@@ -1,0 +1,93 @@
+.specific-chemistry-page{
+    display: flex;
+    max-width: 1200px;
+     margin: 40px auto;
+     padding: 0 20px;
+}
+.specific-chemistry-page .article-list {
+    flex: 1;
+    padding: 20px;
+    background: #252525;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(255,255,255,0.1);
+    margin: 0 10px;
+}
+
+.specific-chemistry-page .article-list h2 {
+    margin-bottom: 15px;
+     text-align: center;
+}
+
+.specific-chemistry-page .article-list ul {
+    list-style: none;
+    padding: 0;
+}
+
+.specific-chemistry-page .article-list ul li {
+    margin-bottom: 10px;
+}
+
+.specific-chemistry-page .article-list ul li a {
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    color: #e0e0e0;
+    background: #333;
+    border-radius: 5px;
+    transition: background 0.3s;
+}
+
+.specific-chemistry-page .article-list ul li a:hover {
+    background: #444;
+}
+.specific-chemistry-page .content-area{
+    flex: 3;
+    padding: 20px;
+    margin: 0 10px;
+}
+.specific-chemistry-page .content-area h1{
+   text-align: center;
+}
+.topic-list-grid{
+     background: #252525;
+      margin-top: 20px;
+        border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(255,255,255,0.1);
+     padding: 20px;
+}
+.topic-list-grid h2{
+     text-align: center;
+    margin-bottom: 15px;
+}
+.topic-list-grid ul {
+    list-style: none;
+    padding: 0;
+}
+.topic-list-grid ul li{
+    margin-bottom: 10px;
+}
+
+.topic-list-grid ul li a {
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    color: #e0e0e0;
+    background: #333;
+    border-radius: 5px;
+     transition: background 0.3s;
+}
+
+.topic-list-grid ul li a:hover {
+  background: #444;
+}
+
+
+@media (max-width: 768px) {
+    .specific-chemistry-page {
+      flex-direction: column;
+    }
+      .specific-chemistry-page .article-list, .specific-chemistry-page .content-area {
+      margin: 10px 0;
+        padding: 10px;
+    }
+}
