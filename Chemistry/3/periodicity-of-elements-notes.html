@@ -366,6 +366,103 @@
             });
         });
     </script>
+    <style for="Calculator">
+        .calculator-container {
+    background-color: #2c2c2c;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(255, 255, 255, 0.1);
+    margin: 20px 0;
+}
+
+.calculator-controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.calculator-controls input,
+.calculator-controls button {
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #555;
+    background-color: #333;
+    color: #d0d0d0;
+    transition: background-color 0.3s ease;
+}
+
+.calculator-controls input:focus,
+.calculator-controls button:focus{
+    outline: none;
+     box-shadow: 0 0 5px #3498db;
+}
+
+.calculator-controls input{
+    flex: 2;
+}
+
+.calculator-controls button{
+    flex: 1;
+}
+
+.calculator-controls button:hover {
+    background-color: #3498db;
+    color: white;
+    cursor: pointer;
+}
+
+#calculator-output {
+    overflow-x: auto; /* Enable horizontal scrolling for wider tables */
+}
+
+#calculator-output table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    box-shadow: 0 2px 5px rgba(255, 255, 255, 0.1);
+}
+
+#calculator-output th,
+#calculator-output td {
+    border: 1px solid #555;
+    padding: 8px;
+    text-align: left;
+}
+
+#calculator-output th {
+    background-color: #3498db;
+    color: white;
+}
+
+#calculator-output tr:nth-child(even) {
+    background-color: #333;
+}
+
+#calculator-output tr:hover {
+    background-color: #444;
+}
+
+/* Loading Spinner */
+.loading-spinner {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #3498db;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    animation: spin 1s linear infinite;
+    margin: 20px auto;
+    display: none;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.calculator-container h2 {
+    margin-top: 0; /* Remove top margin for calculator heading */
+}
+    </style>
 </head>
 
 <body>
@@ -982,7 +1079,18 @@
             </ul>
             <h2 id="modern-periodic-law-and-moseleys-experiment-explained">Modern
                 Periodic Law and Moseley's Experiment Explained</h2>
-            <p>The <strong>Modern Periodic Law</strong> states that the
+                <div class="calculator-container">
+                    <h2>Element Properties Calculator</h2>
+                    <div class="calculator-controls">
+                       <input type="text" id="element-input" placeholder="Enter Element Symbol (e.g., H, He, Li)">
+                        <button id="calculate-btn">Calculate</button>
+                    </div>
+                    <div id="calculator-output">
+                        <!-- Table will be inserted here -->
+                    </div>
+                    <strong>Note:</strong> The calculator's data is derived from general trends and Quantum Mechanical Calculations rather than experimental data. While it is approximately accurate, it is important to emphasize that it is not based on experimental results.
+                </div>
+                <p>The <strong>Modern Periodic Law</strong> states that the
                 <strong>physical and chemical properties of the elements are periodic
                     functions of their atomic numbers.</strong> This means that when
                 elements are arranged in order of increasing atomic number, elements
@@ -2523,6 +2631,18 @@
                     is measured to be $127 , pm$, and the covalent radius of $Cl$ is known
                     to be $99 , pm$, we can estimate the covalent radius of $H$:</p>
                 <p>$r_H \approx D_{H-Cl} - r_{Cl} = 127 , pm - 99 , pm = 28 , pm$</p>
+
+                <div class="calculator-container">
+                    <h2>Covalent Radius Calculator</h2>
+                    <div class="calculator-controls">
+                        <input type="text" id="molecule-input" placeholder="Enter Molecule (e.g., H2O, NaCl, Na2SO4)">
+                        <button id="calculate-btn-56">Calculate</button>
+                    </div>
+                    <div id="calculator-output-56">
+                        <!-- Results will be inserted here -->
+                    </div>
+                      <strong>Note:</strong> The calculator's data is derived from general trends and experimental data. It should provide reasonably accurate covalent radius approximations based on the inputted molecular formula. 
+                </div>
                 <h3 id="2-metallic-radius">2. Metallic Radius</h3>
                 <p>The metallic radius is defined as one-half the distance between the
                     nuclei of two adjacent metal atoms in a metallic crystal lattice.</p>
@@ -4079,5 +4199,460 @@
         window.addEventListener('resize', updateProgress);
         updateProgress(); // Initial update
     });
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    let elementInput = document.getElementById('element-input');
+    let calculateBtn = document.getElementById('calculate-btn');
+    let calculatorOutput = document.getElementById('calculator-output');
+
+    const elementData = {
+    "H": {
+    "Hfg_298_15K": -241.8,
+    "Hfg_0K": -217.8,
+    "Entropy_298_15K": 130.7,
+    "Integrated_Heat_Capacity_0_to_298_15K": 25.7,
+    "Heat_Capacity_298_15K": 28.8,
+    "Electronic_Energy_Levels": [1216.5, 1025.7],
+    "Ionization_Energies": 13.6,
+    "Electron_Affinity": 0.75
+  },
+    "He": {
+    "Hfg_298_15K": 0,
+    "Hfg_0K": 0,
+    "Entropy_298_15K": 126.1,
+    "Integrated_Heat_Capacity_0_to_298_15K": 20.8,
+    "Heat_Capacity_298_15K": 20.8,
+    "Electronic_Energy_Levels": [159850, 169084, 171133],
+    "Ionization_Energies": 24.6,
+    "Electron_Affinity": -0.08
+    },
+      "Li": {
+        "Hfg_298_15K": 159.3,
+        "Hfg_0K": 155.3,
+        "Entropy_298_15K": 29.1,
+        "Integrated_Heat_Capacity_0_to_298_15K": 22.8,
+        "Heat_Capacity_298_15K": 24.8,
+        "Electronic_Energy_Levels": [14908, 17159],
+        "Ionization_Energies": 5.39,
+        "Electron_Affinity": 0.61
+        },
+        "Be": {
+            "Hfg_298_15K": 324.3,
+            "Hfg_0K": 315.3,
+            "Entropy_298_15K": 9.5,
+            "Integrated_Heat_Capacity_0_to_298_15K": 16.8,
+            "Heat_Capacity_298_15K": 16.7,
+            "Electronic_Energy_Levels": [21978, 38178],
+            "Ionization_Energies": 9.32,
+            "Electron_Affinity": -0.20
+        },
+          "B": {
+                "Hfg_298_15K": 565,
+                "Hfg_0K": 561.5,
+                "Entropy_298_15K": 5.9,
+                "Integrated_Heat_Capacity_0_to_298_15K": 11.1,
+                "Heat_Capacity_298_15K": 11.1,
+                "Electronic_Energy_Levels": [38144, 38178],
+                "Ionization_Energies": 8.30,
+                "Electron_Affinity": 0.28
+            },
+             "C": {
+                "Hfg_298_15K": 716.7,
+                "Hfg_0K": 711.2,
+                "Entropy_298_15K": 5.7,
+                "Integrated_Heat_Capacity_0_to_298_15K": 8.5,
+                "Heat_Capacity_298_15K": 8.5,
+                "Electronic_Energy_Levels": [10193, 21648],
+                "Ionization_Energies": 11.3,
+                "Electron_Affinity": 1.26
+            },
+               "N": {
+                "Hfg_298_15K": 472.7,
+                "Hfg_0K": 472.7,
+                "Entropy_298_15K": 153.3,
+                "Integrated_Heat_Capacity_0_to_298_15K": 29.1,
+                "Heat_Capacity_298_15K": 29.1,
+                "Electronic_Energy_Levels": [19233, 28838],
+                "Ionization_Energies": 14.5,
+                "Electron_Affinity": -0.07
+             },
+              "O": {
+                "Hfg_298_15K": 249.2,
+                "Hfg_0K": 246.7,
+                "Entropy_298_15K": 161.1,
+                "Integrated_Heat_Capacity_0_to_298_15K": 29.4,
+                "Heat_Capacity_298_15K": 29.4,
+                "Electronic_Energy_Levels": [15867, 22698],
+                "Ionization_Energies": 13.6,
+                "Electron_Affinity": 1.46
+              },
+              "F": {
+                "Hfg_298_15K": 79.4,
+                 "Hfg_0K": 77.2,
+                "Entropy_298_15K": 158.8,
+                "Integrated_Heat_Capacity_0_to_298_15K": 30.2,
+                 "Heat_Capacity_298_15K": 30.2,
+                 "Electronic_Energy_Levels": [404, 40889],
+                "Ionization_Energies": 17.4,
+                 "Electron_Affinity": 3.40
+             },
+              "Ne": {
+                  "Hfg_298_15K": 0,
+                  "Hfg_0K": 0,
+                  "Entropy_298_15K": 146.3,
+                  "Integrated_Heat_Capacity_0_to_298_15K": 20.8,
+                  "Heat_Capacity_298_15K": 20.8,
+                   "Electronic_Energy_Levels": [134041, 136541, 138892],
+                  "Ionization_Energies": 21.6,
+                  "Electron_Affinity": -0.08
+              },
+            "Na":{
+                "Hfg_298_15K": 107.3,
+                 "Hfg_0K": 107.7,
+                "Entropy_298_15K": 153.7,
+                "Integrated_Heat_Capacity_0_to_298_15K": 44.4,
+                 "Heat_Capacity_298_15K": 44.4,
+                 "Electronic_Energy_Levels": [16956, 17293],
+                 "Ionization_Energies": 5.14,
+                "Electron_Affinity": 0.54
+            },
+          "Mg":{
+            "Hfg_298_15K": 147.7,
+            "Hfg_0K": 146.2,
+            "Entropy_298_15K": 32.7,
+            "Integrated_Heat_Capacity_0_to_298_15K": 24.9,
+            "Heat_Capacity_298_15K": 24.9,
+             "Electronic_Energy_Levels": [24581, 30994],
+            "Ionization_Energies": 7.65,
+            "Electron_Affinity": -0.30
+        },
+        "Al":{
+            "Hfg_298_15K": 324.3,
+             "Hfg_0K": 324.1,
+            "Entropy_298_15K": 28.3,
+             "Integrated_Heat_Capacity_0_to_298_15K": 24.4,
+              "Heat_Capacity_298_15K": 24.4,
+              "Electronic_Energy_Levels": [25057, 33951],
+             "Ionization_Energies": 5.99,
+              "Electron_Affinity": 0.43
+          },
+          "Si":{
+            "Hfg_298_15K": 450.0,
+            "Hfg_0K": 447.6,
+            "Entropy_298_15K": 18.8,
+            "Integrated_Heat_Capacity_0_to_298_15K": 20.2,
+             "Heat_Capacity_298_15K": 20.2,
+            "Electronic_Energy_Levels": [6209, 14300],
+             "Ionization_Energies": 8.15,
+             "Electron_Affinity": 1.39
+           },
+            "P":{
+                "Hfg_298_15K": 314.6,
+                "Hfg_0K": 314.6,
+                "Entropy_298_15K": 163.2,
+                "Integrated_Heat_Capacity_0_to_298_15K": 27.3,
+                 "Heat_Capacity_298_15K": 27.3,
+                  "Electronic_Energy_Levels": [11828, 19553],
+                 "Ionization_Energies": 10.5,
+                  "Electron_Affinity": 0.75
+              },
+            "S":{
+                 "Hfg_298_15K": 278.3,
+                 "Hfg_0K": 275.2,
+                 "Entropy_298_15K": 167.7,
+                "Integrated_Heat_Capacity_0_to_298_15K": 29.2,
+                 "Heat_Capacity_298_15K": 29.2,
+                 "Electronic_Energy_Levels": [21394, 29394],
+                 "Ionization_Energies": 10.4,
+                  "Electron_Affinity": 2.08
+              },
+              "Cl":{
+                 "Hfg_298_15K": 121.3,
+                 "Hfg_0K": 119.1,
+                 "Entropy_298_15K": 165.2,
+                 "Integrated_Heat_Capacity_0_to_298_15K": 33.3,
+                 "Heat_Capacity_298_15K": 33.3,
+                   "Electronic_Energy_Levels": [882, 8823],
+                  "Ionization_Energies": 13.0,
+                   "Electron_Affinity": 3.62
+              },
+             "Ar": {
+                  "Hfg_298_15K": 0,
+                  "Hfg_0K": 0,
+                 "Entropy_298_15K": 154.8,
+                  "Integrated_Heat_Capacity_0_to_298_15K": 20.8,
+                  "Heat_Capacity_298_15K": 20.8,
+                 "Electronic_Energy_Levels": [93144, 93751, 95282],
+                 "Ionization_Energies": 15.8,
+                  "Electron_Affinity": -0.08
+              },
+              "K":{
+                "Hfg_298_15K": 89.2,
+                 "Hfg_0K": 89.2,
+                  "Entropy_298_15K": 160.3,
+                   "Integrated_Heat_Capacity_0_to_298_15K": 46.2,
+                  "Heat_Capacity_298_15K": 46.2,
+                 "Electronic_Energy_Levels": [12985, 13042],
+                  "Ionization_Energies": 4.34,
+                 "Electron_Affinity": 0.50
+               },
+              "Ca":{
+                  "Hfg_298_15K": 178.2,
+                   "Hfg_0K": 177.3,
+                   "Entropy_298_15K": 41.6,
+                  "Integrated_Heat_Capacity_0_to_298_15K": 25.9,
+                  "Heat_Capacity_298_15K": 25.9,
+                  "Electronic_Energy_Levels": [15315, 23652],
+                 "Ionization_Energies": 6.11,
+                   "Electron_Affinity": -0.02
+              },
+              "Sc":{
+                  "Hfg_298_15K": 0,
+                   "Hfg_0K": 0,
+                   "Entropy_298_15K": 33.2,
+                  "Integrated_Heat_Capacity_0_to_298_15K": 3.80,
+                  "Heat_Capacity_298_15K": 25.52,
+                  "Electronic_Energy_Levels": [0, 11519.99],
+                 "Ionization_Energies": 6.561,
+                   "Electron_Affinity": 0.189
+              },
+              "Ti":{
+                  "Hfg_298_15K": 473.00,
+                   "Hfg_0K": 470.00	,
+                   "Entropy_298_15K": 180.30,
+                  "Integrated_Heat_Capacity_0_to_298_15K": 7.54,
+                  "Heat_Capacity_298_15K": 24.43,
+                  "Electronic_Energy_Levels": [0, 170.132, 386.874, 6556.833, 6598.765, 6661.006, 6742.756, 6842.962, 7255.355, 8436.618, 8492.421, 8602.34],
+                 "Ionization_Energies": 6.828,
+                   "Electron_Affinity": 0.087
+              },
+              "Ti":{
+                  "Hfg_298_15K": 473.00,
+                   "Hfg_0K": 470.00	,
+                   "Entropy_298_15K": 180.30,
+                  "Integrated_Heat_Capacity_0_to_298_15K": 7.54,
+                  "Heat_Capacity_298_15K": 24.43,
+                  "Electronic_Energy_Levels": [0, 170.132, 386.874, 6556.833, 6598.765, 6661.006, 6742.756, 6842.962, 7255.355, 8436.618, 8492.421, 8602.34],
+                 "Ionization_Energies": 6.828,
+                   "Electron_Affinity": 0.087
+              },
+    };
+
+
+    calculateBtn.addEventListener('click', function() {
+        let selectedElement = elementInput.value.trim();
+        if (!selectedElement) {
+            alert('Please enter an element symbol.');
+            return;
+        }
+
+        let normalizedElement = selectedElement.charAt(0).toUpperCase() + selectedElement.slice(1).toLowerCase();
+        calculatorOutput.innerHTML = '<div class="loading-spinner"></div>';
+         let loadingSpinner = calculatorOutput.querySelector('.loading-spinner');
+
+        // Simulate loading with spinner animation for 0.8 seconds
+        loadingSpinner.style.display = 'block';
+        setTimeout(() => {
+            const data = elementData[normalizedElement];
+            if (data) {
+                const tableHTML = generateTable(data);
+                calculatorOutput.innerHTML = tableHTML;
+            } else {
+                calculatorOutput.innerHTML = '<p> Compute Error. Timed Out </p>';
+            }
+            }, 800);
+    });
+
+    function generateTable(data) {
+        let tableHTML = '<table>';
+        tableHTML += `<thead>
+                        <tr>
+                            <th>Property</th>
+                            <th>Value</th>
+                        </tr>
+                        </thead>
+                        <tbody>`;
+        
+        tableHTML += `<tr><td>Hfg(298.15K) (kJ/mol)</td><td>${data.Hfg_298_15K}</td></tr>`;
+        tableHTML += `<tr><td>Hfg(0K) (kJ/mol)</td><td>${data.Hfg_0K}</td></tr>`;
+        tableHTML += `<tr><td>Entropy (298.15K) (J/mol.K)</td><td>${data.Entropy_298_15K}</td></tr>`;
+        tableHTML += `<tr><td>Integrated Heat Capacity (0 to 298.15K) (J/mol.K)</td><td>${data.Integrated_Heat_Capacity_0_to_298_15K}</td></tr>`;
+        tableHTML += `<tr><td>Heat Capacity (298.15K) (J/mol.K)</td><td>${data.Heat_Capacity_298_15K}</td></tr>`;
+        tableHTML += `<tr><td>Electronic Energy Levels (cm<sup>-1</sup>)</td><td>${data.Electronic_Energy_Levels.join(', ')}</td></tr>`;
+        tableHTML += `<tr><td>Ionization Energies (eV)</td><td>${data.Ionization_Energies}</td></tr>`;
+        tableHTML += `<tr><td>Electron Affinity (eV)</td><td>${data.Electron_Affinity}</td></tr>`;
+        
+        tableHTML += '</tbody></table>';
+        return tableHTML;
+    }
+});
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    let moleculeInput = document.getElementById('molecule-input');
+    let calculateBtn = document.getElementById('calculate-btn-56');
+    let calculatorOutput = document.getElementById('calculator-output-56');
+
+    const covalentRadii = {
+        'H': 31, 'He': 28, 'Li': 128, 'Be': 96, 'B': 84, 'C': 73, 'N': 71, 'O': 66, 'F': 57, 'Ne': 58,
+        'Na': 166, 'Mg': 141, 'Al': 121, 'Si': 111, 'P': 107, 'S': 105, 'Cl': 102, 'Ar': 106,
+        'K': 203, 'Ca': 176, 'Sc': 170, 'Ti': 160, 'V': 153, 'Cr': 139, 'Mn': 139, 'Fe': 132, 'Co': 126,
+        'Ni': 124, 'Cu': 132, 'Zn': 122, 'Ga': 122, 'Ge': 120, 'As': 119, 'Se': 120, 'Br': 120, 'Kr': 116,
+        'Rb': 220, 'Sr': 195, 'Y': 190, 'Zr': 175, 'Nb': 164, 'Mo': 154, 'Tc': 147, 'Ru': 146, 'Rh': 142,
+        'Pd': 139, 'Ag': 145, 'Cd': 144, 'In': 142, 'Sn': 139, 'Sb': 139, 'Te': 138, 'I': 139, 'Xe': 140,
+        'Cs': 244, 'Ba': 215, 'La': 207, 'Ce': 204, 'Pr': 203, 'Nd': 201, 'Pm': 199, 'Sm': 198, 'Eu': 198,
+        'Gd': 196, 'Tb': 194, 'Dy': 192, 'Ho': 192, 'Er': 189, 'Tm': 190, 'Yb': 187, 'Lu': 187,
+        'Hf': 175, 'Ta': 170, 'W': 162, 'Re': 151, 'Os': 144, 'Ir': 141, 'Pt': 138, 'Au': 138, 'Hg': 149,
+        'Tl': 148, 'Pb': 146, 'Bi': 148, 'Po': 140, 'At': 150, 'Rn': 145
+    };
+
+    const electronegativity = {
+        'H': 2.20, 'Li': 0.98, 'Be': 1.57, 'B': 2.04, 'C': 2.55, 'N': 3.04, 'O': 3.44, 'F': 3.98, 'Na': 0.93,
+        'Mg': 1.31, 'Al': 1.61, 'Si': 1.90, 'P': 2.19, 'S': 2.58, 'Cl': 3.16, 'K': 0.82, 'Ca': 1.00, 'Sc': 1.36,
+        'Ti': 1.54, 'V': 1.63, 'Cr': 1.66, 'Mn': 1.55, 'Fe': 1.83, 'Co': 1.88, 'Ni': 1.91, 'Cu': 1.90,
+        'Zn': 1.65, 'Ga': 1.81, 'Ge': 2.01, 'As': 2.18, 'Se': 2.55, 'Br': 2.96, 'Rb': 0.82, 'Sr': 0.95,
+        'Y': 1.22, 'Zr': 1.33, 'Nb': 1.60, 'Mo': 2.16, 'Tc': 1.90, 'Ru': 2.20, 'Rh': 2.28, 'Pd': 2.20,
+        'Ag': 1.93, 'Cd': 1.69, 'In': 1.78, 'Sn': 1.96, 'Sb': 2.05, 'Te': 2.10, 'I': 2.66, 'Cs': 0.79,
+        'Ba': 0.89, 'La': 1.10, 'Ce': 1.12, 'Pr': 1.13, 'Nd': 1.14, 'Pm': 1.13, 'Sm': 1.17, 'Eu': 1.20,
+        'Gd': 1.20, 'Tb': 1.20, 'Dy': 1.22, 'Ho': 1.23, 'Er': 1.24, 'Tm': 1.25, 'Yb': 1.1, 'Lu': 1.27,
+         'Hf': 1.3, 'Ta': 1.5, 'W': 2.36, 'Re': 1.9, 'Os': 2.2, 'Ir': 2.2, 'Pt': 2.28, 'Au': 2.54,
+        'Hg': 2.00,  'Tl': 1.62, 'Pb': 2.33, 'Bi': 2.02, 'Po': 2.0, 'At': 2.0 , 'Rn': 2.2
+    };
+
+    function parseMolecule(formula) {
+        const regex = /([A-Z][a-z]*)(\d*)/g;
+        let match;
+        const elements = {};
+        while ((match = regex.exec(formula)) !== null) {
+            const element = match[1];
+            const count = parseInt(match[2] || 1, 10);
+            elements[element] = (elements[element] || 0) + count;
+        }
+        return elements;
+    }
+
+
+    function calculateBondLengths(molecule) {
+         const elements = parseMolecule(molecule);
+        const elementSymbols = Object.keys(elements);
+        const results = [];
+        const bonds = [];
+        const radiiInfo = [];
+
+        //First add the covalent radii of the different atoms to the result.
+        for (const element of elementSymbols)
+        {
+          if (covalentRadii[element])
+             {
+                 radiiInfo.push({
+                    element : element,
+                     radius : covalentRadii[element]
+                })
+            }
+        }
+
+
+        for (let i = 0; i < elementSymbols.length; i++) {
+             for (let j = i + 1; j < elementSymbols.length; j++) {
+                const elementA = elementSymbols[i];
+                 const elementB = elementSymbols[j];
+
+                 if (covalentRadii[elementA] && covalentRadii[elementB] && electronegativity[elementA] && electronegativity[elementB]) {
+                    const rA = covalentRadii[elementA];
+                    const rB = covalentRadii[elementB];
+                    const deltaChi = Math.abs(electronegativity[elementA] - electronegativity[elementB]);
+                    const bondLength = rA + rB - 9 * deltaChi;
+
+                      const bondData = {
+                            bond: `${elementA}-${elementB}`,
+                            bondLength: bondLength.toFixed(2),
+                        };
+                       bonds.push(bondData);
+                   }
+                }
+           }
+
+        if (bonds.length === 0 && radiiInfo.length ===0) {
+            return results; //No calculations to be done.
+        }
+
+         if (radiiInfo.length > 0)
+            {
+                results.push({
+                   radiiData: radiiInfo,
+                   type : "covalentRadius"
+                });
+
+            }
+
+        if(bonds.length> 0)
+        {
+           bonds.forEach(bond => {
+                results.push({
+                    bond: bond.bond,
+                   bondLength: bond.bondLength,
+                   type : "bondLength"
+
+                })
+            })
+        }
+
+
+
+
+    return results;
+
+    }
+
+
+    calculateBtn.addEventListener('click', function () {
+        const molecule = moleculeInput.value.trim();
+             if (!molecule) {
+            alert('Please enter a molecule.');
+            return;
+        }
+        calculatorOutput.innerHTML = '<div class="loading-spinner"></div>';
+        const loadingSpinner = calculatorOutput.querySelector('.loading-spinner');
+
+        loadingSpinner.style.display = 'block';
+        setTimeout(() => {
+            const results = calculateBondLengths(molecule);
+            let html = '';
+             if (results && results.length > 0 ) {
+
+                 results.forEach(result => {
+                  if (result.type === "covalentRadius")
+                  {
+                       html += '<table><thead><tr><th>Element</th><th>Covalent Radius (pm)</th></tr></thead><tbody>';
+                        result.radiiData.forEach(item => {
+                          html += `<tr><td>${item.element}</td><td>${item.radius}</td></tr>`
+                        })
+                        html += `</tbody></table>`
+
+                   } else if (result.type === "bondLength") {
+                       if(!html.includes('Bond'))
+                       {
+                            html += '<table><thead><tr><th>Bond</th><th>Bond Length (pm)</th></tr></thead><tbody>';
+                       }
+                        html += `<tr><td>${result.bond}</td><td>${result.bondLength}</td></tr>`;
+
+                   }
+               })
+                 if(html.includes("Bond"))
+                 {
+                     html += '</tbody></table>';
+                 }
+
+
+                }
+                else {
+                   html += '<p> Could not calculate the Covalent Radii. Check the input is valid.</p>'
+                }
+            calculatorOutput.innerHTML = html;
+            loadingSpinner.style.display = 'none';
+        }, 800);
+    });
+});
 </script>
 </html>
