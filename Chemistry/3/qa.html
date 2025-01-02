@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Periodicity of Elements </title>
+    <title>Periodicity of Elements - Questions and Answers </title>
     <style>
 body {
     font-family: sans-serif;
@@ -333,14 +333,20 @@ img {
    }
 }
     </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js"></script>
     <script>
-        MathJax = {
-            tex: { inlineMath: [['$', '$']] },
-            svg: { fontCache: 'global' }
-        };
+        document.addEventListener("DOMContentLoaded", function () {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    { left: "$", right: "$", display: false },
+                    { left: "$$", right: "$$", display: true }
+                ]
+            });
+        });
     </script>
-    <script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
-</head>
+    </head>
 
 <body>
     <div id="progress-bar"></div>
@@ -3172,7 +3178,8 @@ img {
     <p>Therefore, the quantum mechanical model accurately predicts and
         justifies the presence of 32 elements in the sixth period of the
         periodic table.</p>
-</main>  <div id="right-sidebar">
+</main>  
+<div id="right-sidebar">
     <a href="/index.html">
         <img src="https://img.icons8.com/?size=512&id=3113&format=png" alt="Home" >
     </a>
