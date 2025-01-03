@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Neuron IQ - Understanding the Periodic Table</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="specific-chemistry.css" />
+    <link rel="stylesheet" href="style-main.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    { left: "$", right: "$", display: false },
+                    { left: "$$", right: "$$", display: true }
+                ]
+            });
+        });
+    </script>
+    <style>
+        .specific-chemistry-page {
+            display: flex;
+        }
+
+        .sidebar {
+            width: 200px;
+            /* Adjust as needed */
+            padding: 20px;
+            position: sticky;
+        }
+
+        .content-area {
+            flex-grow: 1;
+            padding: 20px;
+        }
+
+        .topic-list-grid ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .topic-list-grid li {
+            margin-bottom: 10px;
+        }
+
+        .topic-list-grid li a {
+            display: block;
+            padding: 10px;
+            background-color: #333;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .content-area {
+            text-align: left !important;
+        }
+
+        strong {
+            color: #e74c3c;
+        }
+
+        topic-list-grid {
+            position: sticky;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav>
+            <div class="logo">Neuron IQ</div>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="subjects.html">Subjects</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="specific-chemistry-page">
+        <aside class="sidebar">
+            <div class="topic-list-grid">
+                <h2>Explore More</h2>
+                <ul>
+                    <li>
+                        <a href="/Chemistry/1/Atomic-Structure-Notes.html">Notes</a>
+                    </li>
+                    <li>
+                        <a href="/Chemistry/1/Atomic-Structure-qa.html">Subjective Questions and Answers</a>
+                    </li>
+                    <li>
+                        <a href="/Chemistry/3/covalent-radii-and-bond-length.html">Covalent Radii and Bond Length
+                            Calculator</a>
+                    </li>
+                    <li>
+                        <a href="/Chemistry/1/Atomic-Structure-Full-Content.html">Full Content</a>
+                    </li>
+                </ul>
+            </div>
+        </aside>
+        <main class="content-area">
+            <h1 id="introduction-to-atomic-structure">Introduction to Atomic Structure</h1>
+            <p>At the heart of all matter, from the air we breathe to the stars that twinkle in the night sky, lies a
+                fundamental building block: the atom. For centuries, the concept of the atom remained abstract, a
+                philosophical idea debated by ancient thinkers. However, through centuries of scientific inquiry and
+                groundbreaking experiments, we have peeled back the layers of the atom, revealing a complex and
+                fascinating internal structure that dictates the properties of everything around us. Understanding
+                atomic structure is not just an academic exercise; it is the foundation upon which much of modern
+                chemistry, physics, and materials science is built.</p>
+            <p>This article will delve into the intricate world of atomic structure, tracing its historical development
+                and exploring the fundamental particles that comprise it. We will examine the arrangement of these
+                particles, the forces that govern their interactions, and the models scientists have developed to
+                visualize and understand this microscopic realm.</p>
+            <p><strong>A Journey Through Time: Unveiling the Atom</strong></p>
+            <p>The idea of an indivisible unit of matter can be traced back to ancient Greece. Around 400 BC, Democritus
+                and Leucippus proposed the concept of &quot;atomos,&quot; meaning uncuttable. They theorized that matter
+                was composed of tiny, indivisible particles. However, this remained a philosophical idea with no
+                experimental evidence to support it.</p>
+            <p>The modern scientific journey into atomic structure began in the early 19th century with John
+                Dalton&#39;s atomic theory. Dalton&#39;s theory, based on experimental observations of chemical
+                reactions, proposed several key ideas:</p>
+            <ul>
+                <li>Elements are made of tiny, indivisible particles called atoms.</li>
+                <li>Atoms of a given element are identical in size, mass, and other properties.</li>
+                <li>Atoms of different elements are different.</li>
+                <li>Atoms cannot be created or destroyed in chemical reactions.</li>
+                <li>Chemical reactions involve the combination, separation, or rearrangement of atoms.</li>
+            </ul>
+            <p>Dalton&#39;s theory, while revolutionary, still depicted the atom as a solid, indivisible sphere. The
+                first cracks in this model appeared with the discovery of subatomic particles.</p>
+            <p><strong>The Dawn of Subatomic Particles</strong></p>
+            <p>The late 19th century witnessed a flurry of discoveries that shattered the notion of the atom as the
+                fundamental, indivisible unit.</p>
+            <ul>
+                <li>
+                    <p><strong>The Electron:</strong> In 1897, J.J. Thomson&#39;s experiments with cathode rays provided
+                        the first evidence of a subatomic particle. He demonstrated that cathode rays were composed of
+                        negatively charged particles, which he named &quot;corpuscles,&quot; later known as electrons.
+                        Thomson&#39;s &quot;plum pudding model&quot; envisioned the atom as a positively charged sphere
+                        with negatively charged electrons embedded within it, like plums in a pudding. [Image of
+                        Thomson&#39;s plum pudding model]</p>
+                </li>
+                <li>
+                    <p><strong>The Nucleus: A Dense Core:</strong> Ernest Rutherford, a former student of Thomson,
+                        conducted a series of groundbreaking experiments known as the gold foil experiment in 1911. He
+                        and his colleagues, Hans Geiger and Ernest Marsden, bombarded a thin gold foil with alpha
+                        particles (positively charged particles). The results were startling: most alpha particles
+                        passed straight through, but a small fraction were deflected at large angles, and some even
+                        bounced back. This led Rutherford to propose the nuclear model of the atom. According to this
+                        model, the atom has a tiny, dense, positively charged nucleus at its center, containing most of
+                        the atom&#39;s mass. The negatively charged electrons orbit the nucleus, occupying the vast
+                        empty space around it. [Image of Rutherford&#39;s gold foil experiment setup and results]</p>
+                </li>
+                <li>
+                    <p><strong>The Proton:</strong> Rutherford later identified the positively charged particles within
+                        the nucleus, naming them protons. The number of protons in the nucleus, known as the
+                        <strong>atomic number</strong> (denoted by $Z$), defines the element.</p>
+                </li>
+                <li>
+                    <p><strong>The Neutron:</strong> The nuclear model, while a significant advancement, had some
+                        inconsistencies. The mass of the nucleus was greater than the combined mass of the protons it
+                        contained. In 1932, James Chadwick discovered the neutron, a neutral particle with a mass
+                        slightly greater than that of a proton, also residing in the nucleus.</p>
+                </li>
+            </ul>
+            <p><strong>The Building Blocks: Protons, Neutrons, and Electrons</strong></p>
+            <p>With the discovery of these subatomic particles, a clearer picture of atomic structure emerged.</p>
+            <ul>
+                <li><strong>Protons:</strong> Positively charged particles located in the nucleus. Their charge is +1.
+                    The number of protons determines the element&#39;s identity.</li>
+                <li><strong>Neutrons:</strong> Neutral particles located in the nucleus. They have no charge. Neutrons
+                    contribute to the atom&#39;s mass and play a crucial role in nuclear stability.</li>
+                <li><strong>Electrons:</strong> Negatively charged particles orbiting the nucleus. Their charge is -1.
+                    Electrons are significantly lighter than protons and neutrons. They are responsible for the chemical
+                    behavior of atoms.</li>
+            </ul>
+            <p><strong>Atomic Number and Mass Number: Defining the Atom</strong></p>
+            <p>Two fundamental numbers are used to characterize an atom:</p>
+            <ul>
+                <li>
+                    <p><strong>Atomic Number ($Z$):</strong> The number of protons in the nucleus of an atom. This
+                        number is unique to each element and defines its identity. For example, all atoms with an atomic
+                        number of 1 are hydrogen atoms, and all atoms with an atomic number of 8 are oxygen atoms.</p>
+                </li>
+                <li>
+                    <p><strong>Mass Number ($A$):</strong> The total number of protons and neutrons in the nucleus of an
+                        atom. It represents the approximate mass of the atom (in atomic mass units, amu). The number of
+                        neutrons can be calculated by subtracting the atomic number from the mass number: Number of
+                        neutrons = $A - Z$.</p>
+                </li>
+            </ul>
+            <p><strong>Isotopes and Isobars: Variations on a Theme</strong></p>
+            <p>While the number of protons defines an element, atoms of the same element can have different numbers of
+                neutrons. These variations are called <strong>isotopes</strong>. Isotopes of an element have the same
+                atomic number but different mass numbers. For example, carbon-12 ($^{12}_6C$), carbon-13 ($^{13}_6C$),
+                and carbon-14 ($^{14}_6C$) are all isotopes of carbon. They all have 6 protons, but they have 6, 7, and
+                8 neutrons, respectively.</p>
+            <p>Atoms with the same mass number but different atomic numbers are called <strong>isobars</strong>. For
+                example, carbon-14 ($^{14}_6C$) and nitrogen-14 ($^{14}_7N$) are isobars. They both have a mass number
+                of 14, but carbon has 6 protons while nitrogen has 7.</p>
+            <p><strong>The Nucleus: A Realm of Strong Forces</strong></p>
+            <p>The nucleus, despite being incredibly small, contains almost all of the atom&#39;s mass. Protons, being
+                positively charged, naturally repel each other due to the electromagnetic force. So, what holds the
+                nucleus together? The answer lies in the <strong>strong nuclear force</strong>, a fundamental force of
+                nature that is much stronger than the electromagnetic force but acts only over very short distances. The
+                strong nuclear force binds protons and neutrons together within the nucleus, overcoming the
+                electrostatic repulsion between protons.</p>
+            <p><strong>The Electronic Structure: Orbitals and Energy Levels</strong></p>
+            <p>The electrons in an atom do not simply orbit the nucleus in fixed paths like planets around a star.
+                Instead, their behavior is governed by the principles of quantum mechanics.</p>
+            <ul>
+                <li>
+                    <p><strong>Bohr&#39;s Model: Quantized Energy Levels:</strong> Niels Bohr, building upon
+                        Rutherford&#39;s model, proposed that electrons occupy specific energy levels or shells around
+                        the nucleus. Electrons can only exist in these discrete energy levels and can transition between
+                        them by absorbing or emitting energy in the form of photons. [Image of Bohr&#39;s model of the
+                        atom]</p>
+                </li>
+                <li>
+                    <p><strong>The Quantum Mechanical Model: Probability and Orbitals:</strong> The modern understanding
+                        of electron behavior is described by the quantum mechanical model. This model abandons the idea
+                        of fixed orbits and instead describes the probability of finding an electron in a specific
+                        region of space around the nucleus, called an <strong>atomic orbital</strong>. Orbitals have
+                        distinct shapes and energy levels.</p>
+                </li>
+            </ul>
+            <p><strong>Quantum Numbers: Describing Electron States</strong></p>
+            <p>The state of an electron in an atom is described by a set of four quantum numbers:</p>
+            <ul>
+                <li>
+                    <p><strong>Principal Quantum Number ($n$):</strong> Indicates the electron&#39;s main energy level.
+                        $n$ can be any positive integer (1, 2, 3, ...), with higher numbers indicating higher energy
+                        levels and greater average distance from the nucleus. These correspond to the electron shells
+                        (K, L, M, N...).</p>
+                </li>
+                <li>
+                    <p><strong>Angular Momentum or Azimuthal Quantum Number ($l$):</strong> Describes the shape of the
+                        electron&#39;s orbital and has values ranging from 0 to $n-1$. $l=0$ corresponds to an s orbital
+                        (spherical), $l=1$ corresponds to a p orbital (dumbbell-shaped), $l=2$ corresponds to a d
+                        orbital (more complex shape), and $l=3$ corresponds to an f orbital (even more complex shape).
+                    </p>
+                </li>
+                <li>
+                    <p><strong>Magnetic Quantum Number ($m_l$):</strong> Describes the orientation of the orbital in
+                        space. It can take integer values from $-l$ to $+l$, including 0. For example, a p orbital
+                        ($l=1$) has three possible orientations ($m_l = -1, 0, +1$) along the x, y, and z axes.</p>
+                </li>
+                <li>
+                    <p><strong>Spin Quantum Number ($m_s$):</strong> Describes the intrinsic angular momentum of an
+                        electron, which is quantized and referred to as spin. Electrons behave as if they are spinning,
+                        creating a magnetic dipole moment. There are two possible spin states, designated as spin up
+                        (+1/2) and spin down (-1/2).</p>
+                </li>
+            </ul>
+            <p><strong>Electron Configuration: Filling the Orbitals</strong></p>
+            <p>The <strong>electron configuration</strong> of an atom describes the arrangement of electrons in its
+                various energy levels and orbitals. The filling of orbitals follows specific rules:</p>
+            <ul>
+                <li>
+                    <p><strong>Aufbau Principle:</strong> Electrons first fill the lowest energy levels and orbitals.
+                    </p>
+                </li>
+                <li>
+                    <p><strong>Hund&#39;s Rule:</strong> When filling orbitals with the same energy (degenerate
+                        orbitals), electrons will individually occupy each orbital before pairing up in the same
+                        orbital. This maximizes the total spin and minimizes electron-electron repulsion.</p>
+                </li>
+                <li>
+                    <p><strong>Pauli Exclusion Principle:</strong> No two electrons in an atom can have the same set of
+                        four quantum numbers. This means that a single atomic orbital can hold a maximum of two
+                        electrons, and these electrons must have opposite spins.</p>
+                </li>
+            </ul>
+            <p>Understanding electron configuration is crucial for predicting an element&#39;s chemical properties, as
+                the outermost electrons, known as <strong>valence electrons</strong>, are responsible for chemical
+                bonding and reactions.</p>
+            <p><strong>Valence Electrons and Chemical Bonding</strong></p>
+            <p>Valence electrons reside in the outermost electron shell of an atom. These electrons are involved in
+                forming chemical bonds with other atoms to create molecules and compounds. The number of valence
+                electrons determines an element&#39;s reactivity and the types of bonds it can form (ionic, covalent,
+                metallic). Atoms tend to gain, lose, or share electrons to achieve a stable electron configuration,
+                typically with eight valence electrons (the octet rule).</p>
+            <p><strong>Modern Techniques for Studying Atomic Structure</strong></p>
+            <p>While the fundamental principles of atomic structure were established through ingenious experiments in
+                the past, modern techniques allow us to probe the atom with unprecedented precision. Techniques like:
+            </p>
+            <ul>
+                <li><strong>Electron Microscopy:</strong> Provides high-resolution images of materials, allowing us to
+                    visualize the arrangement of atoms. [Image of an electron microscope image showing atomic
+                    arrangement]</li>
+                <li><strong>Spectroscopy:</strong> Studies the interaction of matter with electromagnetic radiation,
+                    providing information about the energy levels and electronic structure of atoms.</li>
+                <li><strong>Mass Spectrometry:</strong> Determines the mass-to-charge ratio of ions, allowing for the
+                    identification of isotopes and the determination of elemental composition.</li>
+            </ul>
+            <p>These techniques continue to refine our understanding of atomic structure and allow us to explore the
+                behavior of matter at the atomic level.</p>
+            <p><strong>Applications of Atomic Structure Knowledge</strong></p>
+            <p>The understanding of atomic structure has far-reaching applications across various fields:</p>
+            <ul>
+                <li><strong>Chemistry:</strong> Predicting chemical reactions, designing new materials, and
+                    understanding the properties of matter.</li>
+                <li><strong>Materials Science:</strong> Developing new materials with specific properties, such as
+                    strength, conductivity, and magnetism.</li>
+                <li><strong>Medicine:</strong> Developing new diagnostic and therapeutic tools, including medical
+                    imaging techniques like MRI and PET scans, and radiation therapy for cancer treatment.</li>
+                <li><strong>Nuclear Energy:</strong> Harnessing the energy released from nuclear reactions for power
+                    generation.</li>
+                <li><strong>Electronics:</strong> Developing semiconductors and other electronic components based on the
+                    controlled movement of electrons in materials.</li>
+            </ul>
+            <p><strong>Conclusion: A Foundation for Understanding the Universe</strong></p>
+            <p>The journey to understand atomic structure has been a long and fascinating one, filled with
+                groundbreaking discoveries and paradigm shifts. From the ancient idea of indivisible particles to the
+                complex quantum mechanical model, our understanding of the atom has evolved dramatically. The atom, far
+                from being a simple, solid sphere, is a dynamic and intricate system governed by fundamental forces and
+                quantum principles. The knowledge we have gained about atomic structure is not just a scientific
+                achievement; it is the foundation upon which we understand the properties of matter, the nature of
+                chemical reactions, and the workings of the universe itself. As technology advances, our ability to
+                probe and manipulate matter at the atomic level will continue to unlock new possibilities and further
+                illuminate the unseen world within.</p>
+
+            <h2 id="about-author">About the author</h2>
+            <p>Written by <strong>Noah Kleij, PhD </strong></p>
+            <p>
+                Noah Kleij holds a Doctorate in Organic and General Chemistry from the
+                prestigious University of Manchester, United Kingdom. With a deep
+                passion for chemical sciences, Noah has contributed significantly to
+                advancing knowledge in both organic synthesis and general chemistry
+                principles. Their research encompasses cutting-edge methodologies and
+                innovative problem-solving approaches.
+            </p>
+
+            <p>
+                In addition to their academic achievements, Noah is an accomplished
+                author and educator, committed to sharing complex chemical concepts in
+                accessible and engaging ways. Their work not only bridges theoretical
+                and practical chemistry but also inspires the next generation of
+                chemists to explore the field's transformative potential.
+            </p>
+        </main>
+    </section>
+
+    <footer>
+        <p>© 2025 Neuron IQ. All rights reserved.</p>
+        <ul>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="#">Contact Us</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms of Use</a></li>
+        </ul>
+    </footer>
+</body>
+
+</html>
