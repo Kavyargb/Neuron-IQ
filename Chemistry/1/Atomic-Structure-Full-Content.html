@@ -4289,27 +4289,337 @@ $\bar{\theta}_{2} = \frac{16}{5} \cdot \frac{kq_{e}q_{e}}{mv^{2}} \cdot \frac{1}
 <p>Three experiments carried out near the end of the nineteenth
     century drove scientists to the view that energy can be transferred only in discrete amounts.</p>
 <h4>(a) Black Body Radiation</h4>
-<p>It has been observed that all objects emit electromagnetic radiation across a range of frequencies, with the intensity depending on the object's temperature. A familiar example is a heated metal bar, which first glows red and then becomes "white hot" as it is heated further. As the temperature increases, the color shifts from red toward blue, ultimately resulting in a white glow.</p>
-<p>The radiation emitted by hot objects is discussed in terms of
-    a black body, a body that emits and absorbs electromagnetic
-    radiation without favouring any wavelengths. A good approximation to a black body is a small hole in an empty container. The graph shows how the intensity of the  radiation from a black body varies with wavelength at several
-    temperatures. </p>
-<img src="black-body-radiation-figure-one-and-two.png" alt="Black Body radiation figure and graph">
-<p>At each temperature, $T$ there exists a wavelength, $\lambda_{\text{max}}$, at which the intensity of radiation is at its maximum. The relationship between $T$ and $\lambda_{\text{max}}$ is described by the empirical Wien&#39;s law:</p>
-<p>$\lambda_{max} T = \text{constant}$</p>
-<p>The constant is found to have the value 2.9 mm K. The intensity
-    of the emitted radiation at any temperature declines sharply
-    at short wavelengths (high frequencies). The intensity is effectively a window on to the energy present inside the container, in the sense that the greater the intensity at a given wavelength,
-    the greater is the energy inside the container due to radiation at
-    that wavelength.</p>
-    <p>The energy density, $E(T)$, is the total energy inside a container divided by its volume. The energy spectral density, $\rho(\lambda, T)$, is defined such that $\rho(\lambda, T) d\lambda$ represents the energy density at temperature $T$ due to electromagnetic radiation with wavelengths between $\lambda$ and $\lambda + d\lambda$. A high energy spectral density at a particular wavelength $\lambda$ and temperature $T$ indicates that a significant amount of energy is associated with wavelengths in the range $\lambda$ to $\lambda + d\lambda$ at that temperature. The total energy density is obtained by summing (integrating) the energy spectral density over all wavelengths:  </p>
-    <p>$E(T) = \int_{0}^{\infty} \rho(\lambda, T) \, d\lambda$</p>
-    <p>Here’s the revised version with improved clarity and inline LaTeX formatting:  </p>
-<p>The units of $E(T)$ are joules per cubic meter (J m$^{-3}$), so the units of $\rho(\lambda, T)$ are J m$^{-4}$. Empirically, the energy density is found to vary as $T^4$, an observation described by the Stefan–Boltzmann law:  </p>
-<p>$E(T) = \sigma T^4$ </p>
-<p>where $\sigma$ is the Stefan–Boltzmann constant. We have found $\sigma$ to be equal to $7.567 \times 10^{-16}Jm^{3}K^{-4}$.</p>
-
-<section>
+<p>The work done at the turn of the 20th century on blackbody radiation was the beginning of a totally new field of science. Blackbody radiation is a theoretical concept in quantum mechanics in which a material or substance completely absorbs all frequencies of light. Because of the laws of thermodynamics, this ideal body must also re-emit as much light as it absorbs. Although there is no material that can truly be a blackbody, some have come close. Carbon in its graphite form is about 96% efficient in its absorption of light.</p>
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/Black_body_realization.svg/220px-Black_body_realization.svg.png" alt="Black Body">
+<p>The concept of blackbody radiation is seen in many different places. The intensity of the energy coming from the radiator is a function only of temperature. A good example of this temperature dependence is a flame. The flame starts out with a low frequency emitting red light in the visible range, as the temperature increases the flame turns white and then blue as is moves across the visible spectrum with an increasing temperature. Also, with each temperature corresponds a new maximum radiance which can be emitted. As the temperature increases, the total radiation emitted also increases due to an increase in the area under the curve.</p>
+<strong>Rayleigh Jeans Law</strong>
+<p>The Rayleigh-Jeans Law was an early attempt to describe how the intensity of light emitted by a heated object changes with frequency (or color).  It tried to give a mathematical formula for this, specifically stating that the amount of energy ($u_\nu$) at a given frequency (ν)  is:</p>
+<p>$u_\nu = \dfrac{8\pi\nu^2kT}{c^2}$</p>
+<p>where <em>k</em> is a constant (Boltzmann&#39;s constant), <em>T</em> is the temperature, and <em>c</em> is the speed of light.</p>
+<p>This formula worked okay for low-frequency light (like radio waves), but it went badly wrong as you looked at higher frequencies (like ultraviolet light). This problem, where the formula predicted infinite energy at high frequencies, was called the &quot;ultraviolet catastrophe&quot;.  Even though the Rayleigh-Jeans Law failed, it was still important because it showed that any new successful formula, like Planck&#39;s, had to behave in a similar way at low frequencies.  It also helped to nail down a specific value for an otherwise unknown constant in Planck&#39;s formula. Basically, the Rayleigh-Jeans Law provided a kind of starting point or boundary condition for more accurate models.</p>
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Black_body.svg/800px-Black_body.svg.png" alt="Ultraviolet Catastrophe">
+<p><strong>Derivation</strong></p>
+<p>Imagine a cube with perfectly reflective walls. Inside, light bounces around.  For light to form a stable &quot;standing wave&quot; (like a vibrating guitar string), its wavelength has to fit neatly into the cube.  Specifically, a whole number of half-wavelengths must fit along each edge of the cube.  This idea is represented by the equation:</p>
+<p>$\lambda = \dfrac{2L}{m}$</p>
+<p>where L is the length of the cube&#39;s edge and m is a whole number (1, 2, 3,...).</p>
+<p>We&#39;re mostly interested in the frequency (ν) of the light, not the wavelength. Using the relationship between frequency, speed of light (c) and wavelength ($ν = c/λ$), we can rewrite the above to relate frequency to our &#39;m&#39; value and cube length. We then use a common simplification called the wavenumber (q). It&#39;s related to both wavelength and frequency.  This lets us define the allowed frequencies in terms of &#39;m&#39;, &#39;L&#39;, and pi:</p>
+<p>$q = \dfrac{2\pi m}{2L} = \pi\left(\dfrac{m}{L}\right)$</p>
+<p>Now, if we consider light moving in <em>any</em> direction within the cube, we need three &#39;m&#39; values ($m_X$, $m_Y$, $m_Z$) – one for each direction (x, y, and z) inside the cube. The condition for a standing wave becomes:</p>
+<p>$m_X^2 + m_Y^2 + m_Z^2 = \dfrac{4L^2\nu^2}{c^2}$</p>
+<p>This means we need to figure out how many combinations of $m_X$, $m_Y$, and $m_Z$ are possible for a given frequency range. To do this, we imagine a sphere in &quot;m-space&quot; where the radius corresponds to the frequency.  We want to find out how many combinations of m&#39;s are within a thin shell of this sphere as the frequency changes (think of it like peeling off a very thin layer of an onion). The volume of this shell (which is proportional to the number of ways standing waves can form) is:</p>
+<p>$dV = 32\pi \left(\dfrac{L^3\nu^2}{c^3}\right) d\nu$</p>
+<p>This formula includes <em>all</em> possible wave combinations in m-space.  However, we only care about <em>positive</em> values of $m_X$, $m_Y$, and $m_Z$, this reduces the space we need to account to 1/8th of the full volume. So we adjust the result to give us the <em>number of standing waves</em> for a given frequency range:</p>
+<p>$dN = 4\pi\nu^2\left(\dfrac{L^3}{c^3}\right)\,d\nu$</p>
+<p>Now, each standing wave can be thought of as having an average energy of kT (where k is Boltzmann&#39;s constant and T is the temperature).  So, the energy of all the standing waves within a given frequency range is:</p>
+<p>$\dfrac{dE}{d\nu} = kT\left(\dfrac{dN}{d\nu}\right) = 4\pi kT\left(\dfrac{L^3}{c^3}\right)\nu^2$</p>
+<p>To get the <em>energy density</em> (energy per unit volume), we divide by the volume of the cube ($L^3$) leading to:</p>
+<p>$\dfrac{du_\nu}{d\nu} = \dfrac{4\pi kT\nu^2}{c^3}$</p>
+<p>Finally, we need to consider that light has two polarizations (like a wave wiggling up and down <em>or</em> side to side).  This doubles the number of possible standing waves.  So, the full formula for the Rayleigh-Jeans Law is:</p>
+<p>$\dfrac{du_\nu}{d\nu} = \dfrac{8\pi kT\nu^2}{c^3}$</p>
+<p>This law predicts that the energy density of radiation increases with the square of the frequency. This is what the experiment shows to be correct only for small frequencies but fails at higher ones.</p>
+<p>But, the main thing was that Energy should shoot to infinity or simply, a black body should radiate infinite amount of Energy. Which was incomprehensible, at that time. 300 years worth of Physics study, experiments, all proven wrong.</p>
+<p>Some scientists, when considering the implications of the Rayleigh-Jeans law, even thought that the amount of energy emitted by a black body would become infinitely large. This was because the theoretical calculations predicted such an outcome. However, experiments showed that real-world black bodies emitted a finite amount of energy and had a distinct spectrum of radiation. This contrast between theory and experimental result led some to believe that while this infinite energy prediction might be true for a perfect, theoretical black body, it wouldn't be seen in our real-world materials, and that "nearly" perfect black body.</p>
+<p><strong>Planck's Hypothesis</strong></p>
+<p>Faced with the glaring problem of the &quot;ultraviolet catastrophe,&quot; a young scientist named Planck proposed a radical idea: that energy isn&#39;t continuous, but comes in tiny, indivisible packets called &quot;quanta.&quot;  He suggested that the energy of a light wave could only be a multiple of a fundamental unit, $hν$, where <em>h</em> is a constant and <em>ν</em> is the frequency of the light.  So, the possible energy values are $hν, 2hν, 3hν$, and so on, meaning energy changes are always in steps of $hν$.</p>
+<p>Using statistical mechanics, Planck reasoned that higher-frequency modes of light would be less likely to be energized, and their average energy would decrease as frequency increased. He derived a formula that described the average energy of each mode, known as the Planck distribution:</p>
+<p>$\langle E \rangle = \frac{h\nu}{\exp(\frac{h\nu}{kT}) - 1}$</p>
+<p>This equation shows that at low frequencies, the average energy approaches the classical prediction (of the Rayleigh-Jeans Law). At high frequencies however, the average energy goes towards zero which aligns with experimental data and resolves the ultraviolet catastrophe.</p>
+<p>Unlike Rayleigh and Jeans who assumed energy could take any value, Planck proposed that energy was &quot;quantized,&quot; meaning it could only take on specific, discrete values. He stated energy can only be found at values of $E = nhν$, where <em>n</em> is a whole number, <em>h</em> is a constant (later named Planck&#39;s constant), and <em>ν</em> is the frequency.  This seemingly small change completely changed the understanding of energy.  With this assumption, he derived the Planck distribution formula for blackbody radiation, which precisely matched experimental data:</p>
+<p>$d\rho \left( \nu ,T \right) = \rho_{\nu} \left( T \right) d\nu = \dfrac{8 \pi h}{c^3} \dfrac{\nu^3}{e^{h\nu/k_bT}-1} d\nu$</p>
+<p>This formula, known as Planck&#39;s Law, uses Planck&#39;s constant (h = $6.626 \times 10^{-34} \text{ J s}$) which proved to be the key to understanding blackbody radiation.</p>
+<p><strong>Derivation of Planck's Hypothesis</strong></p>
+<p>Imagine a collection of tiny oscillators (think of them like vibrating atoms or tiny springs), each capable of absorbing and emitting light at different frequencies. Planck proposed that these oscillators could only have energies that were multiples of <em>hν</em> (where <em>h</em> is Planck&#39;s constant and <em>ν</em> is the frequency).</p>
+<p>Let&#39;s say there are a total of <em>N</em> oscillators and their total energy is <em>E</em>. We want to figure out the average energy per oscillator (which we call  $\overline{E}$). This can be expressed as:</p>
+<p>$\overline{E}=\frac{E}{N}$</p>
+<p>Now, imagine that a certain number of these oscillators ($N_0$, $N_1$, $N_2$...) are in different energy states ($E_0$, $E_1$, $E_2$...).</p>
+<p><strong>Maxwell&#39;s Distribution and Counting Oscillators</strong></p>
+<p>According to a principle called Maxwell&#39;s distribution, the number of oscillators in a higher energy state is related to the number of oscillators in the lowest energy state. Planck described the number of oscillators ($N_n$) in the $n^{th}$ energy state ($nh\nu$) using this relationship:</p>
+<p>$N_{n}=N _{0} e^{\tfrac{-nh\nu }{kt} }$</p>
+<p>where k is the Boltzmann constant and T is the temperature. We can write this equation out for the different energy levels like so:</p>
+<p>$N_{1}= N_{0} e^{\tfrac{-h\nu }{kt} }$
+$N_{2}= N_{0} e^{\tfrac{-2h\nu }{kt} }$
+$N_{3}= N_{0} e^{\tfrac{-3h\nu }{kt} }$</p>
+<p>We then find the total number of oscillators $N$ by summing all of the oscillators at the different energy states:</p>
+<p>$N = N_0 + N_1 + N_2 + ...$</p>
+<p>Using the previous formula, we can substitute each $N_n$:</p>
+<p>$N = N_0 + N_0 e^{\tfrac{-h\nu }{kt}} + N_0 e^{\tfrac{-2h\nu }{kt}} + ...$</p>
+<p>Which simplifies to:</p>
+<p>$N= N _{0}[1+e^{\tfrac{-h\nu }{kt}}+e^{\tfrac{-2h\nu }{kt}}+.... ]$</p>
+<p>To make things easier, we make a simple variable substitution and call $x = e^{\frac{-h\nu }{kt}}$. Using a known mathematical identity, this reduces to:</p>
+<p>$N = \frac{N_{0}}{1-x}$</p>
+<p><strong>Calculating Total Energy</strong></p>
+<p>Now, we calculate the total energy ($E_N$) of all the oscillators by adding up the energy of each oscillator at its energy state:</p>
+<p>$E_N = E_0 N_0 + E_1 N_1 + E_2 N_2 + ...$</p>
+<p>Since the energy states start at zero, this equation becomes:</p>
+<p>$E_N = 0*N_0 + h\nu N_1 + 2h\nu N_2 + ...$</p>
+<p>Substituting in the previous value of $N_n$ in terms of x gives:</p>
+<p>$E_{N } = N_{0}h\nu (x+2x^{2}+3x^{3}+...+nx^{n})$</p>
+<p>Which simplifies to:</p>
+<p>$E_N = \frac{N{0}h\nu x}{(1-x)^{2}}$</p>
+<p><strong>Finding Average Energy</strong></p>
+<p>We can now find the average energy ($\overline{E}$) of an oscillator by substituting the derived expressions for <em>N</em> and $E_N$:</p>
+<p>$\overline{E}= \frac{\frac{N<em>{0}h\nu x}{(1-x)^{2}}}{\frac{N</em>{0}}{(1-x)}}$</p>
+<p>This simplifies to:</p>
+<p>$\overline{E}= \frac{h\nu }{(\frac{1}{x}-1)}$</p>
+<p>Which can be rewritten using the value of x to give:</p>
+<p>$\overline{E}= \frac{h\nu }{e^{\tfrac{h\nu }{kt}}-1}$</p>
+<p>This is the average energy of each oscillator in a black body!</p>
+<p><strong>Energy Density and Planck&#39;s Law</strong></p>
+<p>We know that the number of oscillators per unit volume within a small wavelength range ($d\lambda$) is $\frac{8\pi }{\lambda ^{4}} d\lambda$. So, we multiply the average energy by this density to get the total energy per unit volume ($E_\lambda$) within the wavelength range $d\lambda$:</p>
+<p>$E_{\lambda}d\lambda = \frac{8\pi }{\lambda ^{4}}d\lambda \overline{E}$</p>
+<p>Substituting the average energy expression, and rewriting in terms of wavelength gives:</p>
+<p style="font-size: x-large;">$E_{\lambda}d\lambda = \frac{8\pi hc}{\lambda ^{5}} \frac{d\lambda}{(e^{\tfrac{hc}{\lambda kt}}-1)}$</p>
+<p>This is Planck&#39;s radiation law!</p>
+<p><strong>Wien&#39;s Displacement Law (A Special Case)</strong></p>
+<p>At short wavelengths (where $\lambda T$ is small),  $e^{\tfrac{hc}{\lambda kt}}$  becomes much larger than 1, so we can simplify Planck&#39;s Law. If we do this we get the Wien&#39;s Displacement Law which describes the shape of the blackbody curve at higher frequencies:</p>
+<p>$E_{\lambda}d\lambda = \frac{8\pi hc}{\lambda ^{5}}e^{\tfrac{-hc}{\lambda kt}}d\lambda$</p>
+<p><strong>Rayleigh-Jeans Law (Another Special Case)</strong></p>
+<p>At long wavelengths (where $\lambda T$ is large),  $e^{\tfrac{hc}{\lambda kt}}$ can be approximated using the start of the Taylor series. Using this approximation we can simplify the Planck&#39;s Law. Using this approximation we get the Rayleigh-Jeans law which describes the curve at low frequencies:</p>
+<p>$E_{\lambda}.d\lambda = \frac{8\pi kt}{\lambda ^{4}}.d\lambda$</p>
+<p>So, we can safely say that Planck&#39;s law is the more general case which can be used to derive both Wien&#39;s displacement law, and the Rayleigh-Jeans law. The derivation of Planck&#39;s law was a landmark in the history of physics because it introduced the revolutionary idea of quantized energy.</p>
+<hr>
+<p><strong>Quick Example</strong></p>
+<p>Consider Planck's eqn($E_{\lambda}d\lambda = \frac{8\pi hc}{\lambda ^{5}} \frac{d\lambda}{(e^{\tfrac{hc}{\lambda kt}}-1)}$) with $\lambda_1$ = 450 nm (blue light) and $\lambda_2$ = 700 nm (red light), and $T$ = 298 K. It follows that</p>
+<p>$\frac{hc}{\lambda_1kT} = \frac{(6.626 \times 10^{-34} \text{ Js}) \times (2.998 \times 10^8 \text{ ms}^{-1})}{(450 \times 10^{-9} \text{ m}) \times (1.381 \times 10^{-23} \text{ JK}^{-1}) \times (298 \text{ K})} = 107.2...$</p>
+<p>$\frac{hc}{\lambda_2kT} = \frac{(6.626 \times 10^{-34} \text{ Js}) \times (2.998 \times 10^8 \text{ ms}^{-1})}{(700 \times 10^{-9} \text{ m}) \times (1.381 \times 10^{-23} \text{ JK}^{-1}) \times (298 \text{ K})} = 68.9...$</p>
+<p>and</p>
+<p>$\frac{\rho(450 \text{ nm}, 298 \text{ K})}{\rho(700 \text{ nm}, 298 \text{ K})} = \left( \frac{700 \times 10^{-9} \text{ m}}{450 \times 10^{-9} \text{ m}} \right)^5 \times \frac{e^{68.9...} - 1}{e^{107.2...} - 1}$</p>
+<p>$= 9.11 \times (2.30 \times 10^{-17}) = 2.10 \times 10^{-16}$</p>
+<p>At room temperature, the proportion of shorter wavelength radiation is insignificant.</p>
+<hr>
+<p>Planck&#39;s breakthrough in solving the blackbody radiation problem was all thanks to a crucial difference in how he treated the energy of the oscillators compared to Rayleigh. Rayleigh assumed that every oscillator, regardless of its frequency, could have the same average energy. Planck, however, made the revolutionary assumption that the energy of an oscillator could only be a whole number multiple of hν (where h is Planck&#39;s constant and ν is the frequency).</p>
+<p>This seemingly small change had a profound impact. Because of Planck&#39;s assumption, very high-frequency oscillators needed a much larger minimum energy to become active or &quot;excited.&quot; Essentially, they were so &quot;energetically expensive&quot; that they were very unlikely to contribute to the overall energy of the system. By effectively &quot;shutting down&quot; the contribution from these high-frequency oscillators, Planck&#39;s model avoided the ultraviolet catastrophe – the problem where the Rayleigh-Jeans Law predicted infinite energy at high frequencies. In essence, Planck introduced quantization, and showed that energy is not a continuous variable.</p>
+<p>The Planck distribution, which describes the energy of light emitted by a heated object (a blackbody), can be expressed using frequency instead of wavelength. When we use frequency (ν), the formula gives us the energy density, denoted by  ρ(ν,T). This represents the amount of energy per unit volume at a given temperature (T) that is carried by electromagnetic radiation within a specific range of frequencies (between ν and ν + dν).  The formula for this energy density using frequency is:</p>
+<p style="font-size: x-large;">$\rho(\nu,T) = \frac{8\pi h\nu^3}{c^3(e^{h\nu/kT} - 1)}$</p>
+<p>This equation tells us how the energy of blackbody radiation is distributed across different frequencies.</p>
+<h3>(b) Heat Capacity</h3>
+<p>When you add heat to something, its temperature usually goes up. The heat capacity (C) tells you how much heat (dq) you need to add to raise the temperature (dT) of a substance by a certain amount. In other words, it&#39;s the amount of heat needed to increase the temperature of a substance by 1 degree. This is expressed as:</p>
+<p>$C = \frac{dq}{dT}$</p>
+<p>Specifically, at a constant volume, we use $C_{V,m}$ (molar heat capacity at constant volume) which is how much heat is required to increase the temperature of one mole of substance by one degree. It&#39;s related to how much internal energy ($U_m$) increases with temperature:</p>
+<p>$C_{V,m} = \left(\frac{\partial U_m}{\partial T}\right)_V$</p>
+<p><strong>The Problem with Classical Physics</strong></p>
+<p>Experiments in the 19th century showed that many monatomic solids (solids made of single atoms) have a molar heat capacity of about 3R at room temperature, where R is the gas constant. However, at very low temperatures, the heat capacity <em>decreased</em>, approaching zero as the temperature approached absolute zero.</p>
+<p>Classical physics couldn&#39;t explain this. The classical model viewed a solid as a bunch of atoms vibrating around fixed positions. It predicted that each atom would have an average energy of $kT$. For a solid with $N$ atoms (each vibrating in three dimensions), the total energy would be $U = 3NkT$, and therefore the heat capacity would be:</p>
+<p>$C_V = \left(\frac{\partial U}{\partial T}\right)_V = 3Nk$</p>
+<p>This meant the molar heat capacity should be $3R$ at all</em> temperatures, which didn&#39;t match the experimental data, particularly at low temperatures.</p>
+<p><strong>Einstein&#39;s Quantum Solution</strong></p>
+<p>In 1905, Einstein applied Planck&#39;s idea of quantized energy to the problem. He proposed that each oscillating atom in the solid could only have specific energies that were multiples of $hν$ (where $h$ is Planck&#39;s constant, and $ν$ is the frequency of oscillation), just like Planck&#39;s oscillators of light.</p>
+<p>Einstein also used the Boltzmann distribution, which suggests that the likelihood of an oscillator occupying a high energy state decreases exponentially with increasing energy. He showed that at low temperatures, very few oscillators would gain sufficient energy to be excited. As a result, the heat capacity would decrease as the temperature goes down as fewer and fewer oscillators can absorb energy. This was completely unlike the classical model.</p>
+<p>Einstein derived an equation for the molar heat capacity:</p>
+<p>$C_{v,m}(T) = 3Rf_E(T)$,  $f_E(T) = \left(\frac{\theta_E}{T}\right)^2 \left(\frac{e^{\theta_E/2T}}{e^{\theta_E/T} - 1}\right)^2$</p>
+<p>Here, $\theta_E$ is the Einstein temperature ($\theta_E = hν/k$) and is specific to the material.</p>
+<p><img style="background-color: white;" src="Experimental-low-temperature-heat-capacities.png" alt="Experimental low-temperature molar heat capacities (open circles) and the temperature dependence predicted on the basis of Einstein’s theory"></p>
+<p><strong>The Behavior at High and Low Temperatures</strong></p>
+<ul>
+<li><p><strong>High Temperatures (T &gt;&gt; $\theta_E$)</strong>: At high temperatures, the exponential terms in the function $f_E(T)$ simplify and we get that $f_E(T)$ approaches 1. This leads to the classical result:  $C</em>{v,m} = 3R$</p>
+</li>
+<li><p><strong>Low Temperatures (T &lt;&lt; $\theta_E$)</strong>: At low temperatures, the exponentials terms dominate and $f_E(T)$ can be approximated to:</p>
+<p>$f_E(T) \approx \left(\frac{\theta_E}{T}\right)^2 e^{-\theta_E/T}$</p>
+</li>
+</ul>
+<p>This shows that the heat capacity decreases and tends toward zero as the temperature gets lower because of the exponential term.</p>
+<p><strong>In short:</strong> Einstein&#39;s model, using quantized energy, successfully explained why the heat capacity of solids decreases at low temperatures, something that classical physics could not explain. He showed that at low temperatures, the oscillators in solids cannot absorb enough energy to be excited. This was a significant application of the idea of energy quantization and it further established the legitimacy of quantum ideas.</p>
+<p>But, there was one problem. The graph lied below the experimentally found values, as visible in the graph above also.</p>
+<p><strong>Debye's Molar Heat Capacity Equation</strong></p>
+<p>Consider a solid as a collection of atoms connected by springs, vibrating in three dimensions. These vibrations can be thought of as elastic waves traveling through the solid. We&#39;re interested in finding out how the different frequencies of these vibrations are distributed.</p>
+<p>We start by considering a rectangular block of solid with side lengths Lx, Ly, and Lz. The vibrations within this solid can be described by waves that satisfy a particular wave equation. These waves can be described using a wave vector <strong>k</strong>, which tells us the direction of the wave, and it can be split into three components, kx, ky and kz. We can further define $l_x$, $l_y$ and $l_z$ as the direction cosines of the wave vector such that:</p>
+<p>$l_x^2 + l_y^2 + l_z^2 = 1$</p>
+<p><strong>Wave Solutions and Boundary Conditions</strong></p>
+<p>The solutions to this wave equation are plane waves, and can be expressed as:</p>
+<p>$u(x,y,z,t) = \sin(2\pi\nu)\sin\left(\frac{2\pi l_x x}{\lambda}\right)\sin\left(\frac{2\pi l_y y} \lambda}\right)\sin\left(\frac{2\pi l_z z}{\lambda}\right$</p>
+<p>Where <em>ν</em> is the frequency, and <em>λ</em> is the wavelength. Because the wave is contained in the block, the waves must also obey boundary conditions, and the waves must equal to zero at the edges of the cube. These boundary conditions dictate the form of the wave in terms of the wave vector and side lengths of the block:</p>
+<p>$\frac{2l_xL_x}{\lambda}=n_x; \frac{2l_yL_y}{\lambda}=n_y; \frac{2l_zL_z}{\lambda}=n_z$</p>
+<p>Where $n_x$, $n_y$, and $n_z$ are positive integers, these integers represent the &#39;modes&#39; of vibration.</p>
+<p><strong>Relating Modes and Frequency</strong></p>
+<p>Using the previous equation and the fact that $c_s=\lambda\nu$, where $c_s$ is the speed of sound, one can derive a relationship between the mode integers and the frequency, and the side lengths:</p>
+<p>$\frac{n_x^2}{(2\nu L_x/c_s)^2} + \frac{n_y^2}{(2\nu L_y/c_s)^2} + \frac{n_z^2}{(2\nu L_z/c_s)^2} = 1$</p>
+<p>For a given frequency, this equation represents an eighth of an ellipsoid in &#39;mode space&#39;, this space describes all of the possible combinations of the mode numbers, and this allows us to count how many modes exist below a certain frequency. We can calculate the number of modes with frequency less than <em>ν</em> by approximating this as the volume of the ellipsoid.</p>
+<p><strong>The Number of Modes and the Debye Frequency</strong></p>
+<p>The number of modes, $N(\nu)$ with a frequency between 0 and <em>ν</em> is:</p>
+<p>$N(\nu) = \frac{4\pi\nu^3V}{3c_{\mathrm{s}}^3}$</p>
+<p>Where <em>V</em> is the volume of the solid, and $c_s$ is the speed of sound.</p>
+<p>We also need to take into account that waves in the solid have both a longitudinal and transverse direction, and the waves can polarized in multiple ways. This alters the definition of the sound velocity to be $\frac{3}{c_s^3} = \frac{1}{c_\text{long}^3} + \frac{2}{c_\text{trans}^3}$.</p>
+<p>Since there are <em>N</em> atoms in the solid, there are <em>3N</em> possible modes of vibration (3 for x, y, and z).  This gives a maximum frequency of vibration, called the Debye frequency <em>νD</em>. We can derive the Debye frequency from the equation above:</p>
+<p>$3N = N(\nu_{\rm D}) = \frac{4\pi\nu_{\rm D}^3V}{3c_{\rm s}^3}$</p>
+<p>We also define $\nu_{\rm D} = \frac{kT_{\rm D}}{h}$, where $T_D$ is the Debye temperature, <em>k</em> is Boltzmann&#39;s constant, and <em>h</em> is Planck&#39;s constant. This allows us to rewrite the previous expression for $N(\nu)$:</p>
+<p>$N(\nu) = \frac{3Nh^3\nu^3}{k^3T_{\rm D}^3}$</p>
+<p><strong>Energy of Vibrating Oscillators</strong></p>
+<p>Now, we want to find out the average energy of these vibrational modes.  We can do so because, according to quantum mechanics, the energy of a quantum harmonic oscillator is $E_i = (i+1/2)h\nu$ where $i = 0,1,2,\dots$.</p>
+<p>The number of particles in a given energy state ($n_i$) follows Maxwell-Boltzmann statistics:</p>
+<p>$n_i=\frac{1}{A}e^{-E_i/(kT)}=\frac{1}{A}e^{-(i+1/2)h\nu/(kT)}$</p>
+<p>Where <em>A</em> is a normalization constant.</p>
+<p>The total energy contribution from the oscillators at a particular frequency is:</p>
+<p>$dU(\nu) = \sum_{i=0}^\infty E_i\frac{1}{A}e^{-E_i/(kT)}.$</p>
+<p>By noting that the sum over all $n_i$ is equal to the number of modes $dN(\nu)$, we can simplify the equation and calculate the total average energy:
+$dU = dN(\nu)h\nu\left(\frac{1}{2}+\frac{1}{e^{h\nu/(kT)}-1}\right).$</p>
+<p><strong>Total Energy</strong></p>
+<p>Finally, to find the total energy in all of these modes we need to integrate the expression for the average energy over all frequencies from zero up to the Debye frequency $v_D$. This gives us:</p>
+<p>$\boxed{U = \frac{9Nh^4}{k^3T_{\rm D}^3}\int_0^{\nu_D}\left(\frac{1}{2}+\frac{1}{e^{h\nu/(kT)}-1}\right)\nu^3 d\nu}.$</p>
+<img src="Experimental-data-verification-debye.png" alt="Molar heat capacity of several solids versus T, the latter in units of the Debye
+temperature TD = hfD>k. The solid curve is that predicted by Debye.">
+<p>The data for all solids fall on the same curve, which Debye had predicted in his equation.</p>
+<h3>(c)Atomic and molecular spectra</h3>
+<p>Spectroscopy, which involves studying how substances interact with light (electromagnetic radiation), provides the most convincing and direct proof that energy is quantized. By analyzing the patterns of light that a substance absorbs, emits, or scatters, we can see clear evidence that energy exists in discrete packets, rather than as a continuous spectrum. The key to this analysis lies in carefully recording how the intensity of the light changes with its frequency (ν), wavelength (λ), or wavenumber.</p>
+<img src="Atomic-spectra-6png.png" alt="Atomic Spectra" style="background-color: white;" width="70%">
+<p>The image above displays an atomic emission spectrum, while the image below shows a molecular absorption spectrum.</p>
+<img src="Molecular-spectra.png" alt="A molecule can change its state by absorbing radiation at definite frequencies. This spectrum is due to the electronic, vibrational, and rotational excitation of sulfur dioxide (SO2) molecules. The observation of discrete spectral lines suggests that molecules can possess only discrete energies, not an arbitrary energy." style="background-color: white;" width="70%">
+<p>The most noticeable thing about both the emission and absorption spectra is that light is either given off or taken in only at specific, distinct frequencies. This pattern makes sense if we assume that the energy levels within atoms and molecules are also restricted to specific, discrete values. If that's true, then the amounts of energy an atom or molecule can release or absorb are similarly limited to these specific values. When the energy of an atom or molecule decreases by a certain amount (ΔE), and this energy is released as light, the frequency (ν) of the emitted light and the change in energy are connected through the <strong>Bohr frequency condition</strong>: </p>
+<p style="text-align: center; font-size: larger;">$E = h\nu$</p>
+<img src="Spectroscopic Transitions.png" alt="Spectroscopic transitions, such as those shown in former, can be accounted for by supposing that an atom (or molecule) emits electromagnetic radiation as it changes from a discrete level of high energy to a discrete level of lower energy. High-frequency radiation is emitted when the energy change is large. Transitions like those shown in latter can be explained by supposing that a molecule (or atom) absorbs radiation as it changes from a low-energy level to a higher-energy level" style="background-color: white;" width="70%">
+<p>When a molecule changes its energy state, we call this a <strong>spectroscopic transition</strong>. This transition causes the molecule to emit light at a specific frequency, resulting in a sharply defined peak, or "line," in the spectrum.</p>
+<p><strong>Quick Example</strong></p>
+<p><p>Atomic sodium, when heated (like in a flame or some street lamps), emits a characteristic yellow light. This yellow glow is due to the emission of light at a wavelength of 590 nanometers (nm). This emission arises from a spectroscopic transition, where an electron moves between specific energy levels within the sodium atom. The energy difference (ΔE) between these levels can be calculated using the Bohr frequency condition, which relates energy, frequency, and wavelength:</p>
+<p>$\Delta E = h\nu = \frac{hc}{\lambda}$</p>
+<p>Where:</p>
+<ul>
+<li>h is Planck&#39;s constant ($6.626 \times 10^{-34} \text{ Js}$)</li>
+<li>c is the speed of light ($2.998 \times 10^8 \text{ ms}^{-1}$)</li>
+<li>λ is the wavelength (590 × 10⁻⁹ m)</li>
+</ul>
+<p>Substituting the values we get:</p>
+<p>$\Delta E =  \frac{(6.626 \times 10^{-34} \text{ Js}) \times (2.998 \times 10^8 \text{ ms}^{-1})}{590 \times 10^{-9} \text{ m}}$</p>
+<p>$\Delta E = \frac{1.9864748 \times 10^{-25} \text{ J m}}{590 \times 10^{-9} \text{ m}}$</p>
+<p>$\Delta E = 3.36690644 \times 10^{-19} \text{ J}$</p>
+<p>$\Delta E \approx 3.37 \times 10^{-19} \text{ J}$</p>
+<p>This energy difference can also be expressed in other units. If we multiply this energy value by Avogadro&#39;s number (the number of particles in a mole, $6.022 \times 10^{23} \text{ mol}^{-1}$), we get the energy difference per mole of sodium atoms:</p>
+<p>$3.37 \times 10^{-19} \text{ J} \times 6.022 \times 10^{23} \text{ mol}^{-1} = 203,000 \text{ J mol}^{-1} = 203 \text{ kJ mol}^{-1}$.</p>
+<p>This energy difference (203 kJ mol⁻¹) is comparable to the strength of a weak chemical bond.</p>
+</p>
+<h3>Questions for Practice</h3>
+<ol>
+    <li>Calculate the wavelength and frequency at which the intensity of the radiation is a maximum for a black body at 298 K.</li>
+    <li>The intensity of the radiation from an object is found to be a maximum at 2000 cm−1. Assuming that the object is a black body, calculate its temperature.</li>
+    <li>Calculate the molar heat capacity of a monatomic non-metallic solid at 298 K which is characterized by an Einstein temperature of 2000 K. Express your result as a multiple of 3R.</li>
+    <li>What is the total power radiated per unit area by a blackbody at 500 K?</li>
+    <li>A star has a surface temperature of 6000 K. At what wavelength does its radiation intensity peak?</li>
+    <li>A 100 W lightbulb is approximated as a blackbody. Assuming all power is radiated, estimate the bulb&#39;s surface temperature if its surface area is 20 cm².</li>
+    <li>If the temperature of a blackbody is doubled, by what factor does its total radiated power increase?</li>
+    <li>How does the peak wavelength of a blackbody&#39;s radiation change when its temperature is halved?</li>
+    <li>A piece of metal is heated to 800 K. Will the peak of its radiation curve be in the visible, infrared, or ultraviolet region?</li>
+    <li>Explain qualitatively why objects glow red before they glow white when heated.</li>
+    <li>Two objects, one at 300 K and the other at 600 K, radiate energy. What is the ratio of their total radiated power?</li>
+    <li>A furnace is maintained at 1500 K. If the radiation emerging from the opening behaves as blackbody radiation, calculate the wavelength at which the emitted intensity is a maximum.</li>
+    <li>If the peak of a blackbody spectrum occurs at 10 μm, determine the temperature of the emitting body.</li>
+    <li>The filament of an incandescent lightbulb operates at 2500 K. Calculate the fraction of its radiated power that is in the visible region of the electromagnetic spectrum (approx. 400 nm - 700 nm). (Requires knowledge of integrating the Planck function).</li>
+    <li>What is the average energy of a Planck oscillator at a temperature of 1000K and a frequency corresponding to a wavelength of 5 microns?</li>
+    <li>What is the energy of a 200nm photon?</li>
+    <li>Calculate the molar heat capacity of a monatomic ideal gas at constant volume and constant pressure.</li>
+    <li>Why does the heat capacity of a substance generally increase with temperature?</li>
+    <li>Explain the difference between heat capacity at constant volume (Cv) and constant pressure (Cp).</li>
+    <li>The Einstein temperature for copper is about 340 K. What does this imply about the vibrational frequencies of copper atoms?</li>
+    <li>Use the Debye model to qualitatively predict the behavior of the heat capacity of a solid at very low temperatures.</li>
+    <li>A solid has a Debye temperature of 400 K. Calculate its heat capacity at 20 K and 800 K. Express your answers relative to the classical value (3R).</li>
+    <li>If the Einstein temperature for a solid is much larger than the ambient temperature, how does its heat capacity compare to the classical Dulong-Petit law prediction?</li>
+    <li>Explain why the heat capacity of a diatomic gas is higher than that of a monatomic gas.</li>
+    <li>Estimate the molar heat capacity of diamond (an allotrope of carbon) at 25°C, given its Debye temperature is very high (≈ 2230 K). Explain why it is different from the prediction by Dulong-Petit&#39;s law.</li>
+    <li>A metal has an Einstein temperature of 300K. What is the approximate value for the molar heat capacity of the metal at 30K?</li>
+    <li>Derive Wien&#39;s displacement law from the Planck radiation formula.</li>
+    <li>Calculate the ratio of the number of photons emitted by a blackbody at two different wavelengths, given their respective frequencies.</li>
+    <li>A 100g piece of iron at 500K is dropped into 100g of water at 300K. Calculate the equilibrium temperature. (Requires specific heat capacity values).</li>
+    <li>Estimate the vibrational contribution to the heat capacity of a solid if the vibrational frequency is 10^13 Hz, at room temperature.</li>
+    <li>A blackbody of area 0.1 m² emits 1000 W of power. What is its temperature?</li>
+    <li>Consider a blackbody at two different temperatures T1 and T2 (where T2 = 2T1). What is the ratio of the energy density at a wavelength λ/2 if the blackbody was at T1, to the energy density at λ if the blackbody was at T2?</li>
+    <li>Calculate the average energy per mode for the electromagnetic radiation in a blackbody cavity at 500K at a wavelength of 10 microns.</li>
+    <li>Assuming that the human body emits radiation like a blackbody with a temperature of 37°C, calculate the wavelength at which the intensity is maximized.</li>
+    <li>The Einstein model assumes all oscillators vibrate at the same frequency. How does this differ from reality, and how does the Debye model attempt to improve on this?</li>
+    <li>A 50 g aluminum block initially at 80°C is placed in 100 g of water at 20°C. What is the equilibrium temperature? (Specific heats required).</li>
+    <li>A 1 kg block of metal with a specific heat of 500 J/kg.K is heated from 20°C to 100°C. How much heat was required?</li>
+    <li>A 1 kW heater is used to heat a 5 kg copper block. How long will it take to raise the temperature from 20 to 100 degrees C?</li>
+    <li>A 10-gram object is dropped from a 10-meter height. Assuming that all the kinetic energy is converted to heat on impact, how much will the temperature rise if the object is made of lead?</li>
+    <li>Explain the physical basis of the Planck distribution law.</li>
+    <li>A hot piece of iron with heat capacity 200 J/K cools in a room and looses 100 J of energy each second. If the initial temperature of the piece of iron is 400K, what will its temperature be after 10 seconds?</li>
+    <li>Show that the total power radiated by a blackbody is proportional to T⁴ by integrating the Planck distribution.</li>
+    <li>Explain how the quantum nature of energy explains the ultraviolet catastrophe.</li>
+    <li>Calculate the entropy of a system of N oscillators described by the Einstein model.</li>
+    <li>A solar panel has an area of 2 m² and an efficiency of 15%. Assuming the sun radiates as a blackbody at 5800 K, how much power can the solar panel generate when the sun is directly overhead, if we ignore atmospheric effects?</li>
+    <li>Determine the number of photons emitted per unit time by a blackbody source with an area of 100 cm2 at a temperature of 1500 K in the wavelength range between 500 and 505 nm.</li>
+    <li>Derive an expression for the number of modes of electromagnetic radiation per unit volume within a blackbody cavity.</li>
+    <li>A star is observed to emit most strongly at 400 nm. If the radius of this star is 5 times that of the sun, and the sun radiates most strongly at 500 nm, how many times greater is the total power output of the star?</li>
+    <li>A blackbody sphere has its temperature increased by 10% . What is the percentage change in the total power emitted by the sphere and the change in the wavelength at which most of the power is emitted?</li>
+    <li>Given the heat capacity dependence on temperature according to the Debye Model, determine the temperature dependence of the internal energy of the solid.</li>
+    <li>Using the Planck formula for black body radiation, show that for very low frequencies or very high temperatures the Rayleigh-Jeans formula is recovered.</li>
+    <li>Consider a gas of 1000 identical diatomic molecules that are in thermal equilibrium with a surrounding heat bath. Determine the average energy of a single molecule at a temperature of 200K.</li>
+    </ol>
+    <h2 id="Wave-Particle">Wave-Particle Duality</h2>
+    <p>The experiments we're about to discuss demonstrate a fascinating duality: electromagnetic radiation, which classical physics describes as a wave, also exhibits particle-like behavior. Conversely, electrons, which are treated as particles in classical physics, also show wave-like properties. This concept of <strong>wave-particle duality</strong>, where waves and particles have intertwined characteristics, is a core principle of quantum mechanics.    </p>
+    <h3>(a)The particle character of electromagnetic radiation</h3>
+    <p>Planck&#39;s work on blackbody radiation introduced the idea that an oscillator with a frequency of <em>ν</em> can only possess energies that are multiples of <em>hν</em> (0, <em>hν</em>, 2<em>hν</em>, ...). This quantization led to the suggestion – and it was just a suggestion at that point – that electromagnetic radiation of frequency <em>ν</em> could be viewed as a collection of 0, 1, 2, ... particles, each carrying an energy of <em>hν</em>. We now call these particles of electromagnetic radiation &quot;photons&quot;.</p>
+<p>So, if an oscillator with frequency <em>ν</em> is excited to its first energy level, it&#39;s associated with one photon of that frequency being present. If the oscillator is in its second excited state, it&#39;s associated with two photons, and so on. When we observe the discrete lines of light emitted by atoms or molecules, we can think of it as the atom or molecule generating a single photon with energy <em>hν</em> when it transitions to a lower energy level, releasing an amount of energy ΔE equal to <em>hν</em>. Critically, each transition only produces a <em>single</em> photon, not a burst of many photons.</p>
+<p><strong>Example</strong></p>
+<p>Q. Calculate the number of photons emitted by a 100 W yellow lamp in 1.0 s. Take the wavelength of yellow light as 560 nm, and assume 100 per cent efficiency.</p>
+<p><strong>Understanding the Concepts</strong></p>
+<p>Before we start crunching numbers, here are the key ideas:</p>
+<ul>
+<li><strong>Lamp Power:</strong> The lamp&#39;s power (100 W) tells us how much energy it emits as light per second. Since we are assuming 100% efficiency, this is also equal to the amount of electrical energy it uses per second.</li>
+<li><strong>Photon Energy:</strong> Light is composed of individual energy packets called photons. The energy of a single photon depends on its frequency (or wavelength).</li>
+<li><strong>Energy, Wavelength, and Frequency:</strong> We&#39;ll be using the fundamental relationships that connect these properties of light.</li>
+<li><strong>Total Energy and Photon Count:</strong> The total energy emitted by the lamp is the sum of the energy of all the individual photons that are emitted.</li>
+</ul>
+<p><strong>Step 1: Total Energy Emitted</strong></p>
+<p>The lamp has a power of 100 Watts (W). Power is the energy used or emitted per second. Since the lamp operates for 1 second, the total energy emitted is:</p>
+<p>$E_{total} = \text{Power} \times \text{Time}$
+$E_{total} = 100 \, \text{W} \times 1.0 \, \text{s}$
+$E_{total} = 100 \, \text{J}$</p>
+<p>So, the lamp emits 100 Joules of energy as light.</p>
+<p><strong>Step 2: Energy of a Single Photon</strong></p>
+<p>The energy of a single photon ($E_{photon}$) is related to its frequency (ν) by Planck&#39;s equation:</p>
+<p>$E_{photon} = h \nu$</p>
+<p>Where <em>h</em> is Planck&#39;s constant ($6.626 \times 10^{-34} \, \text{Js}$).</p>
+<p>We&#39;re given the wavelength (λ) of the yellow light (560 nm), so we can find the frequency using:</p>
+<p>$c = \lambda \nu$</p>
+<p>Where <em>c</em> is the speed of light ($3.00 \times 10^8 \, \text{m/s}$).</p>
+<p>First, convert the wavelength to meters:</p>
+<p>$\lambda = 560 \, \text{nm} = 560 \times 10^{-9} \, \text{m}$</p>
+<p>Now, calculate the frequency:</p>
+<p>$\nu = \frac{c}{\lambda} = \frac{3.00 \times 10^8 \, \text{m/s}}{560 \times 10^{-9} \, \text{m}}$
+$\nu \approx 5.357 \times 10^{14} \, \text{Hz}$</p>
+<p>Now, we calculate the energy of one photon:</p>
+<p>$E_{photon} = h \nu = (6.626 \times 10^{-34} \, \text{Js}) \times (5.357 \times 10^{14} \, \text{Hz})$
+$E_{photon} \approx 3.549 \times 10^{-19} \, \text{J}$</p>
+<p>Alternatively, we can directly use the wavelength in the equation for energy:</p>
+<p>$E_{photon} = \frac{hc}{\lambda} = \frac{(6.626 \times 10^{-34} \, \text{Js}) \times (3.00 \times 10^8 \, \text{m/s})}{560 \times 10^{-9} \, \text{m}}$</p>
+<p>$E_{photon} = \frac{1.9878 \times 10^{-25} \, \text{J m}}{560 \times 10^{-9} \, \text{m}}$
+$E_{photon} \approx 3.5496 \times 10^{-19} \, \text{J}$</p>
+<p><strong>Step 3: Calculate the Number of Photons</strong></p>
+<p>The total energy emitted is the sum of the energies of all individual photons. If <em>N</em> is the number of photons:</p>
+<p>$E_{total} = N \times E_{photon}$</p>
+<p>We can solve for <em>N</em>:</p>
+<p>$N = \frac{E_{total}}{E</em>{photon}} = \frac{100 \, \text{J}}{3.5496 \times 10^{-19} \, \text{J}}$
+$N \approx 2.817 \times 10^{20}$</p>
+<p><strong>Final Answer</strong></p>
+<p>Therefore, the number of photons emitted by the 100 W yellow lamp in 1.0 s is approximately $\boxed{2.82 \times 10^{20}}$.</p>
+<h3>Questions for Practice</h3>
+<ol>
+    <li><p>A red laser pointer emits light at a wavelength of 650 nm with a power output of 5 mW. How many photons does it emit per second?</p>
+    </li>
+    <li><p>A solar panel with an area of 1 m² is exposed to sunlight. If the average intensity of the sunlight is 1000 W/m² and the average wavelength of the photons is 550 nm, estimate the number of photons hitting the solar panel per second. (Assume all photons are absorbed).</p>
+    </li>
+    <li><p>A radio station transmits at a frequency of 100 MHz with a power of 50 kW. How many photons are emitted per second from the station&#39;s antenna?</p>
+    </li>
+    <li><p>A green LED emits light at a wavelength of 520 nm with an efficiency of 20%. If the electrical power input to the LED is 100 mW, how many photons are emitted per second?</p>
+    </li>
+    <li><p>A X-ray tube operates at a voltage such that the minimum wavelength of emitted X-rays is 0.1 nm. If the tube generates 10 Watts of X-ray power, what is the rate at which the photons are emitted? (Assume the photons are emitted at the minimum wavelength, this is a simplification).</p>
+    </li>
+</ol>
+<hr width="20%">
+<img src="threshold-frequency.png" alt="In the photoelectric effect, it is found that no electrons are ejected when the incident radiation has a frequency below a certain value that is characteristic of the metal. Above that value, the kinetic energy of the photoelectrons varies linearly with the frequency of the incident radiation." width="70%" style="background-color: white;">
+<p>Up to this point, the idea of photons is just a theoretical concept. However, the photoelectric effect, where electrons are ejected from metals when exposed to ultraviolet light, provides experimental evidence for their existence. Here&#39;s what scientists observed during these experiments:</p>
+<ul>
+<li><strong>Threshold Frequency:</strong> No matter how intense the light is, electrons are only ejected if the light&#39;s frequency is above a certain minimum value (the &quot;threshold frequency&quot;), which depends on the specific metal.</li>
+<li><strong>Kinetic Energy and Frequency:</strong> The kinetic energy of the ejected electrons increases linearly with the frequency of the light, but the intensity of the light has no effect on the kinetic energy.</li>
+<li><strong>Immediate Ejection:</strong> Even with very dim light, electrons are ejected instantly as long as the frequency is above the threshold.</li>
+</ul>
+<p>These observations strongly suggest that the photoelectric effect involves a particle-like collision between light and the metal. This is exactly what one would expect if light consisted of photons, as described previously. If we consider photons as projectiles each with an energy of <em>hν</em>, we can relate that to the kinetic energy of the ejected electron and the energy required to dislodge the electron (the work function, Φ). Then the conservation of energy dictates that:</p>
+<p>$h\nu = E_k + \phi$ or $h\nu = E_k - \phi$</p>
+<p>Where $E_k$ is the kinetic energy of the electron.</p>
+<p>This model neatly explains all three observed characteristics of the photoelectric effect:</p>
+<ul>
+<li><strong>Why a Threshold Frequency?</strong> If the energy of the photon, <em>hν</em>, is less than the work function (Φ), there isn&#39;t enough energy to eject an electron.</li>
+<li><strong>Why Kinetic Energy Increases Linearly with Frequency?</strong>  The excess energy that the photon has above the work function goes into the kinetic energy of the electron, hence an increase in frequency increases kinetic energy.</li>
+<li><strong>Why Immediate Ejection?</strong> When a photon collides with an electron, it transfers all of its energy, so if the photon has enough energy, an electron is released instantly.</li>
+</ul>
+    <img src="A10.png" alt="The photoelectric effect can be explained if it is supposed that the incident radiation is composed of photons that have energy proportional to the frequency of the radiation. (a) The energy of the photon is insufficient to drive an electron out of the metal. (b) The energy of the photon is more than enough to eject an electron, and the excess energy is carried away as the kinetic energy of the photoelectron " width="70%" style="background-color: white;">
+    <section>
     <h2 id="about-author">
             About the author
         </h2>
