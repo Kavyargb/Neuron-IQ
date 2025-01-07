@@ -1257,7 +1257,139 @@ document.addEventListener('DOMContentLoaded', lazyLoadImages);
     <p>The Einstein model, which assumes a single vibrational frequency, predicts that the heat capacity approaches zero exponentially as the temperature decreases. While the heat capacity does approach zero, the $T^3$ dependence predicted by the Debye model is a much more accurate description of the experimental behavior of solids at low temperatures.</p>
 
     <p><strong>In summary, the Debye model qualitatively predicts that as the temperature of a solid approaches absolute zero, its heat capacity decreases proportionally to the cube of the temperature. This is because only the low-frequency vibrational modes can be thermally excited at such low temperatures, and the number of these accessible modes increases with temperature according to this cubic relationship.</strong></p>
-    
+    <h2 id="42">A solid has a Debye temperature of 400 K. Calculate its heat capacity at 20 K and 800 K. Express your answers relative to the classical value (3R).</h2>
+    <p>The heat capacity of a solid according to the Debye model is given by:
+        $C_V = 9 N k_B \left(\frac{T}{\Theta_D}\right)^3 \int_0^{\Theta_D/T} \frac{x^4 e^x}{(e^x - 1)^2} dx$
+        where $N$ is the number of atoms, $k_B$ is the Boltzmann constant, $T$ is the temperature, and $\Theta_D$ is the Debye temperature. For one mole, $N k_B = R$, so $3 N k_B = 3R$. The heat capacity relative to the classical value is $C_V / (3R)$.</p>
+        <p>Case 1: T = 20 K
+        $\frac{T}{\Theta_D} = \frac{20}{400} = 0.05$
+        $\frac{\Theta_D}{T} = \frac{400}{20} = 20$
+        Since $T \ll \Theta_D$, we can use the low-temperature approximation:
+        $C_V \approx \frac{12 \pi^4}{5} N k_B \left(\frac{T}{\Theta_D}\right)^3$
+        $\frac{C_V}{3R} \approx \frac{1}{3} \frac{12 \pi^4}{5} \left(\frac{T}{\Theta_D}\right)^3 = \frac{4 \pi^4}{5} \left(\frac{T}{\Theta_D}\right)^3$
+        $\frac{C_V}{3R} \approx \frac{4 \times (3.14159)^4}{5} \times (0.05)^3 = \frac{4 \times 97.409}{5} \times 0.000125 = 77.9272 \times 0.000125 \approx 0.00974$</p>
+        <p>Case 2: T = 800 K
+        $\frac{T}{\Theta_D} = \frac{800}{400} = 2$
+        $\frac{\Theta_D}{T} = \frac{400}{800} = 0.5$
+        Since $T &gt; \Theta_D$, we can use the high-temperature expansion of the Debye function for heat capacity. The Debye function for heat capacity is $D_C(y) = \frac{3}{y^3} \int_0^y \frac{x^4 e^x}{(e^x - 1)^2} dx$, where $y = \Theta_D/T$. Then $C_V = 3R D_C(\Theta_D/T)$.
+        For high temperatures ($T \gg \Theta_D$, or small $y$), $D_C(y) \approx 1 - \frac{y^2}{40}$.
+        $\frac{C_V}{3R} \approx 1 - \frac{1}{40} \left(\frac{\Theta_D}{T}\right)^2$
+        $\frac{C_V}{3R} \approx 1 - \frac{1}{40} (0.5)^2 = 1 - \frac{1}{40} \times 0.25 = 1 - 0.00625 = 0.99375$</p>
+        <p>Final Answer: The final answer is $\boxed{0.00974, 0.994}$</p>
+        <h2 id="43">If the Einstein temperature for a solid is much larger than the ambient temperature, how does its heat capacity compare to the classical Dulong-Petit law prediction?</h2>
+        <p>The Einstein model for the heat capacity at constant volume is given by:</p>
+<p>$$C_V = 3R \left(\frac{\theta_E}{T}\right)^2 \frac{e^{\theta_E/T}}{(e^{\theta_E/T}-1)^2}$$</p>
+<p>where $\theta_E$ is the Einstein temperature and $T$ is the ambient temperature.</p>
+<p>The Dulong-Petit law predicts a molar heat capacity of $3R$.</p>
+
+<p>Given that $\theta_E \gg T$, we can analyze the behavior of the Einstein model in this limit.<br>
+Let $x = \frac{\theta_E}{T}$. Since $\theta_E \gg T$, we have $x \gg 1$.<br>
+Then the expression for the heat capacity becomes:</p>
+<p>$$C_V = 3R x^2 \frac{e^x}{(e^x-1)^2}$$</p>
+<p>Since $x$ is large, $e^x \gg 1$, so $e^x - 1 \approx e^x$.<br>
+Then the expression can be approximated as:</p>
+<p>$$C_V \approx 3R x^2 \frac{e^x}{(e^x)^2} = 3R x^2 e^{-x}$$</p>
+<p>Substitute back $x = \frac{\theta_E}{T}$:</p>
+<p>$$C_V \approx 3R \left(\frac{\theta_E}{T}\right)^2 e^{-\theta_E/T}$$</p>
+<p>To compare this with the Dulong-Petit law prediction, we examine the factor $\left(\frac{\theta_E}{T}\right)^2 e^{-\theta_E/T}$.<br>
+Since $\theta_E \gg T$, the term $\frac{\theta_E}{T}$ is large, but the exponential term $e^{-\theta_E/T}$ is very small. The exponential term dominates as $T$ becomes much smaller than $\theta_E$.</p>
+
+<p>Consider the limit as $T \to 0$ (which is implied by $\theta_E \gg T$ for a fixed $\theta_E$).</p>
+<p>$$\lim_{T \to 0} \left(\frac{\theta_E}{T}\right)^2 e^{-\theta_E/T}$$</p>
+<p>Let $y = \frac{1}{T}$. As $T \to 0$, $y \to \infty$.<br>
+The expression becomes:</p>
+<p>$$\lim_{y \to \infty} (\theta_E y)^2 e^{-\theta_E y} = \theta_E^2 \lim_{y \to \infty} \frac{y^2}{e^{\theta_E y}}$$</p>
+<p>Using L'Hôpital's rule twice:</p>
+<p>$$\theta_E^2 \lim_{y \to \infty} \frac{2y}{\theta_E e^{\theta_E y}} = 2\theta_E \lim_{y \to \infty} \frac{y}{e^{\theta_E y}} = 2\theta_E \lim_{y \to \infty} \frac{1}{\theta_E e^{\theta_E y}} = \frac{2}{\lim_{y \to \infty} e^{\theta_E y}} = 0$$</p>
+<p>Therefore, when the Einstein temperature is much larger than the ambient temperature, the heat capacity is significantly smaller than the classical Dulong-Petit law prediction.</p>
+
+<p>$$\boxed{\text{The heat capacity is much smaller than the Dulong-Petit law prediction.}}$$</span></p>
+<h2 id="44">Explain why the heat capacity of a diatomic gas is higher than that of a monatomic gas.</h2>
+<p>The heat capacity of a diatomic gas is higher than that of a monatomic gas because diatomic molecules possess additional modes of energy storage that monatomic molecules do not. These additional modes are related to the internal structure of the molecule.</p>
+
+<p><strong>Monatomic Gases:</strong></p>
+<ul>
+    <li><strong>Translational Motion:</strong> Monatomic gases (like Helium, Neon, Argon) can only store energy through the kinetic energy of their translational motion. This means they can move in three independent directions (x, y, and z).</li>
+    <li><strong>Degrees of Freedom:</strong> According to the equipartition theorem, each degree of freedom contributes ½<em>kT</em> of energy per molecule (or ½<em>RT</em> per mole), where <em>k</em> is the Boltzmann constant and <em>R</em> is the ideal gas constant. Monatomic gases have 3 translational degrees of freedom.</li>
+    <li><strong>Heat Capacity:</strong> For a monatomic ideal gas, the molar heat capacity at constant volume (<em>C<sub>V</sub></em>) is determined by the translational degrees of freedom:
+        <br><em>C<sub>V</sub></em> = &frac32;<em>R</em>
+    </li>
+</ul>
+
+<p><strong>Diatomic Gases:</strong></p>
+<ul>
+    <li><strong>Translational Motion:</strong> Like monatomic gases, diatomic gases (like Oxygen, Nitrogen, Hydrogen) can also store energy through translational motion in three directions.</li>
+    <li><strong>Rotational Motion:</strong> Diatomic molecules can rotate around two axes perpendicular to the bond axis. Rotation around the bond axis itself doesn't contribute significantly to the energy at typical temperatures because the moment of inertia around that axis is very small. This adds 2 rotational degrees of freedom.</li>
+    <li><strong>Vibrational Motion:</strong> The two atoms in a diatomic molecule can vibrate back and forth along the bond axis. This vibrational motion involves both kinetic and potential energy. It contributes 2 degrees of freedom (one for kinetic and one for potential energy).</li>
+    <li><strong>Degrees of Freedom:</strong> In total, a diatomic molecule has 3 translational + 2 rotational + 2 vibrational = 7 degrees of freedom.</li>
+    <li><strong>Heat Capacity:</strong> According to the equipartition theorem:
+        <ul>
+          <li><strong>At low temperatures:</strong> Only translational degrees of freedom are significantly active. <em>C<sub>V</sub></em> ≈ &frac32;<em>R</em>.</li>
+          <li><strong>At moderate temperatures:</strong> Translational and rotational degrees of freedom are active. <em>C<sub>V</sub></em> ≈ &frac32;<em>R</em> + &frac22;<em>R</em> = &frac52;<em>R</em>.</li>
+           <li><strong>At high temperatures:</strong> Translational, rotational, and vibrational degrees of freedom are active. <em>C<sub>V</sub></em> ≈ &frac32;<em>R</em> + &frac22;<em>R</em> + &frac22;<em>R</em> = &frac72;<em>R</em>.</li>
+        </ul>
+    </li>
+</ul>
+
+<p><strong>Comparison:</strong></p>
+
+<p>As you can see, the molar heat capacity at constant volume (<em>C<sub>V</sub></em>) for a diatomic gas is higher than that of a monatomic gas because diatomic molecules can absorb energy into rotational and vibrational modes in addition to translational motion. This means that for the same increase in temperature, a diatomic gas needs more energy input than a monatomic gas.</p>
+
+<p><strong>In summary:</strong> Diatomic molecules have more ways to store energy (more degrees of freedom) than monatomic molecules. This leads to a higher heat capacity because more energy is required to increase the temperature by a certain amount. The additional energy is absorbed by the rotational and vibrational motion of the diatomic molecules.</p>
+<h2>Estimate the molar heat capacity of diamond (an allotrope of carbon) at 25°C, given its Debye temperature is very high (≈ 2230 K). Explain why it is different from the prediction by Dulong-Petit&#39;s law.</h2>
+<p><strong>Estimating the Molar Heat Capacity of Diamond:</strong></p>
+
+<p>Given that the Debye temperature ($\Theta_D$) of diamond is very high ($\approx 2230$ K) and the ambient temperature ($T$) is $25^\circ$C ($298$ K), we are in the regime where $T \ll \Theta_D$. In this low-temperature regime, the Debye model for the molar heat capacity at constant volume ($C_V$) is approximately given by:</p>
+
+<p>
+$C_V \approx \frac{12 \pi^4}{5} R \left(\frac{T}{\Theta_D}\right)^3$
+</p>
+
+<p>where $R$ is the ideal gas constant ($8.314 \, \text{J/mol K}$).</p>
+
+<p>Let's plug in the values:</p>
+
+<p>
+$C_V \approx \frac{12 \pi^4}{5} (8.314 \, \text{J/mol K}) \left(\frac{298 \, \text{K}}{2230 \, \text{K}}\right)^3$
+</p>
+
+<p>
+$C_V \approx 233.725 \times 8.314 \times (0.13363)^3$
+</p>
+
+<p>
+$C_V \approx 233.725 \times 8.314 \times 0.002381$
+</p>
+
+<p>
+$C_V \approx 1943.15 \times 0.002381$
+</p>
+
+<p>
+$C_V \approx 4.62 \, \text{J/mol K}$
+</p>
+
+<p>Therefore, the estimated molar heat capacity of diamond at $25^\circ$C is approximately $4.62 \, \text{J/mol K}$.</p>
+
+<p><strong>Why it is Different from the Dulong-Petit Law:</strong></p>
+
+<p>The Dulong-Petit law states that the molar heat capacity of a solid is approximately $3R$, which is:</p>
+
+<p>
+$C_V \approx 3 \times 8.314 \, \text{J/mol K} = 24.942 \, \text{J/mol K}$
+</p>
+
+<p>The value we calculated using the Debye model ($4.62 \, \text{J/mol K}$) is significantly lower than the prediction by the Dulong-Petit law ($24.942 \, \text{J/mol K}$). This difference arises from the underlying assumptions of the two models:</p>
+
+<ul>
+    <li><strong>Dulong-Petit Law:</strong> This law is a classical result based on the equipartition theorem. It assumes that each atom in the solid behaves as a harmonic oscillator with 6 degrees of freedom (3 kinetic and 3 potential, corresponding to vibrations in three dimensions). At sufficiently high temperatures, each degree of freedom contributes ½<em>kT</em> of energy per atom (or ½<em>RT</em> per mole). Therefore, the total molar internal energy is $3RT$, and the molar heat capacity at constant volume is its temperature derivative, $C_V = 3R$. This law works well at high temperatures where all vibrational modes are fully excited.</li>
+    <li><strong>Debye Model:</strong> This model is a quantum mechanical approach that considers the quantized nature of lattice vibrations (phonons). It introduces the Debye temperature ($\Theta_D$), which is a measure of the highest frequency of these vibrations. At temperatures much lower than the Debye temperature ($T \ll \Theta_D$), many of the high-frequency vibrational modes are "frozen out" because there is not enough thermal energy available to excite them. Only the low-frequency modes are significantly excited, contributing to the heat capacity. This leads to a heat capacity that is much lower than the classical prediction.</li>
+</ul>
+
+<p><strong>In summary:</strong>  The Dulong-Petit law fails at low temperatures because it does not account for the quantization of vibrational energy. For diamond, with its very high Debye temperature, room temperature ($25^\circ$C) is effectively a low temperature. Therefore, only a small fraction of the vibrational modes are excited, resulting in a significantly lower heat capacity than predicted by the classical Dulong-Petit law.</p>
+
+<p>Final Answer: The final answer is <span style="font-weight:bold;">$\boxed{4.62 \, \text{J/mol K}}$</span> and the explanation for the difference is due to the <span style="font-weight:bold;">quantization of vibrational energy levels</span> which is not considered in the Dulong-Petit law, causing it to overestimate the heat capacity at temperatures much lower than the Debye temperature.</p>
+
 </main>
     <div id="right-sidebar">
         <a href="/index.html">
