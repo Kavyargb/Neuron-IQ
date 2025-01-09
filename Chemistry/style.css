@@ -1,84 +1,187 @@
-.chemistry-page{
+/* Award-Winning CSS for a Chemistry Page */
+
+:root {
+    --primary-color: #00bcd4; /* Vibrant yet professional */
+    --secondary-color: #ffc107; /* Energetic accent */
+    --background-dark: #1a1a1a; /* Deeper, richer dark */
+    --background-light: #2e2e2e; /* Slightly lighter for contrast */
+    --text-light: #f0f0f0; /* Softer off-white */
+    --text-accent: #ffffff; /* Pure white for emphasis */
+    --border-radius: 12px; /* More pronounced curves */
+    --shadow-light: rgba(0, 0, 0, 0.15); /* Subtle shadow */
+    --transition-duration: 0.3s;
+    --font-family-base: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    --font-family-heading: 'Montserrat', sans-serif;
+}
+
+body {
+    font-family: var(--font-family-base);
+    background-color: var(--background-dark);
+    color: var(--text-light);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased; /* Smoother fonts for webkit browsers */
+    -moz-osx-font-smoothing: grayscale; /* Smoother fonts for Firefox */
+}
+
+.chemistry-page {
     display: flex;
     max-width: 1200px;
-     margin: 40px auto;
-     padding: 0 20px;
+    margin: 60px auto; /* Increased top/bottom margin */
+    padding: 30px; /* Increased padding for spaciousness */
+    background: linear-gradient(145deg, var(--background-dark), #111111); /* Subtle gradient */
+    border-radius: var(--border-radius);
+    box-shadow: 0 8px 16px var(--shadow-light); /* More pronounced shadow */
 }
 
 .article-list, .topic-list {
     flex: 1;
-    padding: 20px;
-     background: #252525;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(255,255,255,0.1);
-    margin: 0 10px;
+    padding: 30px; /* Increased padding */
+    background: var(--background-light);
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 8px var(--shadow-light);
+    margin: 0 15px; /* Increased horizontal margin */
+    transition: transform var(--transition-duration), box-shadow var(--transition-duration); /* Smooth transitions */
+}
+
+.article-list:hover, .topic-list:hover {
+    transform: translateY(-5px); /* Gentle lift on hover */
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
 }
 
 .article-list h2, .topic-list h2 {
-    margin-bottom: 15px;
+    margin-bottom: 25px; /* Increased bottom margin */
     text-align: center;
+    font-family: var(--font-family-heading);
+    font-size: 1.8rem; /* Slightly larger */
+    color: var(--text-accent);
+    position: relative; /* For pseudo-element underline */
+    padding-bottom: 10px;
 }
+
+.article-list h2::after, .topic-list h2::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 60px;
+    height: 3px;
+    background-color: var(--primary-color);
+    transform: translateX(-50%);
+}
+
 .article-list ul, .topic-list ul {
     list-style: none;
     padding: 0;
 }
 
 .article-list ul li, .topic-list ul li {
-    margin-bottom: 10px;
+    margin-bottom: 15px; /* Increased bottom margin */
+    border-bottom: 1px solid #444; /* Subtle divider */
+    padding-bottom: 10px;
+}
+.article-list ul li:last-child, .topic-list ul li:last-child {
+    border-bottom: none; /* Remove border from the last item */
+    padding-bottom: 0;
+    margin-bottom: 0;
 }
 
 .article-list ul li a, .topic-list ul li a {
     display: block;
-    padding: 10px;
+    padding: 15px; /* Increased padding */
     text-decoration: none;
-    color: #e0e0e0;
-    background: #333;
-    border-radius: 5px;
-     transition: background 0.3s;
+    color: var(--text-light);
+    background: linear-gradient(to bottom right, #333, #222); /* Subtle gradient */
+    border-radius: calc(var(--border-radius) / 2); /* Smaller radius for list items */
+    transition: background var(--transition-duration), transform var(--transition-duration);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* Add shadow to list items */
 }
+
 .article-list ul li a:hover, .topic-list ul li a:hover {
-  background: #444;
+    background: linear-gradient(to bottom right, var(--primary-color), #0097a7); /* More vibrant hover */
+    transform: scale(1.02); /* Gentle scale on hover */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+    color: var(--text-accent);
 }
 
 .content-grid {
     flex: 3;
-    padding: 20px;
-    margin: 0 10px;
+    padding: 30px; /* Increased padding */
+    margin: 0 15px; /* Increased horizontal margin */
 }
 
-.topic-grid{
-     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px;
+.topic-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); /* Slightly wider min-width */
+    gap: 25px; /* Increased gap */
 }
-.topic-grid a{
+
+.topic-grid a {
     display: flex;
     flex-direction: column;
     align-items: center;
     text-decoration: none;
-    color: #e0e0e0;
-    background: #252525;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(255,255,255,0.1);
-    transition: box-shadow 0.3s;
-}
-.topic-grid a img{
-    width: 40px;
-    height: 40px;
-     margin-bottom: 10px;
-}
-.topic-grid a:hover{
-    box-shadow: 0 4px 8px rgba(255,255,255,0.2);
+    color: var(--text-light);
+    background: var(--background-light);
+    padding: 30px; /* Increased padding */
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 8px var(--shadow-light);
+    transition: transform var(--transition-duration), box-shadow var(--transition-duration);
 }
 
+.topic-grid a img {
+    width: 60px; /* Larger icon */
+    height: 60px; /* Larger icon */
+    margin-bottom: 15px; /* Increased bottom margin */
+    filter: brightness(1.1); /* Slightly brighten the icons */
+    transition: transform var(--transition-duration);
+}
 
+.topic-grid a:hover {
+    transform: scale(1.05); /* Gentle scale on hover */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.topic-grid a:hover img {
+    transform: scale(1.1); /* Scale the icon on hover */
+}
+
+/* Responsive adjustments with smoother transitions */
 @media (max-width: 768px) {
     .chemistry-page {
-      flex-direction: column;
+        flex-direction: column;
+        margin: 30px auto; /* Adjust margins for smaller screens */
+        padding: 20px;
     }
-    .article-list, .topic-list, .content-grid{
-      margin: 10px 0;
-      padding: 10px;
+    .article-list, .topic-list, .content-grid {
+        margin: 15px 0;
+        padding: 20px;
+    }
+    .topic-grid {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Adjust for smaller screens */
+    }
+}
+
+/* Further refinements for smaller screens */
+@media (max-width: 576px) {
+    .chemistry-page {
+        padding: 15px;
+    }
+    .article-list, .topic-list, .content-grid {
+        padding: 15px;
+    }
+    .article-list h2, .topic-list h2 {
+        font-size: 1.5rem;
+        margin-bottom: 20px;
+    }
+    .topic-grid {
+        gap: 15px;
+    }
+    .topic-grid a {
+        padding: 20px;
+    }
+    .topic-grid a img {
+        width: 40px;
+        height: 40px;
+        margin-bottom: 10px;
     }
 }

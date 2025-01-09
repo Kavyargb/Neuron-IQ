@@ -1,1410 +1,583 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Atomic Structure - Questions and Answers </title>
+    <title>Atomic Structure - Notes</title>
     <style>
-        body {
-            font-family: sans-serif;
-            line-height: 1.6;
-            margin: 20px;
-            color: #d0d0d0;
-            background-color: #1e1e1e;
-            transition: background-color 0.3s ease;
-            position: relative;
-            display: flex;
-        }
+header {
+    background: linear-gradient(135deg, #252525 0%, #303030 100%); /* Subtle gradient for depth */
+    padding: 1.2rem 0; /* Slightly increased padding */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* More pronounced, darker shadow */
+    position: sticky;
+    top: 0;
+    z-index: 1000; /* Increased z-index for better layering */
+    transition: box-shadow 0.3s ease-in-out, transform 0.3s ease-in-out; /* Smooth transition for sticky effect */
+    transform: translateY(0); /* Initial state for smooth sticky animation */
+}
 
-        h2 {
-            color: #95a5a6;
-            border-bottom: 2px solid #3498db;
-            padding-bottom: 5px;
-            margin-top: 30px;
-            transition: color 0.3s ease;
-            position: relative;
-        }
+header.sticky-active {
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3); /* Different shadow when sticky */
+    transform: translateY(-5px); /* Slight lift when sticky */
+}
 
-        h2:hover {
-            color: #3498db;
-        }
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 30px; /* Slightly increased side padding */
+}
 
-        h2:first-of-type {
-            margin-top: 0;
-        }
+.logo {
+    font-size: 2rem; /* Slightly larger logo */
+    font-weight: 700; /* Bolder logo */
+    color: #7db4ff; /* Updated logo color, slightly lighter */
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4); /* Subtle text shadow for depth */
+    transition: transform 0.3s ease-in-out;
+}
 
-        p {
-            margin-bottom: 15px;
-            transition: color 0.3s ease;
-        }
+.logo:hover {
+    transform: scale(1.05); /* Gentle scale on hover */
+}
 
-        p strong {
-            font-weight: 600;
-            color: #e74c3c;
-        }
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 30px; /* Use gap for spacing between list items */
+}
 
-        p:hover {
-            color: #bbb;
-        }
+nav ul li a {
+    text-decoration: none;
+    color: #f0f0f0; /* Slightly brighter text color */
+    position: relative; /* For the underline effect */
+    padding-bottom: 4px; /* Space for the underline */
+    transition: color 0.3s ease-in-out, transform 0.3s ease-in-out;
+    overflow: hidden; /* Clip the pseudo-element */
+}
 
-        ul,
-        ol {
-            margin-bottom: 15px;
-            padding-left: 20px;
-        }
+nav ul li a::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: #7db4ff; /* Same as logo color for consistency */
+    transform: scaleX(0); /* Initially hidden */
+    transform-origin: bottom right;
+    transition: transform 0.4s ease-out;
+}
 
-        li {
-            margin-bottom: 5px;
-        }
+nav ul li a:hover {
+    color: #90caf9; /* Lighter hover color */
+    transform: translateY(-2px); /* Slight lift on hover */
+}
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 5px rgba(255, 255, 255, 0.1);
-            background-color: #2c2c2c;
-        }
+nav ul li a:hover::before {
+    transform: scaleX(1);
+    transform-origin: bottom left;
+}
 
-        th,
-        td {
-            border: 1px solid #555;
-            padding: 8px;
-            text-align: left;
-            transition: background-color 0.3s ease;
-        }
+/* Optional: Add an active state highlight */
+nav ul li a.active {
+    color: #90caf9;
+    font-weight: 600;
+}
 
-        th {
-            background-color: #3498db;
-            color: white;
-        }
+nav ul li a.active::before {
+    transform: scaleX(1);
+}
 
-        tr:nth-child(even) {
-            background-color: #333;
-        }
+/* Enhancements for Mobile (consider using JavaScript for more advanced mobile menus) */
+@media (max-width: 1024px) {
+    header {
+        display: hidden;
+    }
+}
+        :root {
+    --primary-bg: #f9f9f9; /* Very light grey for a softer white */
+    --secondary-bg: #ffffff; /* Pure white for content areas */
+    --text-primary: #212121; /* Dark grey for primary text */
+    --text-secondary: #757575; /* Medium grey for secondary text */
+    --accent-color: #2962ff; /* A vibrant blue */
+    --hover-color: #5393ff; /* Lighter blue for hover states */
+    --border-color: #e0e0e0; /* Light grey for borders */
+    --code-bg: #f0f0f0; /* Very light grey for code backgrounds */
+    --code-text: #333333; /* Dark grey for code text */
+    --toc-active: #2962ff;
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.1);
+    --transition-fast: 0.15s ease-in-out;
+    --transition-normal: 0.3s ease-in-out;
+}
 
-        tr:hover {
-            background-color: #444;
-        }
+body {
+    font-family: 'Roboto', sans-serif; /* A clean and modern sans-serif font */
+    line-height: 1.6;
+    margin: 0;
+    background-color: var(--primary-bg);
+    color: var(--text-primary);
+    padding-bottom: 40px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+}
 
-        img {
-            max-width: 100%;
-            height: auto;
-            display: block;
-            margin: 20px auto;
-            box-shadow: 0 2px 5px rgba(255, 255, 255, 0.1);
-            transition: transform 0.3s ease;
-        }
+/* Custom Scrollbar - Light theme version */
+::-webkit-scrollbar {
+    width: 8px;
+}
 
-        img:hover {
-            transform: scale(1.05);
-        }
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
 
-        a {
-            color: #3498db;
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
+::-webkit-scrollbar-thumb {
+    background-color: #bdbdbd;
+    border-radius: 4px;
+}
 
-        a:hover {
-            color: #217dbb;
-        }
+::-webkit-scrollbar-thumb:hover {
+    background-color: #9e9e9e;
+}
 
-        /* Progress Bar */
-        #progress-bar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 0%;
-            height: 5px;
-            background-color: #3498db;
-            transition: width 0.3s ease;
-            z-index: 1000;
-        }
+.container {
+    max-width: 1200px;
+    margin: 50px auto;
+    padding: 60px;
+    background-color: var(--secondary-bg);
+    box-shadow: var(--shadow-md);
+    border-radius: 8px;
+    display: grid;
+    grid-template-columns: minmax(250px, 300px) 1fr;
+    gap: 40px;
+}
 
-        /* Completed Checkmark */
-        h2::after {
-            content: '\2713';
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #3498db;
-            font-size: 1.2em;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
+#table-of-contents {
+    padding: 30px;
+    background-color: var(--secondary-bg);
+    border-radius: 6px;
+    position: sticky;
+    top: 30px;
+    height: fit-content;
+    border: 1px solid var(--border-color);
+}
 
-        h2.completed::after {
-            opacity: 1;
-        }
+/* Custom Scrollbar for Table of Contents */
+#table-of-contents::-webkit-scrollbar {
+    width: 6px; /* Thinner scrollbar */
+}
 
-        /* Sidebar Styles */
-        #sidebar {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            width: 220px;
-            height: calc(100vh - 40px);
-            background-color: #2c2c2c;
-            padding: 15px;
-            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
-            overflow-y: auto;
-            z-index: 999;
-        }
+#table-of-contents::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Light background for the track */
+    border-radius: 3px; /* Slightly rounded track */
+}
 
-        #sidebar::-webkit-scrollbar {
-            width: 0px;
-        }
+#table-of-contents::-webkit-scrollbar-thumb {
+    background-color: #bdbdbd; /* Medium grey for the thumb */
+    border-radius: 3px; /* Slightly rounded thumb */
+}
 
-        #sidebar ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
+#table-of-contents::-webkit-scrollbar-thumb:hover {
+    background-color: #9e9e9e; /* Darker grey on hover */
+}
 
-        #sidebar li {
-            margin-bottom: 10px;
-        }
+#table-of-contents > h2 {
+    font-size: 1.5rem;
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: var(--text-primary);
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 8px;
+    text-align: left;
+}
 
-        #sidebar a {
-            display: block;
-            color: #95a5a6;
-            padding: 10px 12px;
-            transition: background-color 0.3s ease;
-            border-radius: 4px;
-        }
+#table-of-contents ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
 
-        #sidebar a:hover,
-        #sidebar a.active {
-            background-color: #333;
-            color: #fff;
-        }
+#table-of-contents li {
+    margin-bottom: 10px;
+    padding-left: 0;
+    border-left: 3px solid transparent;
+    transition: border-left-color var(--transition-fast), color var(--transition-fast);
+}
 
-        /* Main content area adjustment */
-        main {
-            flex: 1;
-            padding: 10px;
-            margin-right: 60px;
-        }
+#table-of-contents li:hover,
+#table-of-contents li.active {
+    border-left-color: var(--toc-active);
+}
 
-        /* Animations */
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
+#table-of-contents li.active > a {
+    color: var(--toc-active);
+    font-weight: 500;
+}
 
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+#table-of-contents a {
+    text-decoration: none;
+    color: var(--text-secondary);
+    display: block;
+    padding: 6px 0;
+    transition: color var(--transition-fast);
+}
 
-        body,
-        h2,
-        p,
-        ul,
-        ol,
-        table,
-        img {
-            animation: fadeIn 0.5s ease-out;
-        }
+#table-of-contents a:hover {
+    color: var(--hover-color);
+}
 
-        /* Right sidebar */
-        #right-sidebar {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            width: 40px;
-            /* Adjusted width */
-            height: calc(100vh - 40px);
-            background-color: #2c2c2c;
-            padding: 15px 0;
-            /* Adjusted padding */
-            box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            z-index: 999;
-            border-radius: 0.5rem;
-        }
+#table-of-contents ul ul {
+    margin-left: 15px;
+    margin-top: 6px;
+}
 
-        #right-sidebar a {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: #95a5a6;
-            padding: 10px;
-            transition: background-color 0.3s ease;
-            border-radius: 4px;
-            margin-bottom: 5px;
-            height: 40px;
-            /* Set height for a circular look */
-            width: 40px;
-            /* Set width for a circular look */
-        }
+/* Main content styles - Focus on readability */
+main {
+    padding: 40px;
+    border-radius: 6px;
+    overflow: hidden;
+    background-color: var(--secondary-bg);
+    box-shadow: var(--shadow-sm);
+}
 
+main > *:not(:last-child) {
+    margin-bottom: 2em;
+}
 
-        #right-sidebar a:hover,
-        #right-sidebar a.active {
-            background-color: #333;
-            color: #fff;
-        }
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--text-primary);
+    letter-spacing: -0.01em;
+}
 
-        #right-sidebar img {
-            max-width: 20px;
-            height: auto;
-            display: block;
-            margin: 0 auto;
-            filter: invert(65%) sepia(3%) saturate(69%) hue-rotate(185deg) brightness(87%) contrast(86%);
-            transition: transform 0.3s ease;
-        }
+h1 {
+    font-size: 2.5rem;
+    border-bottom: 2px solid var(--accent-color);
+    padding-bottom: 0.4em;
+    margin-bottom: 1em;
+}
 
-        #right-sidebar a:hover img,
-        #right-sidebar a.active img {
-            filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(221deg) brightness(105%) contrast(102%);
-            transform: scale(1.1);
-        }
+h2 {
+    font-size: 2rem;
+    border-bottom: 1px solid var(--accent-color);
+    padding-bottom: 0.3em;
+    margin-bottom: 0.9em;
+    color: var(--accent-color);
+}
 
-        /* Responsive adjustments for smaller screens */
-        @media (max-width: 768px) {
-            body {
-                flex-direction: column;
-                /* Stack elements vertically */
-                margin: 10px;
-                /* Reduce margin */
-            }
+h3 {
+    font-size: 1.6rem;
+    margin-bottom: 0.7em;
+}
 
-            main {
-                padding: 5px;
-            }
+h4 {
+    font-size: 1.4rem;
+    margin-bottom: 0.6em;
+}
 
+p {
+    margin-bottom: 1.5em;
+    color: var(--text-secondary);
+    orphans: 3;
+    widows: 3;
+    word-break: break-word;
+}
 
-            #sidebar {
-                position: static;
-                /* Make sidebar static */
-                width: 100%;
-                /* Full width */
-                height: auto;
-                margin-bottom: 10px;
-                /* Add margin below sidebar */
-                box-shadow: none;
-            }
+ul, ol {
+    margin-left: 25px;
+    margin-bottom: 1.7em;
+}
 
-            #sidebar ul {
-                display: flex;
-                overflow-x: auto;
-                padding: 0px 10px;
-                margin-bottom: 10px;
+li {
+    margin-bottom: 0.7em;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    word-break: break-word;
+}
 
-            }
+strong {
+    font-weight: 600;
+    color: var(--text-primary);
+}
 
+em {
+    font-style: italic;
+    color: var(--accent-color);
+}
 
-            #sidebar li {
-                margin-bottom: 0px;
-            }
+a {
+    color: var(--accent-color);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+    border-bottom: 1px solid transparent; /* Subtle underline on hover */
+}
 
-            #sidebar a {
-                padding: 10px 10px;
-                margin: 0px 5px;
-                white-space: nowrap;
-                border-radius: 10px;
-            }
+a:hover {
+    color: var(--hover-color);
+    border-bottom-color: var(--hover-color);
+}
 
-            #right-sidebar {
-                position: fixed;
-                top: initial;
-                /* Remove top position */
-                bottom: 0;
-                /* Stick to bottom */
-                right: 0;
-                width: 100%;
-                height: auto;
-                /* Adjust height */
-                flex-direction: row;
-                padding: 0;
-                border-radius: 0;
-                box-shadow: none;
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 2em;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    background-color: var(--secondary-bg);
+}
 
-            }
+th, td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+    word-break: break-word;
+}
 
+th {
+    background-color: #f5f5f5; /* Lighter header background */
+    font-weight: 600;
+    color: var(--text-primary);
+}
 
-            #right-sidebar a {
-                margin-bottom: 0;
-                /* Remove bottom margin */
-                width: auto;
-                height: 40px;
-            }
+tbody tr:nth-child(even) {
+    background-color: #fafafa; /* Very light grey for even rows */
+}
 
-            #right-sidebar img {
-                max-width: 20px;
-            }
+/* Code blocks - Light theme styling */
+pre {
+    background-color: var(--code-bg);
+    color: var(--code-text);
+    padding: 12px 18px;
+    border-radius: 4px;
+    overflow-x: auto;
+    font-family: 'Menlo', monospace;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin-bottom: 1.6em;
+    white-space: pre-wrap;
+    border: 1px solid var(--border-color);
+}
 
-        }
+code {
+    font-family: 'Menlo', monospace;
+    background-color: #e8e8e8; /* Even lighter background for inline code */
+    color: var(--code-text);
+    padding: 3px 6px;
+    border-radius: 3px;
+    word-break: break-word;
+}
 
+pre code {
+    background-color: transparent;
+    padding: 0;
+}
 
-        @media (min-width: 769px) {
+/* Horizontal rules - Simpler style */
+hr {
+    border: none;
+    height: 1px;
+    background-color: var(--border-color);
+    margin: 2em 0;
+}
 
-            /* Adjust main content for larger screens to reduce gap if needed */
-            main {
-                margin-left: 250px;
-                /* Further reduce the margin */
-            }
-        }
+/* Blockquotes - Clean separation */
+blockquote {
+    border-left: 3px solid var(--accent-color);
+    padding: 10px 15px;
+    margin: 1.5em 0;
+    font-style: italic;
+    background-color: #f5f5f5;
+    border-radius: 3px;
+    color: var(--text-secondary);
+}
+
+blockquote p {
+    margin-bottom: 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+    .container {
+        max-width: 90%;
+        padding: 50px;
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+
+    #table-of-contents {
+        position: static;
+        margin-bottom: 30px;
+    }
+
+    #table-of-contents > h2 {
+        text-align: center;
+    }
+}
+
+@media (max-width: 768px) {
+    main {
+        padding: 30px;
+    }
+
+    h1 {
+        font-size: 2.2rem;
+    }
+
+    h2 {
+        font-size: 1.8rem;
+    }
+    nav{
+        display:none;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 30px;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    h2 {
+        font-size: 1.6rem;
+    }
+}
     </style>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            renderMathInElement(document.body, {
-                delimiters: [
-                    { left: "$", right: "$", display: false },
-                    { left: "$$", right: "$$", display: true }
-                ]
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js"></script>
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js"></script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                renderMathInElement(document.body, {
+                    delimiters: [
+                        { left: "$", right: "$", display: false },
+                        { left: "$$", right: "$$", display: true }
+                    ]
+                });
             });
-        });
-    </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const headers = document.querySelectorAll('h2');
-            const progressBar = document.getElementById('progress-bar');
-            const totalHeaders = headers.length;
-            const sidebar = document.getElementById('sidebar');
-    
-            // Generate sidebar links
-            let sidebarHTML = '<ul>';
-            headers.forEach(header => {
-                const id = header.getAttribute('id');
-                sidebarHTML += `<li><a href="#${id}" data-id="${id}">${header.textContent}</a></li>`;
-            });
-            sidebarHTML += '</ul>';
-            sidebar.innerHTML = sidebarHTML;
-    
-            const sidebarLinks = document.querySelectorAll('#sidebar a');
-            let activeHeading = null;
-            let progress = 0;
-            let seenHeadings = new Set();
-    
-    
-            function updateProgress() {
-                if (progress >= totalHeaders) {
-                    return;
-                }
-                let currentVisibleHeader = null;
-    
-                for (let i = 0; i < headers.length; i++) {
-                    const header = headers[i];
-                    const rect = header.getBoundingClientRect();
-                    const headerId = header.getAttribute('id');
-                    const link = document.querySelector(`#sidebar a[data-id="${headerId}"]`);
-    
-                    if (rect.top <= window.innerHeight / 2) {
-                        currentVisibleHeader = { header: header, link: link };
-                        header.classList.add('completed');
-    
-                    } else {
-                        header.classList.remove('completed');
-                    }
-                }
-    
-                if (currentVisibleHeader && activeHeading !== currentVisibleHeader.header) {
-                    activeHeading = currentVisibleHeader.header;
-    
-                    if (!seenHeadings.has(activeHeading.id)) {
-                        seenHeadings.add(activeHeading.id);
-                        progress++;
-                    }
-                    sidebarLinks.forEach(link => {
-                        link.classList.remove('active');
-                    });
-    
-                    currentVisibleHeader.link.classList.add('active');
-                }
-    
-                const progressPercentage = (progress / totalHeaders) * 100;
-                progressBar.style.width = `${progressPercentage}%`;
-            }
-    
-    
-            window.addEventListener('scroll', updateProgress);
-            window.addEventListener('resize', updateProgress);
-            updateProgress(); // Initial update
-        });
-    </script>
-    <script>
-        function lazyLoadImages() {
-  const images = document.querySelectorAll('img[data-src]');
-
-  // Intersection Observer Options
-  const options = {
-    root: null,   // Use the viewport as the root
-    rootMargin: '0px', // No margin around the viewport
-    threshold: 0.1, // Load when 10% of the image is visible
-  };
-
-  // Callback function for the Intersection Observer
-  const loadImage = (entries, observer) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const image = entry.target;
-        image.src = image.dataset.src; // Assign the actual URL
-        image.removeAttribute('data-src'); // Remove the data attribute
-        observer.unobserve(image); // Stop observing this image
-      }
-    });
-  };
-
-
-  // Check if Intersection Observer is supported
-  if ('IntersectionObserver' in window) {
-    const observer = new IntersectionObserver(loadImage, options);
-    images.forEach(image => {
-      observer.observe(image); // Start observing each image
-    });
-  } else {
-    // Fallback for older browsers
-    let timeout;
-    const loadImagesFallback = () => {
-        if (timeout) {
-            clearTimeout(timeout);
-        }
-        timeout = setTimeout(() => {
-            images.forEach(image => {
-                const rect = image.getBoundingClientRect();
-                const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
-
-                if (isVisible) {
-                    image.src = image.dataset.src;
-                    image.removeAttribute('data-src');
-                }
-            });
-        }, 100)
-    };
-
-    loadImagesFallback(); // Initial check
-    window.addEventListener('scroll', loadImagesFallback);
-    window.addEventListener('resize', loadImagesFallback);
-    
-}
-
-}
-
-// Initialize Lazy loading function
-document.addEventListener('DOMContentLoaded', lazyLoadImages);
-</script>
+        </script>
 </head>
-
 <body>
-    <div id="progress-bar"></div>
-    <div id="sidebar"></div>
-    <main>
-        <h1>Atomic Structure - Subjective Questions and Answers</h1>
-        <h2 id ="1">State the fundamental concept at the heart of Dalton's Atomic Theory regarding the nature of matter.</h2>
-        <p>The fundamental concept at the heart of Dalton's Atomic Theory regarding the nature of matter is that <strong>all matter is composed of tiny, indivisible particles called atoms.</strong></p>
-
-        <p>Specifically, Dalton proposed that:</p>
-        <ul>
-            <li><strong>Elements are made of atoms:</strong> Each element is composed of a unique type of atom.</li>
-            <li><strong>Atoms are indivisible and indestructible:</strong> Atoms cannot be broken down into smaller particles and are not created or destroyed in chemical reactions.</li>
-            <li><strong>Atoms of a given element are identical:</strong> All atoms of a particular element have the same mass and properties.</li>
-            <li><strong>Atoms of different elements combine in simple whole-number ratios to form compounds:</strong> Chemical compounds are formed when atoms of different elements combine in fixed, simple ratios.</li>
-        </ul>
-        <p>While some of these ideas have been modified by later discoveries (atoms <em>are</em> divisible, for example), the core idea that matter is ultimately made of fundamental, discrete particles called atoms remains a cornerstone of modern chemistry and physics.</p>
-        <h2 id="2">According to Dalton's Atomic Theory, how do atoms of the same element compare to atoms of different elements?</h2>
-        <p>According to Dalton's Atomic Theory:</p>
-
-        <ul>
-            <li><strong>Atoms of the same element are identical in all respects:</strong> This means that all atoms of a particular element have the same:
-                <ul>
-                    <li><strong>Mass:</strong> They all weigh the same.</li>
-                    <li><strong>Size:</strong> They all have the same size (though this wasn't as precise a concept at the time).</li>
-                    <li><strong>Chemical Properties:</strong> They all react in the same way in chemical reactions.</li>
-                </ul>
-            </li>
-    
-            <li><strong>Atoms of different elements are different from each other:</strong> This means that atoms of one element differ from atoms of another element in terms of:
-                <ul>
-                    <li><strong>Mass:</strong> They have different weights.</li>
-                     <li><strong>Properties:</strong> They behave differently in chemical reactions.</li>
-                </ul>
-            </li>
-        </ul>
-    
-        <p>Essentially, Dalton's theory posited that each element was defined by a specific, unique type of atom that possessed distinct characteristics compared to atoms of other elements. This difference was key to explaining why different elements have different chemical behaviors.</p>
-    
-        <p><strong>In short:</strong> Atoms of the same element are clones of each other, while atoms of different elements are distinct and distinguishable.</p>
-        <h2 id="3">List the five key postulates of Dalton's Atomic Theory.</h2>
-        <p>The five key postulates of Dalton's Atomic Theory are:</p>
-
-        <ol>
-            <li><strong>All matter is composed of extremely small particles called atoms.</strong> This is the fundamental idea that matter is not continuous but is made of discrete units.</li>
-            <li><strong>Atoms of a given element are identical in size, mass, and other properties.</strong> This implies that all atoms of, say, gold, are exactly the same and have the same characteristics.</li>
-            <li><strong>Atoms of different elements differ in size, mass, and other properties.</strong> This emphasizes that atoms of different elements, like gold versus silver, are fundamentally different from each other.</li>
-            <li><strong>Atoms cannot be subdivided, created, or destroyed.</strong> This postulate assumes atoms are indivisible and that chemical reactions involve the rearrangement of atoms, not their destruction or creation.</li>
-            <li><strong>Atoms of different elements combine in simple whole-number ratios to form chemical compounds.</strong> This explains why compounds have fixed and definite compositions. For example, water is always two hydrogen atoms to one oxygen atom.</li>
-        </ol>
-    
-        <p>These five postulates form the basis of Dalton's Atomic Theory and were groundbreaking in establishing a scientific framework for understanding matter and chemical reactions. While some of these postulates have been modified based on later discoveries, they remain historically significant.</p>
-        <h2 id="4">Explain Dalton's postulate regarding the formation of chemical compounds from different elements.</h2>
-        <p>Dalton's postulate on compound formation states that chemical compounds are formed when atoms of different elements combine in simple, whole-number ratios.  He proposed that each type of compound has a unique and fixed ratio of atoms. For instance, water ($H_2O$) always consists of two hydrogen atoms for every one oxygen atom. Similarly, carbon dioxide ($CO_2$) always has one carbon atom for every two oxygen atoms. These fixed ratios mean compounds have definite chemical formulas, reflecting these simple numerical relationships in their atomic compositions. This concept was revolutionary because it implied that chemical reactions involve rearranging atoms rather than creating or destroying them, and helped define the field of stoichiometry.</p>
-        <h2 id="5">How did Dalton's Atomic Theory successfully explain the Law of Conservation of Mass?</h2>
-        <p>Dalton's Atomic Theory successfully explained the Law of Conservation of Mass by proposing that chemical reactions involve the rearrangement of atoms, not their creation or destruction. Since atoms are indivisible and indestructible in chemical processes, their total mass remains constant throughout a reaction.</p>
-
-        <p>For example, if elements A and B react to form compound AB, the mass of A and B before the reaction equals the mass of AB after the reaction. The number of atoms is conserved, each retaining its inherent mass, thus ensuring no change in total mass from reactants to products. This explanation provided a concrete atomic-level interpretation of the empirically observed conservation of mass, solidifying the significance of Dalton's postulates.</p>
-        <h2 id="6">Explain how Dalton's theory provided a framework for understanding the Law of Definite Proportions (or Law of Constant Composition).</h2>
-        <p>Dalton's Atomic Theory provided a framework for understanding the Law of Definite Proportions by postulating that chemical compounds are formed by combining atoms of different elements in simple, fixed, whole-number ratios. This fixed ratio, according to Dalton, is inherent to each specific compound.</p>
-
-        <p>For instance, water (H₂O) always contains two hydrogen atoms for every one oxygen atom. This immutable ratio of atoms directly translates to a fixed ratio by mass. Therefore, a compound will consistently have the same mass composition, regardless of its source or method of preparation. This fixed atomic ratio, proposed by Dalton, was the underlying mechanism responsible for the constant mass ratios observed in experiments, thus, directly explaining the Law of Definite Proportions.</p>
-        <h2 id="7">What fundamental idea about atoms, proposed by Dalton, was later proven to be incorrect by further scientific discoveries?</h2>
-        <p>Dalton's fundamental idea that atoms are indivisible and indestructible was later proven incorrect. Scientific discoveries, notably the discovery of subatomic particles like electrons, protons, and neutrons, revealed that atoms are not the smallest units of matter. Furthermore, nuclear reactions demonstrated that atoms can be transformed into other atoms, and even be split into smaller particles, contradicting Dalton's view of their indivisibility. The understanding that atoms have internal structures and can be altered fundamentally changed the atomic model, superseding Dalton's initial concept of the atom as a solid, indestructible sphere.</p>
-        <h2 id="8">Describe one phenomenon that Dalton's Atomic Theory could not adequately explain, which later discoveries clarified.</h2>
-        <p>Dalton's Atomic Theory could not adequately explain the phenomenon of isotopes. Dalton postulated that all atoms of a given element were identical in mass and properties. However, the discovery of isotopes revealed that atoms of the same element can have different masses due to varying numbers of neutrons. For instance, chlorine exists as chlorine-35 and chlorine-37. This variance in mass within the same element contradicted Dalton's assumption of identical atomic mass. Subsequent discoveries, involving subatomic particles and nuclear structure, clarified the existence of isotopes, showing that while atoms of an element share the same number of protons, they can differ in neutron count, thus explaining variations in mass.
-        </p>
-        <h2 id="9">Describe the basic setup of a cathode ray tube experiment.</h2>
-        <p>A basic cathode ray tube experiment involves a sealed glass tube containing two electrodes: a cathode (negative electrode) and an anode (positive electrode). The tube is evacuated to create a near vacuum. When a high voltage is applied across the electrodes, a stream of particles, known as cathode rays, is emitted from the cathode towards the anode. These rays can be detected by observing fluorescence when they strike a phosphorescent screen coated inside the tube, or by using other detectors. The path of these rays can be influenced by applying electric or magnetic fields, which indicates the presence of charged particles.
-        </p>
-        <h2 id="10">What were the key observations from cathode ray tube experiments that suggested the presence of negatively charged particles?
-            Answer in points.</h2>
-            <p>Key observations from cathode ray tube experiments suggesting the presence of negatively charged particles:</p>
-
-    <ul>
-        <li><strong>Deflection by Electric Fields:</strong> The cathode rays were deflected towards the positive plate and away from the negative plate when an electric field was applied. This indicated that the particles composing the rays possessed a negative charge.</li>
-        <li><strong>Deflection by Magnetic Fields:</strong> The rays were also deflected when exposed to a magnetic field, which is consistent with the behavior of moving charged particles. The direction of deflection further confirmed the negative charge.</li>
-         <li><strong>Independence of Electrode Material:</strong> The nature of the cathode rays was found to be independent of the material used for the cathode. This suggested that the particles were a fundamental component of all matter.</li>
-        <li><strong>Production of Fluorescence:</strong> The rays caused certain substances to fluoresce, demonstrating that they carried energy and were capable of interacting with matter.</li>
-    </ul>
-    <h2 id="11">What was the significance of J.J. Thomson's experiments with cathode rays in the context of Dalton's theory?</h2>
-    <p>J.J. Thomson's experiments with cathode rays were significant because they directly challenged Dalton's atomic theory. Dalton proposed that atoms were indivisible, the smallest unit of matter. Thomson's work demonstrated that cathode rays were composed of subatomic particles, later identified as electrons. These particles were shown to be negatively charged and present in all atoms, indicating that atoms were not fundamental, indivisible entities as Dalton had suggested, but had a substructure. Thomson's discovery of the electron revolutionized the understanding of atomic structure and required revisions to Dalton's model, moving towards a model of the atom that included smaller, charged components.</p>
-    <h2 id="12">Describe the structure of the atom as proposed by J.J. Thomson in the plum pudding model.
-    </h2>
-    <p>Thomson's plum pudding model of the atom proposed the following structure:</p>
-
-    <ul>
-        <li><strong>Overall Neutrality:</strong> The atom is electrically neutral, with a balance of positive and negative charges.</li>
-        <li><strong>Positively Charged Sphere:</strong> The atom consists of a sphere of positively charged material.</li>
-        <li><strong>Embedded Electrons:</strong> Negatively charged electrons are embedded within this positively charged sphere, like plums in a pudding.</li>
-        <li><strong>Distribution of Electrons:</strong> The electrons are dispersed throughout the positive sphere, balancing the positive charge and maintaining overall neutrality.</li>
-        <li><strong>No Nucleus:</strong> The model does not propose a nucleus or any concentrated region of positive charge; the positive charge is distributed uniformly.</li>
-    </ul>
-    <h2 id="13">Describe the design of Rutherford's Gold Foil Experiment, including the source of particles used and the material being bombarded.</h2>
-    <p>Rutherford's Gold Foil Experiment employed the following design:</p>
-
-    <ul>
-        <li><strong>Alpha Particle Source:</strong> A source of alpha particles, typically from the radioactive decay of polonium or radium, was used. Alpha particles are positively charged particles consisting of two protons and two neutrons.</li>
-        <li><strong>Thin Gold Foil:</strong> A very thin sheet of gold foil, about a few atoms thick, served as the target material to be bombarded by the alpha particles. Gold was chosen due to its malleability, allowing for the creation of extremely thin films.</li>
-        <li><strong>Circular Fluorescent Screen:</strong> A circular screen coated with zinc sulfide, which emits light when struck by an alpha particle, surrounded the gold foil. This screen allowed for the detection and observation of scattered alpha particles.</li>
-         <li><strong>Narrow Beam of Alpha Particles:</strong> A lead shield with a small opening was used to create a narrow beam of alpha particles aimed towards the gold foil.</li>
-         <li><strong>Observation System:</strong> The location and number of flashes on the fluorescent screen were carefully observed and counted to determine the scattering pattern of the alpha particles after they passed through the gold foil.</li>
-    </ul>
-    <h2 id="14">What were the three key observations made by Rutherford and his team during the Gold Foil Experiment?
-    </h2>
-    <p>Rutherford and his team made the following three key observations during the Gold Foil Experiment:</p>
-
-    <ol>
-        <li><strong>Most Alpha Particles Passed Straight Through:</strong> The majority of alpha particles passed through the gold foil undeflected. This indicated that most of the atom was empty space.</li>
-        <li><strong>Some Alpha Particles Were Deflected:</strong> A small fraction of the alpha particles were deflected from their original paths by small angles. This suggested the presence of a region with a concentrated positive charge.</li>
-        <li><strong>Very Few Alpha Particles Were Deflected at Large Angles or Even Backwards:</strong> An even smaller fraction of alpha particles were deflected at very large angles, sometimes even bouncing directly back. This indicated the existence of a very dense, positively charged region within the atom.</li>
-    </ol>
-    <h2 id="15">Based on the results of the Gold Foil Experiment, what were the main conclusions Rutherford drew about the structure of the atom?</h2>
-    <p>Based on the Gold Foil Experiment results, Rutherford drew the following main conclusions about the structure of the atom:</p>
-
-    <ol>
-        <li><strong>The Nuclear Atom:</strong> The atom has a tiny, dense, positively charged core, which he called the nucleus. This nucleus contains most of the atom's mass.</li>
-        <li><strong>Empty Space:</strong> Most of the atom is empty space, through which alpha particles can pass without significant deflection.</li>
-        <li><strong>Electrons Orbiting:</strong> Negatively charged electrons are distributed around the nucleus at a relatively large distance, orbiting the nucleus much like planets orbiting the sun.</li>
-        <li><strong>Atomic Size:</strong> The size of the nucleus is extremely small compared to the overall size of the atom.</li>
-    </ol>
-
-    <p>These conclusions led to Rutherford's nuclear model of the atom, which replaced Thomson's plum pudding model.</p>
-    <h2 id="16">Explain the concept of the "nucleus" as proposed by Rutherford, including its key characteristics.</h2>
-    <p>Rutherford proposed that the nucleus is the central core of an atom, possessing several key characteristics. Firstly, it is extremely small and dense, concentrating nearly all the atom's mass within a tiny volume. Secondly, the nucleus carries a positive electrical charge, which is responsible for the repulsion of the positively charged alpha particles in his gold foil experiment. This positive charge is due to the presence of protons within the nucleus. Thirdly, the nucleus is surrounded by mostly empty space, where the electrons orbit. Rutherford's concept of the nucleus revolutionized the understanding of atomic structure, shifting from the idea of a uniform distribution of charge, as proposed by Thomson, to one where the positive charge and most of the mass are concentrated at the center of the atom.</p>
-    <h2 id="17">What was the major instability issue with Rutherford's model based on classical physics and the movement of charged particles?
-    </h2>
-    <p>The major instability issue with Rutherford's model, based on classical physics, was that accelerating charged particles, such as electrons orbiting the nucleus, should continuously emit electromagnetic radiation, losing energy in the process. According to classical electromagnetism, this loss of energy would cause the electrons to spiral into the nucleus very quickly, leading to the collapse of the atom. This instability contradicted the observed stability of atoms in the real world. The classical physics predictions failed to account for the fact that atoms did not collapse, highlighting the need for a new model that incorporated quantum mechanics to describe electron behavior.
-    </p>
-    <h2 id="18">Why couldn't Rutherford's model explain the discrete line spectra observed in the emission of light from excited atoms?</h2>
-    <p>Rutherford's model could not explain the discrete line spectra observed in the emission of light from excited atoms because it treated electrons as particles orbiting the nucleus in any arbitrary path. According to classical physics, these orbiting electrons should emit a continuous spectrum of electromagnetic radiation as they lose energy. However, experiments showed that excited atoms emit light at specific, discrete wavelengths (line spectra), not a continuous range. Rutherford's model, based on classical mechanics and electromagnetism, could not account for the quantization of electron energy and the specific energy transitions that produce these distinct spectral lines. The observed discrete nature of the emitted light indicated the need for a new, quantum mechanical approach to understanding electron behavior in atoms.</p>
-    <h2 id="19">What key modification did Niels Bohr introduce to Rutherford's model to address its limitations regarding electron stability?</h2>
-    <p>Niels Bohr introduced the concept of quantized energy levels, or orbits, to address the limitations of Rutherford's model. Instead of electrons being able to orbit the nucleus at any distance, Bohr proposed that electrons could only exist in specific, discrete orbits with fixed energy levels. He postulated that electrons could not radiate energy while in these specific orbits, thus resolving the stability problem. Electrons could only gain or lose energy by transitioning between these allowed orbits. This transition would then result in the absorption or emission of a photon with a specific energy corresponding to the difference between the energy levels, thus explaining the observed line spectra.
-    </p>
-    <h2 id="20">Explain the concept of "quantized energy levels" for electrons as proposed in the Rutherford-Bohr model and how it addressed the issue of atomic stability and line spectra.</h2>
-    <p>The concept of quantized energy levels in the Rutherford-Bohr model addressed atomic stability and line spectra as follows:</p>
-
-    <ul>
-        <li><strong>Discrete Orbits:</strong> Electrons can only exist in specific, fixed orbits around the nucleus, each corresponding to a distinct energy level. These orbits are quantized, meaning only certain energy values are permitted.</li>
-        <li><strong>No Radiation in Allowed Orbits:</strong> Electrons do not radiate energy while orbiting within these allowed orbits, thus preventing the electrons from spiraling into the nucleus and resolving the stability problem of Rutherford's model.</li>
-         <li><strong>Energy Transitions:</strong> Electrons can move between these orbits, but only by absorbing or emitting energy in the form of a photon.</li>
-        <li><strong>Specific Energy for Transitions:</strong> The energy of a photon absorbed or emitted during an electron transition is precisely equal to the difference in energy between the two orbits involved.</li>
-        <li><strong>Discrete Line Spectra:</strong> These specific energy transitions result in the emission or absorption of light at particular, discrete wavelengths (line spectra), corresponding to the specific energy differences between the quantized energy levels, thus explaining observed atomic spectra.</li>
-    </ul>
-    <h2 id="21">Calculate the wavelength and frequency at which the intensity of the radiation is a maximum for a black body at 298 K.</h2>
-    <p>To calculate the wavelength and frequency at which the intensity of the radiation is a maximum for a black body at 298 K, we can use Wien's Displacement Law and the relationship between the speed of light, wavelength, and frequency.</p>
-
-    <p><strong>1. Wien's Displacement Law:</strong></p>
-
-    <p>Wien's Displacement Law states that the wavelength at which the black body emission spectrum is at its maximum is inversely proportional to the absolute temperature of the black body. Mathematically, it is expressed as:</p>
-
-    <p>$\lambda_{max} T = b$</p>
-
-    <p>where:</p>
-    <ul>
-        <li>$\lambda_{max}$ is the wavelength of maximum intensity (in meters)</li>
-        <li>$T$ is the absolute temperature of the black body (in Kelvin)</li>
-        <li>$b$ is Wien's displacement constant, approximately $2.898 \times 10^{-3}$ m⋅K</li>
-    </ul>
-
-    <p><strong>Calculation of the wavelength:</strong></p>
-
-    <p>Given the temperature $T = 298$ K, we can solve for $\lambda_{max}$:</p>
-
-    <p>$\lambda_{max} = \frac{b}{T}$</p>
-
-    <p>$\lambda_{max} = \frac{2.898 \times 10^{-3} \, \text{m⋅K}}{298 \, \text{K}}$</p>
-
-    <p>$\lambda_{max} \approx 9.7248 \times 10^{-6} \, \text{m}$</p>
-
-    <p>To express this in more common units for wavelength, we can convert it to micrometers ($\mu$m):</p>
-
-    <p>$\lambda_{max} \approx 9.7248 \, \mu\text{m}$</p>
-
-    <p>This wavelength falls within the infrared region of the electromagnetic spectrum.</p>
-
-    <p><strong>2. Relationship between Wavelength and Frequency:</strong></p>
-
-    <p>The speed of light ($c$), wavelength ($\lambda$), and frequency ($\nu$) are related by the following equation:</p>
-
-    <p>$c = \lambda \nu$</p>
-
-    <p>where:</p>
-    <ul>
-       <li>$c$ is the speed of light in a vacuum, approximately $3 \times 10^8$ m/s</li>
-        <li>$\lambda$ is the wavelength (in meters)</li>
-        <li>$\nu$ is the frequency (in Hertz or s$^{-1}$)</li>
-    </ul>
-
-    <p><strong>Calculation of the frequency:</strong></p>
-
-    <p>We can rearrange the equation to solve for the frequency ($\nu_{max}$) corresponding to the maximum intensity wavelength ($\lambda_{max}$):</p>
-
-    <p>$\nu_{max} = \frac{c}{\lambda_{max}}$</p>
-
-    <p>Substituting the values:</p>
-
-     <p>$\nu_{max} = \frac{3 \times 10^8 \, \text{m/s}}{9.7248 \times 10^{-6} \, \text{m}}$</p>
-
-    <p>$\nu_{max} \approx 3.0858 \times 10^{13} \, \text{s}^{-1}$</p>
-
-    <p>Therefore, the frequency at which the intensity of the radiation is a maximum is approximately $3.0858 \times 10^{13}$ Hz.</p>
-
-    <p><strong>Summary:</strong></p>
-
-    <p>For a black body at 298 K:</p>
-
-    <ul>
-        <li>The wavelength at which the intensity of the radiation is a maximum is approximately <span style="font-weight:bold;">9.72 × 10<sup>-6</sup> m</span> or <span style="font-weight:bold;">9.72 μm</span>.</li>
-        <li>The frequency at which the intensity of the radiation is a maximum is approximately <span style="font-weight:bold;">3.09 × 10<sup>13</sup> Hz</span>.</li>
-    </ul>
-    <h2 id="22">The intensity of the radiation from an object is found to be a maximum at 2000 cm−1. Assuming that the
-        object is a black body, calculate its temperature.</h2>
-        <p>To calculate the temperature of a black body given the wavenumber at which the intensity of radiation is a maximum, we need to use Wien's Displacement Law. Wien's Law relates the wavelength of maximum emission to the temperature. Since we are given the wavenumber, we first need to convert it to wavelength.</p>
-
-        <p>The wavenumber ($\tilde{\nu}$) is related to the wavelength ($\lambda$) by:</p>
-    
-        <p>$\tilde{\nu} = \frac{1}{\lambda}$</p>
-    
-        <p>where $\lambda$ is the wavelength. If the wavenumber is in cm<sup>-1</sup>, then the wavelength obtained from this formula will be in cm.</p>
-    
-        <p>Given that the maximum intensity is at $\tilde{\nu}_{max} = 2000 \, \text{cm}^{-1}$, we can calculate the corresponding wavelength:</p>
-    
-        <p>$\lambda_{max} = \frac{1}{\tilde{\nu}_{max}} = \frac{1}{2000 \, \text{cm}^{-1}} = 0.0005 \, \text{cm}$</p>
-    
-        <p>Now, to use Wien's Displacement Law, the wavelength needs to be in meters. We convert the wavelength from cm to meters:</p>
-    
-        <p>$\lambda_{max} = 0.0005 \, \text{cm} \times \frac{1 \, \text{m}}{100 \, \text{cm}} = 5 \times 10^{-6} \, \text{m}$</p>
-    
-        <p>Wien's Displacement Law states:</p>
-    
-        <p>$\lambda_{max} T = b$</p>
-    
-        <p>where:</p>
-        <ul>
-          <li>$\lambda_{max}$ is the wavelength of maximum intensity (in meters)</li>
-          <li>$T$ is the temperature of the black body (in Kelvin)</li>
-          <li>$b$ is Wien's displacement constant, approximately $2.898 \times 10^{-3} \, \text{m} \cdot \text{K}$</li>
-        </ul>
-    
-        <p>We can rearrange the formula to solve for the temperature $T$:</p>
-    
-        <p>$T = \frac{b}{\lambda_{max}}$</p>
-    
-        <p>Now, substitute the values:</p>
-    
-        <p>$T = \frac{2.898 \times 10^{-3} \, \text{m} \cdot \text{K}}{5 \times 10^{-6} \, \text{m}}$</p>
-    
-        <p>$T = 579.6 \, \text{K}$</p>
-    
-        <p>Therefore, the temperature of the black body is approximately <span style="font-weight:bold;">579.6 K</span>.</p>
-        <h2 id="23">Calculate the molar heat capacity of a monatomic non-metallic solid at 298 K which is characterized by
-            an Einstein temperature of 2000 K. Express your result as a multiple of 3R.</h2>
-            <p>The molar heat capacity of a monatomic non-metallic solid according to the Einstein model is given by:</p>
-            <p>$C_V = 3R \left( \frac{\Theta_E}{T} \right)^2 \frac{e^{\Theta_E/T}}{(e^{\Theta_E/T} - 1)^2}$</p>
-        
-            <p>Given values:</p>
-            <p>$T = 298 \text{ K}$</p>
-            <p>$\Theta_E = 2000 \text{ K}$</p>
-        
-            <p>First, calculate the ratio $\frac{\Theta_E}{T}$:</p>
-            <p>$\frac{\Theta_E}{T} = \frac{2000 \text{ K}}{298 \text{ K}} \approx 6.7114$</p>
-        
-            <p>Next, calculate $e^{\Theta_E/T}$:</p>
-            <p>$e^{\Theta_E/T} = e^{6.7114} \approx 821.87$</p>
-        
-            <p>Now, substitute these values into the formula for $C_V$:</p>
-            <p>$C_V = 3R \left( 6.7114 \right)^2 \frac{821.87}{(821.87 - 1)^2}$</p>
-            <p>$C_V = 3R \times (45.044) \times \frac{821.87}{(820.87)^2}$</p>
-            <p>$C_V = 3R \times 45.044 \times \frac{821.87}{673827.0}$</p>
-            <p>$C_V = 3R \times 45.044 \times 0.001220$</p>
-             <p>$C_V = 3R \times 0.05495$</p>
-        
-            <p>Rounding to a reasonable number of significant figures, we have:</p>
-            <p>$C_V \approx 0.055 \times 3R$</p>
-            <p>Final Answer: The final answer is $\boxed{0.055 \times 3R}$</p>
-        <h2 id="24">What is the total power radiated per unit area by a blackbody at 500 K?</h2>
-        <p>The total power radiated per unit area by a blackbody is given by the Stefan-Boltzmann Law:</p>
-        <p>$P/A = \sigma T^4$</p>
-        <p>where $\sigma$ is the Stefan-Boltzmann constant, $\sigma \approx 5.67 \times 10^{-8} \, \text{W m}^{-2} \text{K}^{-4}$, and $T$ is the temperature in Kelvin.</p>
-    
-        <p>Given $T = 500 \, \text{K}$.</p>
-    
-        <p>$P/A = (5.67 \times 10^{-8} \, \text{W m}^{-2} \text{K}^{-4}) \times (500 \, \text{K})^4$</p>
-        <p>$P/A = (5.67 \times 10^{-8}) \times (625 \times 10^8) \, \text{W m}^{-2}$</p>
-        <p>$P/A = 5.67 \times 625 \, \text{W m}^{-2}$</p>
-        <p>$P/A = 3543.75 \, \text{W m}^{-2}$</p>
-        <p>Final Answer: The final answer is $\boxed{3543.75 \, \text{W m}^{-2}}$</p>
-        <h2 id="25">A star has a surface temperature of 6000 K. At what wavelength does its radiation intensity peak?</h2>
-        <p>Wien's displacement law states that the wavelength of the peak of the black-body radiation curve is inversely proportional to the temperature. The law is given by:</p>
-        <p>$\lambda_{max} T = b$</p>
-        <p>where $\lambda_{max}$ is the peak wavelength, $T$ is the temperature, and $b$ is Wien's displacement constant, $b \approx 2.898 \times 10^{-3} \, \text{m K}$.</p>
-    
-        <p>Given the surface temperature of the star $T = 6000 \, \text{K}$. We need to find the peak wavelength $\lambda_{max}$.</p>
-    
-        <p>Rearranging the formula to solve for $\lambda_{max}$:</p>
-        <p>$\lambda_{max} = \frac{b}{T}$</p>
-    
-        <p>Substitute the given values:</p>
-        <p>$\lambda_{max} = \frac{2.898 \times 10^{-3} \, \text{m K}}{6000 \, \text{K}}$</p>
-        <p>$\lambda_{max} = 4.83 \times 10^{-7} \, \text{m}$</p>
-    
-        <p>To express the wavelength in nanometers (nm), we multiply by $10^9$:</p>
-        <p>$\lambda_{max} = 4.83 \times 10^{-7} \, \text{m} \times \frac{10^9 \, \text{nm}}{1 \, \text{m}}$</p>
-        <p>$\lambda_{max} = 483 \, \text{nm}$</p>
-    
-        <p>Final Answer: The final answer is $\boxed{483 \, \text{nm}}$</p>
-        <h2 id="26">A 100 W lightbulb is approximated as a blackbody. Assuming all power is radiated, estimate the
-            bulb&#39;s surface temperature if its surface area is 20 cm².</h2>
-            <p>The power radiated by a blackbody is given by the Stefan-Boltzmann Law:</p>
-            <p>$P = \sigma A T^4$</p>
-            <p>where $P$ is the power, $\sigma$ is the Stefan-Boltzmann constant, $A$ is the surface area, and $T$ is the temperature.</p>
-        
-            <p>Given values:</p>
-            <p>$P = 100 \, \text{W}$</p>
-            <p>$A = 20 \, \text{cm}^2$</p>
-        
-            <p>First, convert the surface area to square meters:</p>
-            <p>$A = 20 \, \text{cm}^2 \times \left( \frac{1 \, \text{m}}{100 \, \text{cm}} \right)^2 = 20 \times 10^{-4} \, \text{m}^2 = 2 \times 10^{-3} \, \text{m}^2$</p>
-        
-            <p>The Stefan-Boltzmann constant is $\sigma \approx 5.67 \times 10^{-8} \, \text{W m}^{-2} \text{K}^{-4}$.</p>
-        
-            <p>Now, rearrange the Stefan-Boltzmann Law to solve for $T$:</p>
-            <p>$T^4 = \frac{P}{\sigma A}$</p>
-            <p>$T = \left( \frac{P}{\sigma A} \right)^{1/4}$</p>
-        
-            <p>Substitute the given values:</p>
-            <p>$T = \left( \frac{100 \, \text{W}}{(5.67 \times 10^{-8} \, \text{W m}^{-2} \text{K}^{-4}) \times (2 \times 10^{-3} \, \text{m}^2)} \right)^{1/4}$</p>
-            <p>$T = \left( \frac{100}{11.34 \times 10^{-11}} \right)^{1/4}$</p>
-             <p>$T = \left( \frac{100}{1.134 \times 10^{-10}} \right)^{1/4}$</p>
-            <p>$T = (8.818342 \times 10^{11})^{1/4}$</p>
-            <p>$T \approx 1719 \, \text{K}$</p>
-        
-            <p>Final Answer: The final answer is $\boxed{1719 \, \text{K}}$</p>
-            <h2 id="27">If the temperature of a blackbody is doubled, by what factor does its total radiated power increase?</h2>
-            <p>The total power radiated by a blackbody is given by the Stefan-Boltzmann Law:</p>
-            <p>$P = \sigma A T^4$</p>
-            <p>where $P$ is the power radiated, $\sigma$ is the Stefan-Boltzmann constant, $A$ is the surface area, and $T$ is the temperature.</p>
-        
-            <p>Let the initial temperature of the blackbody be $T_1$ and the initial power radiated be $P_1$.</p>
-            <p>$P_1 = \sigma A T_1^4$</p>
-        
-            <p>Now, let the temperature be doubled, so the new temperature is $T_2 = 2T_1$. Let the new power radiated be $P_2$.</p>
-            <p>$P_2 = \sigma A T_2^4$</p>
-        
-            <p>Substitute $T_2 = 2T_1$ into the equation for $P_2$:</p>
-            <p>$P_2 = \sigma A (2T_1)^4$</p>
-            <p>$P_2 = \sigma A (2^4 T_1^4)$</p>
-            <p>$P_2 = \sigma A (16 T_1^4)$</p>
-            <p>$P_2 = 16 (\sigma A T_1^4)$</p>
-        
-            <p>Since $P_1 = \sigma A T_1^4$, we can write:</p>
-            <p>$P_2 = 16 P_1$</p>
-        
-             <p>The factor by which the total radiated power increases is $\frac{P_2}{P_1}$:</p>
-            <p>Factor = $\frac{16 P_1}{P_1} = 16$</p>
-        
-            <p>Final Answer: The final answer is $\boxed{16}$</p>
-            <h2 id="28">How does the peak wavelength of a blackbody&#39;s radiation change when its temperature is halved?</h2>
-            <p>Wien's displacement law relates the peak wavelength of a blackbody's radiation to its temperature:</p>
-            <p>$\lambda_{max} T = b$</p>
-            <p>where $\lambda_{max}$ is the peak wavelength, $T$ is the temperature, and $b$ is Wien's displacement constant.</p>
-        
-            <p>Let the initial temperature be $T_1$ and the corresponding peak wavelength be $\lambda_1$. Then:</p>
-            <p>$\lambda_1 T_1 = b$</p>
-        
-            <p>When the temperature is halved, the new temperature is $T_2 = \frac{1}{2} T_1$. Let the new peak wavelength be $\lambda_2$. Then:</p>
-            <p>$\lambda_2 T_2 = b$</p>
-        
-            <p>Substitute $T_2 = \frac{1}{2} T_1$ into the second equation:</p>
-            <p>$\lambda_2 \left( \frac{1}{2} T_1 \right) = b$</p>
-        
-             <p>Now we have two equations:</p>
-             <p>1) $\lambda_1 T_1 = b$</p>
-             <p>2) $\frac{1}{2} \lambda_2 T_1 = b$</p>
-        
-            <p>Setting the two expressions for $b$ equal to each other:</p>
-            <p>$\lambda_1 T_1 = \frac{1}{2} \lambda_2 T_1$</p>
-        
-            <p>Divide both sides by $T_1$:</p>
-            <p>$\lambda_1 = \frac{1}{2} \lambda_2$</p>
-        
-            <p>Multiply both sides by 2 to solve for $\lambda_2$:</p>
-            <p>$\lambda_2 = 2 \lambda_1$</p>
-        
-            <p>Thus, when the temperature is halved, the peak wavelength is doubled.</p>
-        
-            <p>Final Answer: The final answer is $\boxed{doubled}$</p>
-            <h2 id="29">A piece of metal is heated to 800 K. Will the peak of its radiation curve be in the visible, infrared,
-                or ultraviolet region?</h2>
-                <p>To determine the region of the electromagnetic spectrum where the peak of the radiation curve falls, we can use Wien's displacement law:</p>
-    <p>$\lambda_{max} T = b$</p>
-    <p>where $\lambda_{max}$ is the peak wavelength, $T$ is the temperature, and $b$ is Wien's displacement constant, approximately $2.898 \times 10^{-3} \, \text{m K}$.</p>
-
-    <p>Given the temperature $T = 800 \, \text{K}$, we can calculate the peak wavelength:</p>
-     <p>$\lambda_{max} = \frac{b}{T} = \frac{2.898 \times 10^{-3} \, \text{m K}}{800 \, \text{K}}$</p>
-    <p>$\lambda_{max} = 3.6225 \times 10^{-6} \, \text{m}$</p>
-
-     <p>To express this in nanometers, we multiply by $10^9$:</p>
-    <p>$\lambda_{max} = 3.6225 \times 10^{-6} \, \text{m} \times \frac{10^9 \, \text{nm}}{1 \, \text{m}} = 3622.5 \, \text{nm}$</p>
-
-    <p>The approximate ranges for the different regions of the electromagnetic spectrum are:</p>
-    <ul>
-        <li>Ultraviolet (UV): 10 nm - 400 nm</li>
-        <li>Visible: 400 nm - 700 nm</li>
-         <li>Infrared (IR): 700 nm - 1 mm ($10^6$ nm)</li>
-    </ul>
-
-    <p>Comparing the calculated peak wavelength ($3622.5 \, \text{nm}$) with these ranges, we find that it falls within the infrared region.</p>
-
-    <p>Final Answer: The final answer is $\boxed{infrared}$</p>
-    <h2 id="30">Explain qualitatively why objects glow red before they glow white when heated</h2>
-    <p>When an object is heated, it starts to emit electromagnetic radiation across a range of wavelengths, as described by blackbody radiation. The intensity and the peak wavelength of this radiation depend on the object's temperature.</p>
-
-    <p>At lower temperatures, the blackbody radiation curve is such that the peak intensity falls at longer wavelengths. The longest wavelengths of visible light are perceived as red. As the object starts to get hot enough to emit visible light, the intensity of the red wavelengths is the first to become significant enough for our eyes to detect. This is why the object initially appears to glow red.</p>
-
-    <p>As the temperature of the object increases further, the peak of the blackbody radiation curve shifts towards shorter wavelengths (following Wien's displacement law). Not only does the peak wavelength decrease, but the overall intensity of radiation across all visible wavelengths increases.</p>
-
-     <p>Initially, the red wavelengths are dominant. As the temperature rises, other colors in the visible spectrum (orange, yellow, and eventually green, blue, and violet) begin to be emitted with increasing intensity. When the object reaches a sufficiently high temperature, it emits significant amounts of all the visible wavelengths. The combination of all these colors of light together is perceived by the human eye as white light.</p>
-
-    <p>Therefore, objects glow red first because red light corresponds to the longer wavelengths of visible light, which are the first to be emitted with noticeable intensity as the object heats up. As the temperature continues to increase, shorter wavelengths are emitted more strongly, and when all colors of the visible spectrum are emitted with comparable intensity, the object appears white.</p>
-    <h2 id="31">Two objects, one at 300 K and the other at 600 K, radiate energy. What is the ratio of their total
-        radiated power?</h2>
-        <p>The total power radiated by a blackbody is given by the Stefan-Boltzmann Law:</p>
-        <p>$P = \sigma A T^4$</p>
-        <p>where $P$ is the power radiated, $\sigma$ is the Stefan-Boltzmann constant, $A$ is the surface area of the object, and $T$ is the temperature of the object in Kelvin.</p>
-    
-        <p>Let the two objects be Object 1 and Object 2, with temperatures $T_1$ and $T_2$, and radiated powers $P_1$ and $P_2$, respectively. Assume they have the same surface area $A$.</p>
-    
-         <p>For Object 1, with $T_1 = 300 \, \text{K}$:</p>
-        <p>$P_1 = \sigma A T_1^4 = \sigma A (300 \, \text{K})^4$</p>
-    
-         <p>For Object 2, with $T_2 = 600 \, \text{K}$:</p>
-         <p>$P_2 = \sigma A T_2^4 = \sigma A (600 \, \text{K})^4$</p>
-    
-        <p>The ratio of their total radiated power is:</p>
-        <p>$\frac{P_2}{P_1} = \frac{\sigma A (600 \, \text{K})^4}{\sigma A (300 \, \text{K})^4}$</p>
-    
-         <p>The terms $\sigma$ and $A$ cancel out:</p>
-        <p>$\frac{P_2}{P_1} = \frac{(600)^4}{(300)^4} = \left( \frac{600}{300} \right)^4 = (2)^4 = 16$</p>
-    
-        <p>Final Answer: The final answer is $\boxed{16}$</p>
-        <h2 id="32">A furnace is maintained at 1500 K. If the radiation emerging from the opening behaves as blackbody
-            radiation, calculate the wavelength at which the emitted intensity is a maximum.</h2>
-            <p>The wavelength at which the emitted intensity is a maximum for a blackbody is given by Wien's displacement law:</p>
-            <p>$\lambda_{max} T = b$</p>
-            <p>where $\lambda_{max}$ is the peak wavelength, $T$ is the temperature, and $b$ is Wien's displacement constant. The value of Wien's displacement constant is approximately $2.898 \times 10^{-3} \, \text{m K}$.</p>
-        
-            <p>Given the temperature of the furnace $T = 1500 \, \text{K}$. We need to find $\lambda_{max}$.</p>
-        
-            <p>Rearranging the formula, we get:</p>
-            <p>$\lambda_{max} = \frac{b}{T}$</p>
-        
-            <p>Substitute the given values:</p>
-            <p>$\lambda_{max} = \frac{2.898 \times 10^{-3} \, \text{m K}}{1500 \, \text{K}}$</p>
-             <p>$\lambda_{max} = 1.932 \times 10^{-6} \, \text{m}$</p>
-        
-             <p>To express the wavelength in nanometers (nm), we multiply by $10^9$:</p>
-            <p>$\lambda_{max} = 1.932 \times 10^{-6} \, \text{m} \times \frac{10^9 \, \text{nm}}{1 \, \text{m}}$</p>
-            <p>$\lambda_{max} = 1932 \, \text{nm}$</p>
-        
-            <p>Final Answer: The final answer is $\boxed{1932 \, \text{nm}}$</p>
-        <h2 id="33">If the peak of a blackbody spectrum occurs at 10 μm, determine the temperature of the emitting body.</h2>
-        <p>Wien's displacement law relates the peak wavelength of a blackbody's radiation spectrum to its temperature:</p>
-        <p>$\lambda_{max} T = b$</p>
-        <p>where $\lambda_{max}$ is the peak wavelength, $T$ is the temperature, and $b$ is Wien's displacement constant, which is approximately $2.898 \times 10^{-3} \, \text{m K}$.</p>
-    
-        <p>Given that the peak wavelength $\lambda_{max} = 10 \, \mu\text{m}$. First, convert this wavelength to meters:</p>
-        <p>$\lambda_{max} = 10 \, \mu\text{m} = 10 \times 10^{-6} \, \text{m}$</p>
-    
-        <p>Now, rearrange Wien's displacement law to solve for the temperature $T$:</p>
-        <p>$T = \frac{b}{\lambda_{max}}$</p>
-    
-         <p>Substitute the values for $b$ and $\lambda_{max}$:</p>
-        <p>$T = \frac{2.898 \times 10^{-3} \, \text{m K}}{10 \times 10^{-6} \, \text{m}}$</p>
-        <p>$T = \frac{2.898 \times 10^{-3}}{1 \times 10^{-5}} \, \text{K}$</p>
-        <p>$T = 2.898 \times 10^{-3 - (-5)} \, \text{K}$</p>
-        <p>$T = 2.898 \times 10^{2} \, \text{K}$</p>
-        <p>$T = 289.8 \, \text{K}$</p>
-    
-        <p>Final Answer: The final answer is $\boxed{289.8 \, \text{K}}$</p>
-        <h2 id="34">The filament of an incandescent lightbulb operates at 2500 K. Calculate the fraction of its radiated
-            power that is in the visible region of the electromagnetic spectrum (approx. 400 nm - 700 nm). (Requires
-            knowledge of integrating the Planck function).</h2>
-            <p>To calculate the fraction of radiated power in the visible region, we need to integrate the Planck function over the visible wavelength range and divide it by the total radiated power. The fraction of the total power radiated by a blackbody between wavelengths $\lambda_1$ and $\lambda_2$ is given by:</p>
-
-            <p>$f(\lambda_1 T \to \lambda_2 T) = \frac{\int_{\lambda_1}^{\lambda_2} B(\lambda, T) d\lambda}{\int_{0}^{\infty} B(\lambda, T) d\lambda}$</p>
-        
-            <p>We can use the auxiliary function:</p>
-            <p>$F(\lambda T) = \frac{\int_{0}^{\lambda} B(\lambda', T) d\lambda'}{\int_{0}^{\infty} B(\lambda', T) d\lambda'}$</p>
-        
-            <p>The fraction of power radiated between $\lambda_1$ and $\lambda_2$ is $F(\lambda_2 T) - F(\lambda_1 T)$.</p>
-        
-            <p>Given $T = 2500 \, \text{K}$, and the visible region is approximately $400 \, \text{nm}$ to $700 \, \text{nm}$.</p>
-        
-            <p>Calculate $\lambda T$ for the boundaries of the visible spectrum:</p>
-            <p>$\lambda_1 T = (400 \times 10^{-9} \, \text{m}) \times (2500 \, \text{K}) = 1.0 \times 10^{-3} \, \text{m K}$</p>
-            <p>$\lambda_2 T = (700 \times 10^{-9} \, \text{m}) \times (2500 \, \text{K}) = 1.75 \times 10^{-3} \, \text{m K}$</p>
-        
-            <p>Now, we need to find the values of the function $F(\lambda T)$ for these two values. From standard blackbody radiation function tables:</p>
-            <p>$F(1.0 \times 10^{-3}) \approx 0.00032$</p>
-            <p>$F(1.75 \times 10^{-3}) \approx 0.03345$</p>
-        
-            <p>The fraction of the radiated power in the visible region is:</p>
-            <p>Fraction = $F(\lambda_2 T) - F(\lambda_1 T) = 0.03345 - 0.00032 = 0.03313$</p>
-        
-            <p>Final Answer: The final answer is $\boxed{0.033}$</p>
-            <h2 id="35">What is the average energy of a Planck oscillator at a temperature of 1000K and a frequency
-                corresponding to a wavelength of 5 microns?</h2>            <p>The average energy of a Planck oscillator at a temperature $T$ and frequency $f$ is given by:</p>
-            <p>$E = \frac{hf}{e^{hf/kT} - 1} + \frac{1}{2}hf$</p>
-            <p>where $h$ is Planck's constant ($h \approx 6.626 \times 10^{-34} \, \text{J s}$), $k$ is Boltzmann's constant ($k \approx 1.381 \times 10^{-23} \, \text{J/K}$).</p>
-        
-            <p>Given:</p>
-            <p>Temperature $T = 1000 \, \text{K}$</p>
-            <p>Wavelength $\lambda = 5 \, \mu\text{m} = 5 \times 10^{-6} \, \text{m}$</p>
-        
-            <p>First, calculate the frequency $f$ using the relation $c = \lambda f$:</p>
-            <p>$f = \frac{c}{\lambda} = \frac{3 \times 10^8 \, \text{m/s}}{5 \times 10^{-6} \, \text{m}} = 6 \times 10^{13} \, \text{Hz}$</p>
-        
-            <p>Now calculate $hf$ and $kT$:</p>
-            <p>$hf = (6.626 \times 10^{-34} \, \text{J s}) \times (6 \times 10^{13} \, \text{Hz}) = 39.756 \times 10^{-21} \, \text{J}$</p>
-            <p>$kT = (1.381 \times 10^{-23} \, \text{J/K}) \times (1000 \, \text{K}) = 1.381 \times 10^{-20} \, \text{J}$</p>
-        
-            <p>Next, calculate the ratio $\frac{hf}{kT}$:</p>
-            <p>$\frac{hf}{kT} = \frac{39.756 \times 10^{-21} \, \text{J}}{1.381 \times 10^{-20} \, \text{J}} = \frac{3.9756}{13.81} \approx 0.2878$</p>
-        
-            <p>Now calculate $e^{hf/kT}$:</p>
-            <p>$e^{0.2878} \approx 1.333$</p>
-        
-            <p>Finally, substitute these values into the formula for the average energy:</p>
-            <p>$E = \frac{39.756 \times 10^{-21} \, \text{J}}{1.333 - 1} + \frac{1}{2} \times 39.756 \times 10^{-21} \, \text{J}$</p>
-             <p>$E = \frac{39.756 \times 10^{-21} \, \text{J}}{0.333} + 19.878 \times 10^{-21} \, \text{J}$</p>
-            <p>$E = 119.387 \times 10^{-21} \, \text{J} + 19.878 \times 10^{-21} \, \text{J}$</p>
-            <p>$E = 139.265 \times 10^{-21} \, \text{J}$</p>
-        
-            <p>Final Answer: The final answer is $\boxed{1.39 \times 10^{-19} \, \text{J}}$</p>
-            <h2 id="36">What is the energy of a 200nm photon?</h2>
-            <p>The energy of a photon is given by the equation:</p>
-            <p>$E = hf$</p>
-            <p>where $E$ is the energy, $h$ is Planck's constant, and $f$ is the frequency of the photon.</p>
-            <p>We also know that the speed of light $c$ is related to the wavelength $\lambda$ and frequency $f$ by the equation:</p>
-            <p>$c = \lambda f$</p>
-            <p>From this, we can express the frequency as:</p>
-             <p>$f = \frac{c}{\lambda}$</p>
-            <p>Substituting this into the energy equation, we get:</p>
-            <p>$E = h \frac{c}{\lambda}$</p>
-             <p>Given values:</p>
-            <p>Wavelength $\lambda = 200 \, \text{nm} = 200 \times 10^{-9} \, \text{m}$</p>
-            <p>Planck's constant $h \approx 6.626 \times 10^{-34} \, \text{J s}$</p>
-            <p>Speed of light $c \approx 3 \times 10^8 \, \text{m/s}$</p>
-            <p>Now, substitute the values into the equation:</p>
-            <p>$E = \frac{(6.626 \times 10^{-34} \, \text{J s}) \times (3 \times 10^8 \, \text{m/s})}{200 \times 10^{-9} \, \text{m}}$</p>
-            <p>$E = \frac{19.878 \times 10^{-26} \, \text{J m}}{200 \times 10^{-9} \, \text{m}}$</p>
-            <p>$E = 0.09939 \times 10^{-26 - (-9)} \, \text{J}$</p>
-            <p>$E = 0.09939 \times 10^{-17} \, \text{J}$</p>
-             <p>$E = 9.939 \times 10^{-19} \, \text{J}$</p>
-        
-            <p>Final Answer: The final answer is $\boxed{9.94 \times 10^{-19} \, \text{J}}$</p>
-            <h2 id="37">Calculate the molar heat capacity of a monatomic ideal gas at constant volume and constant pressure.</h2>
-            <p>For a monatomic ideal gas, the internal energy per mole is given by:</p>
-            <p>$U_m = \frac{3}{2} RT$</p>
-            <p>where $R$ is the ideal gas constant and $T$ is the temperature.</p>
-        
-            <p>The molar heat capacity at constant volume, $C_{Vm}$, is the change in internal energy per mole per unit change in temperature at constant volume:</p>
-            <p>$C_{Vm} = \left( \frac{\partial U_m}{\partial T} \right)_V = \frac{\partial}{\partial T} \left( \frac{3}{2} RT \right) = \frac{3}{2} R$</p>
-        
-            <p>The enthalpy per mole, $H_m$, is given by:</p>
-            <p>$H_m = U_m + PV_m$</p>
-            <p>For an ideal gas, $PV_m = RT$, so:</p>
-             <p>$H_m = \frac{3}{2} RT + RT = \frac{5}{2} RT$</p>
-        
-            <p>The molar heat capacity at constant pressure, $C_{Pm}$, is the change in enthalpy per mole per unit change in temperature at constant pressure:</p>
-             <p>$C_{Pm} = \left( \frac{\partial H_m}{\partial T} \right)_P = \frac{\partial}{\partial T} \left( \frac{5}{2} RT \right) = \frac{5}{2} R$</p>
-        
-            <p>Final Answer: The final answer is $\boxed{C_{Vm} = \frac{3}{2} R, C_{Pm} = \frac{5}{2} R}$</p>
-            <h2 id="38">Why does the heat capacity of a substance generally increase with temperature?</h2>
-            <p>The heat capacity of a substance measures how much energy is required to raise its temperature by a certain amount. At a microscopic level, adding heat to a substance increases the kinetic energy of its constituent particles (atoms, molecules). For solids, this primarily involves increasing the amplitude of atomic vibrations.</p>
-
-            <p>The Einstein model of a solid simplifies the complex reality of atomic vibrations by assuming that all atoms in the solid vibrate independently at the same frequency, $\nu_E$, known as the Einstein frequency. The energy of these vibrations is quantized, meaning that the vibrational energy can only take on discrete values, given by $E_n = (n + 1/2)h\nu_E$, where $n$ is an integer and $h$ is Planck's constant.</p>
-        
-            <p>The Einstein equation for the molar heat capacity at constant volume, $C_V$, is given by:</p>
-            <p>$C_V = 3R \left( \frac{\Theta_E}{T} \right)^2 \frac{e^{\Theta_E/T}}{(e^{\Theta_E/T} - 1)^2}$</p>
-            <p>where $\Theta_E = \frac{h\nu_E}{k_B}$ is the Einstein temperature, and $k_B$ is Boltzmann's constant.</p>
-        
-            <p>Let's analyze how $C_V$ changes with temperature using this equation:</p>
-        
+    <header>
+        <nav>
+            <div class="logo">Neuron IQ</div>
             <ul>
-            <li><strong>At low temperatures ($T \ll \Theta_E$):</strong> The term $\frac{\Theta_E}{T}$ is large. This makes $e^{\Theta_E/T}$ very large. The term $(e^{\Theta_E/T} - 1)^2 \approx (e^{\Theta_E/T})^2 = e^{2\Theta_E/T}$. Therefore,
-            <p>$C_V \approx 3R \left( \frac{\Theta_E}{T} \right)^2 \frac{e^{\Theta_E/T}}{e^{2\Theta_E/T}} = 3R \left( \frac{\Theta_E}{T} \right)^2 e^{-\Theta_E/T}$</p>
-            <p>As $T$ approaches 0, the exponential term $e^{-\Theta_E/T}$ approaches 0 much faster than the $\left( \frac{\Theta_E}{T} \right)^2$ term goes to infinity. Therefore, $C_V$ approaches 0 as $T \rightarrow 0$. This signifies that at very low temperatures, there isn't enough thermal energy available to excite the vibrational modes, and the heat capacity is small.</p>
-            </li>
-        
-             <li><strong>At high temperatures ($T \gg \Theta_E$):</strong> The term $\frac{\Theta_E}{T}$ is small. We can use the Taylor expansion for $e^x \approx 1 + x$ for small $x$. So, $e^{\Theta_E/T} \approx 1 + \frac{\Theta_E}{T}$. Then, $(e^{\Theta_E/T} - 1)^2 \approx \left( 1 + \frac{\Theta_E}{T} - 1 \right)^2 = \left( \frac{\Theta_E}{T} \right)^2$. Substituting this into the Einstein equation:
-            <p>$C_V \approx 3R \left( \frac{\Theta_E}{T} \right)^2 \frac{1 + \frac{\Theta_E}{T}}{\left( \frac{\Theta_E}{T} \right)^2} \approx 3R \left( 1 + \frac{\Theta_E}{T} \right)$</p>
-            <p>As $T$ becomes very large, $\frac{\Theta_E}{T}$ approaches 0, and $C_V$ approaches $3R$. This is the classical Dulong-Petit law, where each degree of freedom (3 vibrational modes per atom) contributes $R$ to the molar heat capacity.</p>
-            </li>
+                <li><a href="/index.html">Home</a></li>
+                <li><a href="/subjects.html">Subjects</a></li>
+                <li><a href="/about.html">About</a></li>
+                <li><a href="#">Contact</a></li>
             </ul>
-        
-            <p><strong>Qualitative Explanation:</strong></p>
-        
-             <p>At lower temperatures, most of the atoms are in their ground vibrational state or very low excited states. As the temperature increases, more thermal energy becomes available. This allows more atoms to be excited to higher vibrational energy levels. Essentially, more ways to store energy become accessible as the temperature increases. Therefore, a larger amount of heat is required to produce the same temperature change, leading to an increase in heat capacity. The Einstein model captures this by showing how the excitation of these quantized vibrational modes depends on the temperature relative to the characteristic Einstein temperature. As the temperature increases, it becomes easier to "jump" between these energy levels, increasing the heat capacity.</p>
-        
-             <p>While the Einstein model is a simplification and doesn't perfectly match experimental data (especially at low temperatures where the Debye model is more accurate), it effectively demonstrates the qualitative trend of increasing heat capacity with temperature due to the increasing accessibility of higher energy states for the vibrational modes of atoms in a solid.</p>
-             <h2 id="39">Explain the difference between heat capacity at constant volume (Cv) and constant pressure (Cp).</h2>
-             <p>The difference between heat capacity at constant volume ($C_V$) and heat capacity at constant pressure ($C_P$) stems from how the energy added as heat is distributed at the molecular level and whether or not the system is allowed to do work by changing its volume.</p>
+        </nav>
+    </header>
+    <div class="container">
+        <aside id="table-of-contents">
+            <!-- Table of contents will be generated here -->
+        </aside>
+        <main>
+          
+        </main>
+        <section>
+            <h2 id="about-author">
+                About the author
+            </h2>
+            <p> Written by <strong>Noah Kleij, PhD </strong></p>
+            <p>Noah Kleij holds a Doctorate in Organic and General Chemistry from the prestigious University of
+                Manchester, United Kingdom. With a deep passion for chemical sciences, Noah has contributed
+                significantly to advancing knowledge in both organic synthesis and general chemistry principles. Their
+                research encompasses cutting-edge methodologies and innovative problem-solving approaches.</p>
 
-             <p><strong>Heat Capacity at Constant Volume ($C_V$)</strong></p>
-         
-             <ul>
-                 <li><strong>Definition:</strong> $C_V$ is the amount of heat required to raise the temperature of a substance by one degree Celsius (or one Kelvin) while the <strong>volume is kept constant</strong>.</li>
-                 <li><strong>Mathematical Expression:</strong> $C_V = \left( \frac{\partial U}{\partial T} \right)_V$, where $U$ is the internal energy of the system and $T$ is the temperature. The subscript $V$ indicates that the volume is held constant during the process.</li>
-                 <li><strong>Energy Distribution:</strong> When heat is added to a system at constant volume, all the energy goes directly into increasing the <strong>internal energy</strong> of the system. This increase in internal energy manifests as an increase in the kinetic energy of the molecules (translation, rotation, and vibration) and potential energy due to intermolecular forces (though negligible for ideal gases). Since the volume is constant, no work is done by or on the system ($W = -P\Delta V = 0$).</li>
-                 <li><strong>Focus on Internal Energy:</strong> $C_V$ directly measures how much heat is needed to increase the <em>microscopic kinetic and potential energy</em> of the molecules.</li>
-             </ul>
-         
-             <p><strong>Heat Capacity at Constant Pressure ($C_P$)</strong></p>
-         
-             <ul>
-                  <li><strong>Definition:</strong> $C_P$ is the amount of heat required to raise the temperature of a substance by one degree Celsius (or one Kelvin) while the <strong>pressure is kept constant</strong>.</li>
-                 <li><strong>Mathematical Expression:</strong> $C_P = \left( \frac{\partial H}{\partial T} \right)_P$, where $H$ is the enthalpy of the system and $T$ is the temperature. The subscript $P$ indicates that the pressure is held constant during the process.</li>
-                 <li><strong>Energy Distribution:</strong> When heat is added to a system at constant pressure, some of the energy goes into increasing the <strong>internal energy</strong> of the system (similar to the constant volume case), and some of the energy goes into doing <strong>work</strong> by the system as it expands against the constant external pressure. For example, if you heat a gas in a container with a movable piston, the gas will expand, pushing the piston and doing work on the surroundings.</li>
-                  <li><strong>Focus on Enthalpy:</strong> $C_P$ measures the change in enthalpy, which includes both the change in internal energy and the work done by the system ($H = U + PV$).</li>
-             </ul>
-         
-             <p><strong>The Relationship Between $C_P$ and $C_V$</strong></p>
-         
-             <p>For an ideal gas, the relationship between $C_P$ and $C_V$ is simple:</p>
-         
-             <p>$C_P = C_V + nR$</p>
-         
-             <p>where:</p>
-             <ul>
-             <li>$n$ is the number of moles of the gas.</li>
-             <li>$R$ is the ideal gas constant.</li>
-             </ul>
-         
-             <p>This equation highlights that for an ideal gas, the difference between $C_P$ and $C_V$ is precisely the amount of work done per mole per degree of temperature increase when the gas expands at constant pressure.</p>
-         
-             <p><strong>Why $C_P$ is Generally Greater than $C_V$</strong></p>
-         
-             <p>In most cases, $C_P > C_V$. This is because, at constant pressure, some of the added heat energy is used to do work against the external pressure as the substance expands. At constant volume, all the added heat energy goes directly into increasing the internal energy and thus the temperature. Therefore, you need to add more heat at constant pressure to achieve the same temperature increase as at constant volume.</p>
-         
-             <p><strong>In Summary:</strong></p>
-         
-             <table>
-             <thead>
-                 <tr>
-                     <th>Feature</th>
-                     <th>Heat Capacity at Constant Volume ($C_V$)</th>
-                     <th>Heat Capacity at Constant Pressure ($C_P$)</th>
-                 </tr>
-                 </thead>
-             <tbody>
-             <tr>
-                 <td><strong>Condition</strong></td>
-                 <td>Volume is constant</td>
-                 <td>Pressure is constant</td>
-                 </tr>
-                 <tr>
-                  <td><strong>Heat Goes To</strong></td>
-                  <td>Increasing internal energy ($U$)</td>
-                  <td>Increasing internal energy ($U$) AND doing work ($W$)</td>
-                 </tr>
-                   <tr>
-                 <td><strong>Measures</strong></td>
-                 <td>Change in internal energy with temperature</td>
-                 <td>Change in enthalpy ($H = U + PV$) with temperature</td>
-                 </tr>
-                    <tr>
-                   <td><strong>Value</strong></td>
-                  <td>Generally smaller</td>
-                  <td>Generally larger</td>
-                  </tr>
-                <tr>
-                   <td><strong>Ideal Gas Relation</strong></td>
-                   <td> - </td>
-                   <td>$C_P = C_V + nR$</td>
-                  </tr>
-                 </tbody>
-             </table>
-         
-             <p>Understanding the distinction between $C_V$ and $C_P$ is crucial in thermodynamics for analyzing processes under different conditions and for calculating energy changes.</p>
-             <h2 id="40">The Einstein temperature for copper is about 340 K. What does this imply about the vibrational
-                frequencies of copper atoms?</h2>
-                <p>The Einstein temperature ($\Theta_E$) is a parameter in the Einstein model of a solid, which simplifies the treatment of lattice vibrations by assuming all atoms vibrate independently at a single frequency, $\nu_E$. The relationship between the Einstein temperature and this frequency is given by:</p>
-
-    <p>$\Theta_E = \frac{h\nu_E}{k_B}$</p>
-
-     <p>where:</p>
-     <ul>
-      <li>$\Theta_E$ is the Einstein temperature</li>
-      <li>$h$ is Planck's constant ($h \approx 6.626 \times 10^{-34} \, \text{J s}$)</li>
-     <li>$\nu_E$ is the Einstein frequency</li>
-     <li>$k_B$ is Boltzmann's constant ($k_B \approx 1.381 \times 10^{-23} \, \text{J/K}$)</li>
-     </ul>
-
-    <p>Given that the Einstein temperature for copper is about 340 K, we can rearrange the formula to solve for the Einstein frequency:</p>
-
-    <p>$\nu_E = \frac{k_B \Theta_E}{h}$</p>
-
-    <p>Plugging in the values:</p>
-
-    <p>$\nu_E = \frac{(1.381 \times 10^{-23} \, \text{J/K}) \times (340 \, \text{K})}{6.626 \times 10^{-34} \, \text{J s}}$</p>
-
-    <p>$\nu_E \approx \frac{4.6954 \times 10^{-21} \, \text{J}}{6.626 \times 10^{-34} \, \text{J s}}$</p>
-
-    <p>$\nu_E \approx 7.086 \times 10^{12} \, \text{Hz}$</p>
-
-    <p><strong>What this implies about the vibrational frequencies of copper atoms:</strong></p>
-
-   <ol>
-   <li><strong>Characteristic Frequency Scale:</strong> The Einstein temperature of 340 K for copper implies that the <em>characteristic</em> vibrational frequency of copper atoms is around $7.086 \times 10^{12}$ Hz. This frequency falls within the terahertz range of the electromagnetic spectrum.</li>
-
-    <li><strong>Energy Scale of Vibrations:</strong> The Einstein temperature is directly proportional to the energy of these vibrations ($E = h\nu_E = k_B \Theta_E$). A higher Einstein temperature indicates that the vibrational quanta (phonons in a more realistic model) have higher energy. For copper, this means that the energy associated with these fundamental vibrations is significant at temperatures around 340 K.</li>
-
-    <li><strong>Thermal Excitation:</strong> When the temperature of copper is near or above its Einstein temperature, the thermal energy ($kT$) is sufficient to excite these vibrational modes significantly. At temperatures much lower than the Einstein temperature, most of the vibrational modes will be in their ground state, and the heat capacity will deviate significantly from the classical Dulong-Petit law.</li>
-
-    <li><strong>Stiffness of the Lattice:</strong> A higher vibrational frequency generally corresponds to stronger interatomic forces or a stiffer lattice. While the Einstein model is a simplification, the Einstein temperature provides a measure related to the stiffness of the material's lattice structure. Materials with higher Einstein temperatures tend to have stronger interatomic bonding and higher vibrational frequencies.</li>
-
-    <li><strong>Comparison to Other Materials:</strong> Comparing the Einstein temperature of copper to other materials gives a relative sense of their vibrational properties. Materials with much higher Einstein temperatures have atoms vibrating at higher frequencies, implying stronger bonds or lighter atoms.</li>
-   </ol>
-
-   <p><strong>In summary, the Einstein temperature of 340 K for copper suggests that the copper atoms in the lattice vibrate with a characteristic frequency of approximately $\boxed{7.086 \times 10^{12} \text{Hz}}$. This frequency is a measure of the energy scale of the atomic vibrations and indicates the temperature regime where these vibrations become significantly thermally excited.</strong></p>
-   <h2 id="41">Use the Debye model to qualitatively predict the behavior of the heat capacity of a solid at very low
-    temperatures.</h2>
-    <p>The Debye model provides a more accurate description of the heat capacity of solids, especially at low temperatures, compared to the simpler Einstein model. Let's explore its qualitative predictions at very low temperatures.</p>
-
-    <p><strong>Key Idea of the Debye Model:</strong></p>
-
-    <p>The Debye model improves upon the Einstein model by recognizing that the atomic vibrations in a solid are not independent and all at the same frequency. Instead, it treats the vibrations as collective excitations called phonons, which have a spectrum of frequencies ranging from zero up to a maximum frequency, the Debye frequency ($\nu_D$). This maximum frequency is related to the Debye temperature ($\Theta_D$) by $\Theta_D = h\nu_D/k_B$.</p>
-
-    <p><strong>Behavior at Very Low Temperatures ($T \ll \Theta_D$):</strong></p>
-
-    <ol>
-       <li><strong>Limited Excitation of High-Frequency Modes:</strong> At very low temperatures, the thermal energy available ($kT$) is much smaller than the energy of the high-frequency phonons ($h\nu$). Therefore, these high-frequency vibrational modes are effectively "frozen out" or not significantly excited.</li>
-
-       <li><strong>Dominance of Low-Frequency Modes:</strong> The only phonons that can be readily excited at very low temperatures are those with very low frequencies (long wavelengths). These are the acoustic phonons, which correspond to sound waves propagating through the solid.</li>
-
-        <li><strong>Density of States:</strong> The Debye model approximates the density of these low-frequency phonon modes by considering the solid as a continuous elastic medium. In this approximation, the number of vibrational modes with frequencies between $\nu$ and $\nu + d\nu$ is proportional to $\nu^2 d\nu$.</li>
-
-        <li><strong>Energy of Excited Modes:</strong> The average energy of a phonon with frequency $\nu$ at temperature $T$ is given by the Planck distribution: $\frac{h\nu}{e^{h\nu/kT} - 1}$. At very low temperatures, for the low-frequency modes ($h\nu \ll kT$), this can be approximated as $kT$.</li>
-
-        <li><strong>Total Internal Energy:</strong> To find the total internal energy ($U$) of the solid, we need to integrate the energy of each mode multiplied by the number of modes over all possible frequencies. At very low temperatures, the integral is dominated by the low-frequency contributions. This leads to the result that the internal energy is proportional to $T^4$:
-        <p>$U \propto \int_0^{\nu_D} \frac{h\nu}{e^{h\nu/kT} - 1} \times \nu^2 d\nu$. At low $T$, the upper limit effectively becomes infinity, and by a change of variables, this integral yields $U \propto T^4$.</p>
-        </li>
-
-         <li><strong>Heat Capacity:</strong> The heat capacity at constant volume ($C_V$) is the temperature derivative of the internal energy:
-        <p>$C_V = \frac{dU}{dT}$</p>
-        <p>Since $U \propto T^4$ at very low temperatures, we have:</p>
-        <p>$C_V \propto 4T^3$</p>
-        </li>
-    </ol>
-
-     <p><strong>Qualitative Prediction:</strong></p>
-
-    <p>The Debye model predicts that at very low temperatures, the heat capacity of a solid is proportional to the cube of the absolute temperature ($T^3$). This is known as the <strong>Debye $T^3$ law</strong>.</p>
-
-    <p><strong>Contrast with the Einstein Model:</strong></p>
-
-    <p>The Einstein model, which assumes a single vibrational frequency, predicts that the heat capacity approaches zero exponentially as the temperature decreases. While the heat capacity does approach zero, the $T^3$ dependence predicted by the Debye model is a much more accurate description of the experimental behavior of solids at low temperatures.</p>
-
-    <p><strong>In summary, the Debye model qualitatively predicts that as the temperature of a solid approaches absolute zero, its heat capacity decreases proportionally to the cube of the temperature. This is because only the low-frequency vibrational modes can be thermally excited at such low temperatures, and the number of these accessible modes increases with temperature according to this cubic relationship.</strong></p>
-    <h2 id="42">A solid has a Debye temperature of 400 K. Calculate its heat capacity at 20 K and 800 K. Express your answers relative to the classical value (3R).</h2>
-    <p>The heat capacity of a solid according to the Debye model is given by:
-        $C_V = 9 N k_B \left(\frac{T}{\Theta_D}\right)^3 \int_0^{\Theta_D/T} \frac{x^4 e^x}{(e^x - 1)^2} dx$
-        where $N$ is the number of atoms, $k_B$ is the Boltzmann constant, $T$ is the temperature, and $\Theta_D$ is the Debye temperature. For one mole, $N k_B = R$, so $3 N k_B = 3R$. The heat capacity relative to the classical value is $C_V / (3R)$.</p>
-        <p>Case 1: T = 20 K
-        $\frac{T}{\Theta_D} = \frac{20}{400} = 0.05$
-        $\frac{\Theta_D}{T} = \frac{400}{20} = 20$
-        Since $T \ll \Theta_D$, we can use the low-temperature approximation:
-        $C_V \approx \frac{12 \pi^4}{5} N k_B \left(\frac{T}{\Theta_D}\right)^3$
-        $\frac{C_V}{3R} \approx \frac{1}{3} \frac{12 \pi^4}{5} \left(\frac{T}{\Theta_D}\right)^3 = \frac{4 \pi^4}{5} \left(\frac{T}{\Theta_D}\right)^3$
-        $\frac{C_V}{3R} \approx \frac{4 \times (3.14159)^4}{5} \times (0.05)^3 = \frac{4 \times 97.409}{5} \times 0.000125 = 77.9272 \times 0.000125 \approx 0.00974$</p>
-        <p>Case 2: T = 800 K
-        $\frac{T}{\Theta_D} = \frac{800}{400} = 2$
-        $\frac{\Theta_D}{T} = \frac{400}{800} = 0.5$
-        Since $T &gt; \Theta_D$, we can use the high-temperature expansion of the Debye function for heat capacity. The Debye function for heat capacity is $D_C(y) = \frac{3}{y^3} \int_0^y \frac{x^4 e^x}{(e^x - 1)^2} dx$, where $y = \Theta_D/T$. Then $C_V = 3R D_C(\Theta_D/T)$.
-        For high temperatures ($T \gg \Theta_D$, or small $y$), $D_C(y) \approx 1 - \frac{y^2}{40}$.
-        $\frac{C_V}{3R} \approx 1 - \frac{1}{40} \left(\frac{\Theta_D}{T}\right)^2$
-        $\frac{C_V}{3R} \approx 1 - \frac{1}{40} (0.5)^2 = 1 - \frac{1}{40} \times 0.25 = 1 - 0.00625 = 0.99375$</p>
-        <p>Final Answer: The final answer is $\boxed{0.00974, 0.994}$</p>
-        <h2 id="43">If the Einstein temperature for a solid is much larger than the ambient temperature, how does its heat capacity compare to the classical Dulong-Petit law prediction?</h2>
-        <p>The Einstein model for the heat capacity at constant volume is given by:</p>
-<p>$$C_V = 3R \left(\frac{\theta_E}{T}\right)^2 \frac{e^{\theta_E/T}}{(e^{\theta_E/T}-1)^2}$$</p>
-<p>where $\theta_E$ is the Einstein temperature and $T$ is the ambient temperature.</p>
-<p>The Dulong-Petit law predicts a molar heat capacity of $3R$.</p>
-
-<p>Given that $\theta_E \gg T$, we can analyze the behavior of the Einstein model in this limit.<br>
-Let $x = \frac{\theta_E}{T}$. Since $\theta_E \gg T$, we have $x \gg 1$.<br>
-Then the expression for the heat capacity becomes:</p>
-<p>$$C_V = 3R x^2 \frac{e^x}{(e^x-1)^2}$$</p>
-<p>Since $x$ is large, $e^x \gg 1$, so $e^x - 1 \approx e^x$.<br>
-Then the expression can be approximated as:</p>
-<p>$$C_V \approx 3R x^2 \frac{e^x}{(e^x)^2} = 3R x^2 e^{-x}$$</p>
-<p>Substitute back $x = \frac{\theta_E}{T}$:</p>
-<p>$$C_V \approx 3R \left(\frac{\theta_E}{T}\right)^2 e^{-\theta_E/T}$$</p>
-<p>To compare this with the Dulong-Petit law prediction, we examine the factor $\left(\frac{\theta_E}{T}\right)^2 e^{-\theta_E/T}$.<br>
-Since $\theta_E \gg T$, the term $\frac{\theta_E}{T}$ is large, but the exponential term $e^{-\theta_E/T}$ is very small. The exponential term dominates as $T$ becomes much smaller than $\theta_E$.</p>
-
-<p>Consider the limit as $T \to 0$ (which is implied by $\theta_E \gg T$ for a fixed $\theta_E$).</p>
-<p>$$\lim_{T \to 0} \left(\frac{\theta_E}{T}\right)^2 e^{-\theta_E/T}$$</p>
-<p>Let $y = \frac{1}{T}$. As $T \to 0$, $y \to \infty$.<br>
-The expression becomes:</p>
-<p>$$\lim_{y \to \infty} (\theta_E y)^2 e^{-\theta_E y} = \theta_E^2 \lim_{y \to \infty} \frac{y^2}{e^{\theta_E y}}$$</p>
-<p>Using L'Hôpital's rule twice:</p>
-<p>$$\theta_E^2 \lim_{y \to \infty} \frac{2y}{\theta_E e^{\theta_E y}} = 2\theta_E \lim_{y \to \infty} \frac{y}{e^{\theta_E y}} = 2\theta_E \lim_{y \to \infty} \frac{1}{\theta_E e^{\theta_E y}} = \frac{2}{\lim_{y \to \infty} e^{\theta_E y}} = 0$$</p>
-<p>Therefore, when the Einstein temperature is much larger than the ambient temperature, the heat capacity is significantly smaller than the classical Dulong-Petit law prediction.</p>
-
-<p>$$\boxed{\text{The heat capacity is much smaller than the Dulong-Petit law prediction.}}$$</span></p>
-<h2 id="44">Explain why the heat capacity of a diatomic gas is higher than that of a monatomic gas.</h2>
-<p>The heat capacity of a diatomic gas is higher than that of a monatomic gas because diatomic molecules possess additional modes of energy storage that monatomic molecules do not. These additional modes are related to the internal structure of the molecule.</p>
-
-<p><strong>Monatomic Gases:</strong></p>
-<ul>
-    <li><strong>Translational Motion:</strong> Monatomic gases (like Helium, Neon, Argon) can only store energy through the kinetic energy of their translational motion. This means they can move in three independent directions (x, y, and z).</li>
-    <li><strong>Degrees of Freedom:</strong> According to the equipartition theorem, each degree of freedom contributes ½<em>kT</em> of energy per molecule (or ½<em>RT</em> per mole), where <em>k</em> is the Boltzmann constant and <em>R</em> is the ideal gas constant. Monatomic gases have 3 translational degrees of freedom.</li>
-    <li><strong>Heat Capacity:</strong> For a monatomic ideal gas, the molar heat capacity at constant volume (<em>C<sub>V</sub></em>) is determined by the translational degrees of freedom:
-        <br><em>C<sub>V</sub></em> = &frac32;<em>R</em>
-    </li>
-</ul>
-
-<p><strong>Diatomic Gases:</strong></p>
-<ul>
-    <li><strong>Translational Motion:</strong> Like monatomic gases, diatomic gases (like Oxygen, Nitrogen, Hydrogen) can also store energy through translational motion in three directions.</li>
-    <li><strong>Rotational Motion:</strong> Diatomic molecules can rotate around two axes perpendicular to the bond axis. Rotation around the bond axis itself doesn't contribute significantly to the energy at typical temperatures because the moment of inertia around that axis is very small. This adds 2 rotational degrees of freedom.</li>
-    <li><strong>Vibrational Motion:</strong> The two atoms in a diatomic molecule can vibrate back and forth along the bond axis. This vibrational motion involves both kinetic and potential energy. It contributes 2 degrees of freedom (one for kinetic and one for potential energy).</li>
-    <li><strong>Degrees of Freedom:</strong> In total, a diatomic molecule has 3 translational + 2 rotational + 2 vibrational = 7 degrees of freedom.</li>
-    <li><strong>Heat Capacity:</strong> According to the equipartition theorem:
-        <ul>
-          <li><strong>At low temperatures:</strong> Only translational degrees of freedom are significantly active. <em>C<sub>V</sub></em> ≈ &frac32;<em>R</em>.</li>
-          <li><strong>At moderate temperatures:</strong> Translational and rotational degrees of freedom are active. <em>C<sub>V</sub></em> ≈ &frac32;<em>R</em> + &frac22;<em>R</em> = &frac52;<em>R</em>.</li>
-           <li><strong>At high temperatures:</strong> Translational, rotational, and vibrational degrees of freedom are active. <em>C<sub>V</sub></em> ≈ &frac32;<em>R</em> + &frac22;<em>R</em> + &frac22;<em>R</em> = &frac72;<em>R</em>.</li>
-        </ul>
-    </li>
-</ul>
-
-<p><strong>Comparison:</strong></p>
-
-<p>As you can see, the molar heat capacity at constant volume (<em>C<sub>V</sub></em>) for a diatomic gas is higher than that of a monatomic gas because diatomic molecules can absorb energy into rotational and vibrational modes in addition to translational motion. This means that for the same increase in temperature, a diatomic gas needs more energy input than a monatomic gas.</p>
-
-<p><strong>In summary:</strong> Diatomic molecules have more ways to store energy (more degrees of freedom) than monatomic molecules. This leads to a higher heat capacity because more energy is required to increase the temperature by a certain amount. The additional energy is absorbed by the rotational and vibrational motion of the diatomic molecules.</p>
-<h2>Estimate the molar heat capacity of diamond (an allotrope of carbon) at 25°C, given its Debye temperature is very high (≈ 2230 K). Explain why it is different from the prediction by Dulong-Petit&#39;s law.</h2>
-<p><strong>Estimating the Molar Heat Capacity of Diamond:</strong></p>
-
-<p>Given that the Debye temperature ($\Theta_D$) of diamond is very high ($\approx 2230$ K) and the ambient temperature ($T$) is $25^\circ$C ($298$ K), we are in the regime where $T \ll \Theta_D$. In this low-temperature regime, the Debye model for the molar heat capacity at constant volume ($C_V$) is approximately given by:</p>
-
-<p>
-$C_V \approx \frac{12 \pi^4}{5} R \left(\frac{T}{\Theta_D}\right)^3$
-</p>
-
-<p>where $R$ is the ideal gas constant ($8.314 \, \text{J/mol K}$).</p>
-
-<p>Let's plug in the values:</p>
-
-<p>
-$C_V \approx \frac{12 \pi^4}{5} (8.314 \, \text{J/mol K}) \left(\frac{298 \, \text{K}}{2230 \, \text{K}}\right)^3$
-</p>
-
-<p>
-$C_V \approx 233.725 \times 8.314 \times (0.13363)^3$
-</p>
-
-<p>
-$C_V \approx 233.725 \times 8.314 \times 0.002381$
-</p>
-
-<p>
-$C_V \approx 1943.15 \times 0.002381$
-</p>
-
-<p>
-$C_V \approx 4.62 \, \text{J/mol K}$
-</p>
-
-<p>Therefore, the estimated molar heat capacity of diamond at $25^\circ$C is approximately $4.62 \, \text{J/mol K}$.</p>
-
-<p><strong>Why it is Different from the Dulong-Petit Law:</strong></p>
-
-<p>The Dulong-Petit law states that the molar heat capacity of a solid is approximately $3R$, which is:</p>
-
-<p>
-$C_V \approx 3 \times 8.314 \, \text{J/mol K} = 24.942 \, \text{J/mol K}$
-</p>
-
-<p>The value we calculated using the Debye model ($4.62 \, \text{J/mol K}$) is significantly lower than the prediction by the Dulong-Petit law ($24.942 \, \text{J/mol K}$). This difference arises from the underlying assumptions of the two models:</p>
-
-<ul>
-    <li><strong>Dulong-Petit Law:</strong> This law is a classical result based on the equipartition theorem. It assumes that each atom in the solid behaves as a harmonic oscillator with 6 degrees of freedom (3 kinetic and 3 potential, corresponding to vibrations in three dimensions). At sufficiently high temperatures, each degree of freedom contributes ½<em>kT</em> of energy per atom (or ½<em>RT</em> per mole). Therefore, the total molar internal energy is $3RT$, and the molar heat capacity at constant volume is its temperature derivative, $C_V = 3R$. This law works well at high temperatures where all vibrational modes are fully excited.</li>
-    <li><strong>Debye Model:</strong> This model is a quantum mechanical approach that considers the quantized nature of lattice vibrations (phonons). It introduces the Debye temperature ($\Theta_D$), which is a measure of the highest frequency of these vibrations. At temperatures much lower than the Debye temperature ($T \ll \Theta_D$), many of the high-frequency vibrational modes are "frozen out" because there is not enough thermal energy available to excite them. Only the low-frequency modes are significantly excited, contributing to the heat capacity. This leads to a heat capacity that is much lower than the classical prediction.</li>
-</ul>
-
-<p><strong>In summary:</strong>  The Dulong-Petit law fails at low temperatures because it does not account for the quantization of vibrational energy. For diamond, with its very high Debye temperature, room temperature ($25^\circ$C) is effectively a low temperature. Therefore, only a small fraction of the vibrational modes are excited, resulting in a significantly lower heat capacity than predicted by the classical Dulong-Petit law.</p>
-
-<p>Final Answer: The final answer is <span style="font-weight:bold;">$\boxed{4.62 \, \text{J/mol K}}$</span> and the explanation for the difference is due to the <span style="font-weight:bold;">quantization of vibrational energy levels</span> which is not considered in the Dulong-Petit law, causing it to overestimate the heat capacity at temperatures much lower than the Debye temperature.</p>
-
-</main>
-    <div id="right-sidebar">
-        <a href="/index.html">
-            <img src="https://img.icons8.com/?size=512&id=3113&format=png" alt="Home">
-        </a>
-        <a href="/subjects.html">
-            <img src="/icons/subjects.png" alt="Subject">
-        </a>
-        <a href="/about.html">
-            <img src="https://img.icons8.com/?size=512&id=61995&format=png" alt="About">
-        </a>
-        <a href="#">
-            <img src="https://img.icons8.com/?size=512&id=85185&format=png" alt="Contact">
-        </a>
+            <p>In addition to their academic achievements, Noah is an accomplished author and educator, committed to
+                sharing complex chemical concepts in accessible and engaging ways. Their work not only bridges
+                theoretical and practical chemistry but also inspires the next generation of chemists to explore the
+                field's transformative potential.</p>
+        </section>
     </div>
-</body>
+    <script>
+        // script.js
+document.addEventListener('DOMContentLoaded', () => {
+    const mainContent = document.querySelector('main');
+    const tableOfContents = document.getElementById('table-of-contents');
 
+    if (!mainContent || !tableOfContents) {
+        console.error('Main content or table of contents element not found.');
+        return;
+    }
+
+    const headings = mainContent.querySelectorAll('h2, h3, h4');
+    const tocList = document.createElement('ul');
+
+    let currentList = tocList;
+    const stack = [currentList];
+
+    headings.forEach(heading => {
+        const tagName = heading.tagName;
+        const id = heading.id;
+        const text = heading.textContent;
+
+        if (id) {
+            const listItem = document.createElement('li');
+            const link = document.createElement('a');
+            link.href = `#${id}`;
+            link.textContent = text;
+            listItem.appendChild(link);
+
+            if (tagName === 'H2') {
+                while (stack.length > 1) {
+                    stack.pop();
+                }
+                currentList = stack[stack.length - 1];
+                currentList.appendChild(listItem);
+                stack.push(document.createElement('ul'));
+                currentList = stack[stack.length - 1];
+                listItem.appendChild(currentList);
+            } else if (tagName === 'H3') {
+                while (stack.length > 2) {
+                    stack.pop();
+                }
+                currentList = stack[stack.length - 1];
+                currentList.appendChild(listItem);
+                stack.push(document.createElement('ul'));
+                currentList = stack[stack.length - 1];
+                listItem.appendChild(currentList);
+            } else if (tagName === 'H4') {
+                while (stack.length > 3) {
+                    stack.pop();
+                }
+                currentList = stack[stack.length - 1];
+                currentList.appendChild(listItem);
+            }
+        }
+    });
+
+    // Remove any empty ul elements that might have been created
+    function removeEmptyLists(list) {
+        Array.from(list.children).forEach(item => {
+            if (item.tagName === 'UL' && item.children.length === 0) {
+                item.remove();
+            } else if (item.tagName === 'LI') {
+                const childUl = item.querySelector('ul');
+                if (childUl) {
+                    removeEmptyLists(childUl);
+                }
+            }
+        });
+    }
+    removeEmptyLists(tocList);
+
+    const tocTitle = document.createElement('h2');
+    tocTitle.textContent = 'Table of Contents';
+    tableOfContents.appendChild(tocTitle);
+    tableOfContents.appendChild(tocList);
+});
+    </script>
+</body>
 </html>

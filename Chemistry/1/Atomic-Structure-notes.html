@@ -1,0 +1,1381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atomic Structure - Notes</title>
+    <style>
+header {
+    background: linear-gradient(135deg, #252525 0%, #303030 100%); /* Subtle gradient for depth */
+    padding: 1.2rem 0; /* Slightly increased padding */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* More pronounced, darker shadow */
+    position: sticky;
+    top: 0;
+    z-index: 1000; /* Increased z-index for better layering */
+    transition: box-shadow 0.3s ease-in-out, transform 0.3s ease-in-out; /* Smooth transition for sticky effect */
+    transform: translateY(0); /* Initial state for smooth sticky animation */
+}
+
+header.sticky-active {
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3); /* Different shadow when sticky */
+    transform: translateY(-5px); /* Slight lift when sticky */
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 30px; /* Slightly increased side padding */
+}
+
+.logo {
+    font-size: 2rem; /* Slightly larger logo */
+    font-weight: 700; /* Bolder logo */
+    color: #7db4ff; /* Updated logo color, slightly lighter */
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4); /* Subtle text shadow for depth */
+    transition: transform 0.3s ease-in-out;
+}
+
+.logo:hover {
+    transform: scale(1.05); /* Gentle scale on hover */
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 30px; /* Use gap for spacing between list items */
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #f0f0f0; /* Slightly brighter text color */
+    position: relative; /* For the underline effect */
+    padding-bottom: 4px; /* Space for the underline */
+    transition: color 0.3s ease-in-out, transform 0.3s ease-in-out;
+    overflow: hidden; /* Clip the pseudo-element */
+}
+
+nav ul li a::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: #7db4ff; /* Same as logo color for consistency */
+    transform: scaleX(0); /* Initially hidden */
+    transform-origin: bottom right;
+    transition: transform 0.4s ease-out;
+}
+
+nav ul li a:hover {
+    color: #90caf9; /* Lighter hover color */
+    transform: translateY(-2px); /* Slight lift on hover */
+}
+
+nav ul li a:hover::before {
+    transform: scaleX(1);
+    transform-origin: bottom left;
+}
+
+/* Optional: Add an active state highlight */
+nav ul li a.active {
+    color: #90caf9;
+    font-weight: 600;
+}
+
+nav ul li a.active::before {
+    transform: scaleX(1);
+}
+
+/* Enhancements for Mobile (consider using JavaScript for more advanced mobile menus) */
+@media (max-width: 1024px) {
+    header {
+        display: hidden;
+    }
+}
+        :root {
+    --primary-bg: #f9f9f9; /* Very light grey for a softer white */
+    --secondary-bg: #ffffff; /* Pure white for content areas */
+    --text-primary: #212121; /* Dark grey for primary text */
+    --text-secondary: #757575; /* Medium grey for secondary text */
+    --accent-color: #2962ff; /* A vibrant blue */
+    --hover-color: #5393ff; /* Lighter blue for hover states */
+    --border-color: #e0e0e0; /* Light grey for borders */
+    --code-bg: #f0f0f0; /* Very light grey for code backgrounds */
+    --code-text: #333333; /* Dark grey for code text */
+    --toc-active: #2962ff;
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.1);
+    --transition-fast: 0.15s ease-in-out;
+    --transition-normal: 0.3s ease-in-out;
+}
+
+body {
+    font-family: 'Roboto', sans-serif; /* A clean and modern sans-serif font */
+    line-height: 1.6;
+    margin: 0;
+    background-color: var(--primary-bg);
+    color: var(--text-primary);
+    padding-bottom: 40px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+}
+
+/* Custom Scrollbar - Light theme version */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #bdbdbd;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: #9e9e9e;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 50px auto;
+    padding: 60px;
+    background-color: var(--secondary-bg);
+    box-shadow: var(--shadow-md);
+    border-radius: 8px;
+    display: grid;
+    grid-template-columns: minmax(250px, 300px) 1fr;
+    gap: 40px;
+}
+
+#table-of-contents {
+    padding: 30px;
+    background-color: var(--secondary-bg);
+    border-radius: 6px;
+    position: sticky;
+    top: 30px;
+    height: fit-content;
+    border: 1px solid var(--border-color);
+}
+
+/* Custom Scrollbar for Table of Contents */
+#table-of-contents::-webkit-scrollbar {
+    width: 6px; /* Thinner scrollbar */
+}
+
+#table-of-contents::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Light background for the track */
+    border-radius: 3px; /* Slightly rounded track */
+}
+
+#table-of-contents::-webkit-scrollbar-thumb {
+    background-color: #bdbdbd; /* Medium grey for the thumb */
+    border-radius: 3px; /* Slightly rounded thumb */
+}
+
+#table-of-contents::-webkit-scrollbar-thumb:hover {
+    background-color: #9e9e9e; /* Darker grey on hover */
+}
+
+#table-of-contents > h2 {
+    font-size: 1.5rem;
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: var(--text-primary);
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 8px;
+    text-align: left;
+}
+
+#table-of-contents ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#table-of-contents li {
+    margin-bottom: 10px;
+    padding-left: 0;
+    border-left: 3px solid transparent;
+    transition: border-left-color var(--transition-fast), color var(--transition-fast);
+}
+
+#table-of-contents li:hover,
+#table-of-contents li.active {
+    border-left-color: var(--toc-active);
+}
+
+#table-of-contents li.active > a {
+    color: var(--toc-active);
+    font-weight: 500;
+}
+
+#table-of-contents a {
+    text-decoration: none;
+    color: var(--text-secondary);
+    display: block;
+    padding: 6px 0;
+    transition: color var(--transition-fast);
+}
+
+#table-of-contents a:hover {
+    color: var(--hover-color);
+}
+
+#table-of-contents ul ul {
+    margin-left: 15px;
+    margin-top: 6px;
+}
+
+/* Main content styles - Focus on readability */
+main {
+    padding: 40px;
+    border-radius: 6px;
+    overflow: hidden;
+    background-color: var(--secondary-bg);
+    box-shadow: var(--shadow-sm);
+}
+
+main > *:not(:last-child) {
+    margin-bottom: 2em;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--text-primary);
+    letter-spacing: -0.01em;
+}
+
+h1 {
+    font-size: 2.5rem;
+    border-bottom: 2px solid var(--accent-color);
+    padding-bottom: 0.4em;
+    margin-bottom: 1em;
+}
+
+h2 {
+    font-size: 2rem;
+    border-bottom: 1px solid var(--accent-color);
+    padding-bottom: 0.3em;
+    margin-bottom: 0.9em;
+    color: var(--accent-color);
+}
+
+h3 {
+    font-size: 1.6rem;
+    margin-bottom: 0.7em;
+}
+
+h4 {
+    font-size: 1.4rem;
+    margin-bottom: 0.6em;
+}
+
+p {
+    margin-bottom: 1.5em;
+    color: var(--text-secondary);
+    orphans: 3;
+    widows: 3;
+    word-break: break-word;
+}
+
+ul, ol {
+    margin-left: 25px;
+    margin-bottom: 1.7em;
+}
+
+li {
+    margin-bottom: 0.7em;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    word-break: break-word;
+}
+
+strong {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+em {
+    font-style: italic;
+    color: var(--accent-color);
+}
+
+a {
+    color: var(--accent-color);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+    border-bottom: 1px solid transparent; /* Subtle underline on hover */
+}
+
+a:hover {
+    color: var(--hover-color);
+    border-bottom-color: var(--hover-color);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 2em;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    background-color: var(--secondary-bg);
+}
+
+th, td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+    word-break: break-word;
+}
+
+th {
+    background-color: #f5f5f5; /* Lighter header background */
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+tbody tr:nth-child(even) {
+    background-color: #fafafa; /* Very light grey for even rows */
+}
+
+/* Code blocks - Light theme styling */
+pre {
+    background-color: var(--code-bg);
+    color: var(--code-text);
+    padding: 12px 18px;
+    border-radius: 4px;
+    overflow-x: auto;
+    font-family: 'Menlo', monospace;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin-bottom: 1.6em;
+    white-space: pre-wrap;
+    border: 1px solid var(--border-color);
+}
+
+code {
+    font-family: 'Menlo', monospace;
+    background-color: #e8e8e8; /* Even lighter background for inline code */
+    color: var(--code-text);
+    padding: 3px 6px;
+    border-radius: 3px;
+    word-break: break-word;
+}
+
+pre code {
+    background-color: transparent;
+    padding: 0;
+}
+
+/* Horizontal rules - Simpler style */
+hr {
+    border: none;
+    height: 1px;
+    background-color: var(--border-color);
+    margin: 2em 0;
+}
+
+/* Blockquotes - Clean separation */
+blockquote {
+    border-left: 3px solid var(--accent-color);
+    padding: 10px 15px;
+    margin: 1.5em 0;
+    font-style: italic;
+    background-color: #f5f5f5;
+    border-radius: 3px;
+    color: var(--text-secondary);
+}
+
+blockquote p {
+    margin-bottom: 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+    .container {
+        max-width: 90%;
+        padding: 50px;
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+
+    #table-of-contents {
+        position: static;
+        margin-bottom: 30px;
+    }
+
+    #table-of-contents > h2 {
+        text-align: center;
+    }
+}
+
+@media (max-width: 768px) {
+    main {
+        padding: 30px;
+    }
+
+    h1 {
+        font-size: 2.2rem;
+    }
+
+    h2 {
+        font-size: 1.8rem;
+    }
+    nav{
+        display:none;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 30px;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    h2 {
+        font-size: 1.6rem;
+    }
+}
+    </style>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js"></script>
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js"></script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                renderMathInElement(document.body, {
+                    delimiters: [
+                        { left: "$", right: "$", display: false },
+                        { left: "$$", right: "$$", display: true }
+                    ]
+                });
+            });
+        </script>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">Neuron IQ</div>
+            <ul>
+                <li><a href="/index.html">Home</a></li>
+                <li><a href="/subjects.html">Subjects</a></li>
+                <li><a href="/about.html">About</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="container">
+        <aside id="table-of-contents">
+            <!-- Table of contents will be generated here -->
+        </aside>
+        <main>
+        
+                    <h1 id="atomic-structure-notes">Atomic Structure - Notes</h1>
+            <h2 id="overview">Overview</h2>
+            <p><p><strong>1. Discovery of Subatomic Particles:</strong></p></p>
+            <p><ul></p>
+            <p><li><strong>Early Ideas:</strong> Ancient Indian and Greek philosophers proposed the existence of indivisible particles, which they termed &#39;atoms&#39;.</li></p>
+            <p><li><strong>Dalton&#39;s Atomic Theory:</strong> In 1808, John Dalton presented a scientific theory, stating that atoms are the ultimate particles, explaining the laws of chemical combination. However, Dalton&#39;s theory failed to account for electrical properties of matter.</li></p>
+            <p><li><strong>Electrical Discharge Tubes:</strong> Experiments with discharge tubes in the late 19th century led to the discovery of electrons.
+                <ul>
+                    <li><strong>Cathode Rays:</strong> Streams of particles (electrons) moving from the cathode to the anode when a high voltage is applied. These rays have a negative charge.</li>
+                </ul>
+            </li></p>
+            <p><li><strong>Discovery of Electrons (e):</strong>
+                <ul>
+                    <li><strong>J.J. Thomson:</strong> Determined the charge-to-mass ratio (e/me) of the electron using electric and magnetic fields in a discharge tube.</li>
+                    <li><strong>R.A. Millikan:</strong> Determined the charge of an electron using the oil drop experiment. Combining this with Thomson’s result allowed the calculation of the mass of an electron.</li>
+                </ul>
+            </li></p>
+            <p><li><strong>Discovery of Protons (p):</strong> Modified discharge tube experiments led to discovery of positively charged particles (protons). Hydrogen produced the lightest and smallest of these particles, leading to the identification of the proton.</li></p>
+            <p><li><strong>Discovery of Neutrons (n):</strong> James Chadwick discovered neutrons in 1932 by bombarding beryllium with alpha particles. These are neutral particles with a mass slightly greater than protons.</li>
+                <li><strong>Summary of Fundamental Particles:</strong>
+                <ul>
+                    <li>Electrons: Negative charge, very low mass, basic constituent of atoms</li>
+                    <li>Protons: Positive charge, mass approximately equal to 1 atomic mass unit (amu).</li>
+                    <li>Neutrons: No charge, mass approximately equal to 1 amu.</li>
+                </ul>
+            </li>
+            </ul></p>
+            <p><p><strong>2. Atomic Models:</strong></p></p>
+            <p><ul></p>
+            <p><li><strong>Thomson&#39;s Model (Plum Pudding Model):</strong>
+                <ul>
+                    <li>Proposed a spherical atom with positive charge uniformly distributed, with electrons embedded in it like plums in a pudding.</li>
+                    <li>Failed to explain the results of Rutherford’s experiment.</li>
+                </ul>
+            </li></p>
+            <p><li><strong>Rutherford&#39;s Nuclear Model:</strong>
+                <ul>
+                    <li><strong>Alpha Particle Scattering Experiment:</strong> Bombarded a thin gold foil with alpha particles, resulting in unexpected scattering patterns.
+                        <ul>
+                            <li>Most alpha particles passed through undeflected.</li>
+                            <li>Some were deflected at small angles.</li>
+                            <li>A very few bounced back at large angles.</li>
+                        </ul>
+                    </li>
+                    <li><strong>Conclusions:</strong>
+                        <ul>
+                            <li>Most of the atom is empty space.</li>
+                            <li>Positive charge and mass are concentrated in a small, central region called the <em>nucleus</em>.</li>
+                             <li>Electrons revolve around the nucleus in circular paths called <em>orbits</em>.</li>
+                        </ul>
+                    </li>
+                    <li><strong>Drawbacks:</strong>
+                        <ul>
+                            <li>Failed to explain the stability of atoms (electrons should lose energy and collapse into the nucleus due to electromagnetic forces).</li>
+                            <li>Did not account for the discrete line spectra of atoms.</li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            </ul></p>
+            <p><p><strong>3. Developments Leading to Bohr&#39;s Model:</strong></p></p>
+            <p><ul></p>
+            <p><li><strong>Dual Nature of Electromagnetic Radiation:</strong> Radiations possess both wave-like and particle-like properties.
+                <ul>
+                    <li><strong>Wave Nature:</strong>
+                        <ul>
+                            <li>Electromagnetic waves consist of oscillating electric and magnetic fields.</li>
+                             <li>Characterized by wavelength (λ), frequency (ν), and speed of light (c): c = νλ</li>
+                            <li>Electromagnetic spectrum: Range of radiations from radio waves to gamma rays.</li>
+                            <li>Visible light: Small part of the electromagnetic spectrum.</li>
+                        </ul>
+                    </li>
+                     <li><strong>Particle Nature:</strong>
+                         <ul>
+                            <li><strong>Planck&#39;s Quantum Theory:</strong> Energy is emitted or absorbed in discrete packets called <em>quanta</em> or <em>photons.</em> Energy of a photon (E) is proportional to its frequency: E = hv (where h is Planck&#39;s constant).</li>
+                            <li><strong>Photoelectric Effect:</strong> Ejection of electrons from a metal surface when light of sufficient frequency shines on it.
+                                 <ul>
+                                     <li>Threshold frequency (ν₀) exists below which photoelectric effect is not observed</li>
+                                     <li>Kinetic energy of ejected electrons: ½ mv² = hν - hν₀</li>
+                                </ul>
+                            </li>
+                            <li>Both wave and particle properties are needed to describe electromagnetic radiation.</li>
+                        </ul>
+                     </li>
+                </ul>
+            </li>
+                <li><strong>Atomic Spectra:</strong>
+                    <ul>
+                        <li><strong>Emission Spectrum:</strong> Spectrum of radiation emitted by a substance (atoms, molecules) after absorbing energy (a bright line spectrum).</li>
+                        <li><strong>Absorption Spectrum:</strong> Spectrum of radiation absorbed by a substance (a dark line spectrum).</li>
+                        <li><strong>Line Spectrum:</strong> Unique for each element, consists of bright lines at specific wavelengths.</li>
+                        <li><strong>Hydrogen Spectrum:</strong> Consists of several series of lines (Lyman, Balmer, Paschen, etc.) which were explained by Rydberg&#39;s formula.</li>
+                    </ul>
+                </li>
+            </ul></p>
+            <p><p><strong>4. Bohr&#39;s Model for Hydrogen Atom:</strong></p></p>
+            <p><ul>
+                <li><strong>Postulates:</strong>
+                    <ul>
+                       <li>Electrons revolve around the nucleus in fixed circular paths called <em>orbits</em> or <em>stationary states</em>.</li>
+                        <li>Each orbit has a fixed energy level.</li>
+                       <li>Electrons can only move between orbits by absorbing or emitting energy equal to the difference between the energy levels of the orbits. (Bohr&#39;s frequency rule: ΔE = E₂ - E₁ = hν)</li>
+                         <li>The angular momentum (mvr) of an electron in a permitted orbit is quantized as an integral multiple of h/2π (mvr = nh/2π).</li>
+                    </ul>
+                </li>
+                <li><strong>Quantization of Angular Momentum</strong> Allowed electrons paths are only those for which angular momentum is an integral multiple of h/2π.</li>
+               <li><strong>Energy of an Electron:</strong> Calculated using Bohr’s model for hydrogen and one electron hydrogen-like species.
+                    <ul>
+                       <li>Energy is quantized and has negative values, with zero as the reference when electron is completely detached from the atom.</li>
+                       <li>En = -(RH/n²) (where RH is Rydberg constant).</li>
+                    </ul>
+                </li>
+               <li><strong>Radii of Orbits:</strong> Also calculated using the model. rn = n² a₀ (where a₀ = 52.9 pm is the radius of the first Bohr orbit).</li>
+              <li><strong>Explanation of Hydrogen Line Spectrum:</strong> Successfully explained the discrete spectral lines of the hydrogen atom and also predicted the Rydberg constant value.</li>
+             <li><strong>Drawbacks:</strong>
+                    <ul>
+                       <li>Failed to explain the spectra of multi-electron atoms.</li>
+                        <li>Failed to explain the fine structure of spectral lines.</li>
+                        <li>Unable to explain splitting of spectral lines in magnetic field (Zeeman effect) or electric field (Stark effect).</li>
+                        <li>Ignores the dual nature of matter</li>
+                         <li>Violates Heisenberg Uncertainty Principle by assuming fixed orbits.</li>
+                    </ul>
+                </li>
+            </ul></p>
+            <p><p><strong>5. Towards Quantum Mechanical Model of the Atom:</strong></p></p>
+            <p><ul>
+               <li><strong>Dual Behaviour of Matter (de Broglie Hypothesis):</strong> Proposed that matter, like radiation, exhibits both wave-like and particle-like properties.
+                   <ul>
+                       <li>Wavelength of a particle: λ = h/mv = h/p (where p is momentum)</li>
+                        <li>Led to the concept of wave-particle duality for electrons, protons and other microscopic particles.</li>
+                    </ul>
+                </li>
+                <li><strong>Heisenberg Uncertainty Principle:</strong> It is impossible to determine simultaneously, the exact position and exact momentum (or velocity) of a microscopic particle like an electron. Δx . Δp ≥ h/4π
+                    <ul>
+                        <li>Rules out the concept of well-defined trajectories for electrons.</li>
+                       <li>The classical concept of an orbit is invalid for electrons.</li>
+                         <li>It is significant only for microscopic particles.</li>
+                    </ul>
+                </li>
+            </ul></p>
+            <p><p><strong>6. Quantum Mechanical Model of the Atom:</strong></p></p>
+            <p><ul>
+               <li><strong>Schrödinger Equation:</strong> Developed by Erwin Schrödinger, describes the wave-like behavior of electrons in atoms.
+                    <ul>
+                        <li>Hψ = Eψ (where H is the Hamiltonian operator, ψ is the wave function, and E is the energy).</li>
+                        <li>Solutions to the equation give quantized energy levels and corresponding <em>atomic orbitals</em> (wave functions) of electrons.</li>
+                          <li>The equation cannot be solved exactly for multi-electron atoms, requiring approximations.</li>
+                    </ul>
+               </li>
+                <li><strong>Atomic Orbitals:</strong> Represent the probability of finding an electron in a given region of space.
+                  <ul>
+                     <li>No physical meaning on its own, but the probability of finding an electron is given by the square of the wavefunction (ψ²), termed as probability density.</li>
+                   </ul>
+                </li>
+                <li><strong>Quantum Numbers:</strong> Characterize atomic orbitals and the properties of the electrons within them.
+                    <ul>
+                         <li><strong>Principal Quantum Number (n):</strong> Determines the energy level of the electron (shell), and the size of the orbital. n=1,2,3...</li>
+                         <li><strong>Azimuthal Quantum Number (l):</strong> Determines the shape of the orbital (subshell). For a given n, l ranges from 0 to n-1. Each l value is represented by a letter: s(l=0), p(l=1), d(l=2), and f(l=3).</li>
+                       <li><strong>Magnetic Quantum Number (ml):</strong> Determines the orientation of the orbital in space. For a given l, ml takes 2l+1 values ranging from -l to +l (including 0).</li>
+                         <li><strong>Spin Quantum Number (ms):</strong> Describes the intrinsic angular momentum of the electron (spin), with two possible values: +½ and -½.</li>
+                    </ul>
+               </li>
+                <li><strong>Shapes of Atomic Orbitals:</strong>
+                     <ul>
+                       <li><em>s</em> orbitals are spherical and have (n-1) number of radial nodes.</li>
+                       <li><em>p</em> orbitals are dumbbell-shaped, with (n-2) number of radial nodes and an angular node.</li>
+                      <li><em>d</em> orbitals have more complex shapes and have (n-3) number of radial nodes and 2 angular nodes.</li>
+                    </ul>
+               </li>
+                 <li><strong>Energies of Orbitals:</strong>
+                      <ul>
+                       <li>In hydrogen atom, orbital energy depends solely on the principal quantum number (n).</li>
+                         <li>In multi-electron atoms, orbital energies depend on both &#39;n&#39; and &#39;l&#39;. The energies increases as s &lt; p &lt; d &lt; f.</li>
+                         <li>The lower the (n + l) value for an orbital, the lower is its energy. If two orbitals have the same (n + l) value, the one with the lower &#39;n&#39; value is lower in energy.</li>
+                         <li>The energies of orbitals with the same principal quantum number is lower for those orbitals where electrons are present closer to nucleus.</li>
+                    </ul>
+                </li>
+            </ul></p>
+            <p><p><strong>7. Filling of Orbitals in Atoms:</strong></p></p>
+            <p><ul>
+               <li><strong>Aufbau Principle:</strong> Electrons fill the orbitals in order of increasing energy.</li>
+               <li><strong>Pauli Exclusion Principle:</strong> No two electrons in an atom can have the same set of all four quantum numbers. Only two electrons are allowed in the same orbital but they must have opposite spins.</li>
+                 <li><strong>Hund&#39;s Rule of Maximum Multiplicity:</strong> Electrons occupy degenerate orbitals singly with parallel spins before pairing up in the same orbital.</li>
+                <li><strong>Electronic Configuration:</strong> The distribution of electrons in the orbitals of an atom.
+                     <ul>
+                        <li>Written using spdf notation or orbital diagrams.</li>
+                       <li>Valence electrons: Electrons in the outermost shell, responsible for chemical properties.</li>
+                        <li>Core electrons: Electrons in filled inner shells.</li>
+                    </ul>
+                </li>
+                <li><strong>Stability of Completely Filled and Half-Filled Subshells:</strong> They are more stable due to:
+                    <ul>
+                       <li>Symmetrical distribution of electrons</li>
+                        <li>Exchange energy that occurs due to exchange of positions by two or more electrons having the same spin within the subshell.</li>
+                   </ul>
+                </li>
+            </ul></p>
+            <h2 id="deeper-dive-into-concepts">Deeper Dive into Concepts</h2>
+            <h3 id="dalton-s-atomic-theory">Dalton&#39;s Atomic Theory</h3>
+            <ul>
+            <li><strong>Introduction:</strong><ul>
+            <li>Dalton&#39;s theory proposed a revolutionary microscopic view of matter.</li>
+            <li>Shifted focus to the fundamental units of matter: atoms.</li>
+            <li>Offered a concrete model for laws of chemical combination.</li>
+            </ul>
+            </li>
+            <li><strong>Setting the Context (Before Dalton):</strong><ul>
+            <li>Chemists had a macroscopic understanding of matter.<ul>
+            <li>Lavoisier: Concept of elements.</li>
+            <li>Proust: Definite proportions in compounds.</li>
+            </ul>
+            </li>
+            <li>Lacked a model to explain <em>why</em> elements existed or <em>why</em> compounds had fixed compositions.</li>
+            <li>Ancient Greek idea of atoms was a philosophical concept, not empirical.</li>
+            </ul>
+            </li>
+            <li><strong>Dalton&#39;s Revolutionary Leap:</strong><ul>
+            <li>Atoms: Tiny, indivisible particles that make up all matter.</li>
+            <li>Explained laws of chemical combination (conservation of mass and definite proportions).</li>
+            <li>Introduced the atom as a real scientific entity.</li>
+            <li>Opened new avenues for research into atomic masses and compound formulas.</li>
+            </ul>
+            </li>
+            <li><strong>The Initial Source of Dalton’s Ideas:</strong><ul>
+            <li>Stemmed from his work with gas mixtures.</li>
+            <li>Observed partial pressures of gases.</li>
+            <li>Hypothesized gases were made of tiny particles with distinct weights.</li>
+            <li>Determined relative atomic weights by analyzing combining ratios in compounds.</li>
+            <li>Work with gases provided the conceptual framework for his core postulates.</li>
+            </ul>
+            </li>
+            <li><strong>Dalton&#39;s Key Postulates:</strong><ul>
+            <li><strong>Postulate 1: The Nature of Elements:</strong><ul>
+            <li>Matter is composed of tiny, indivisible atoms.</li>
+            <li>Atoms are indestructible (not created or destroyed in chemical reactions).</li>
+            <li>Broke from Aristotelian ideas of continuous matter.</li>
+            <li>Elements as collections of identical atoms.</li>
+            </ul>
+            </li>
+            <li><strong>Postulate 2: Atoms of a Given Element:</strong><ul>
+            <li>All atoms of a given element are identical in mass and other properties.</li>
+            <li>Atoms of different elements have different properties.</li>
+            <li>Provided an explanation for the Law of Definite Proportions.</li>
+            </ul>
+            </li>
+            <li><strong>Postulate 3: Combination of Atoms:</strong><ul>
+            <li>Atoms combine in simple, whole-number ratios to form chemical compounds.</li>
+            <li>Explains Law of Definite Proportions at the microscopic level.</li>
+            <li>The idea of a fixed number of combining atoms.</li>
+            </ul>
+            </li>
+            <li><strong>Postulate 4: Chemical Reactions as Rearrangement:</strong><ul>
+            <li>In chemical reactions, atoms are rearranged, not created or destroyed.</li>
+            <li>Provides an atomic-level explanation for the Law of Conservation of Mass.</li>
+            </ul>
+            </li>
+            </ul>
+            </li>
+            <li><strong>Early Successes of Dalton&#39;s Theory:</strong><ul>
+            <li><strong>Explanation of the Law of Definite Proportions:</strong><ul>
+            <li>Dalton&#39;s postulates explained why mass ratios of elements in compounds are always constant.</li>
+            </ul>
+            </li>
+            <li><strong>Introduction of the Law of Multiple Proportions:</strong><ul>
+            <li>Explained that some elements can combine in multiple ratios to form different compounds.</li>
+            </ul>
+            </li>
+            <li><strong>The Development of Chemical Formulas:</strong><ul>
+            <li>Provided a foundation for representing compounds using symbols and subscripts (e.g. H₂O, CO₂).</li>
+            </ul>
+            </li>
+            </ul>
+            </li>
+            <li><strong>The Development of Atomic Weights</strong><ul>
+            <li><strong>Dalton&#39;s Methods for Determining Atomic Weights</strong><ul>
+            <li>Dalton&#39;s assumption that elements combined in the simplest possible whole number ratios was a key error.</li>
+            <li>Dalton used known mass ratios from experimental data and the assumption of simplest ratios to compile the table of atomic weights.<ul>
+            <li>His values for atomic weight were inaccurate because of incorrect formula and limited experimental data.</li>
+            <li>His method was good in theory but flawed in practice.</li>
+            <li><strong>Dalton&#39;s Initial Atomic Weight Tables:</strong></li>
+            <li>Tables showed a first attempt to quantify the atomic world.</li>
+            <li>Tables had errors because of incorrect assumptions about compound formulas and inaccurate data.</li>
+            <li>The water formula error led to underestimated atomic weights for many elements.</li>
+            </ul>
+            </li>
+            </ul>
+            </li>
+            </ul>
+            </li>
+            <li><strong>Limitations and Challenges of Dalton’s Theory:</strong><ul>
+            <li><strong>The Indivisibility of Atoms:</strong><ul>
+            <li>Assumed atoms were indivisible and indestructible, which later proved incorrect.</li>
+            <li>Discovery of electricity, radioactivity, isotopes challenged the indivisible concept.</li>
+            <li>Led to discovery of subatomic particles: electrons, nucleus, protons, and neutrons.</li>
+            </ul>
+            </li>
+            <li><strong>Simplistic Combinations and Assumptions:</strong><ul>
+            <li>His assumption that compounds formed in the simplest ratios was incorrect.</li>
+            <li>Failed to account for diatomic molecules and incorrect molecular formulas.</li>
+            </ul>
+            </li>
+            <li><strong>Problems with Measuring Atomic Weights:</strong><ul>
+            <li>Experimental limitations in measuring accurate atomic weights.</li>
+            <li>Difficulty with isolating pure elements and compounds.</li>
+            <li>Inability to directly measure molecular composition.</li>
+            </ul>
+            </li>
+            </ul>
+            </li>
+            </ul>
+            <hr>
+            <h3 id="the-discovery-of-the-electron">The Discovery of the Electron</h3>
+            <ul>
+            <li><strong>The Era of Electrical Discoveries:</strong><ul>
+            <li>19th century: Surge of interest in electricity.</li>
+            <li>Early experiments with static electricity.</li>
+            <li>Development of the Leyden jar (capacitor) for storing static electricity.</li>
+            <li>Development of rudimentary batteries, such as the voltaic pile (continuous electricity).</li>
+            <li>Discovery of electrolysis revealing electrical nature of chemical bonds.</li>
+            </ul>
+            </li>
+            <li><strong>Early Vacuum Technology:</strong><ul>
+            <li>Improved vacuum pumps were critical for experiments.</li>
+            <li><strong>Otto von Guericke:</strong> First vacuum pump.</li>
+            <li><strong>Heinrich Geissler:</strong> Improved mercury pump and Geissler tubes.<ul>
+            <li>Enabled experiments with electrical discharges in partially evacuated tubes.</li>
+            </ul>
+            </li>
+            </ul>
+            </li>
+            <li><strong>The Initial Observation of Cathode Rays:</strong><ul>
+            <li>A mysterious “glow” observed in partially evacuated tubes.</li>
+            <li>Emitted from the cathode towards the anode when high voltage applied.</li>
+            <li>Uncertainty about whether they were light, charged particles, or something else.</li>
+            </ul>
+            </li>
+            <li><strong>The Basic Cathode Ray Tube Design:</strong><ul>
+            <li>Sealed glass tube with a partial vacuum.</li>
+            <li>Electrodes: Cathode (negative) and anode (positive).</li>
+            <li>High voltage source applied across the electrodes.</li>
+            <li>Electrons emitted from cathode, accelerated towards anode.</li>
+            <li>Collisions with residual gas create the observed “glow.”</li>
+            </ul>
+            </li>
+            <li><strong>Plücker&#39;s Experiments (1859):</strong><pre><code> *   Observed <span class="hljs-keyword">that</span> cathode rays are deflected <span class="hljs-keyword">by</span> a magnetic field.
+             *   Concluded <span class="hljs-keyword">that</span> cathode rays were <span class="hljs-keyword">not</span> just light, they were charged particles.
+             *   Work showed <span class="hljs-keyword">that</span> there was interplay <span class="hljs-keyword">between</span> magnetism <span class="hljs-keyword">and</span> electricity.
+            </code></pre></li>
+            <li><strong>Hittorf&#39;s Experiments (1869):</strong><pre><code> *   Observed <span class="hljs-keyword">that</span> cathode rays travel <span class="hljs-keyword">in</span> straight lines.
+             *   Showed <span class="hljs-keyword">that</span> opaque objects would cast shadows, reinforcing their particle nature.
+            </code></pre></li>
+            <li><strong>Goldstein&#39;s Experiments (1876):</strong><pre><code><span class="hljs-comment">*   Discovered **channel rays** (or canal rays).</span>
+            <span class="hljs-comment">*   Observed positively charged particles in the region behind the cathode.</span>
+            <span class="hljs-comment">*   These were identified as positive ions.</span>
+            </code></pre></li>
+            <li><strong>Crookes’ Experiments (1870s):</strong><pre><code>*   Showed that cathode rays possessed momentum <span class="hljs-keyword">and</span> mass.
+            *   Discovered <span class="hljs-keyword">the</span> Crookes dark <span class="hljs-literal">space</span> near <span class="hljs-keyword">the</span> cathode.
+            *   Used better vacuum tubes than his predecessors <span class="hljs-built_in">to</span> obtain <span class="hljs-keyword">a</span> clearer view <span class="hljs-keyword">of</span> <span class="hljs-keyword">the</span> phenomena.
+            </code></pre></li>
+            <li><strong>Lenard&#39;s Experiments (1890s):</strong>
+                <ul>
+                    <li>Used a thin aluminum window to observe cathode rays outside the tube.</li>
+                    <li>Studied the penetrating power of cathode rays, demonstrating that they could pass through matter.</li>
+                    <li>Demonstrated their tangible physical properties.</li>
+                </ul>   
+            </li>
+            <li><strong>Perrin&#39;s Experiments (1895):</strong>
+            <ul>
+                <li>Used a charge collector to directly measure the negative charge of cathode rays.</li>
+                <li>Provided a definitive experiment that showed the cathode rays were negatively charged.</li>
+            </ul>
+        </li>
+            <li><strong>Thomson&#39;s Apparatus (1897):</strong><ul>
+            <li>Modified a CRT with electric and magnetic deflection plates.</li>
+            <li>Balancing the electric and magnetic forces, he was able to measure the charge-to-mass ratio (e/m) of cathode rays.</li>
+            </ul>
+            </li>
+            <li><strong>Determination of Charge-to-Mass Ratio (e/m):</strong><ul>
+            <li>Used electric and magnetic fields to deflect and balance the cathode rays.</li>
+            <li>Calculated e/m ratio from the amount of deflection, a key property of the particles.</li>
+            <li>The e/m ratio was constant regardless of material or gas.</li>
+            </ul>
+            </li>
+            <li><strong>The Discovery of the Electron:</strong><ul>
+            <li>Thomson concluded that cathode rays were composed of universal subatomic particles with a negative charge: electrons.</li>
+            <li>Shattered the indivisible atom theory and showed that atoms had smaller components within them.</li>
+            <li>First subatomic particle to be discovered.</li>
+            <li>Emphasized the electromagnetic nature of matter.</li>
+            <li>Opened the door to new models of atomic structure.</li>
+            </ul>
+            </li>
+            <li><strong>The Plum Pudding Model:</strong><ul>
+            <li>Proposed by Thomson to explain the arrangement of electrons in atoms.</li>
+            <li>Atoms were composed of a sphere of uniform positive charge with electrons embedded within, similar to “plums in a pudding”.</li>
+            <li>Explained that atoms were electrically neutral due to the balance between the total positive and negative charge.</li>
+            <li>Though a logical step forward, the model was unable to explain Rutherford&#39;s scattering experiment.</li>
+            </ul>
+            </li>
+            </ul>
+            <hr>
+            <h3 id="the-discovery-of-radioactivity">The Discovery of Radioactivity</h3>
+            <ul>
+            <li><strong>The Prevailing Understanding of Energy and Matter:</strong><ul>
+            <li>Late 19th century: Science dominated by Newtonian physics, thermodynamics, electromagnetism.</li>
+            <li>Matter was viewed as solid and continuous.</li>
+            <li>No subatomic energy sources known.</li>
+            </ul>
+            </li>
+            <li><strong>X-Rays and the Mystery of Fluorescence:</strong><ul>
+            <li>Röntgen&#39;s discovery of X-rays (1895).<ul>
+            <li>Caused fluorescence in certain materials.</li>
+            </ul>
+            </li>
+            <li>Fluorescence: Emission of light during excitation.</li>
+            <li>Phosphorescence: Emission of light even after excitation stops.</li>
+            </ul>
+            </li>
+            <li><strong>Becquerel&#39;s Interest in Fluorescence:</strong><ul>
+            <li>Sought to explore relationship between fluorescence and X-ray emission.</li>
+            <li>Familiarity with uranium salts, known for fluorescence.</li>
+            </ul>
+            </li>
+            <li><strong>Becquerel&#39;s Initial Experimental Setup:</strong><ul>
+            <li>Photographic plates wrapped in black paper.</li>
+            <li>Uranium salts placed on top.</li>
+            <li>Exposed to sunlight, then developed plate to look for X-Rays.</li>
+            </ul>
+            </li>
+            <li><strong>Serendipitous Discovery: The Cloudy Day:</strong><ul>
+            <li>Becquerel developed plates despite no sunlight exposure (due to clouds), expecting a blank result.</li>
+            <li>Discovered that uranium salts emitted radiation that exposed photographic plates in the absence of sunlight.</li>
+            </ul>
+            </li>
+            <li><strong>The Unexpected Result:</strong><ul>
+            <li>Photographic plate was exposed even without sunlight.</li>
+            <li>Radiation could penetrate opaque materials (black paper).</li>
+            <li>Implied radiation was an intrinsic property of uranium.</li>
+            </ul>
+            </li>
+            <li><strong>Ruling Out Fluorescence:</strong><ul>
+            <li>Experiments in darkness: Uranium salts still emitted radiation.</li>
+            <li>Experiments with non-fluorescent uranium salts: Still emitted radiation.</li>
+            <li>This showed that fluorescence was not causing radiation, and the radiation was intrinsic to uranium.</li>
+            </ul>
+            </li>
+            <li><strong>The Discovery of Radioactivity:</strong><ul>
+            <li>A new phenomenon: spontaneous emission of radiation by unstable atoms (called radioactivity by Marie Curie).</li>
+            <li>Atoms are not stable, they are capable of change and emitting particles and energy.</li>
+            <li>This is different from normal chemical reactions or external excitation.</li>
+            </ul>
+            </li>
+            <li><strong>Preliminary Properties of Radioactivity:</strong><ul>
+            <li>Penetrating power, ionization of gases, exposure of photographic plates.</li>
+            <li>Showed that atoms had an internal source of energy.</li>
+            <li>All these properties were demonstrated without external illumination.</li>
+            </ul>
+            </li>
+            <li><strong>Introduction to Marie Curie’s Research:</strong><ul>
+            <li>Marie Curie’s passion for science led her to focus on radioactivity.</li>
+            <li>Collaboration with Pierre Curie, they combined strengths in chemistry and physics.</li>
+            </ul>
+            </li>
+            <li><strong>The Electrometer and Quantitative Measurements:</strong><ul>
+            <li>Curies used the electrometer to measure the ionization effects of radioactivity.</li>
+            <li>Realized that the level of radioactivity was proportional to the amount of the element, not the compound.</li>
+            <li>This realization led them to hypothesize that radioactivity was an atomic property.</li>
+            </ul>
+            </li>
+            <li><strong>The Isolation of Polonium and Radium</strong><ul>
+            <li><strong>The Choice of Pitchblende</strong><ul>
+            <li>Curies chose to use pitchblende because they observed that it was more radioactive than pure uranium, and that this must be due to other radioactive elements.</li>
+            </ul>
+            </li>
+            <li><strong>The Curies’ Laboratory Conditions:</strong><pre><code>*   Cramped, poorly ventilated shed <span class="hljs-keyword">with</span> <span class="hljs-literal">minimal</span> resources.
+            *   Had <span class="hljs-keyword">to</span> work under extremely challenging conditions.
+            </code></pre></li>
+            <li><strong>Overview of the Chemical Approach:</strong><ul>
+            <li>Combined chemical separation techniques (precipitation, filtration, crystallization) with radioactivity measurements.</li>
+            <li>Used the electrometer to guide the process and to track the radioactivity.</li>
+            </ul>
+            </li>
+            <li><strong>Grinding and Dissolving Pitchblende:</strong><pre><code>* Manual grinding <span class="hljs-keyword">and</span> tedious dissolving <span class="hljs-keyword">with</span> <span class="hljs-keyword">strong</span> acids, which also meant exposure <span class="hljs-keyword">to</span> dangerous substances.
+            </code></pre></li>
+            <li><strong>Initial Chemical Separations:</strong><pre><code>*   Used established methods (precipitation, filtration, crystallization) to <span class="hljs-keyword">separate</span> components <span class="hljs-keyword">of</span> pitchblende.
+            </code></pre></li>
+            <li><strong>The Bismuth Fraction:</strong><pre><code>*   Observed surprisingly high radioactivity <span class="hljs-keyword">in</span> <span class="hljs-keyword">the</span> bismuth fraction.
+            *   Hypothesized <span class="hljs-keyword">the</span> presence <span class="hljs-keyword">of</span> <span class="hljs-keyword">a</span> <span class="hljs-built_in">new</span> radioactive <span class="hljs-keyword">element</span>.
+            </code></pre></li>
+            <li><strong>Identification of Polonium:</strong><ul>
+            <li>New element named in honor of Marie Curie’s native Poland.</li>
+            <li>Demonstrated the existence of another element that had radioactivity.</li>
+            <li>Was chemically similar to bismuth, making separation difficult.</li>
+            <li><strong>The Barium Fraction:</strong><ul>
+            <li>Observed high radioactivity, higher than uranium and polonium.</li>
+            <li>Led to the search for yet another new element.</li>
+            </ul>
+            </li>
+            </ul>
+            </li>
+            <li><strong>Fractionation of Barium Salts:</strong><pre><code>*     Repeated crystallization <span class="hljs-keyword">and</span> precipitation was used <span class="hljs-built_in">to</span> concentrate <span class="hljs-keyword">the</span> radioactive <span class="hljs-keyword">element</span>.
+            *     This was <span class="hljs-keyword">a</span> laborious <span class="hljs-built_in">process</span> that was repeated thousands <span class="hljs-keyword">of</span> times.
+            </code></pre><ul>
+            <li><strong>The Observation of Increased Radioactivity:</strong><ul>
+            <li>The radioactivity of the solid fraction increased after each crystallization step, further showing they were close to isolating a pure sample.</li>
+            </ul>
+            </li>
+            </ul>
+            </li>
+            <li><strong>Identification of Radium:</strong><pre><code>*    Extremely radioactive element <span class="hljs-keyword">that</span> glowed <span class="hljs-keyword">in</span> <span class="hljs-keyword">the</span> dark.
+            *    This confirmed their hypothesis <span class="hljs-keyword">that</span> pitchblende contained other radioactive elements.
+            </code></pre></li>
+            </ul>
+            </li>
+            </ul>
+            <hr>
+            <h3 id="rutherford-s-nuclear-model">Rutherford&#39;s Nuclear Model</h3>
+            <ul>
+            <li><strong>The Design and Execution of the Gold Foil Experiment:</strong><ul>
+            <li><strong>The Prevailing Atomic Model:</strong> Plum pudding model was dominant at the time.<ul>
+            <li>Uniformly distributed positive charge with electrons embedded in it.</li>
+            </ul>
+            </li>
+            <li><strong>Rutherford’s Early Work on Alpha Particles:</strong><ul>
+            <li>Established alpha particles as positively charged particles, and that they had mass and momentum.<ul>
+            <li>Showed they are emitted from radioactive materials.</li>
+            </ul>
+            </li>
+            </ul>
+            </li>
+            <li><strong>The Experimental Question:</strong><ul>
+            <li>To test the plum pudding model and the distribution of charge within the atom.</li>
+            <li><strong>The Source of Alpha Particles:</strong><ul>
+            <li>Radioactive source (radon gas) within a lead container.</li>
+            <li>A collimator to direct the particles in a narrow beam.</li>
+            </ul>
+            </li>
+            <li><strong>The Collimator:</strong><ul>
+            <li>Lead collimator used to create a focused beam of alpha particles.</li>
+            <li>Helped to ensure the alpha particles travel in the same direction.</li>
+            </ul>
+            </li>
+            <li><strong>The Thin Gold Foil:</strong><ul>
+            <li>Used gold because it is malleable and can form extremely thin foils.</li>
+            <li>Minimized absorption of alpha particles.</li>
+            <li><strong>The Zinc Sulfide Screen:</strong><ul>
+            <li>A zinc sulfide screen was used to detect scattered alpha particles via scintillations.</li>
+            <li>Allowed the observation of scattering and measurement of scattered alpha particles.</li>
+            </ul>
+            </li>
+            </ul>
+            </li>
+            </ul>
+            </li>
+            <li><strong>The Experimental Setup and Procedure:</strong><ul>
+            <li>Alpha particles emitted and collimated.</li>
+            <li>Alpha particle beam directed at a thin gold foil.</li>
+            <li>Scattered alpha particles detected on a zinc sulfide screen.</li>
+            <li>Scintillations were observed through a microscope to quantify the scattering angles.</li>
+            </ul>
+            </li>
+            <li><strong>Expected Results Based on the Plum Pudding Model:</strong><ul>
+            <li>Most alpha particles should pass straight through.</li>
+            <li>A few particles might experience minor deflections.</li>
+            <li>There would be no large angle deflections.</li>
+            </ul>
+            </li>
+            <li><strong>Thomson’s model of beta particle scattering:</strong><ul>
+            <li>Deflections due to the positive sphere in the plum pudding model is based on the coulomb forces, which should result in a small angle deflection.</li>
+            <li>Using a straight-line approximation, the average deflection angle can be calculated.</li>
+            <li>The model also takes into account deflections due to electrons, which are also calculated assuming multiple small-angle scattering events.</li>
+            <li>The model predicts small angle scattering for both positive charge and electron deflections.</li>
+            </ul>
+            </li>
+            <li><strong>The First Surprising Observation:</strong><ul>
+            <li>Most alpha particles passed straight through, which is not surprising.</li>
+            </ul>
+            </li>
+            <li><strong>The Unexpected Large Deflections:</strong><ul>
+            <li>A small fraction of alpha particles were scattered at very large angles, with some bouncing back at angles &gt; 90°.</li>
+            <li>This observation was completely incompatible with the predictions of the plum pudding model.</li>
+            <li>This indicated that there was a hard object in the interior of the atoms, that could reflect particles at high angles.</li>
+            </ul>
+            </li>
+            <li><strong>Maximum Nuclear Size Estimate:</strong><pre><code>*   Calculated <span class="hljs-keyword">the</span> minimum approach <span class="hljs-keyword">of</span> <span class="hljs-keyword">an</span> alpha particle <span class="hljs-built_in">to</span> <span class="hljs-keyword">the</span> nucleus during <span class="hljs-keyword">a</span> head-<span class="hljs-keyword">on</span> <span class="hljs-title">collision</span> <span class="hljs-title">to</span> <span class="hljs-title">estimate</span> <span class="hljs-title">the</span> <span class="hljs-title">size</span> <span class="hljs-title">of</span> <span class="hljs-title">the</span> <span class="hljs-title">nucleus</span>.
+            </code></pre><ul>
+            <li>The analysis used the principle of conservation of energy to relate the kinetic energy of the alpha particle to the potential energy from the repulsive coulomb force of the nucleus at its closest approach.<ul>
+            <li>The turning point distance gave an estimate for the radius of the nucleus (about 10⁻¹⁴ m).</li>
+            </ul>
+            </li>
+            </ul>
+            </li>
+            <li><strong>Single Scattering by a Heavy Nucleus</strong><ul>
+            <li>Showed that alpha particle scattering occurs close to the center of the atom.<ul>
+            <li>Used concepts of conservation of angular momentum and conservation of energy.</li>
+            <li>Derived that the trajectory of the alpha particle was a hyperbola</li>
+            <li>Demonstrated the relationship between impact parameter and scattering angle.</li>
+            </ul>
+            </li>
+            </ul>
+            </li>
+            <li><strong>Intensity vs. Angle:</strong><ul>
+            <li>Derived a formula for the cross section using the single scattering result.</li>
+            <li>Showed that the scattering probability is greatest at small angles, while large angle scattering is far less likely, but still present.</li>
+            </ul>
+            </li>
+            <li><strong>Target Recoil:</strong><ul>
+            <li>Discussed how the scattering of alpha particles was dependent on the mass of the target material, because of recoil.</li>
+            <li>The recoil of target atom reduces the speed of the alpha particle, and this is more significant for lighter atoms.<ul>
+            <li>Compared results with aluminum and gold, predicting the effects of a lighter nuclei target.</li>
+            </ul>
+            </li>
+            </ul>
+            </li>
+            <li><strong>The Statistical Data and Scattering Patterns:</strong><ul>
+            <li>The number of scattered particles drastically decreased as the scattering angle increased.</li>
+            <li>This data directly implied that the scattering was due to small, dense and hard regions (nuclei) within the atom.</li>
+            </ul>
+            </li>
+            <li><strong>Rutherford&#39;s Nuclear Model:</strong><ul>
+            <li>At the center of the atom is a tiny, dense, positively charged core called the <strong>nucleus.</strong><ul>
+            <li>Most of the atom is empty space.</li>
+            </ul>
+            </li>
+            <li>The electrons move around the nucleus, but he did not offer a description of how these electrons were moving.</li>
+            </ul>
+            </li>
+            </ul>
+            </li>
+            <li><strong>Limitations of the Rutherford Model:</strong><ul>
+            <li><strong>The Issue of Electron Stability:</strong><ul>
+            <li>According to classical physics, orbiting electrons should emit radiation and spiral into the nucleus.</li>
+            <li>This predicted atomic instability was a major problem for the model.</li>
+            </ul>
+            </li>
+            <li><strong>The Absence of Discrete Emission Spectra:</strong><ul>
+            <li>Rutherford model cannot explain the discrete line spectra of atoms.</li>
+            <li>The electron can occupy any orbit, which meant the emission of light should be continuous, not discrete.</li>
+            </ul>
+            </li>
+            </ul>
+            </li>
+            </ul>
+            <hr>
+            <h2 id="the-quantum-theory">The Quantum Theory</h2>
+            <ul>
+            <li><strong>The Origins of Quantum Mechanics:</strong><ul>
+            <li>Classical mechanics failed to explain atomic and subatomic phenomena.</li>
+            <li>New paradigm was needed for small length scale physics.</li>
+            </ul>
+            </li>
+            <li><strong>Electromagnetic Radiation:</strong><ul>
+            <li>Oscillating electric and magnetic fields propagating as waves.<ul>
+            <li>Speed of light (c):  2.99792458 × 10⁸ m/s</li>
+            </ul>
+            </li>
+            <li>Characterized by: wavelength (λ), frequency (ν), wavenumber  (ν̃=1/λ), speed of light: <strong>c = νλ</strong>.</li>
+            <li>Waves can interfere constructively or destructively.</li>
+            </ul>
+            </li>
+            <li><strong>Energy Quantization:</strong><ul>
+            <li>Three key experiments led to the idea that energy transfer is quantized.<ul>
+            <li><strong>Black Body Radiation:</strong><ul>
+            <li>Rayleigh-Jeans Law predicted infinite energy at high frequencies, which failed to match experimental data.</li>
+            <li><strong>Planck&#39;s Hypothesis:</strong> Energy is emitted or absorbed in discrete packets (quanta) with the equation <strong>E = nhν</strong>.</li>
+            <li>Planck distribution formula correctly predicted how energy was distributed among different frequencies.</li>
+            <li>The Planck constant (h = $6.626 \times 10^{-34}$ Js) was a fundamental constant introduced by Planck.</li>
+            </ul>
+            </li>
+            <li>Wien&#39;s displacement law and Rayleigh-Jeans law can be derived using Planck&#39;s law</li>
+            <li><strong>Heat Capacity:</strong><ul>
+            <li>Classical physics predicted a constant heat capacity for solids, which was not observed.</li>
+            <li><strong>Einstein&#39;s Model:</strong> Applied Planck&#39;s quantum idea to oscillations of atoms, and showed how heat capacity decreases at low temperatures.</li>
+            <li><strong>Debye Model:</strong> Improved the model for the heat capacity of solids, by also considering the vibrations of the entire lattice of the solid, not just individual atoms.</li>
+            </ul>
+            </li>
+            <li><strong>Atomic and Molecular Spectra:</strong><ul>
+            <li>Atoms and molecules absorb and emit light only at specific, discrete frequencies.</li>
+            <li>Bohr frequency condition explains this effect: <strong>ΔE = hv</strong>.</li>
+            </ul>
+            </li>
+            </ul>
+            </li>
+            </ul>
+            </li>
+            <li><strong>Wave-Particle Duality:</strong><ul>
+            <li>Electromagnetic radiation, described as waves, also exhibits particle-like properties (photons).</li>
+            <li>Particles also exhibit wave-like properties.<ul>
+            <li><strong>Davisson-Germer experiment:</strong> Electrons can be diffracted, which is a wave-like property.</li>
+            <li><strong>De Broglie Relation:</strong> All particles have an associated wavelength: <strong>λ = h/mv = h/p</strong>.</li>
+            </ul>
+            </li>
+            </ul>
+            </li>
+            <li><strong>Wave functions</strong><pre><code><span class="hljs-comment">* In quantum mechanics, a particle’s dynamic properties are encoded in a wavefunction which is distributed in space, rather than a fixed path.</span>
+            <span class="hljs-comment">*The wavefunction provides all the information that can be known about a particular state of a particle.</span>
+            </code></pre></li>
+            <li><strong>Schrödinger equation:</strong><pre><code> * It<span class="hljs-symbol">'s</span> the fundamental equation <span class="hljs-keyword">of</span> quantum mechanics <span class="hljs-keyword">for</span> determining the wavefunctions <span class="hljs-keyword">of</span> systems.
+            </code></pre><ul>
+            <li>The time-independent form of the Schrodinger equation is:
+              $-\frac{\hbar^2}{2m}\frac{d^2\psi}{dx^2} + V(x)\psi = E\psi$<ul>
+            <li>Solutions to the equation give quantized energy levels and the wavefunctions of the system.</li>
+            <li>For a free particle (no potential energy), this equation leads directly to the de Broglie relation.</li>
+            </ul>
+            </li>
+            </ul>
+            </li>
+            <li><strong>Born Interpretation:</strong><ul>
+            <li>Probability of finding a particle within a small volume is given by the square of the wavefunction: <strong>probability density= ψ²</strong>.<ul>
+            <li>Wavefunction must be finite, single-valued, continuous, and smooth to be acceptable.</li>
+            <li>This interpretation connects the wavefunction to a measurable property.</li>
+            <li>The sign of a wavefunction has no direct physical significance.</li>
+            </ul>
+            </li>
+            <li>Normalization ensures that the total probability of finding the particle over all space is equal to 1.</li>
+            <li>A node is a position where the wavefunction passes through zero.</li>
+            </ul>
+            </li>
+            <li><strong>Operators and Observables:</strong><ul>
+            <li><strong>Operators:</strong> Mathematical instructions that act on wavefunctions to extract information about observables.<ul>
+            <li>Examples of operators:<ul>
+            <li>Position operator : $\hat{x} = x \times$</li>
+            <li>Linear momentum operator : $\hat{p_x} = \frac{\hbar}{i} \frac{d}{dx}$.<ul>
+            <li>Kinetic energy operator :$\hat{E_k} = -\frac{\hbar^2}{2m}\frac{d^2}{dx^2}$</li>
+            </ul>
+            </li>
+            <li>Total energy (Hamiltonian operator) :$\hat{H} =  -\frac{\hbar^2}{2m}\frac{d^2}{dx^2} + V(x)$.</li>
+            </ul>
+            </li>
+            </ul>
+            </li>
+            <li><strong>Eigenvalue Equations:</strong><ul>
+            <li>General form: <strong>(operator)(function) = (constant factor) × (same function)</strong>.</li>
+            <li>Eigenfunctions and eigenvalues are the fundamental components of operators.</li>
+            <li>Hamiltonian operator gives energy eigenvalues and wavefunctions, which are also eigenfunctions.</li>
+            </ul>
+            </li>
+            <li><strong>Hermitian Operators:</strong><ul>
+            <li>Represent physical observables in quantum mechanics.</li>
+            <li>Satisfy a specific mathematical condition: $\int \psi_i^<em> \hat{\Omega} \psi_j \, d\tau = \left{ \int \psi_j^</em> \hat{\Omega} \psi_i \, d\tau \right}^*$.</li>
+            <li>Their eigenvalues are always real, and their eigenfunctions corresponding to different eigenvalues are orthogonal.</li>
+            <li><strong>Orthogonality:</strong><ul>
+            <li>Two functions are orthogonal if the integral of their product is zero:  $\int \psi_i^* \psi_j \, d\tau = 0$ (when $i \neq j$).</li>
+            <li>Hermitian operators have eigenfunctions that are orthogonal.</li>
+            </ul>
+            </li>
+            </ul>
+            </li>
+            <li><strong>Superposition and Expectation Values:</strong><pre><code> *  A wavefunction can be expressed as a superposition (linear combination) <span class="hljs-keyword">of</span> eigenfunctions: $<span class="hljs-string">\psi</span> = c_1<span class="hljs-string">\psi_1</span> + c_2<span class="hljs-string">\psi_2</span> + ... = <span class="hljs-string">\sum_k</span> c_k<span class="hljs-string">\psi_k$.</span>
+             *   A measurement will yield one <span class="hljs-keyword">of</span> the corresponding eigenvalues.
+             *  The probability <span class="hljs-keyword">of</span> obtaining a specific eigenvalue <span class="hljs-keyword">is</span> given <span class="hljs-keyword">by</span> the square <span class="hljs-keyword">of</span> the corresponding coefficient, $|c_k|^<span class="hljs-number">2</span>$.
+             *  The average <span class="hljs-keyword">of</span> multiple measurements <span class="hljs-keyword">is</span> the expectation value: $<span class="hljs-string">\langle</span> <span class="hljs-string">\Omega</span> <span class="hljs-string">\rangle</span> = <span class="hljs-string">\int</span> <span class="hljs-string">\psi^*</span> <span class="hljs-string">\hat{\Omega}</span> <span class="hljs-string">\psi</span> <span class="hljs-string">\,</span> d<span class="hljs-string">\tau$.</span>
+            </code></pre></li>
+            <li><strong>Uncertainty Principle:</strong><ul>
+            <li>It is impossible to determine both position and momentum of a particle with arbitrary precision simultaneously.</li>
+            <li><strong>Δx . Δp ≥ h/4π</strong>
+            *The uncertainty principle is not a limitation of experimental measurement, but is an inherent property of quantum mechanics itself.</li>
+            <li>When the wave function is a momentum eigenfunction, the position is completely uncertain, and when the wavefunction is localized in position, the momentum becomes completely uncertain.</li>
+            </ul>
+            </li>
+            </ul>
+            </li>
+            </ul>
+            <hr>
+            <h3 id="key-equations-">Key Equations:</h3>
+            <ul>
+            <li><strong>Electromagnetic Radiation:</strong><ul>
+            <li><strong>c = νλ</strong></li>
+            </ul>
+            </li>
+            <li><strong>Planck&#39;s Quantum Theory:</strong><ul>
+            <li><strong>E = hv</strong></li>
+            </ul>
+            </li>
+            <li><strong>Photoelectric Effect:</strong><ul>
+            <li><strong>½ mv² = hν - hν₀</strong></li>
+            </ul>
+            </li>
+            <li><strong>Bohr&#39;s Frequency Rule:</strong><ul>
+            <li><strong>ΔE = E₂ - E₁ = hν</strong></li>
+            </ul>
+            </li>
+            <li><strong>Rutherford&#39;s energy level:</strong><ul>
+            <li><strong>En = -(RH/n²)</strong></li>
+            </ul>
+            </li>
+            <li><strong>Rutherford&#39;s orbit radii:</strong><ul>
+            <li><strong>rn = n² a₀</strong></li>
+            </ul>
+            </li>
+            <li><strong>de Broglie Hypothesis:</strong><ul>
+            <li><strong>λ = h/mv = h/p</strong></li>
+            </ul>
+            </li>
+            <li><strong> Uncertainty Principle:</strong><ul>
+            <li><strong>Δx . Δp ≥ h/4π</strong></li>
+            </ul>
+            </li>
+            </ul>
+        </main>
+        <section>
+            <h2 id="about-author">
+                About the author
+            </h2>
+            <p> Written by <strong>Noah Kleij, PhD </strong></p>
+            <p>Noah Kleij holds a Doctorate in Organic and General Chemistry from the prestigious University of
+                Manchester, United Kingdom. With a deep passion for chemical sciences, Noah has contributed
+                significantly to advancing knowledge in both organic synthesis and general chemistry principles. Their
+                research encompasses cutting-edge methodologies and innovative problem-solving approaches.</p>
+
+            <p>In addition to their academic achievements, Noah is an accomplished author and educator, committed to
+                sharing complex chemical concepts in accessible and engaging ways. Their work not only bridges
+                theoretical and practical chemistry but also inspires the next generation of chemists to explore the
+                field's transformative potential.</p>
+        </section>
+    </div>
+    <script>
+        // script.js
+document.addEventListener('DOMContentLoaded', () => {
+    const mainContent = document.querySelector('main');
+    const tableOfContents = document.getElementById('table-of-contents');
+
+    if (!mainContent || !tableOfContents) {
+        console.error('Main content or table of contents element not found.');
+        return;
+    }
+
+    const headings = mainContent.querySelectorAll('h2, h3, h4');
+    const tocList = document.createElement('ul');
+
+    let currentList = tocList;
+    const stack = [currentList];
+
+    headings.forEach(heading => {
+        const tagName = heading.tagName;
+        const id = heading.id;
+        const text = heading.textContent;
+
+        if (id) {
+            const listItem = document.createElement('li');
+            const link = document.createElement('a');
+            link.href = `#${id}`;
+            link.textContent = text;
+            listItem.appendChild(link);
+
+            if (tagName === 'H2') {
+                while (stack.length > 1) {
+                    stack.pop();
+                }
+                currentList = stack[stack.length - 1];
+                currentList.appendChild(listItem);
+                stack.push(document.createElement('ul'));
+                currentList = stack[stack.length - 1];
+                listItem.appendChild(currentList);
+            } else if (tagName === 'H3') {
+                while (stack.length > 2) {
+                    stack.pop();
+                }
+                currentList = stack[stack.length - 1];
+                currentList.appendChild(listItem);
+                stack.push(document.createElement('ul'));
+                currentList = stack[stack.length - 1];
+                listItem.appendChild(currentList);
+            } else if (tagName === 'H4') {
+                while (stack.length > 3) {
+                    stack.pop();
+                }
+                currentList = stack[stack.length - 1];
+                currentList.appendChild(listItem);
+            }
+        }
+    });
+
+    // Remove any empty ul elements that might have been created
+    function removeEmptyLists(list) {
+        Array.from(list.children).forEach(item => {
+            if (item.tagName === 'UL' && item.children.length === 0) {
+                item.remove();
+            } else if (item.tagName === 'LI') {
+                const childUl = item.querySelector('ul');
+                if (childUl) {
+                    removeEmptyLists(childUl);
+                }
+            }
+        });
+    }
+    removeEmptyLists(tocList);
+
+    const tocTitle = document.createElement('h2');
+    tocTitle.textContent = 'Table of Contents';
+    tableOfContents.appendChild(tocTitle);
+    tableOfContents.appendChild(tocList);
+});
+    </script>
+</body>
+</html>
