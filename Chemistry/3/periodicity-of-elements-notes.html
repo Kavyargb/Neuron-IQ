@@ -1,474 +1,594 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Periodicity of Elements - Notes </title>
+    <title>Periodicity of Elements - Notes</title>
     <style>
-        body {
-            font-family: sans-serif;
-            line-height: 1.6;
-            margin: 20px;
-            color: #d0d0d0;
-            background-color: #1e1e1e;
-            transition: background-color 0.3s ease;
-            position: relative;
-            display: flex;
-        }
-
-        h2 {
-            color: #95a5a6;
-            border-bottom: 2px solid #3498db;
-            padding-bottom: 5px;
-            margin-top: 30px;
-            transition: color 0.3s ease;
-            position: relative;
-        }
-
-        h2:hover {
-            color: #3498db;
-        }
-
-        h2:first-of-type {
-            margin-top: 0;
-        }
-
-        p {
-            margin-bottom: 15px;
-            transition: color 0.3s ease;
-        }
-
-        p strong {
-            font-weight: 600;
-            color: #e74c3c;
-        }
-
-        p:hover {
-            color: #bbb;
-        }
-
-        ul,
-        ol {
-            margin-bottom: 15px;
-            padding-left: 20px;
-        }
-
-        li {
-            margin-bottom: 5px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 5px rgba(255, 255, 255, 0.1);
-            background-color: #2c2c2c;
-        }
-
-        th,
-        td {
-            border: 1px solid #555;
-            padding: 8px;
-            text-align: left;
-            transition: background-color 0.3s ease;
-        }
-
-        th {
-            background-color: #3498db;
-            color: white;
-        }
-
-        tr:nth-child(even) {
-            background-color: #333;
-        }
-
-        tr:hover {
-            background-color: #444;
-        }
-
-        img {
-            max-width: 100%;
-            height: auto;
-            display: block;
-            margin: 20px auto;
-            box-shadow: 0 2px 5px rgba(255, 255, 255, 0.1);
-            transition: transform 0.3s ease;
-        }
-
-        img:hover {
-            transform: scale(1.05);
-        }
-
-        a {
-            color: #3498db;
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        a:hover {
-            color: #217dbb;
-        }
-
-        /* Progress Bar */
-        #progress-bar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 0%;
-            height: 5px;
-            background-color: #3498db;
-            transition: width 0.3s ease;
-            z-index: 1000;
-        }
-
-        /* Completed Checkmark */
-        h2::after {
-            content: '\2713';
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #3498db;
-            font-size: 1.2em;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        h2.completed::after {
-            opacity: 1;
-        }
-
-        /* Sidebar Styles */
-        #sidebar {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            width: 220px;
-            height: calc(100vh - 40px);
-            background-color: #2c2c2c;
-            padding: 15px;
-            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
-            overflow-y: auto;
-            z-index: 999;
-        }
-
-        #sidebar::-webkit-scrollbar {
-            width: 0px;
-        }
-
-        #sidebar ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        #sidebar li {
-            margin-bottom: 10px;
-        }
-
-        #sidebar a {
-            display: block;
-            color: #95a5a6;
-            padding: 10px 12px;
-            transition: background-color 0.3s ease;
-            border-radius: 4px;
-        }
-
-        #sidebar a:hover,
-        #sidebar a.active {
-            background-color: #333;
-            color: #fff;
-        }
-
-        /* Main content area adjustment */
-        main {
-            flex: 1;
-            padding: 10px;
-            margin-right: 60px;
-        }
-
-        /* Animations */
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        body,
-        h2,
-        p,
-        ul,
-        ol,
-        table,
-        img {
-            animation: fadeIn 0.5s ease-out;
-        }
-
-        /* Right sidebar */
-        #right-sidebar {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            width: 40px;
-            /* Adjusted width */
-            height: calc(100vh - 40px);
-            background-color: #2c2c2c;
-            padding: 15px 0;
-            /* Adjusted padding */
-            box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            z-index: 999;
-            border-radius: 0.5rem;
-        }
-
-        #right-sidebar a {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: #95a5a6;
-            padding: 10px;
-            transition: background-color 0.3s ease;
-            border-radius: 4px;
-            margin-bottom: 5px;
-            height: 40px;
-            /* Set height for a circular look */
-            width: 40px;
-            /* Set width for a circular look */
-        }
-
-
-        #right-sidebar a:hover,
-        #right-sidebar a.active {
-            background-color: #333;
-            color: #fff;
-        }
-
-        #right-sidebar img {
-            max-width: 20px;
-            height: auto;
-            display: block;
-            margin: 0 auto;
-            filter: invert(65%) sepia(3%) saturate(69%) hue-rotate(185deg) brightness(87%) contrast(86%);
-            transition: transform 0.3s ease;
-        }
-
-        #right-sidebar a:hover img,
-        #right-sidebar a.active img {
-            filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(221deg) brightness(105%) contrast(102%);
-            transform: scale(1.1);
-        }
-
-        /* Responsive adjustments for smaller screens */
-        @media (max-width: 768px) {
-            body {
-                flex-direction: column;
-                /* Stack elements vertically */
-                margin: 10px;
-                /* Reduce margin */
-            }
-
-            main {
-                padding: 5px;
-            }
-
-
-            #sidebar {
-                position: static;
-                /* Make sidebar static */
-                width: 100%;
-                /* Full width */
-                height: auto;
-                margin-bottom: 10px;
-                /* Add margin below sidebar */
-                box-shadow: none;
-            }
-
-            #sidebar ul {
-                display: flex;
-                overflow-x: auto;
-                padding: 0px 10px;
-                margin-bottom: 10px;
-
-            }
-
-
-            #sidebar li {
-                margin-bottom: 0px;
-            }
-
-            #sidebar a {
-                padding: 10px 10px;
-                margin: 0px 5px;
-                white-space: nowrap;
-                border-radius: 10px;
-            }
-
-            #right-sidebar {
-                position: fixed;
-                top: initial;
-                /* Remove top position */
-                bottom: 0;
-                /* Stick to bottom */
-                right: 0;
-                width: 100%;
-                height: auto;
-                /* Adjust height */
-                flex-direction: row;
-                padding: 0;
-                border-radius: 0;
-                box-shadow: none;
-
-            }
-
-
-            #right-sidebar a {
-                margin-bottom: 0;
-                /* Remove bottom margin */
-                width: auto;
-                height: 40px;
-            }
-
-            #right-sidebar img {
-                max-width: 20px;
-            }
-
-        }
-
-
-        @media (min-width: 769px) {
-
-            /* Adjust main content for larger screens to reduce gap if needed */
-            main {
-                margin-left: 250px;
-                /* Further reduce the margin */
-            }
-        }
-    </style>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            renderMathInElement(document.body, {
-                delimiters: [
-                    { left: "$", right: "$", display: false },
-                    { left: "$$", right: "$$", display: true }
-                ]
-            });
-        });
-    </script>
-    <style for="Calculator">
-        .calculator-container {
-    background-color: #2c2c2c;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(255, 255, 255, 0.1);
-    margin: 20px 0;
+header {
+    background: linear-gradient(135deg, #252525 0%, #303030 100%); /* Subtle gradient for depth */
+    padding: 1.2rem 0; /* Slightly increased padding */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* More pronounced, darker shadow */
+    position: sticky;
+    top: 0;
+    z-index: 1000; /* Increased z-index for better layering */
+    transition: box-shadow 0.3s ease-in-out, transform 0.3s ease-in-out; /* Smooth transition for sticky effect */
+    transform: translateY(0); /* Initial state for smooth sticky animation */
 }
 
-.calculator-controls {
+header.sticky-active {
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3); /* Different shadow when sticky */
+    transform: translateY(-5px); /* Slight lift when sticky */
+}
+
+nav {
     display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 30px; /* Slightly increased side padding */
 }
 
-.calculator-controls input,
-.calculator-controls button {
-    padding: 10px;
-    border-radius: 4px;
-    border: 1px solid #555;
-    background-color: #333;
-    color: #d0d0d0;
-    transition: background-color 0.3s ease;
+.logo {
+    font-size: 2rem; /* Slightly larger logo */
+    font-weight: 700; /* Bolder logo */
+    color: #7db4ff; /* Updated logo color, slightly lighter */
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4); /* Subtle text shadow for depth */
+    transition: transform 0.3s ease-in-out;
 }
 
-.calculator-controls input:focus,
-.calculator-controls button:focus{
-    outline: none;
-     box-shadow: 0 0 5px #3498db;
+.logo:hover {
+    transform: scale(1.05); /* Gentle scale on hover */
 }
 
-.calculator-controls input{
-    flex: 2;
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 30px; /* Use gap for spacing between list items */
 }
 
-.calculator-controls button{
-    flex: 1;
+nav ul li a {
+    text-decoration: none;
+    color: #f0f0f0; /* Slightly brighter text color */
+    position: relative; /* For the underline effect */
+    padding-bottom: 4px; /* Space for the underline */
+    transition: color 0.3s ease-in-out, transform 0.3s ease-in-out;
+    overflow: hidden; /* Clip the pseudo-element */
 }
 
-.calculator-controls button:hover {
-    background-color: #3498db;
-    color: white;
-    cursor: pointer;
-}
-
-#calculator-output {
-    overflow-x: auto; /* Enable horizontal scrolling for wider tables */
-}
-
-#calculator-output table {
+nav ul li a::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
     width: 100%;
-    border-collapse: collapse;
-    margin-top: 10px;
-    box-shadow: 0 2px 5px rgba(255, 255, 255, 0.1);
+    height: 2px;
+    background-color: #7db4ff; /* Same as logo color for consistency */
+    transform: scaleX(0); /* Initially hidden */
+    transform-origin: bottom right;
+    transition: transform 0.4s ease-out;
 }
 
-#calculator-output th,
-#calculator-output td {
-    border: 1px solid #555;
-    padding: 8px;
+nav ul li a:hover {
+    color: #90caf9; /* Lighter hover color */
+    transform: translateY(-2px); /* Slight lift on hover */
+}
+
+nav ul li a:hover::before {
+    transform: scaleX(1);
+    transform-origin: bottom left;
+}
+
+/* Optional: Add an active state highlight */
+nav ul li a.active {
+    color: #90caf9;
+    font-weight: 600;
+}
+
+nav ul li a.active::before {
+    transform: scaleX(1);
+}
+
+/* Enhancements for Mobile (consider using JavaScript for more advanced mobile menus) */
+@media (max-width: 1024px) {
+    header {
+        display: hidden;
+    }
+}
+        :root {
+    --primary-bg: #f9f9f9; /* Very light grey for a softer white */
+    --secondary-bg: #ffffff; /* Pure white for content areas */
+    --text-primary: #212121; /* Dark grey for primary text */
+    --text-secondary: #757575; /* Medium grey for secondary text */
+    --accent-color: #2962ff; /* A vibrant blue */
+    --hover-color: #5393ff; /* Lighter blue for hover states */
+    --border-color: #e0e0e0; /* Light grey for borders */
+    --code-bg: #f0f0f0; /* Very light grey for code backgrounds */
+    --code-text: #333333; /* Dark grey for code text */
+    --toc-active: #2962ff;
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.1);
+    --transition-fast: 0.15s ease-in-out;
+    --transition-normal: 0.3s ease-in-out;
+}
+
+body {
+    font-family: 'Roboto', sans-serif; /* A clean and modern sans-serif font */
+    line-height: 1.6;
+    margin: 0;
+    background-color: var(--primary-bg);
+    color: var(--text-primary);
+    padding-bottom: 40px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+}
+
+/* Custom Scrollbar - Light theme version */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #bdbdbd;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: #9e9e9e;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 50px auto;
+    padding: 60px;
+    background-color: var(--secondary-bg);
+    box-shadow: var(--shadow-md);
+    border-radius: 8px;
+    display: grid;
+    grid-template-columns: minmax(250px, 300px) 1fr;
+    gap: 40px;
+}
+
+/* Table of contents styles - Clean and simple */
+
+#table-of-contents {
+    padding: 30px;
+    background-color: var(--secondary-bg);
+    border-radius: 6px;
+    position: sticky;
+    top: 30px;
+    height: fit-content;
+    border: 1px solid var(--border-color);
+}
+
+/* Custom Scrollbar for Table of Contents */
+#table-of-contents::-webkit-scrollbar {
+    width: 6px; /* Thinner scrollbar */
+}
+
+#table-of-contents::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Light background for the track */
+    border-radius: 3px; /* Slightly rounded track */
+}
+
+#table-of-contents::-webkit-scrollbar-thumb {
+    background-color: #bdbdbd; /* Medium grey for the thumb */
+    border-radius: 3px; /* Slightly rounded thumb */
+}
+
+#table-of-contents::-webkit-scrollbar-thumb:hover {
+    background-color: #9e9e9e; /* Darker grey on hover */
+}
+
+#table-of-contents > h2 {
+    font-size: 1.5rem;
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: var(--text-primary);
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 8px;
     text-align: left;
 }
 
-#calculator-output th {
-    background-color: #3498db;
-    color: white;
+#table-of-contents ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
 }
 
-#calculator-output tr:nth-child(even) {
-    background-color: #333;
+#table-of-contents li {
+    margin-bottom: 10px;
+    padding-left: 0;
+    border-left: 3px solid transparent;
+    transition: border-left-color var(--transition-fast), color var(--transition-fast);
 }
 
-#calculator-output tr:hover {
-    background-color: #444;
+#table-of-contents li:hover,
+#table-of-contents li.active {
+    border-left-color: var(--toc-active);
 }
 
-/* Loading Spinner */
-.loading-spinner {
-    border: 4px solid #f3f3f3;
-    border-top: 4px solid #3498db;
-    border-radius: 50%;
-    width: 30px;
-    height: 30px;
-    animation: spin 1s linear infinite;
-    margin: 20px auto;
-    display: none;
+#table-of-contents li.active > a {
+    color: var(--toc-active);
+    font-weight: 500;
 }
 
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+#table-of-contents a {
+    text-decoration: none;
+    color: var(--text-secondary);
+    display: block;
+    padding: 6px 0;
+    transition: color var(--transition-fast);
 }
 
-.calculator-container h2 {
-    margin-top: 0; /* Remove top margin for calculator heading */
+#table-of-contents a:hover {
+    color: var(--hover-color);
+}
+
+#table-of-contents ul ul {
+    margin-left: 15px;
+    margin-top: 6px;
+}
+
+
+/* Main content styles - Focus on readability */
+main {
+    padding: 40px;
+    border-radius: 6px;
+    overflow: hidden;
+    background-color: var(--secondary-bg);
+    box-shadow: var(--shadow-sm);
+}
+
+main > *:not(:last-child) {
+    margin-bottom: 2em;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--text-primary);
+    letter-spacing: -0.01em;
+}
+
+h1 {
+    font-size: 2.5rem;
+    border-bottom: 2px solid var(--accent-color);
+    padding-bottom: 0.4em;
+    margin-bottom: 1em;
+}
+
+h2 {
+    font-size: 2rem;
+    border-bottom: 1px solid var(--accent-color);
+    padding-bottom: 0.3em;
+    margin-bottom: 0.9em;
+    color: var(--accent-color);
+}
+
+h3 {
+    font-size: 1.6rem;
+    margin-bottom: 0.7em;
+}
+
+h4 {
+    font-size: 1.4rem;
+    margin-bottom: 0.6em;
+}
+
+p {
+    margin-bottom: 1.5em;
+    color: var(--text-secondary);
+    orphans: 3;
+    widows: 3;
+    word-break: break-word;
+}
+
+ul, ol {
+    margin-left: 25px;
+    margin-bottom: 1.7em;
+}
+
+li {
+    margin-bottom: 0.7em;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    word-break: break-word;
+}
+
+strong {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+em {
+    font-style: italic;
+    color: var(--accent-color);
+}
+
+a {
+    color: var(--accent-color);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+    border-bottom: 1px solid transparent; /* Subtle underline on hover */
+}
+
+a:hover {
+    color: var(--hover-color);
+    border-bottom-color: var(--hover-color);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 2em;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    overflow: hidden;
+    background-color: var(--secondary-bg);
+}
+
+th, td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+    word-break: break-word;
+}
+
+th {
+    background-color: #f5f5f5; /* Lighter header background */
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+tbody tr:nth-child(even) {
+    background-color: #fafafa; /* Very light grey for even rows */
+}
+
+/* Code blocks - Light theme styling */
+pre {
+    background-color: var(--code-bg);
+    color: var(--code-text);
+    padding: 12px 18px;
+    border-radius: 4px;
+    overflow-x: auto;
+    font-family: 'Menlo', monospace;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin-bottom: 1.6em;
+    white-space: pre-wrap;
+    border: 1px solid var(--border-color);
+}
+
+code {
+    font-family: 'Menlo', monospace;
+    background-color: #e8e8e8; /* Even lighter background for inline code */
+    color: var(--code-text);
+    padding: 3px 6px;
+    border-radius: 3px;
+    word-break: break-word;
+}
+
+pre code {
+    background-color: transparent;
+    padding: 0;
+}
+
+/* Horizontal rules - Simpler style */
+hr {
+    border: none;
+    height: 1px;
+    background-color: var(--border-color);
+    margin: 2em 0;
+}
+
+/* Blockquotes - Clean separation */
+blockquote {
+    border-left: 3px solid var(--accent-color);
+    padding: 10px 15px;
+    margin: 1.5em 0;
+    font-style: italic;
+    background-color: #f5f5f5;
+    border-radius: 3px;
+    color: var(--text-secondary);
+}
+
+blockquote p {
+    margin-bottom: 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+    .container {
+        max-width: 90%;
+        padding: 50px;
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+
+    #table-of-contents {
+        position: static;
+        margin-bottom: 30px;
+    }
+
+    #table-of-contents > h2 {
+        text-align: center;
+    }
+}
+
+@media (max-width: 768px) {
+    main {
+        padding: 30px;
+    }
+
+    h1 {
+        font-size: 2.2rem;
+    }
+
+    h2 {
+        font-size: 1.8rem;
+    }
+    nav{
+        display:none;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 30px;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    h2 {
+        font-size: 1.6rem;
+    }
 }
     </style>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js"></script>
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js"></script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                renderMathInElement(document.body, {
+                    delimiters: [
+                        { left: "$", right: "$", display: false },
+                        { left: "$$", right: "$$", display: true }
+                    ]
+                });
+            });
+        </script>
+        <style for="Calculator">
+            /* Light Mode Styles */
+            .calculator-container {
+                background-color: #f5f5f5; /* Light background */
+                padding: 20px;
+                border-radius: 8px;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+                margin: 20px 0;
+            }
+        
+            .calculator-controls {
+                display: flex;
+                gap: 10px;
+                margin-bottom: 20px;
+            }
+        
+            .calculator-controls input,
+            .calculator-controls button {
+                padding: 10px;
+                border-radius: 4px;
+                border: 1px solid #ccc; /* Light border */
+                background-color: #fff; /* White background */
+                color: #333; /* Dark text */
+                transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Added box-shadow transition */
+            }
+        
+            .calculator-controls input:focus,
+            .calculator-controls button:focus {
+                outline: none;
+                box-shadow: 0 0 5px #3498db; /* Focus highlight (same as dark mode) */
+            }
+        
+            .calculator-controls input {
+                flex: 2;
+            }
+        
+            .calculator-controls button {
+                flex: 1;
+            }
+        
+            .calculator-controls button:hover {
+                background-color: #e0e0e0; /* Slightly darker on hover */
+                cursor: pointer;
+            }
+        
+            #calculator-output {
+                overflow-x: auto;
+            }
+        
+            #calculator-output table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 10px;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+            }
+        
+            #calculator-output th,
+            #calculator-output td {
+                border: 1px solid #ccc; /* Light border */
+                padding: 8px;
+                text-align: left;
+            }
+        
+            #calculator-output th {
+                background-color: #3498db; /* Header color (same as dark mode) */
+                color: white;
+            }
+        
+            #calculator-output tr:nth-child(even) {
+                background-color: #f0f0f0; /* Slightly darker for even rows */
+            }
+        
+            #calculator-output tr:hover {
+                background-color: #e8e8e8; /* Slightly darker on hover */
+            }
+        
+            /* Loading Spinner */
+            .loading-spinner {
+                border: 4px solid #ccc; /* Light border */
+                border-top: 4px solid #3498db; /* Spinner color (same as dark mode) */
+                border-radius: 50%;
+                width: 30px;
+                height: 30px;
+                animation: spin 1s linear infinite;
+                margin: 20px auto;
+                display: none;
+            }
+        
+            @keyframes spin {
+                0% {
+                    transform: rotate(0deg);
+                }
+                100% {
+                    transform: rotate(360deg);
+                }
+            }
+        
+            .calculator-container h2 {
+                margin-top: 0;
+                color: #333; /* Darker text color for heading */
+            }
+        </style>
 </head>
-
 <body>
-    <div id="progress-bar"></div>
-    <div id="sidebar"></div>
-    <main>
+    <header>
+        <nav>
+            <div class="logo">Neuron IQ</div>
+            <ul>
+                <li><a href="/index.html">Home</a></li>
+                <li><a href="/subjects.html">Subjects</a></li>
+                <li><a href="/about.html">About</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="container">
+        <aside id="table-of-contents">
+            <!-- Table of contents will be generated here -->
+        </aside>
+        <main>
             <h1>
                 Structure of Periodic Table
             </h1>
@@ -4124,541 +4244,539 @@
             
             <p>In addition to their academic achievements, Noah is an accomplished author and educator, committed to sharing complex chemical concepts in accessible and engaging ways. Their work not only bridges theoretical and practical chemistry but also inspires the next generation of chemists to explore the field's transformative potential.</p>
     </main>
-        <div id="right-sidebar">
-            <a href="/index.html">
-                <img src="https://img.icons8.com/?size=512&id=3113&format=png" alt="Home">
-            </a>
-            <a href="/subjects.html">
-                <img src="/icons/subjects.png" alt="Subject">
-            </a>
-            <a href="/about.html">
-                <img src="https://img.icons8.com/?size=512&id=61995&format=png" alt="About">
-            </a>
-            <a href="#">
-                <img src="https://img.icons8.com/?size=512&id=85185&format=png" alt="Contact">
-            </a>
-        </div>
-</body>
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const headers = document.querySelectorAll('h2');
-        const progressBar = document.getElementById('progress-bar');
-        const totalHeaders = headers.length;
-        const sidebar = document.getElementById('sidebar');
+    </div>
+    <script>
+        // script.js
+document.addEventListener('DOMContentLoaded', () => {
+    const mainContent = document.querySelector('main');
+    const tableOfContents = document.getElementById('table-of-contents');
 
-        // Generate sidebar links
-        let sidebarHTML = '<ul>';
-        headers.forEach(header => {
-            const id = header.getAttribute('id');
-            sidebarHTML += `<li><a href="#${id}" data-id="${id}">${header.textContent}</a></li>`;
+    if (!mainContent || !tableOfContents) {
+        console.error('Main content or table of contents element not found.');
+        return;
+    }
+
+    const headings = mainContent.querySelectorAll('h2, h3, h4');
+    const tocList = document.createElement('ul');
+
+    let currentList = tocList;
+    const stack = [currentList];
+
+    headings.forEach(heading => {
+        const tagName = heading.tagName;
+        const id = heading.id;
+        const text = heading.textContent;
+
+        if (id) {
+            const listItem = document.createElement('li');
+            const link = document.createElement('a');
+            link.href = `#${id}`;
+            link.textContent = text;
+            listItem.appendChild(link);
+
+            if (tagName === 'H2') {
+                while (stack.length > 1) {
+                    stack.pop();
+                }
+                currentList = stack[stack.length - 1];
+                currentList.appendChild(listItem);
+                stack.push(document.createElement('ul'));
+                currentList = stack[stack.length - 1];
+                listItem.appendChild(currentList);
+            } else if (tagName === 'H3') {
+                while (stack.length > 2) {
+                    stack.pop();
+                }
+                currentList = stack[stack.length - 1];
+                currentList.appendChild(listItem);
+                stack.push(document.createElement('ul'));
+                currentList = stack[stack.length - 1];
+                listItem.appendChild(currentList);
+            } else if (tagName === 'H4') {
+                while (stack.length > 3) {
+                    stack.pop();
+                }
+                currentList = stack[stack.length - 1];
+                currentList.appendChild(listItem);
+            }
+        }
+    });
+
+    // Remove any empty ul elements that might have been created
+    function removeEmptyLists(list) {
+        Array.from(list.children).forEach(item => {
+            if (item.tagName === 'UL' && item.children.length === 0) {
+                item.remove();
+            } else if (item.tagName === 'LI') {
+                const childUl = item.querySelector('ul');
+                if (childUl) {
+                    removeEmptyLists(childUl);
+                }
+            }
         });
-        sidebarHTML += '</ul>';
-        sidebar.innerHTML = sidebarHTML;
+    }
+    removeEmptyLists(tocList);
 
-        const sidebarLinks = document.querySelectorAll('#sidebar a');
-        let activeHeading = null;
-        let progress = 0;
-        let seenHeadings = new Set();
-
-
-        function updateProgress() {
-            if (progress >= totalHeaders) {
+    const tocTitle = document.createElement('h2');
+    tocTitle.textContent = 'Table of Contents';
+    tableOfContents.appendChild(tocTitle);
+    tableOfContents.appendChild(tocList);
+});
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+        let elementInput = document.getElementById('element-input');
+        let calculateBtn = document.getElementById('calculate-btn');
+        let calculatorOutput = document.getElementById('calculator-output');
+    
+        const elementData = {
+        "H": {
+        "Hfg_298_15K": -241.8,
+        "Hfg_0K": -217.8,
+        "Entropy_298_15K": 130.7,
+        "Integrated_Heat_Capacity_0_to_298_15K": 25.7,
+        "Heat_Capacity_298_15K": 28.8,
+        "Electronic_Energy_Levels": [1216.5, 1025.7],
+        "Ionization_Energies": 13.6,
+        "Electron_Affinity": 0.75
+      },
+        "He": {
+        "Hfg_298_15K": 0,
+        "Hfg_0K": 0,
+        "Entropy_298_15K": 126.1,
+        "Integrated_Heat_Capacity_0_to_298_15K": 20.8,
+        "Heat_Capacity_298_15K": 20.8,
+        "Electronic_Energy_Levels": [159850, 169084, 171133],
+        "Ionization_Energies": 24.6,
+        "Electron_Affinity": -0.08
+        },
+          "Li": {
+            "Hfg_298_15K": 159.3,
+            "Hfg_0K": 155.3,
+            "Entropy_298_15K": 29.1,
+            "Integrated_Heat_Capacity_0_to_298_15K": 22.8,
+            "Heat_Capacity_298_15K": 24.8,
+            "Electronic_Energy_Levels": [14908, 17159],
+            "Ionization_Energies": 5.39,
+            "Electron_Affinity": 0.61
+            },
+            "Be": {
+                "Hfg_298_15K": 324.3,
+                "Hfg_0K": 315.3,
+                "Entropy_298_15K": 9.5,
+                "Integrated_Heat_Capacity_0_to_298_15K": 16.8,
+                "Heat_Capacity_298_15K": 16.7,
+                "Electronic_Energy_Levels": [21978, 38178],
+                "Ionization_Energies": 9.32,
+                "Electron_Affinity": -0.20
+            },
+              "B": {
+                    "Hfg_298_15K": 565,
+                    "Hfg_0K": 561.5,
+                    "Entropy_298_15K": 5.9,
+                    "Integrated_Heat_Capacity_0_to_298_15K": 11.1,
+                    "Heat_Capacity_298_15K": 11.1,
+                    "Electronic_Energy_Levels": [38144, 38178],
+                    "Ionization_Energies": 8.30,
+                    "Electron_Affinity": 0.28
+                },
+                 "C": {
+                    "Hfg_298_15K": 716.7,
+                    "Hfg_0K": 711.2,
+                    "Entropy_298_15K": 5.7,
+                    "Integrated_Heat_Capacity_0_to_298_15K": 8.5,
+                    "Heat_Capacity_298_15K": 8.5,
+                    "Electronic_Energy_Levels": [10193, 21648],
+                    "Ionization_Energies": 11.3,
+                    "Electron_Affinity": 1.26
+                },
+                   "N": {
+                    "Hfg_298_15K": 472.7,
+                    "Hfg_0K": 472.7,
+                    "Entropy_298_15K": 153.3,
+                    "Integrated_Heat_Capacity_0_to_298_15K": 29.1,
+                    "Heat_Capacity_298_15K": 29.1,
+                    "Electronic_Energy_Levels": [19233, 28838],
+                    "Ionization_Energies": 14.5,
+                    "Electron_Affinity": -0.07
+                 },
+                  "O": {
+                    "Hfg_298_15K": 249.2,
+                    "Hfg_0K": 246.7,
+                    "Entropy_298_15K": 161.1,
+                    "Integrated_Heat_Capacity_0_to_298_15K": 29.4,
+                    "Heat_Capacity_298_15K": 29.4,
+                    "Electronic_Energy_Levels": [15867, 22698],
+                    "Ionization_Energies": 13.6,
+                    "Electron_Affinity": 1.46
+                  },
+                  "F": {
+                    "Hfg_298_15K": 79.4,
+                     "Hfg_0K": 77.2,
+                    "Entropy_298_15K": 158.8,
+                    "Integrated_Heat_Capacity_0_to_298_15K": 30.2,
+                     "Heat_Capacity_298_15K": 30.2,
+                     "Electronic_Energy_Levels": [404, 40889],
+                    "Ionization_Energies": 17.4,
+                     "Electron_Affinity": 3.40
+                 },
+                  "Ne": {
+                      "Hfg_298_15K": 0,
+                      "Hfg_0K": 0,
+                      "Entropy_298_15K": 146.3,
+                      "Integrated_Heat_Capacity_0_to_298_15K": 20.8,
+                      "Heat_Capacity_298_15K": 20.8,
+                       "Electronic_Energy_Levels": [134041, 136541, 138892],
+                      "Ionization_Energies": 21.6,
+                      "Electron_Affinity": -0.08
+                  },
+                "Na":{
+                    "Hfg_298_15K": 107.3,
+                     "Hfg_0K": 107.7,
+                    "Entropy_298_15K": 153.7,
+                    "Integrated_Heat_Capacity_0_to_298_15K": 44.4,
+                     "Heat_Capacity_298_15K": 44.4,
+                     "Electronic_Energy_Levels": [16956, 17293],
+                     "Ionization_Energies": 5.14,
+                    "Electron_Affinity": 0.54
+                },
+              "Mg":{
+                "Hfg_298_15K": 147.7,
+                "Hfg_0K": 146.2,
+                "Entropy_298_15K": 32.7,
+                "Integrated_Heat_Capacity_0_to_298_15K": 24.9,
+                "Heat_Capacity_298_15K": 24.9,
+                 "Electronic_Energy_Levels": [24581, 30994],
+                "Ionization_Energies": 7.65,
+                "Electron_Affinity": -0.30
+            },
+            "Al":{
+                "Hfg_298_15K": 324.3,
+                 "Hfg_0K": 324.1,
+                "Entropy_298_15K": 28.3,
+                 "Integrated_Heat_Capacity_0_to_298_15K": 24.4,
+                  "Heat_Capacity_298_15K": 24.4,
+                  "Electronic_Energy_Levels": [25057, 33951],
+                 "Ionization_Energies": 5.99,
+                  "Electron_Affinity": 0.43
+              },
+              "Si":{
+                "Hfg_298_15K": 450.0,
+                "Hfg_0K": 447.6,
+                "Entropy_298_15K": 18.8,
+                "Integrated_Heat_Capacity_0_to_298_15K": 20.2,
+                 "Heat_Capacity_298_15K": 20.2,
+                "Electronic_Energy_Levels": [6209, 14300],
+                 "Ionization_Energies": 8.15,
+                 "Electron_Affinity": 1.39
+               },
+                "P":{
+                    "Hfg_298_15K": 314.6,
+                    "Hfg_0K": 314.6,
+                    "Entropy_298_15K": 163.2,
+                    "Integrated_Heat_Capacity_0_to_298_15K": 27.3,
+                     "Heat_Capacity_298_15K": 27.3,
+                      "Electronic_Energy_Levels": [11828, 19553],
+                     "Ionization_Energies": 10.5,
+                      "Electron_Affinity": 0.75
+                  },
+                "S":{
+                     "Hfg_298_15K": 278.3,
+                     "Hfg_0K": 275.2,
+                     "Entropy_298_15K": 167.7,
+                    "Integrated_Heat_Capacity_0_to_298_15K": 29.2,
+                     "Heat_Capacity_298_15K": 29.2,
+                     "Electronic_Energy_Levels": [21394, 29394],
+                     "Ionization_Energies": 10.4,
+                      "Electron_Affinity": 2.08
+                  },
+                  "Cl":{
+                     "Hfg_298_15K": 121.3,
+                     "Hfg_0K": 119.1,
+                     "Entropy_298_15K": 165.2,
+                     "Integrated_Heat_Capacity_0_to_298_15K": 33.3,
+                     "Heat_Capacity_298_15K": 33.3,
+                       "Electronic_Energy_Levels": [882, 8823],
+                      "Ionization_Energies": 13.0,
+                       "Electron_Affinity": 3.62
+                  },
+                 "Ar": {
+                      "Hfg_298_15K": 0,
+                      "Hfg_0K": 0,
+                     "Entropy_298_15K": 154.8,
+                      "Integrated_Heat_Capacity_0_to_298_15K": 20.8,
+                      "Heat_Capacity_298_15K": 20.8,
+                     "Electronic_Energy_Levels": [93144, 93751, 95282],
+                     "Ionization_Energies": 15.8,
+                      "Electron_Affinity": -0.08
+                  },
+                  "K":{
+                    "Hfg_298_15K": 89.2,
+                     "Hfg_0K": 89.2,
+                      "Entropy_298_15K": 160.3,
+                       "Integrated_Heat_Capacity_0_to_298_15K": 46.2,
+                      "Heat_Capacity_298_15K": 46.2,
+                     "Electronic_Energy_Levels": [12985, 13042],
+                      "Ionization_Energies": 4.34,
+                     "Electron_Affinity": 0.50
+                   },
+                  "Ca":{
+                      "Hfg_298_15K": 178.2,
+                       "Hfg_0K": 177.3,
+                       "Entropy_298_15K": 41.6,
+                      "Integrated_Heat_Capacity_0_to_298_15K": 25.9,
+                      "Heat_Capacity_298_15K": 25.9,
+                      "Electronic_Energy_Levels": [15315, 23652],
+                     "Ionization_Energies": 6.11,
+                       "Electron_Affinity": -0.02
+                  },
+                  "Sc":{
+                      "Hfg_298_15K": 0,
+                       "Hfg_0K": 0,
+                       "Entropy_298_15K": 33.2,
+                      "Integrated_Heat_Capacity_0_to_298_15K": 3.80,
+                      "Heat_Capacity_298_15K": 25.52,
+                      "Electronic_Energy_Levels": [0, 11519.99],
+                     "Ionization_Energies": 6.561,
+                       "Electron_Affinity": 0.189
+                  },
+                  "Ti":{
+                      "Hfg_298_15K": 473.00,
+                       "Hfg_0K": 470.00	,
+                       "Entropy_298_15K": 180.30,
+                      "Integrated_Heat_Capacity_0_to_298_15K": 7.54,
+                      "Heat_Capacity_298_15K": 24.43,
+                      "Electronic_Energy_Levels": [0, 170.132, 386.874, 6556.833, 6598.765, 6661.006, 6742.756, 6842.962, 7255.355, 8436.618, 8492.421, 8602.34],
+                     "Ionization_Energies": 6.828,
+                       "Electron_Affinity": 0.087
+                  },
+                  "Ti":{
+                      "Hfg_298_15K": 473.00,
+                       "Hfg_0K": 470.00	,
+                       "Entropy_298_15K": 180.30,
+                      "Integrated_Heat_Capacity_0_to_298_15K": 7.54,
+                      "Heat_Capacity_298_15K": 24.43,
+                      "Electronic_Energy_Levels": [0, 170.132, 386.874, 6556.833, 6598.765, 6661.006, 6742.756, 6842.962, 7255.355, 8436.618, 8492.421, 8602.34],
+                     "Ionization_Energies": 6.828,
+                       "Electron_Affinity": 0.087
+                  },
+        };
+    
+    
+        calculateBtn.addEventListener('click', function() {
+            let selectedElement = elementInput.value.trim();
+            if (!selectedElement) {
+                alert('Please enter an element symbol.');
                 return;
             }
-            let currentVisibleHeader = null;
-
-            for (let i = 0; i < headers.length; i++) {
-                const header = headers[i];
-                const rect = header.getBoundingClientRect();
-                const headerId = header.getAttribute('id');
-                const link = document.querySelector(`#sidebar a[data-id="${headerId}"]`);
-
-                if (rect.top <= window.innerHeight / 2) {
-                    currentVisibleHeader = { header: header, link: link };
-                    header.classList.add('completed');
-
+    
+            let normalizedElement = selectedElement.charAt(0).toUpperCase() + selectedElement.slice(1).toLowerCase();
+            calculatorOutput.innerHTML = '<div class="loading-spinner"></div>';
+             let loadingSpinner = calculatorOutput.querySelector('.loading-spinner');
+    
+            // Simulate loading with spinner animation for 0.8 seconds
+            loadingSpinner.style.display = 'block';
+            setTimeout(() => {
+                const data = elementData[normalizedElement];
+                if (data) {
+                    const tableHTML = generateTable(data);
+                    calculatorOutput.innerHTML = tableHTML;
                 } else {
-                    header.classList.remove('completed');
+                    calculatorOutput.innerHTML = '<p> Compute Error. Timed Out </p>';
                 }
-            }
-
-            if (currentVisibleHeader && activeHeading !== currentVisibleHeader.header) {
-                activeHeading = currentVisibleHeader.header;
-
-                if (!seenHeadings.has(activeHeading.id)) {
-                    seenHeadings.add(activeHeading.id);
-                    progress++;
-                }
-                sidebarLinks.forEach(link => {
-                    link.classList.remove('active');
-                });
-
-                currentVisibleHeader.link.classList.add('active');
-            }
-
-            const progressPercentage = (progress / totalHeaders) * 100;
-            progressBar.style.width = `${progressPercentage}%`;
+                }, 800);
+        });
+    
+        function generateTable(data) {
+            let tableHTML = '<table>';
+            tableHTML += `<thead>
+                            <tr>
+                                <th>Property</th>
+                                <th>Value</th>
+                            </tr>
+                            </thead>
+                            <tbody>`;
+            
+            tableHTML += `<tr><td>Hfg(298.15K) (kJ/mol)</td><td>${data.Hfg_298_15K}</td></tr>`;
+            tableHTML += `<tr><td>Hfg(0K) (kJ/mol)</td><td>${data.Hfg_0K}</td></tr>`;
+            tableHTML += `<tr><td>Entropy (298.15K) (J/mol.K)</td><td>${data.Entropy_298_15K}</td></tr>`;
+            tableHTML += `<tr><td>Integrated Heat Capacity (0 to 298.15K) (J/mol.K)</td><td>${data.Integrated_Heat_Capacity_0_to_298_15K}</td></tr>`;
+            tableHTML += `<tr><td>Heat Capacity (298.15K) (J/mol.K)</td><td>${data.Heat_Capacity_298_15K}</td></tr>`;
+            tableHTML += `<tr><td>Electronic Energy Levels (cm<sup>-1</sup>)</td><td>${data.Electronic_Energy_Levels.join(', ')}</td></tr>`;
+            tableHTML += `<tr><td>Ionization Energies (eV)</td><td>${data.Ionization_Energies}</td></tr>`;
+            tableHTML += `<tr><td>Electron Affinity (eV)</td><td>${data.Electron_Affinity}</td></tr>`;
+            
+            tableHTML += '</tbody></table>';
+            return tableHTML;
         }
-
-
-        window.addEventListener('scroll', updateProgress);
-        window.addEventListener('resize', updateProgress);
-        updateProgress(); // Initial update
     });
-</script>
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-    let elementInput = document.getElementById('element-input');
-    let calculateBtn = document.getElementById('calculate-btn');
-    let calculatorOutput = document.getElementById('calculator-output');
-
-    const elementData = {
-    "H": {
-    "Hfg_298_15K": -241.8,
-    "Hfg_0K": -217.8,
-    "Entropy_298_15K": 130.7,
-    "Integrated_Heat_Capacity_0_to_298_15K": 25.7,
-    "Heat_Capacity_298_15K": 28.8,
-    "Electronic_Energy_Levels": [1216.5, 1025.7],
-    "Ionization_Energies": 13.6,
-    "Electron_Affinity": 0.75
-  },
-    "He": {
-    "Hfg_298_15K": 0,
-    "Hfg_0K": 0,
-    "Entropy_298_15K": 126.1,
-    "Integrated_Heat_Capacity_0_to_298_15K": 20.8,
-    "Heat_Capacity_298_15K": 20.8,
-    "Electronic_Energy_Levels": [159850, 169084, 171133],
-    "Ionization_Energies": 24.6,
-    "Electron_Affinity": -0.08
-    },
-      "Li": {
-        "Hfg_298_15K": 159.3,
-        "Hfg_0K": 155.3,
-        "Entropy_298_15K": 29.1,
-        "Integrated_Heat_Capacity_0_to_298_15K": 22.8,
-        "Heat_Capacity_298_15K": 24.8,
-        "Electronic_Energy_Levels": [14908, 17159],
-        "Ionization_Energies": 5.39,
-        "Electron_Affinity": 0.61
-        },
-        "Be": {
-            "Hfg_298_15K": 324.3,
-            "Hfg_0K": 315.3,
-            "Entropy_298_15K": 9.5,
-            "Integrated_Heat_Capacity_0_to_298_15K": 16.8,
-            "Heat_Capacity_298_15K": 16.7,
-            "Electronic_Energy_Levels": [21978, 38178],
-            "Ionization_Energies": 9.32,
-            "Electron_Affinity": -0.20
-        },
-          "B": {
-                "Hfg_298_15K": 565,
-                "Hfg_0K": 561.5,
-                "Entropy_298_15K": 5.9,
-                "Integrated_Heat_Capacity_0_to_298_15K": 11.1,
-                "Heat_Capacity_298_15K": 11.1,
-                "Electronic_Energy_Levels": [38144, 38178],
-                "Ionization_Energies": 8.30,
-                "Electron_Affinity": 0.28
-            },
-             "C": {
-                "Hfg_298_15K": 716.7,
-                "Hfg_0K": 711.2,
-                "Entropy_298_15K": 5.7,
-                "Integrated_Heat_Capacity_0_to_298_15K": 8.5,
-                "Heat_Capacity_298_15K": 8.5,
-                "Electronic_Energy_Levels": [10193, 21648],
-                "Ionization_Energies": 11.3,
-                "Electron_Affinity": 1.26
-            },
-               "N": {
-                "Hfg_298_15K": 472.7,
-                "Hfg_0K": 472.7,
-                "Entropy_298_15K": 153.3,
-                "Integrated_Heat_Capacity_0_to_298_15K": 29.1,
-                "Heat_Capacity_298_15K": 29.1,
-                "Electronic_Energy_Levels": [19233, 28838],
-                "Ionization_Energies": 14.5,
-                "Electron_Affinity": -0.07
-             },
-              "O": {
-                "Hfg_298_15K": 249.2,
-                "Hfg_0K": 246.7,
-                "Entropy_298_15K": 161.1,
-                "Integrated_Heat_Capacity_0_to_298_15K": 29.4,
-                "Heat_Capacity_298_15K": 29.4,
-                "Electronic_Energy_Levels": [15867, 22698],
-                "Ionization_Energies": 13.6,
-                "Electron_Affinity": 1.46
-              },
-              "F": {
-                "Hfg_298_15K": 79.4,
-                 "Hfg_0K": 77.2,
-                "Entropy_298_15K": 158.8,
-                "Integrated_Heat_Capacity_0_to_298_15K": 30.2,
-                 "Heat_Capacity_298_15K": 30.2,
-                 "Electronic_Energy_Levels": [404, 40889],
-                "Ionization_Energies": 17.4,
-                 "Electron_Affinity": 3.40
-             },
-              "Ne": {
-                  "Hfg_298_15K": 0,
-                  "Hfg_0K": 0,
-                  "Entropy_298_15K": 146.3,
-                  "Integrated_Heat_Capacity_0_to_298_15K": 20.8,
-                  "Heat_Capacity_298_15K": 20.8,
-                   "Electronic_Energy_Levels": [134041, 136541, 138892],
-                  "Ionization_Energies": 21.6,
-                  "Electron_Affinity": -0.08
-              },
-            "Na":{
-                "Hfg_298_15K": 107.3,
-                 "Hfg_0K": 107.7,
-                "Entropy_298_15K": 153.7,
-                "Integrated_Heat_Capacity_0_to_298_15K": 44.4,
-                 "Heat_Capacity_298_15K": 44.4,
-                 "Electronic_Energy_Levels": [16956, 17293],
-                 "Ionization_Energies": 5.14,
-                "Electron_Affinity": 0.54
-            },
-          "Mg":{
-            "Hfg_298_15K": 147.7,
-            "Hfg_0K": 146.2,
-            "Entropy_298_15K": 32.7,
-            "Integrated_Heat_Capacity_0_to_298_15K": 24.9,
-            "Heat_Capacity_298_15K": 24.9,
-             "Electronic_Energy_Levels": [24581, 30994],
-            "Ionization_Energies": 7.65,
-            "Electron_Affinity": -0.30
-        },
-        "Al":{
-            "Hfg_298_15K": 324.3,
-             "Hfg_0K": 324.1,
-            "Entropy_298_15K": 28.3,
-             "Integrated_Heat_Capacity_0_to_298_15K": 24.4,
-              "Heat_Capacity_298_15K": 24.4,
-              "Electronic_Energy_Levels": [25057, 33951],
-             "Ionization_Energies": 5.99,
-              "Electron_Affinity": 0.43
-          },
-          "Si":{
-            "Hfg_298_15K": 450.0,
-            "Hfg_0K": 447.6,
-            "Entropy_298_15K": 18.8,
-            "Integrated_Heat_Capacity_0_to_298_15K": 20.2,
-             "Heat_Capacity_298_15K": 20.2,
-            "Electronic_Energy_Levels": [6209, 14300],
-             "Ionization_Energies": 8.15,
-             "Electron_Affinity": 1.39
-           },
-            "P":{
-                "Hfg_298_15K": 314.6,
-                "Hfg_0K": 314.6,
-                "Entropy_298_15K": 163.2,
-                "Integrated_Heat_Capacity_0_to_298_15K": 27.3,
-                 "Heat_Capacity_298_15K": 27.3,
-                  "Electronic_Energy_Levels": [11828, 19553],
-                 "Ionization_Energies": 10.5,
-                  "Electron_Affinity": 0.75
-              },
-            "S":{
-                 "Hfg_298_15K": 278.3,
-                 "Hfg_0K": 275.2,
-                 "Entropy_298_15K": 167.7,
-                "Integrated_Heat_Capacity_0_to_298_15K": 29.2,
-                 "Heat_Capacity_298_15K": 29.2,
-                 "Electronic_Energy_Levels": [21394, 29394],
-                 "Ionization_Energies": 10.4,
-                  "Electron_Affinity": 2.08
-              },
-              "Cl":{
-                 "Hfg_298_15K": 121.3,
-                 "Hfg_0K": 119.1,
-                 "Entropy_298_15K": 165.2,
-                 "Integrated_Heat_Capacity_0_to_298_15K": 33.3,
-                 "Heat_Capacity_298_15K": 33.3,
-                   "Electronic_Energy_Levels": [882, 8823],
-                  "Ionization_Energies": 13.0,
-                   "Electron_Affinity": 3.62
-              },
-             "Ar": {
-                  "Hfg_298_15K": 0,
-                  "Hfg_0K": 0,
-                 "Entropy_298_15K": 154.8,
-                  "Integrated_Heat_Capacity_0_to_298_15K": 20.8,
-                  "Heat_Capacity_298_15K": 20.8,
-                 "Electronic_Energy_Levels": [93144, 93751, 95282],
-                 "Ionization_Energies": 15.8,
-                  "Electron_Affinity": -0.08
-              },
-              "K":{
-                "Hfg_298_15K": 89.2,
-                 "Hfg_0K": 89.2,
-                  "Entropy_298_15K": 160.3,
-                   "Integrated_Heat_Capacity_0_to_298_15K": 46.2,
-                  "Heat_Capacity_298_15K": 46.2,
-                 "Electronic_Energy_Levels": [12985, 13042],
-                  "Ionization_Energies": 4.34,
-                 "Electron_Affinity": 0.50
-               },
-              "Ca":{
-                  "Hfg_298_15K": 178.2,
-                   "Hfg_0K": 177.3,
-                   "Entropy_298_15K": 41.6,
-                  "Integrated_Heat_Capacity_0_to_298_15K": 25.9,
-                  "Heat_Capacity_298_15K": 25.9,
-                  "Electronic_Energy_Levels": [15315, 23652],
-                 "Ionization_Energies": 6.11,
-                   "Electron_Affinity": -0.02
-              },
-              "Sc":{
-                  "Hfg_298_15K": 0,
-                   "Hfg_0K": 0,
-                   "Entropy_298_15K": 33.2,
-                  "Integrated_Heat_Capacity_0_to_298_15K": 3.80,
-                  "Heat_Capacity_298_15K": 25.52,
-                  "Electronic_Energy_Levels": [0, 11519.99],
-                 "Ionization_Energies": 6.561,
-                   "Electron_Affinity": 0.189
-              },
-              "Ti":{
-                  "Hfg_298_15K": 473.00,
-                   "Hfg_0K": 470.00	,
-                   "Entropy_298_15K": 180.30,
-                  "Integrated_Heat_Capacity_0_to_298_15K": 7.54,
-                  "Heat_Capacity_298_15K": 24.43,
-                  "Electronic_Energy_Levels": [0, 170.132, 386.874, 6556.833, 6598.765, 6661.006, 6742.756, 6842.962, 7255.355, 8436.618, 8492.421, 8602.34],
-                 "Ionization_Energies": 6.828,
-                   "Electron_Affinity": 0.087
-              },
-              "Ti":{
-                  "Hfg_298_15K": 473.00,
-                   "Hfg_0K": 470.00	,
-                   "Entropy_298_15K": 180.30,
-                  "Integrated_Heat_Capacity_0_to_298_15K": 7.54,
-                  "Heat_Capacity_298_15K": 24.43,
-                  "Electronic_Energy_Levels": [0, 170.132, 386.874, 6556.833, 6598.765, 6661.006, 6742.756, 6842.962, 7255.355, 8436.618, 8492.421, 8602.34],
-                 "Ionization_Energies": 6.828,
-                   "Electron_Affinity": 0.087
-              },
-    };
-
-
-    calculateBtn.addEventListener('click', function() {
-        let selectedElement = elementInput.value.trim();
-        if (!selectedElement) {
-            alert('Please enter an element symbol.');
-            return;
-        }
-
-        let normalizedElement = selectedElement.charAt(0).toUpperCase() + selectedElement.slice(1).toLowerCase();
-        calculatorOutput.innerHTML = '<div class="loading-spinner"></div>';
-         let loadingSpinner = calculatorOutput.querySelector('.loading-spinner');
-
-        // Simulate loading with spinner animation for 0.8 seconds
-        loadingSpinner.style.display = 'block';
-        setTimeout(() => {
-            const data = elementData[normalizedElement];
-            if (data) {
-                const tableHTML = generateTable(data);
-                calculatorOutput.innerHTML = tableHTML;
-            } else {
-                calculatorOutput.innerHTML = '<p> Compute Error. Timed Out </p>';
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+        let moleculeInput = document.getElementById('molecule-input');
+        let calculateBtn = document.getElementById('calculate-btn-56');
+        let calculatorOutput = document.getElementById('calculator-output-56');
+    
+        const covalentRadii = {
+            'H': 31, 'He': 28, 'Li': 128, 'Be': 96, 'B': 84, 'C': 73, 'N': 71, 'O': 66, 'F': 57, 'Ne': 58,
+            'Na': 166, 'Mg': 141, 'Al': 121, 'Si': 111, 'P': 107, 'S': 105, 'Cl': 102, 'Ar': 106,
+            'K': 203, 'Ca': 176, 'Sc': 170, 'Ti': 160, 'V': 153, 'Cr': 139, 'Mn': 139, 'Fe': 132, 'Co': 126,
+            'Ni': 124, 'Cu': 132, 'Zn': 122, 'Ga': 122, 'Ge': 120, 'As': 119, 'Se': 120, 'Br': 120, 'Kr': 116,
+            'Rb': 220, 'Sr': 195, 'Y': 190, 'Zr': 175, 'Nb': 164, 'Mo': 154, 'Tc': 147, 'Ru': 146, 'Rh': 142,
+            'Pd': 139, 'Ag': 145, 'Cd': 144, 'In': 142, 'Sn': 139, 'Sb': 139, 'Te': 138, 'I': 139, 'Xe': 140,
+            'Cs': 244, 'Ba': 215, 'La': 207, 'Ce': 204, 'Pr': 203, 'Nd': 201, 'Pm': 199, 'Sm': 198, 'Eu': 198,
+            'Gd': 196, 'Tb': 194, 'Dy': 192, 'Ho': 192, 'Er': 189, 'Tm': 190, 'Yb': 187, 'Lu': 187,
+            'Hf': 175, 'Ta': 170, 'W': 162, 'Re': 151, 'Os': 144, 'Ir': 141, 'Pt': 138, 'Au': 138, 'Hg': 149,
+            'Tl': 148, 'Pb': 146, 'Bi': 148, 'Po': 140, 'At': 150, 'Rn': 145
+        };
+    
+        const electronegativity = {
+            'H': 2.20, 'Li': 0.98, 'Be': 1.57, 'B': 2.04, 'C': 2.55, 'N': 3.04, 'O': 3.44, 'F': 3.98, 'Na': 0.93,
+            'Mg': 1.31, 'Al': 1.61, 'Si': 1.90, 'P': 2.19, 'S': 2.58, 'Cl': 3.16, 'K': 0.82, 'Ca': 1.00, 'Sc': 1.36,
+            'Ti': 1.54, 'V': 1.63, 'Cr': 1.66, 'Mn': 1.55, 'Fe': 1.83, 'Co': 1.88, 'Ni': 1.91, 'Cu': 1.90,
+            'Zn': 1.65, 'Ga': 1.81, 'Ge': 2.01, 'As': 2.18, 'Se': 2.55, 'Br': 2.96, 'Rb': 0.82, 'Sr': 0.95,
+            'Y': 1.22, 'Zr': 1.33, 'Nb': 1.60, 'Mo': 2.16, 'Tc': 1.90, 'Ru': 2.20, 'Rh': 2.28, 'Pd': 2.20,
+            'Ag': 1.93, 'Cd': 1.69, 'In': 1.78, 'Sn': 1.96, 'Sb': 2.05, 'Te': 2.10, 'I': 2.66, 'Cs': 0.79,
+            'Ba': 0.89, 'La': 1.10, 'Ce': 1.12, 'Pr': 1.13, 'Nd': 1.14, 'Pm': 1.13, 'Sm': 1.17, 'Eu': 1.20,
+            'Gd': 1.20, 'Tb': 1.20, 'Dy': 1.22, 'Ho': 1.23, 'Er': 1.24, 'Tm': 1.25, 'Yb': 1.1, 'Lu': 1.27,
+             'Hf': 1.3, 'Ta': 1.5, 'W': 2.36, 'Re': 1.9, 'Os': 2.2, 'Ir': 2.2, 'Pt': 2.28, 'Au': 2.54,
+            'Hg': 2.00,  'Tl': 1.62, 'Pb': 2.33, 'Bi': 2.02, 'Po': 2.0, 'At': 2.0 , 'Rn': 2.2
+        };
+    
+        function parseMolecule(formula) {
+            const regex = /([A-Z][a-z]*)(\d*)/g;
+            let match;
+            const elements = {};
+            while ((match = regex.exec(formula)) !== null) {
+                const element = match[1];
+                const count = parseInt(match[2] || 1, 10);
+                elements[element] = (elements[element] || 0) + count;
             }
-            }, 800);
-    });
-
-    function generateTable(data) {
-        let tableHTML = '<table>';
-        tableHTML += `<thead>
-                        <tr>
-                            <th>Property</th>
-                            <th>Value</th>
-                        </tr>
-                        </thead>
-                        <tbody>`;
-        
-        tableHTML += `<tr><td>Hfg(298.15K) (kJ/mol)</td><td>${data.Hfg_298_15K}</td></tr>`;
-        tableHTML += `<tr><td>Hfg(0K) (kJ/mol)</td><td>${data.Hfg_0K}</td></tr>`;
-        tableHTML += `<tr><td>Entropy (298.15K) (J/mol.K)</td><td>${data.Entropy_298_15K}</td></tr>`;
-        tableHTML += `<tr><td>Integrated Heat Capacity (0 to 298.15K) (J/mol.K)</td><td>${data.Integrated_Heat_Capacity_0_to_298_15K}</td></tr>`;
-        tableHTML += `<tr><td>Heat Capacity (298.15K) (J/mol.K)</td><td>${data.Heat_Capacity_298_15K}</td></tr>`;
-        tableHTML += `<tr><td>Electronic Energy Levels (cm<sup>-1</sup>)</td><td>${data.Electronic_Energy_Levels.join(', ')}</td></tr>`;
-        tableHTML += `<tr><td>Ionization Energies (eV)</td><td>${data.Ionization_Energies}</td></tr>`;
-        tableHTML += `<tr><td>Electron Affinity (eV)</td><td>${data.Electron_Affinity}</td></tr>`;
-        
-        tableHTML += '</tbody></table>';
-        return tableHTML;
-    }
-});
-</script>
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-    let moleculeInput = document.getElementById('molecule-input');
-    let calculateBtn = document.getElementById('calculate-btn-56');
-    let calculatorOutput = document.getElementById('calculator-output-56');
-
-    const covalentRadii = {
-        'H': 31, 'He': 28, 'Li': 128, 'Be': 96, 'B': 84, 'C': 73, 'N': 71, 'O': 66, 'F': 57, 'Ne': 58,
-        'Na': 166, 'Mg': 141, 'Al': 121, 'Si': 111, 'P': 107, 'S': 105, 'Cl': 102, 'Ar': 106,
-        'K': 203, 'Ca': 176, 'Sc': 170, 'Ti': 160, 'V': 153, 'Cr': 139, 'Mn': 139, 'Fe': 132, 'Co': 126,
-        'Ni': 124, 'Cu': 132, 'Zn': 122, 'Ga': 122, 'Ge': 120, 'As': 119, 'Se': 120, 'Br': 120, 'Kr': 116,
-        'Rb': 220, 'Sr': 195, 'Y': 190, 'Zr': 175, 'Nb': 164, 'Mo': 154, 'Tc': 147, 'Ru': 146, 'Rh': 142,
-        'Pd': 139, 'Ag': 145, 'Cd': 144, 'In': 142, 'Sn': 139, 'Sb': 139, 'Te': 138, 'I': 139, 'Xe': 140,
-        'Cs': 244, 'Ba': 215, 'La': 207, 'Ce': 204, 'Pr': 203, 'Nd': 201, 'Pm': 199, 'Sm': 198, 'Eu': 198,
-        'Gd': 196, 'Tb': 194, 'Dy': 192, 'Ho': 192, 'Er': 189, 'Tm': 190, 'Yb': 187, 'Lu': 187,
-        'Hf': 175, 'Ta': 170, 'W': 162, 'Re': 151, 'Os': 144, 'Ir': 141, 'Pt': 138, 'Au': 138, 'Hg': 149,
-        'Tl': 148, 'Pb': 146, 'Bi': 148, 'Po': 140, 'At': 150, 'Rn': 145
-    };
-
-    const electronegativity = {
-        'H': 2.20, 'Li': 0.98, 'Be': 1.57, 'B': 2.04, 'C': 2.55, 'N': 3.04, 'O': 3.44, 'F': 3.98, 'Na': 0.93,
-        'Mg': 1.31, 'Al': 1.61, 'Si': 1.90, 'P': 2.19, 'S': 2.58, 'Cl': 3.16, 'K': 0.82, 'Ca': 1.00, 'Sc': 1.36,
-        'Ti': 1.54, 'V': 1.63, 'Cr': 1.66, 'Mn': 1.55, 'Fe': 1.83, 'Co': 1.88, 'Ni': 1.91, 'Cu': 1.90,
-        'Zn': 1.65, 'Ga': 1.81, 'Ge': 2.01, 'As': 2.18, 'Se': 2.55, 'Br': 2.96, 'Rb': 0.82, 'Sr': 0.95,
-        'Y': 1.22, 'Zr': 1.33, 'Nb': 1.60, 'Mo': 2.16, 'Tc': 1.90, 'Ru': 2.20, 'Rh': 2.28, 'Pd': 2.20,
-        'Ag': 1.93, 'Cd': 1.69, 'In': 1.78, 'Sn': 1.96, 'Sb': 2.05, 'Te': 2.10, 'I': 2.66, 'Cs': 0.79,
-        'Ba': 0.89, 'La': 1.10, 'Ce': 1.12, 'Pr': 1.13, 'Nd': 1.14, 'Pm': 1.13, 'Sm': 1.17, 'Eu': 1.20,
-        'Gd': 1.20, 'Tb': 1.20, 'Dy': 1.22, 'Ho': 1.23, 'Er': 1.24, 'Tm': 1.25, 'Yb': 1.1, 'Lu': 1.27,
-         'Hf': 1.3, 'Ta': 1.5, 'W': 2.36, 'Re': 1.9, 'Os': 2.2, 'Ir': 2.2, 'Pt': 2.28, 'Au': 2.54,
-        'Hg': 2.00,  'Tl': 1.62, 'Pb': 2.33, 'Bi': 2.02, 'Po': 2.0, 'At': 2.0 , 'Rn': 2.2
-    };
-
-    function parseMolecule(formula) {
-        const regex = /([A-Z][a-z]*)(\d*)/g;
-        let match;
-        const elements = {};
-        while ((match = regex.exec(formula)) !== null) {
-            const element = match[1];
-            const count = parseInt(match[2] || 1, 10);
-            elements[element] = (elements[element] || 0) + count;
+            return elements;
         }
-        return elements;
-    }
-
-
-    function calculateBondLengths(molecule) {
-         const elements = parseMolecule(molecule);
-        const elementSymbols = Object.keys(elements);
-        const results = [];
-        const bonds = [];
-        const radiiInfo = [];
-
-        //First add the covalent radii of the different atoms to the result.
-        for (const element of elementSymbols)
-        {
-          if (covalentRadii[element])
-             {
-                 radiiInfo.push({
-                    element : element,
-                     radius : covalentRadii[element]
-                })
-            }
-        }
-
-
-        for (let i = 0; i < elementSymbols.length; i++) {
-             for (let j = i + 1; j < elementSymbols.length; j++) {
-                const elementA = elementSymbols[i];
-                 const elementB = elementSymbols[j];
-
-                 if (covalentRadii[elementA] && covalentRadii[elementB] && electronegativity[elementA] && electronegativity[elementB]) {
-                    const rA = covalentRadii[elementA];
-                    const rB = covalentRadii[elementB];
-                    const deltaChi = Math.abs(electronegativity[elementA] - electronegativity[elementB]);
-                    const bondLength = rA + rB - 9 * deltaChi;
-
-                      const bondData = {
-                            bond: `${elementA}-${elementB}`,
-                            bondLength: bondLength.toFixed(2),
-                        };
-                       bonds.push(bondData);
-                   }
-                }
-           }
-
-        if (bonds.length === 0 && radiiInfo.length ===0) {
-            return results; //No calculations to be done.
-        }
-
-         if (radiiInfo.length > 0)
+    
+    
+        function calculateBondLengths(molecule) {
+             const elements = parseMolecule(molecule);
+            const elementSymbols = Object.keys(elements);
+            const results = [];
+            const bonds = [];
+            const radiiInfo = [];
+    
+            //First add the covalent radii of the different atoms to the result.
+            for (const element of elementSymbols)
             {
-                results.push({
-                   radiiData: radiiInfo,
-                   type : "covalentRadius"
-                });
-
-            }
-
-        if(bonds.length> 0)
-        {
-           bonds.forEach(bond => {
-                results.push({
-                    bond: bond.bond,
-                   bondLength: bond.bondLength,
-                   type : "bondLength"
-
-                })
-            })
-        }
-
-
-
-
-    return results;
-
-    }
-
-
-    calculateBtn.addEventListener('click', function () {
-        const molecule = moleculeInput.value.trim();
-             if (!molecule) {
-            alert('Please enter a molecule.');
-            return;
-        }
-        calculatorOutput.innerHTML = '<div class="loading-spinner"></div>';
-        const loadingSpinner = calculatorOutput.querySelector('.loading-spinner');
-
-        loadingSpinner.style.display = 'block';
-        setTimeout(() => {
-            const results = calculateBondLengths(molecule);
-            let html = '';
-             if (results && results.length > 0 ) {
-
-                 results.forEach(result => {
-                  if (result.type === "covalentRadius")
-                  {
-                       html += '<table><thead><tr><th>Element</th><th>Covalent Radius (pm)</th></tr></thead><tbody>';
-                        result.radiiData.forEach(item => {
-                          html += `<tr><td>${item.element}</td><td>${item.radius}</td></tr>`
-                        })
-                        html += `</tbody></table>`
-
-                   } else if (result.type === "bondLength") {
-                       if(!html.includes('Bond'))
-                       {
-                            html += '<table><thead><tr><th>Bond</th><th>Bond Length (pm)</th></tr></thead><tbody>';
-                       }
-                        html += `<tr><td>${result.bond}</td><td>${result.bondLength}</td></tr>`;
-
-                   }
-               })
-                 if(html.includes("Bond"))
+              if (covalentRadii[element])
                  {
-                     html += '</tbody></table>';
-                 }
-
-
+                     radiiInfo.push({
+                        element : element,
+                         radius : covalentRadii[element]
+                    })
                 }
-                else {
-                   html += '<p> Could not calculate the Covalent Radii. Check the input is valid.</p>'
+            }
+    
+    
+            for (let i = 0; i < elementSymbols.length; i++) {
+                 for (let j = i + 1; j < elementSymbols.length; j++) {
+                    const elementA = elementSymbols[i];
+                     const elementB = elementSymbols[j];
+    
+                     if (covalentRadii[elementA] && covalentRadii[elementB] && electronegativity[elementA] && electronegativity[elementB]) {
+                        const rA = covalentRadii[elementA];
+                        const rB = covalentRadii[elementB];
+                        const deltaChi = Math.abs(electronegativity[elementA] - electronegativity[elementB]);
+                        const bondLength = rA + rB - 9 * deltaChi;
+    
+                          const bondData = {
+                                bond: `${elementA}-${elementB}`,
+                                bondLength: bondLength.toFixed(2),
+                            };
+                           bonds.push(bondData);
+                       }
+                    }
+               }
+    
+            if (bonds.length === 0 && radiiInfo.length ===0) {
+                return results; //No calculations to be done.
+            }
+    
+             if (radiiInfo.length > 0)
+                {
+                    results.push({
+                       radiiData: radiiInfo,
+                       type : "covalentRadius"
+                    });
+    
                 }
-            calculatorOutput.innerHTML = html;
-            loadingSpinner.style.display = 'none';
-        }, 800);
+    
+            if(bonds.length> 0)
+            {
+               bonds.forEach(bond => {
+                    results.push({
+                        bond: bond.bond,
+                       bondLength: bond.bondLength,
+                       type : "bondLength"
+    
+                    })
+                })
+            }
+    
+    
+    
+    
+        return results;
+    
+        }
+    
+    
+        calculateBtn.addEventListener('click', function () {
+            const molecule = moleculeInput.value.trim();
+                 if (!molecule) {
+                alert('Please enter a molecule.');
+                return;
+            }
+            calculatorOutput.innerHTML = '<div class="loading-spinner"></div>';
+            const loadingSpinner = calculatorOutput.querySelector('.loading-spinner');
+    
+            loadingSpinner.style.display = 'block';
+            setTimeout(() => {
+                const results = calculateBondLengths(molecule);
+                let html = '';
+                 if (results && results.length > 0 ) {
+    
+                     results.forEach(result => {
+                      if (result.type === "covalentRadius")
+                      {
+                           html += '<table><thead><tr><th>Element</th><th>Covalent Radius (pm)</th></tr></thead><tbody>';
+                            result.radiiData.forEach(item => {
+                              html += `<tr><td>${item.element}</td><td>${item.radius}</td></tr>`
+                            })
+                            html += `</tbody></table>`
+    
+                       } else if (result.type === "bondLength") {
+                           if(!html.includes('Bond'))
+                           {
+                                html += '<table><thead><tr><th>Bond</th><th>Bond Length (pm)</th></tr></thead><tbody>';
+                           }
+                            html += `<tr><td>${result.bond}</td><td>${result.bondLength}</td></tr>`;
+    
+                       }
+                   })
+                     if(html.includes("Bond"))
+                     {
+                         html += '</tbody></table>';
+                     }
+    
+    
+                    }
+                    else {
+                       html += '<p> Could not calculate the Covalent Radii. Check the input is valid.</p>'
+                    }
+                calculatorOutput.innerHTML = html;
+                loadingSpinner.style.display = 'none';
+            }, 800);
+        });
     });
-});
-</script>
+    </script>
+</body>
 </html>
