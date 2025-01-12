@@ -1,471 +1,525 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Atomic Structure - Notes</title>
     <style>
-header {
-    background: linear-gradient(135deg, #252525 0%, #303030 100%); /* Subtle gradient for depth */
-    padding: 1.2rem 0; /* Slightly increased padding */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* More pronounced, darker shadow */
-    position: sticky;
-    top: 0;
-    z-index: 1000; /* Increased z-index for better layering */
-    transition: box-shadow 0.3s ease-in-out, transform 0.3s ease-in-out; /* Smooth transition for sticky effect */
-    transform: translateY(0); /* Initial state for smooth sticky animation */
-}
+        header {
+            background: linear-gradient(135deg, #252525 0%, #303030 100%);
+            /* Subtle gradient for depth */
+            padding: 1.2rem 0;
+            /* Slightly increased padding */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            /* More pronounced, darker shadow */
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            /* Increased z-index for better layering */
+            transition: box-shadow 0.3s ease-in-out, transform 0.3s ease-in-out;
+            /* Smooth transition for sticky effect */
+            transform: translateY(0);
+            /* Initial state for smooth sticky animation */
+        }
 
-header.sticky-active {
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3); /* Different shadow when sticky */
-    transform: translateY(-5px); /* Slight lift when sticky */
-}
+        header.sticky-active {
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+            /* Different shadow when sticky */
+            transform: translateY(-5px);
+            /* Slight lift when sticky */
+        }
 
-nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 30px; /* Slightly increased side padding */
-}
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 30px;
+            /* Slightly increased side padding */
+        }
 
-.logo {
-    font-size: 2rem; /* Slightly larger logo */
-    font-weight: 700; /* Bolder logo */
-    color: #7db4ff; /* Updated logo color, slightly lighter */
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4); /* Subtle text shadow for depth */
-    transition: transform 0.3s ease-in-out;
-}
+        .logo {
+            font-size: 2rem;
+            /* Slightly larger logo */
+            font-weight: 700;
+            /* Bolder logo */
+            color: #7db4ff;
+            /* Updated logo color, slightly lighter */
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+            /* Subtle text shadow for depth */
+            transition: transform 0.3s ease-in-out;
+        }
 
-.logo:hover {
-    transform: scale(1.05); /* Gentle scale on hover */
-}
+        .logo:hover {
+            transform: scale(1.05);
+            /* Gentle scale on hover */
+        }
 
-nav ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    gap: 30px; /* Use gap for spacing between list items */
-}
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            gap: 30px;
+            /* Use gap for spacing between list items */
+        }
 
-nav ul li a {
-    text-decoration: none;
-    color: #f0f0f0; /* Slightly brighter text color */
-    position: relative; /* For the underline effect */
-    padding-bottom: 4px; /* Space for the underline */
-    transition: color 0.3s ease-in-out, transform 0.3s ease-in-out;
-    overflow: hidden; /* Clip the pseudo-element */
-}
+        nav ul li a {
+            text-decoration: none;
+            color: #f0f0f0;
+            /* Slightly brighter text color */
+            position: relative;
+            /* For the underline effect */
+            padding-bottom: 4px;
+            /* Space for the underline */
+            transition: color 0.3s ease-in-out, transform 0.3s ease-in-out;
+            overflow: hidden;
+            /* Clip the pseudo-element */
+        }
 
-nav ul li a::before {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 2px;
-    background-color: #7db4ff; /* Same as logo color for consistency */
-    transform: scaleX(0); /* Initially hidden */
-    transform-origin: bottom right;
-    transition: transform 0.4s ease-out;
-}
+        nav ul li a::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: #7db4ff;
+            /* Same as logo color for consistency */
+            transform: scaleX(0);
+            /* Initially hidden */
+            transform-origin: bottom right;
+            transition: transform 0.4s ease-out;
+        }
 
-nav ul li a:hover {
-    color: #90caf9; /* Lighter hover color */
-    transform: translateY(-2px); /* Slight lift on hover */
-}
+        nav ul li a:hover {
+            color: #90caf9;
+            /* Lighter hover color */
+            transform: translateY(-2px);
+            /* Slight lift on hover */
+        }
 
-nav ul li a:hover::before {
-    transform: scaleX(1);
-    transform-origin: bottom left;
-}
+        nav ul li a:hover::before {
+            transform: scaleX(1);
+            transform-origin: bottom left;
+        }
 
-/* Optional: Add an active state highlight */
-nav ul li a.active {
-    color: #90caf9;
-    font-weight: 600;
-}
+        /* Optional: Add an active state highlight */
+        nav ul li a.active {
+            color: #90caf9;
+            font-weight: 600;
+        }
 
-nav ul li a.active::before {
-    transform: scaleX(1);
-}
+        nav ul li a.active::before {
+            transform: scaleX(1);
+        }
 
-/* Enhancements for Mobile (consider using JavaScript for more advanced mobile menus) */
-@media (max-width: 1024px) {
-    header {
-        display: hidden;
-    }
-}
+        /* Enhancements for Mobile (consider using JavaScript for more advanced mobile menus) */
+        @media (max-width: 1024px) {
+            header {
+                display: hidden;
+            }
+        }
+
         :root {
-    --primary-bg: #f9f9f9; /* Very light grey for a softer white */
-    --secondary-bg: #ffffff; /* Pure white for content areas */
-    --text-primary: #212121; /* Dark grey for primary text */
-    --text-secondary: #757575; /* Medium grey for secondary text */
-    --accent-color: #2962ff; /* A vibrant blue */
-    --hover-color: #5393ff; /* Lighter blue for hover states */
-    --border-color: #e0e0e0; /* Light grey for borders */
-    --code-bg: #f0f0f0; /* Very light grey for code backgrounds */
-    --code-text: #333333; /* Dark grey for code text */
-    --toc-active: #2962ff;
-    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-    --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.1);
-    --transition-fast: 0.15s ease-in-out;
-    --transition-normal: 0.3s ease-in-out;
-}
+            --primary-bg: #f9f9f9;
+            /* Very light grey for a softer white */
+            --secondary-bg: #ffffff;
+            /* Pure white for content areas */
+            --text-primary: #212121;
+            /* Dark grey for primary text */
+            --text-secondary: #757575;
+            /* Medium grey for secondary text */
+            --accent-color: #2962ff;
+            /* A vibrant blue */
+            --hover-color: #5393ff;
+            /* Lighter blue for hover states */
+            --border-color: #e0e0e0;
+            /* Light grey for borders */
+            --code-bg: #f0f0f0;
+            /* Very light grey for code backgrounds */
+            --code-text: #333333;
+            /* Dark grey for code text */
+            --toc-active: #2962ff;
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.1);
+            --transition-fast: 0.15s ease-in-out;
+            --transition-normal: 0.3s ease-in-out;
+        }
 
-body {
-    font-family: 'Roboto', sans-serif; /* A clean and modern sans-serif font */
-    line-height: 1.6;
-    margin: 0;
-    background-color: var(--primary-bg);
-    color: var(--text-primary);
-    padding-bottom: 40px;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    scroll-behavior: smooth;
-    overflow-x: hidden;
-}
+        body {
+            font-family: 'Roboto', sans-serif;
+            /* A clean and modern sans-serif font */
+            line-height: 1.6;
+            margin: 0;
+            background-color: var(--primary-bg);
+            color: var(--text-primary);
+            padding-bottom: 40px;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
 
-/* Custom Scrollbar - Light theme version */
-::-webkit-scrollbar {
-    width: 8px;
-}
+        /* Custom Scrollbar - Light theme version */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
 
-::-webkit-scrollbar-track {
-    background: #f1f1f1;
-}
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
 
-::-webkit-scrollbar-thumb {
-    background-color: #bdbdbd;
-    border-radius: 4px;
-}
+        ::-webkit-scrollbar-thumb {
+            background-color: #bdbdbd;
+            border-radius: 4px;
+        }
 
-::-webkit-scrollbar-thumb:hover {
-    background-color: #9e9e9e;
-}
+        ::-webkit-scrollbar-thumb:hover {
+            background-color: #9e9e9e;
+        }
 
-.container {
-    max-width: 1200px;
-    margin: 50px auto;
-    padding: 60px;
-    background-color: var(--secondary-bg);
-    box-shadow: var(--shadow-md);
-    border-radius: 8px;
-    display: grid;
-    grid-template-columns: minmax(250px, 300px) 1fr;
-    gap: 40px;
-}
+        .container {
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 60px;
+            background-color: var(--secondary-bg);
+            box-shadow: var(--shadow-md);
+            border-radius: 8px;
+            display: grid;
+            grid-template-columns: minmax(250px, 300px) 1fr;
+            gap: 40px;
+        }
 
-#table-of-contents {
-    padding: 30px;
-    background-color: var(--secondary-bg);
-    border-radius: 6px;
-    position: sticky;
-    top: 30px;
-    height: fit-content;
-    border: 1px solid var(--border-color);
-}
+        #table-of-contents {
+            padding: 30px;
+            background-color: var(--secondary-bg);
+            border-radius: 6px;
+            position: sticky;
+            top: 30px;
+            height: fit-content;
+            border: 1px solid var(--border-color);
+        }
 
-/* Custom Scrollbar for Table of Contents */
-#table-of-contents::-webkit-scrollbar {
-    width: 6px; /* Thinner scrollbar */
-}
+        /* Custom Scrollbar for Table of Contents */
+        #table-of-contents::-webkit-scrollbar {
+            width: 6px;
+            /* Thinner scrollbar */
+        }
 
-#table-of-contents::-webkit-scrollbar-track {
-    background: #f1f1f1; /* Light background for the track */
-    border-radius: 3px; /* Slightly rounded track */
-}
+        #table-of-contents::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            /* Light background for the track */
+            border-radius: 3px;
+            /* Slightly rounded track */
+        }
 
-#table-of-contents::-webkit-scrollbar-thumb {
-    background-color: #bdbdbd; /* Medium grey for the thumb */
-    border-radius: 3px; /* Slightly rounded thumb */
-}
+        #table-of-contents::-webkit-scrollbar-thumb {
+            background-color: #bdbdbd;
+            /* Medium grey for the thumb */
+            border-radius: 3px;
+            /* Slightly rounded thumb */
+        }
 
-#table-of-contents::-webkit-scrollbar-thumb:hover {
-    background-color: #9e9e9e; /* Darker grey on hover */
-}
+        #table-of-contents::-webkit-scrollbar-thumb:hover {
+            background-color: #9e9e9e;
+            /* Darker grey on hover */
+        }
 
-#table-of-contents > h2 {
-    font-size: 1.5rem;
-    margin-top: 0;
-    margin-bottom: 15px;
-    color: var(--text-primary);
-    border-bottom: 1px solid var(--border-color);
-    padding-bottom: 8px;
-    text-align: left;
-}
+        #table-of-contents>h2 {
+            font-size: 1.5rem;
+            margin-top: 0;
+            margin-bottom: 15px;
+            color: var(--text-primary);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 8px;
+            text-align: left;
+        }
 
-#table-of-contents ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
+        #table-of-contents ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
 
-#table-of-contents li {
-    margin-bottom: 10px;
-    padding-left: 0;
-    border-left: 3px solid transparent;
-    transition: border-left-color var(--transition-fast), color var(--transition-fast);
-}
+        #table-of-contents li {
+            margin-bottom: 10px;
+            padding-left: 0;
+            border-left: 3px solid transparent;
+            transition: border-left-color var(--transition-fast), color var(--transition-fast);
+        }
 
-#table-of-contents li:hover,
-#table-of-contents li.active {
-    border-left-color: var(--toc-active);
-}
+        #table-of-contents li:hover,
+        #table-of-contents li.active {
+            border-left-color: var(--toc-active);
+        }
 
-#table-of-contents li.active > a {
-    color: var(--toc-active);
-    font-weight: 500;
-}
+        #table-of-contents li.active>a {
+            color: var(--toc-active);
+            font-weight: 500;
+        }
 
-#table-of-contents a {
-    text-decoration: none;
-    color: var(--text-secondary);
-    display: block;
-    padding: 6px 0;
-    transition: color var(--transition-fast);
-}
+        #table-of-contents a {
+            text-decoration: none;
+            color: var(--text-secondary);
+            display: block;
+            padding: 6px 0;
+            transition: color var(--transition-fast);
+        }
 
-#table-of-contents a:hover {
-    color: var(--hover-color);
-}
+        #table-of-contents a:hover {
+            color: var(--hover-color);
+        }
 
-#table-of-contents ul ul {
-    margin-left: 15px;
-    margin-top: 6px;
-}
+        #table-of-contents ul ul {
+            margin-left: 15px;
+            margin-top: 6px;
+        }
 
-/* Main content styles - Focus on readability */
-main {
-    padding: 40px;
-    border-radius: 6px;
-    overflow: hidden;
-    background-color: var(--secondary-bg);
-    box-shadow: var(--shadow-sm);
-}
+        /* Main content styles - Focus on readability */
+        main {
+            padding: 40px;
+            border-radius: 6px;
+            overflow: hidden;
+            background-color: var(--secondary-bg);
+            box-shadow: var(--shadow-sm);
+        }
 
-main > *:not(:last-child) {
-    margin-bottom: 2em;
-}
+        main>*:not(:last-child) {
+            margin-bottom: 2em;
+        }
 
-h1, h2, h3, h4, h5, h6 {
-    font-weight: 700;
-    line-height: 1.3;
-    color: var(--text-primary);
-    letter-spacing: -0.01em;
-}
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-weight: 700;
+            line-height: 1.3;
+            color: var(--text-primary);
+            letter-spacing: -0.01em;
+        }
 
-h1 {
-    font-size: 2.5rem;
-    border-bottom: 2px solid var(--accent-color);
-    padding-bottom: 0.4em;
-    margin-bottom: 1em;
-}
+        h1 {
+            font-size: 2.5rem;
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 0.4em;
+            margin-bottom: 1em;
+        }
 
-h2 {
-    font-size: 2rem;
-    border-bottom: 1px solid var(--accent-color);
-    padding-bottom: 0.3em;
-    margin-bottom: 0.9em;
-    color: var(--accent-color);
-}
+        h2 {
+            font-size: 2rem;
+            border-bottom: 1px solid var(--accent-color);
+            padding-bottom: 0.3em;
+            margin-bottom: 0.9em;
+            color: var(--accent-color);
+        }
 
-h3 {
-    font-size: 1.6rem;
-    margin-bottom: 0.7em;
-}
+        h3 {
+            font-size: 1.6rem;
+            margin-bottom: 0.7em;
+        }
 
-h4 {
-    font-size: 1.4rem;
-    margin-bottom: 0.6em;
-}
+        h4 {
+            font-size: 1.4rem;
+            margin-bottom: 0.6em;
+        }
 
-p {
-    margin-bottom: 1.5em;
-    color: var(--text-secondary);
-    orphans: 3;
-    widows: 3;
-    word-break: break-word;
-}
+        p {
+            margin-bottom: 1.5em;
+            color: var(--text-secondary);
+            orphans: 3;
+            widows: 3;
+            word-break: break-word;
+        }
 
-ul, ol {
-    margin-left: 25px;
-    margin-bottom: 1.7em;
-}
+        ul,
+        ol {
+            margin-left: 25px;
+            margin-bottom: 1.7em;
+        }
 
-li {
-    margin-bottom: 0.7em;
-    color: var(--text-secondary);
-    line-height: 1.5;
-    word-break: break-word;
-}
+        li {
+            margin-bottom: 0.7em;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            word-break: break-word;
+        }
 
-strong {
-    font-weight: 600;
-    color: var(--text-primary);
-}
+        strong {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
 
-em {
-    font-style: italic;
-    color: var(--accent-color);
-}
+        em {
+            font-style: italic;
+            color: var(--accent-color);
+        }
 
-a {
-    color: var(--accent-color);
-    text-decoration: none;
-    transition: color var(--transition-fast);
-    border-bottom: 1px solid transparent; /* Subtle underline on hover */
-}
+        a {
+            color: var(--accent-color);
+            text-decoration: none;
+            transition: color var(--transition-fast);
+            border-bottom: 1px solid transparent;
+            /* Subtle underline on hover */
+        }
 
-a:hover {
-    color: var(--hover-color);
-    border-bottom-color: var(--hover-color);
-}
+        a:hover {
+            color: var(--hover-color);
+            border-bottom-color: var(--hover-color);
+        }
 
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 2em;
-    border: 1px solid var(--border-color);
-    border-radius: 4px;
-    background-color: var(--secondary-bg);
-}
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 2em;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background-color: var(--secondary-bg);
+        }
 
-th, td {
-    padding: 12px 15px;
-    text-align: left;
-    border-bottom: 1px solid var(--border-color);
-    word-break: break-word;
-}
+        th,
+        td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+            word-break: break-word;
+        }
 
-th {
-    background-color: #f5f5f5; /* Lighter header background */
-    font-weight: 600;
-    color: var(--text-primary);
-}
+        th {
+            background-color: #f5f5f5;
+            /* Lighter header background */
+            font-weight: 600;
+            color: var(--text-primary);
+        }
 
-tbody tr:nth-child(even) {
-    background-color: #fafafa; /* Very light grey for even rows */
-}
+        tbody tr:nth-child(even) {
+            background-color: #fafafa;
+            /* Very light grey for even rows */
+        }
 
-/* Code blocks - Light theme styling */
-pre {
-    background-color: var(--code-bg);
-    color: var(--code-text);
-    padding: 12px 18px;
-    border-radius: 4px;
-    overflow-x: auto;
-    font-family: 'Menlo', monospace;
-    font-size: 0.9rem;
-    line-height: 1.5;
-    margin-bottom: 1.6em;
-    white-space: pre-wrap;
-    border: 1px solid var(--border-color);
-}
+        /* Code blocks - Light theme styling */
+        pre {
+            background-color: var(--code-bg);
+            color: var(--code-text);
+            padding: 12px 18px;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-family: 'Menlo', monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin-bottom: 1.6em;
+            white-space: pre-wrap;
+            border: 1px solid var(--border-color);
+        }
 
-code {
-    font-family: 'Menlo', monospace;
-    background-color: #e8e8e8; /* Even lighter background for inline code */
-    color: var(--code-text);
-    padding: 3px 6px;
-    border-radius: 3px;
-    word-break: break-word;
-}
+        code {
+            font-family: 'Menlo', monospace;
+            background-color: #e8e8e8;
+            /* Even lighter background for inline code */
+            color: var(--code-text);
+            padding: 3px 6px;
+            border-radius: 3px;
+            word-break: break-word;
+        }
 
-pre code {
-    background-color: transparent;
-    padding: 0;
-}
+        pre code {
+            background-color: transparent;
+            padding: 0;
+        }
 
-/* Horizontal rules - Simpler style */
-hr {
-    border: none;
-    height: 1px;
-    background-color: var(--border-color);
-    margin: 2em 0;
-}
+        /* Horizontal rules - Simpler style */
+        hr {
+            border: none;
+            height: 1px;
+            background-color: var(--border-color);
+            margin: 2em 0;
+        }
 
-/* Blockquotes - Clean separation */
-blockquote {
-    border-left: 3px solid var(--accent-color);
-    padding: 10px 15px;
-    margin: 1.5em 0;
-    font-style: italic;
-    background-color: #f5f5f5;
-    border-radius: 3px;
-    color: var(--text-secondary);
-}
+        /* Blockquotes - Clean separation */
+        blockquote {
+            border-left: 3px solid var(--accent-color);
+            padding: 10px 15px;
+            margin: 1.5em 0;
+            font-style: italic;
+            background-color: #f5f5f5;
+            border-radius: 3px;
+            color: var(--text-secondary);
+        }
 
-blockquote p {
-    margin-bottom: 0;
-}
+        blockquote p {
+            margin-bottom: 0;
+        }
 
-/* Responsive adjustments */
-@media (max-width: 1024px) {
-    .container {
-        max-width: 90%;
-        padding: 50px;
-        grid-template-columns: 1fr;
-        gap: 30px;
-    }
+        /* Responsive adjustments */
+        @media (max-width: 1024px) {
+            .container {
+                max-width: 90%;
+                padding: 50px;
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
 
-    #table-of-contents {
-        position: static;
-        margin-bottom: 30px;
-    }
+            #table-of-contents {
+                position: static;
+                margin-bottom: 30px;
+            }
 
-    #table-of-contents > h2 {
-        text-align: center;
-    }
-}
+            #table-of-contents>h2 {
+                text-align: center;
+            }
+        }
 
-@media (max-width: 768px) {
-    main {
-        padding: 30px;
-    }
+        @media (max-width: 768px) {
+            main {
+                padding: 30px;
+            }
 
-    h1 {
-        font-size: 2.2rem;
-    }
+            h1 {
+                font-size: 2.2rem;
+            }
 
-    h2 {
-        font-size: 1.8rem;
-    }
-    nav{
-        display:none;
-    }
-}
+            h2 {
+                font-size: 1.8rem;
+            }
 
-@media (max-width: 480px) {
-    .container {
-        padding: 30px;
-    }
+            nav {
+                display: none;
+            }
+        }
 
-    h1 {
-        font-size: 2rem;
-    }
+        @media (max-width: 480px) {
+            .container {
+                padding: 30px;
+            }
 
-    h2 {
-        font-size: 1.6rem;
-    }
-}
+            h1 {
+                font-size: 2rem;
+            }
+
+            h2 {
+                font-size: 1.6rem;
+            }
+        }
     </style>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
-        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js"></script>
-        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js"></script>
-        <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                renderMathInElement(document.body, {
-                    delimiters: [
-                        { left: "$", right: "$", display: false },
-                        { left: "$$", right: "$$", display: true }
-                    ]
-                });
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    { left: "$", right: "$", display: false },
+                    { left: "$$", right: "$$", display: true }
+                ]
             });
-        </script>
+        });
+    </script>
 </head>
+
 <body>
     <header>
         <nav>
@@ -483,101 +537,1272 @@ blockquote p {
             <!-- Table of contents will be generated here -->
         </aside>
         <main>
-          
-        </main>
-        <section>
-            <h2 id="about-author">
-                About the author
-            </h2>
-            <p> Written by <strong>Noah Kleij, PhD </strong></p>
-            <p>Noah Kleij holds a Doctorate in Organic and General Chemistry from the prestigious University of
-                Manchester, United Kingdom. With a deep passion for chemical sciences, Noah has contributed
-                significantly to advancing knowledge in both organic synthesis and general chemistry principles. Their
-                research encompasses cutting-edge methodologies and innovative problem-solving approaches.</p>
+            <h2 id="Easy-questions">Easy Questions</h2>
+            <h3> <a href="three-main-subatomic-particles.html">What are the three main subatomic particles in an
+                    atom?</a></h3>
+            <p><strong>Protons, neutrons, and electrons.</strong></p>
+            <h3><a href="positive-subatomic-particle.html">Which subatomic particle has a positive charge?</a></h3>
+            <p><strong>Proton.</strong></p>
+            <h3><a href="negative-subatomic-particle.html"> Which subatomic particle has a negative charge?</a></h3>
+            <p><strong>Electron.</strong></p>
+            <h3><a href="neutral-subatomic-particle.html"> Which subatomic particle has no charge?</a></h3>
+            <p><strong>Neutron. </strong></p>
+            <h3><a href="nucleus-of-an-atom.html">Where are protons and neutrons located in an atom?</a></h3>
+            <p><strong>Nucleus of the atom. </strong></p>
+            <h3><a href="location-of-electron-in-atom.html">Where are electrons located in an atom?</a></h3>
+            <p><strong>Orbiting the nucleus in electron shells.</strong></p>
+            <h3><a href="atomic-number-of-an-atom.html">What is the atomic number of an element?</a></h3>
+            <p><strong>The number of protons in its nucleus.</strong></p>
+            <h3><a href="mass-no-of-an-atom.html">What is the mass number of an atom?</a></h3>
+            <p><strong>The total number of protons and neutrons in its nucleus.</strong></p>
+            <h3><a href="isotopes-definition.html">What are Isotopes?</a></h3>
+            <p><strong>Atoms of the same element with different numbers of neutrons.</strong></p>
+            <h3><a href="ion-definition.html">What is an Ion?</a></h3>
+            <p><strong>An atom or molecule with a net electric charge due to the loss or gain of one or more
+                    electrons.</strong></p>
+            <h3><a href="two-types-of-ions.html">Two Main Types of Ions</a></h3>
+            <ol>
+                <li><strong>Cations:</strong> Positively charged ions, formed by losing electrons.</li>
+                <li><strong>Anions:</strong> Negatively charged ions, formed by gaining electrons.</li>
+            </ol>
+            <h3><a href="daltons-atomic-theory.html">Dalton's Atomic Theory</a></h3>
+            <ol>
+                <li>Matter is made of indivisible atoms.</li>
+                <li>Atoms of the same element are identical.</li>
+                <li>Atoms of different elements are different.</li>
+                <li>Atoms combine in whole-number ratios to form compounds.</li>
+                <li>Atoms are rearranged in chemical reactions.</li>
+            </ol>
+            <h3><a href="thomson-cathode-ray-experiment.html">Significance of Thomson's Cathode Ray Experiment</a></h3>
+            <p><strong>Discovered the electron, showing atoms were divisible and contained negatively charged
+                    particles.</strong></p>
+            <h3><a href="rutherford-gold-foil-experiment.html">Rutherford's Gold Foil Experiment</a></h3>
+            <p><strong>Demonstrated that atoms have a small, dense, positively charged nucleus, with most of the atom
+                    being empty space.</strong></p>
+            <h3><a href="quantum-number-definition.html">What is a Quantum Number?</a></h3>
+            <p><strong>A number that describes a property of an electron in an atom, such as energy or angular
+                    momentum.</strong></p>
+            <h3><a href="four-principal-quantum-numbers.html">Four Principal Quantum Numbers</a></h3>
+            <ol>
+                <li><strong>Principal (n):</strong> Energy level.</li>
+                <li><strong>Angular Momentum/Azimuthal (l):</strong> Shape of orbital (subshell).</li>
+                <li><strong>Magnetic (m<sub>l</sub>):</strong> Orientation of orbital in space.</li>
+                <li><strong>Spin (m<sub>s</sub>):</strong> Electron spin direction.</li>
+            </ol>
+            <h3><a href="atomic-orbital-definition.html">What is an Atomic Orbital?</a></h3>
+            <p><strong>A region around the nucleus where there is a high probability of finding an electron.</strong>
+            </p>
+            <h3><a href="electrons-in-orbital.html">How many electrons can occupy a single orbital?</a></h3>
+            <p><strong>Maximum of two electrons, with opposite spins.</strong></p>
+            <h3><a href="s-orbital-shape.html">What is the shape of an s orbital?</a></h3>
+            <p><strong>Spherical.</strong></p>
+            <h3><a href="p-orbital-shape.html">What is the shape of a p orbital?</a></h3>
+            <p><strong>Dumbbell-shaped.</strong></p>
+            <h3><a href="p-orbitals-in-energy-level.html">How many p orbitals are there in a given energy level?</a>
+            </h3>
+            <p><strong>Three, oriented along the x, y, and z axes.</strong></p>
+            <h3><a href="d-orbitals-in-energy-level.html">How many d orbitals are there in a given energy level?</a>
+            </h3>
+            <p><strong>Five.</strong></p>
+            <h3><a href="electron-configuration-definition.html">What is the Electron Configuration of an Atom?</a></h3>
+            <p><strong>The distribution of electrons among the atom's orbitals.</strong></p>
+            <h3><a href="aufbau-principle.html">What is the Aufbau Principle?</a></h3>
+            <p><strong>Electrons fill orbitals starting with the lowest energy levels first.</strong></p>
+            <h3><a href="hunds-rule.html">What is Hund's Rule?</a></h3>
+            <p><strong>Electrons individually occupy each orbital within a subshell before pairing up, maximizing total
+                    spin. $S = \sum_{i=1}^{N} s_{i}$</strong></p>
+            <h3><a href="pauli-exclusion-principle.html">What is the Pauli Exclusion Principle?</a></h3>
+            <p><strong>No two electrons in an atom can have the same set of four quantum numbers.</strong></p>
+            <h3><a href="valence-electrons-definition.html">What are Valence Electrons?</a></h3>
+            <p><strong>Electrons in the outermost energy level of an atom, involved in chemical bonding.</strong></p>
 
-            <p>In addition to their academic achievements, Noah is an accomplished author and educator, committed to
-                sharing complex chemical concepts in accessible and engaging ways. Their work not only bridges
-                theoretical and practical chemistry but also inspires the next generation of chemists to explore the
-                field's transformative potential.</p>
-        </section>
+            <h3><a href="isoelectronic-series-definition.html">What is an Isoelectronic Series?</a></h3>
+            <p><strong>A group of atoms/ions with the same number of electrons.</strong></p>
+            <p><strong>Example:</strong> N<sup>3-</sup>, O<sup>2-</sup>, F<sup>-</sup>, Ne, Na<sup>+</sup>,
+                Mg<sup>2+</sup> all have 10 electrons.</p>
+
+            <h3><a href="atomic-radius-trend.html">How does the Atomic Radius Change Across a Period and Down a Group in
+                    the Periodic Table?</a></h3>
+            <p><strong>Decreases across a period, increases down a group.</strong></p>
+
+            <h3><a href="ionization-energy-trend.html">How does Ionization Energy Change Across a Period and Down a
+                    Group in the Periodic Table?</a></h3>
+            <p><strong>Increases across a period, decreases down a group.</strong></p>
+
+            <h2 id="Intermediate Questions">Intermediate Questions</h2>
+
+            <h3><a href="photon-energy-frequency-relationship.html">What is the Relationship Between the Energy of a
+                    Photon and its Frequency?</a></h3>
+            <p><strong>The energy of a photon is directly proportional to its frequency.</strong></p>
+            <p><strong>Mathematical expression:</strong></p>
+            <p>Planck proposed that $E = hf$, where:</p>
+            <ul>
+                <li>$E$ is the energy of the photon.</li>
+                <li>$h$ is Planck's constant ($6.626 \times 10^{-34} J \cdot s$).</li>
+                <li>$f$ is the frequency of the photon.</li>
+            </ul>
+
+            <h3><a href="photoelectric-effect-definition.html">What is the Photoelectric Effect?</a></h3>
+            <p><strong>The emission of electrons from a material when light of sufficient frequency shines on
+                    it.</strong></p>
+
+            <h3><a href="de-broglie-wavelength-definition.html">What is the de Broglie Wavelength of a Particle?</a>
+            </h3>
+            <p><strong>The wavelength associated with a moving particle, given by $\lambda = \frac{h}{p}$, where
+                    $\lambda$ is the wavelength, $h$ is Planck's constant, and $p$ is the momentum.</strong></p>
+
+            <h3><a href="heisenberg-uncertainty-principle.html">What is the Heisenberg Uncertainty Principle?</a></h3>
+            <p><strong>It is impossible to simultaneously know both the exact position and exact momentum of a particle.
+                    $\Delta x \cdot \Delta p \geq \frac{h}{4\pi}$</strong></p>
+            <h3><a href="bohr-model-limitations.html">What are the Limitations of the Bohr Model of the Atom?</a></h3>
+            <ul>
+                <li>Only works for hydrogen-like species (single electron).</li>
+                <li>Cannot explain the spectra of multi-electron atoms.</li>
+                <li>Does not account for the wave nature of electrons.</li>
+                <li>Violates the Heisenberg uncertainty principle.</li>
+            </ul>
+
+            <h3><a href="schrodinger-equation-significance.html">What is the Significance of the Schrödinger Equation in
+                    Quantum Mechanics?</a></h3>
+            <p><strong>Describes the wave function of a particle, allowing the calculation of the probability of finding
+                    the particle in a specific state or location. It is fundamental to understanding atomic and
+                    molecular behavior.</strong></p>
+
+            <h3><a href="wave-particle-duality.html">Explain the Concept of Wave-Particle Duality.</a></h3>
+            <p><strong>Matter and light exhibit both wave-like and particle-like properties.</strong></p>
+
+            <h3><a href="node-antinode-difference.html">What is the Difference Between a Node and an Antinode?</a></h3>
+            <p><strong>A node is a point of zero amplitude in a wave, while an antinode is a point of maximum
+                    amplitude.</strong></p>
+
+            <h3><a href="radial-angular-nodes.html">How do you Determine the Number of Radial and Angular Nodes in an
+                    Orbital?</a></h3>
+            <ul>
+                <li><strong>Radial nodes:</strong> $n - l - 1$</li>
+                <li><strong>Angular nodes:</strong> $l$</li>
+            </ul>
+            <p>Where $n$ is the principal quantum number and $l$ is the angular momentum quantum number.</p>
+
+            <h3><a href="wave-function-square-interpretation.html">What is the Physical Interpretation of the Square of
+                    the Wave Function ($|\psi|^2$)?</a></h3>
+            <p><strong>Represents the probability density of finding an electron at a particular point in
+                    space.</strong></p>
+            <h3><a href="electron-shielding-effective-nuclear-charge.html">Explain the Concept of Electron Shielding and
+                    Effective Nuclear Charge.</a></h3>
+            <p><strong>Electron shielding:</strong> Inner electrons reduce the attraction between outer electrons and
+                the nucleus.</p>
+            <p><strong>Effective nuclear charge ($Z_{eff}$):</strong> The net positive charge experienced by an
+                electron, accounting for shielding. $Z_{eff} = Z - S$, where Z is the atomic number and S is the
+                shielding constant.</p>
+
+            <h3><a href="paramagnetic-diamagnetic-difference.html">What is the Difference Between Paramagnetic and
+                    Diamagnetic Substances?</a></h3>
+            <p><strong>Paramagnetic:</strong> Substances with unpaired electrons, attracted to a magnetic field.</p>
+            <p><strong>Diamagnetic:</strong> Substances with all paired electrons, weakly repelled by a magnetic field.
+            </p>
+
+            <h3><a href="transition-metals-multiple-oxidation-states.html">Why do Transition Metals Often Have Multiple
+                    Oxidation States?</a></h3>
+            <p><strong>Due to the involvement of both d and s electrons in bonding, with relatively small energy
+                    differences between these subshells.</strong></p>
+
+            <h3><a href="aufbau-principle-exceptions.html">What are the Exceptions to the Aufbau Principle, and Why do
+                    They Occur?</a></h3>
+            <p><strong>Exceptions:</strong> Some elements (e.g., Cr, Cu) have unexpected electron configurations.</p>
+            <p><strong>Reason:</strong> Extra stability associated with half-filled or fully-filled d subshells.</p>
+            <h3><a href="core-valence-electrons-difference.html">What is the Difference Between Core Electrons and
+                    Valence Electrons?</a></h3>
+            <p><strong>Core electrons:</strong> Inner shell electrons, tightly bound to the nucleus, not involved in
+                bonding.</p>
+            <p><strong>Valence electrons:</strong> Outermost shell electrons, involved in chemical bonding.</p>
+
+            <h3><a href="degeneracy-atomic-orbitals.html">What is the Concept of Degeneracy in Atomic Orbitals?</a></h3>
+            <p><strong>Degeneracy:</strong> Orbitals with the same energy level. For example, in an isolated hydrogen
+                atom the 2s and all three 2p orbitals are degenerate.</p>
+
+            <h3><a href="emission-absorption-spectra-difference.html">Explain the Difference Between Emission and
+                    Absorption Spectra.</a></h3>
+            <p><strong>Emission spectra:</strong> Light emitted by an excited atom, appearing as discrete lines.</p>
+            <p><strong>Absorption spectra:</strong> Light absorbed by an atom, appearing as dark lines on a continuous
+                spectrum.</p>
+
+            <h3><a href="rydberg-states.html">What are Rydberg States of Atoms?</a></h3>
+            <p><strong>Highly excited states of an atom where an electron is in an orbital with a very large principal
+                    quantum number, far from the nucleus.</strong></p>
+
+            <h3><a href="electron-energy-principal-quantum-number-hydrogen.html">How does the Energy of an Electron in a
+                    Hydrogen Atom Depend on the Principal Quantum Number?</a></h3>
+            <p><strong>Energy is inversely proportional to the square of the principal quantum number:</strong> $E_n =
+                -\frac{13.6 eV}{n^2}$</p>
+
+            <h3><a href="electron-spin-energy-levels-multielectron-atom.html">How does the Spin of an Electron Affect
+                    the Energy Levels in a Multi-electron Atom?</a></h3>
+            <p><strong>Electron spin leads to splitting of energy levels due to spin-orbit coupling, creating fine
+                    structure in the spectrum.</strong></p>
+
+            <h3><a href="spin-orbit-coupling.html">What is Spin-Orbit Coupling?</a></h3>
+            <p><strong>The interaction between an electron's spin magnetic moment and the magnetic field created by its
+                    orbital motion around the nucleus.</strong></p>
+
+            <h3><a href="zeeman-effect.html">What is the Zeeman Effect?</a></h3>
+            <p><strong>The splitting of atomic energy levels in the presence of an external magnetic field.</strong></p>
+
+            <h3><a href="stark-effect.html">What is the Stark Effect?</a></h3>
+            <p><strong>The splitting of atomic energy levels in the presence of an external electric field.</strong></p>
+
+            <h3><a href="singlet-triplet-state-difference.html">What is the Difference Between a Singlet and a Triplet
+                    State?</a></h3>
+            <p><strong>Singlet state:</strong> Total electron spin $S = 0$ (all electron spins are paired).</p>
+            <p><strong>Triplet state:</strong> Total electron spin $S = 1$ (two electron spins are parallel).</p>
+
+            <h3><a href="photoelectron-spectroscopy-principles.html">Describe the Basic Principles of Photoelectron
+                    Spectroscopy.</a></h3>
+            <p><strong>A sample is irradiated with photons, and the kinetic energies of the emitted electrons are
+                    measured. This provides information about the binding energies of electrons in the sample.</strong>
+            </p>
+
+            <h3><a href="radial-distribution-function-significance.html">What is the Significance of the Radial
+                    Distribution Function?</a></h3>
+            <p><strong>Gives the probability of finding an electron at a certain distance from the nucleus, regardless
+                    of direction.</strong></p>
+
+            <h3><a href="electron-probability-calculation.html">How do you Calculate the Probability of Finding an
+                    Electron in a Specific Region of Space?</a></h3>
+            <p><strong>By integrating the square of the wave function ($|\psi|^2$) over that region of space.</strong>
+            </p>
+
+            <h3><a href="atomic-term-symbol.html">What is the Concept of an Atomic Term Symbol, and How is it
+                    Determined?</a></h3>
+            <p><strong>Atomic term symbol:</strong> A shorthand notation representing the total angular momentum of an
+                atom in a specific electronic state.</p>
+            <p><strong>Determination:</strong> Based on the values of $L$ (total orbital angular momentum), $S$ (total
+                spin angular momentum), and $J$ (total angular momentum, where $\vec{J} = \vec{L} + \vec{S}$). It has
+                the form: $^{2S+1}L_J$.</p>
+
+            <h3><a href="electron-affinity-definition.html">Explain the Concept of Electron Affinity.</a></h3>
+            <p><strong>The energy change when an electron is added to a neutral atom in the gaseous state to form a
+                    negative ion.</strong></p>
+
+            <h3><a href="slaters-rules.html">What are Slater's Rules, and How are They Used?</a></h3>
+            <p><strong>Slater's rules:</strong> A set of empirical rules for estimating the effective nuclear charge
+                ($Z_{eff}$) experienced by an electron in a multi-electron atom.</p>
+            <p><strong>Use:</strong> To calculate the shielding constant ($S$) for an electron, which is then used to
+                determine $Z_{eff}$.</p>
+
+            <h2 id="school/jeemain">School level Subjective Questions</h2>
+            <h3><a href="electron-correlation.html">Explain the Concept of Electron Correlation.</a></h3>
+            <p><strong>Electron correlation refers to the interaction between electrons in a multi-electron atom beyond
+                    the simple electrostatic repulsion described by the mean-field approximation.</strong> Because
+                electrons are negatively charged, they tend to avoid each other more than predicted by their average
+                distribution. This instantaneous repulsion affects their motion and energy levels. Electron correlation
+                is crucial for accurately calculating the properties of atoms and molecules, especially for systems with
+                many electrons. Methods like configuration interaction and coupled cluster are used to account for
+                electron correlation in quantum chemical calculations, providing a more realistic description of
+                electronic structure than simpler models like the Hartree-Fock method.</p>
+
+            <h3><a href="einstein-photoelectric-effect-explanation.html">How did Einstein Explain the Photoelectric
+                    Effect Using Planck's Quantum Theory?</a></h3>
+            <p><strong>Einstein proposed that light consists of discrete packets of energy called photons, with energy
+                    $E = h\nu$ (using Planck's formula). He suggested that a single photon can eject an electron if its
+                    energy exceeds the material's work function (minimum energy required to remove an
+                    electron).</strong></p>
+
+            <h3><a href="blackbody-radiation-planck-explanation.html">What is Blackbody Radiation, and How did Planck's
+                    Theory Explain its Characteristics?</a></h3>
+            <p><strong>Blackbody radiation</strong> is the electromagnetic radiation emitted by an idealized object
+                (blackbody) that absorbs all incident radiation. <strong>Planck's theory</strong> explained its spectrum
+                by proposing that energy is quantized, meaning it can only be emitted or absorbed in discrete packets
+                called quanta, with energy $E = nh\nu$, resolving the ultraviolet catastrophe.</p>
+
+            <h3><a href="plancks-constant-significance.html">What is the Significance of Planck's Constant (h)?</a></h3>
+            <p><strong>Planck's constant ($h = 6.626 \times 10^{-34} J \cdot s$)</strong> is a fundamental physical
+                constant representing the proportionality factor between a photon's energy and its frequency. It's a
+                cornerstone of quantum mechanics, signifying that energy, like matter, is not continuous but exists in
+                discrete packets or quanta.</p>
+
+            <h3><a href="quantized-energy-levels.html">What is Meant by "Quantized Energy Levels"?</a></h3>
+            <p><strong>Quantized energy levels</strong> refer to the discrete, specific energy values that electrons in
+                atoms or molecules can possess. Unlike classical systems where energy can vary continuously, quantum
+                mechanics dictates that electrons are restricted to specific energy states, often visualized as distinct
+                energy levels or "rungs" on a ladder.</p>
+
+            <h2 id="mains">JEE Mains level Subejctive Questions</h2>
+            <h3><a href="multielectron-vs-hydrogen-orbital-energies.html">How do the Energies of Orbitals in
+                    Multi-electron Atoms Differ from those in Hydrogen Atoms, and Why?</a></h3>
+            <p>In a hydrogen atom, which has only one proton and one electron, the energy of an orbital depends solely
+                on the principal quantum number, $n$. Orbitals with the same $n$ value are degenerate, meaning they have
+                the same energy. However, in multi-electron atoms, the presence of multiple electrons introduces
+                electron-electron repulsion, which significantly alters the orbital energies. This electron-electron
+                interaction leads to a phenomenon called "shielding," where inner electrons partially block the
+                attractive force of the nucleus experienced by outer electrons. </p>
+            <p>As a result, the degeneracy observed in hydrogen atoms is lifted in multi-electron atoms. Orbitals with
+                the same principal quantum number $n$ but different angular momentum quantum numbers $l$ now have
+                different energies. For a given $n$, the energy of an orbital generally increases with increasing $l$.
+                This means that within a shell, s orbitals are lower in energy than p orbitals, which are lower in
+                energy than d orbitals, and so on ($E_{ns} < E_{np} < E_{nd} < E_{nf}$). This difference arises because
+                    electrons in orbitals with lower $l$ values (like s orbitals) penetrate closer to the nucleus and
+                    experience less shielding, thus experiencing a stronger effective nuclear charge and having lower
+                    energy. The specific ordering of energy levels can vary depending on the element and its electron
+                    configuration, leading to the complex patterns observed in the periodic table.</p>
+
+                    <h3><a href="effective-nuclear-charge-orbital-energies.html">Explain the Concept of "Effective
+                            Nuclear Charge" and its Impact on Orbital Energies.</a></h3>
+                    <p>The effective nuclear charge ($Z_{eff}$) is the net positive charge experienced by an electron in
+                        a multi-electron atom. It is not the full nuclear charge ($Z$, the atomic number) because of the
+                        shielding effect of other electrons in the atom. Inner electrons, and to some extent, other
+                        outer electrons, partially cancel out the positive charge of the nucleus, reducing the
+                        attraction felt by a particular electron. The effective nuclear charge can be approximated as
+                        $Z_{eff} = Z - S$, where $Z$ is the atomic number and $S$ is the shielding constant,
+                        representing the average number of electrons between the nucleus and the electron in question.
+                    </p>
+                    <p>$Z_{eff}$ has a significant impact on orbital energies. A higher $Z_{eff}$ means a stronger
+                        attraction between the nucleus and the electron, resulting in a lower (more negative) orbital
+                        energy. Electrons closer to the nucleus experience a higher $Z_{eff}$ and are therefore more
+                        tightly bound. As we move across a period in the periodic table, $Z_{eff}$ generally increases
+                        because the number of protons in the nucleus increases while the added electrons are in the same
+                        shell and do not shield each other as effectively. This increasing $Z_{eff}$ leads to a decrease
+                        in atomic size and an increase in ionization energy across a period. Conversely, as we move down
+                        a group, the increasing number of inner shells leads to greater shielding, reducing $Z_{eff}$
+                        and resulting in larger atomic radii and lower ionization energies.</p>
+
+                    <h3><a href="shielding-effect-orbital-energies.html">What is the Shielding Effect, and How does it
+                            Influence the Energies of Electrons in Different Orbitals?</a></h3>
+                    <p>The shielding effect describes the reduction in the attractive force between an electron and the
+                        nucleus in a multi-electron atom due to the presence of other electrons. Inner electrons, and to
+                        a lesser extent other electrons in the same shell, partially block the positive charge of the
+                        nucleus from reaching outer electrons. This "shield" reduces the effective nuclear charge
+                        ($Z_{eff}$) experienced by the outer electrons. The extent of shielding depends on the type of
+                        orbital. Electrons in orbitals that penetrate closer to the nucleus, such as s orbitals,
+                        experience less shielding and thus a higher $Z_{eff}$, making them lower in energy compared to
+                        orbitals like p or d, which are more effectively shielded due to their spatial distribution.
+                        Shielding leads to the splitting of energy levels within a principal quantum number, making the
+                        energy of an orbital dependent on both $n$ and $l$, unlike in the hydrogen atom. Consequently,
+                        the energies of orbitals in multi-electron atoms follow the order $E_{ns} < E_{np} < E_{nd} <
+                            E_{nf}$ for a given $n$.</p>
+
+                            <h3><a href="n-plus-l-rule.html">What is the (n+l) Rule, and How is it Used to Predict the
+                                    Order of Filling of Orbitals?</a></h3>
+                            <p>The $(n+l)$ rule, also known as the Madelung rule or Klechkowski's rule, is an empirical
+                                guideline used to predict the order in which atomic orbitals are filled in
+                                multi-electron atoms. It states that orbitals are filled in order of increasing $(n+l)$
+                                value, where $n$ is the principal quantum number and $l$ is the azimuthal quantum
+                                number. If two orbitals have the same $(n+l)$ value, the orbital with the lower $n$
+                                value is filled first. For example, 4s ($4+0=4$) is filled before 3d ($3+2=5$), and 4p
+                                ($4+1=5$) is filled after 4s but before 4d ($4+2=6$). While the $(n+l)$ rule is a useful
+                                approximation, it is not absolute and exceptions exist, particularly among heavier
+                                elements where energy differences between orbitals become smaller and more complex.</p>
+
+                            <h3><a href="aufbau-principle-explanation.html">What is the Aufbau Principle?</a></h3>
+                            <p>The Aufbau principle (from the German word "Aufbau" meaning "building up") is a set of
+                                rules that describes the hypothetical process of building up the electron configuration
+                                of an atom by sequentially adding electrons to available orbitals, starting with the
+                                lowest energy. It dictates that electrons fill orbitals in a way that minimizes the
+                                total energy of the atom. The principle incorporates the $(n+l)$ rule to determine the
+                                order of orbital filling, along with Hund's rule (which states that electrons
+                                individually occupy each orbital within a subshell before pairing up) and the Pauli
+                                exclusion principle (which states that no two electrons in an atom can have the same set
+                                of four quantum numbers). The Aufbau principle provides a systematic way to understand
+                                the ground state electron configurations of atoms.</p>
+
+                            <h3><a href="core-vs-valence-electrons.html">What are Core Electrons and Valence
+                                    Electrons?</a></h3>
+                            <p><strong>Core electrons</strong> are the electrons in an atom that are not in the
+                                outermost principal energy level (or shell). They are tightly bound to the nucleus and
+                                are generally not involved in chemical bonding. They are essentially "buried" beneath
+                                the valence electrons and contribute significantly to the shielding effect.
+                                <strong>Valence electrons</strong>, on the other hand, are the electrons located in the
+                                outermost principal energy level of an atom. These electrons are less tightly bound to
+                                the nucleus and are the primary participants in chemical reactions. They determine an
+                                element's chemical properties and its ability to form bonds with other atoms. The number
+                                of valence electrons dictates an element's position in the periodic table and its
+                                reactivity.</p>
+
+                            <h3><a href="anomalous-configurations-cr-cu.html">Why do Certain Elements, like Chromium and
+                                    Copper, have Anomalous Electronic Configurations?</a></h3>
+                            <p>Chromium (Cr) and copper (Cu) are classic examples of elements with anomalous electron
+                                configurations that deviate from the Aufbau principle. The expected configuration for Cr
+                                is [Ar] 4s<sup>2</sup> 3d<sup>4</sup>, but the actual configuration is [Ar]
+                                4s<sup>1</sup> 3d<sup>5</sup>. Similarly, Cu is expected to be [Ar] 4s<sup>2</sup>
+                                3d<sup>9</sup>, but is actually [Ar] 4s<sup>1</sup> 3d<sup>10</sup>. These anomalies
+                                arise due to the extra stability associated with half-filled (d<sup>5</sup>) and
+                                fully-filled (d<sup>10</sup>) d subshells. The energy difference between the 4s and 3d
+                                orbitals is relatively small, and the increased stability gained from having a
+                                symmetrical distribution of electrons in the d subshell outweighs the slightly higher
+                                energy of the 3d orbital compared to the 4s in these cases. This results in one electron
+                                from the 4s orbital being promoted to the 3d orbital.</p>
+
+                            <h3><a href="exchange-energy-stability.html">Explain the Concept of "Exchange Energy" and
+                                    its Role in the Stability of Half-Filled and Fully-Filled Subshells.</a></h3>
+                            <p>Exchange energy is a quantum mechanical concept that contributes to the stability of an
+                                atom. It is a consequence of the Pauli exclusion principle and arises from the ability
+                                of electrons with parallel spins to exchange positions. This exchange is more favorable
+                                energetically because it reduces electron-electron repulsion. Exchange energy is
+                                proportional to the number of possible exchanges between electrons with the same spin.
+                                In half-filled and fully-filled subshells, the number of possible exchanges between
+                                electrons with parallel spins is maximized. For example, in a half-filled d subshell
+                                (d<sup>5</sup>), each of the five electrons has the same spin, leading to a large number
+                                of possible exchanges and a significant stabilization due to exchange energy. This extra
+                                stability contributes to the anomalous electron configurations observed in elements like
+                                chromium and copper, where achieving a half-filled or fully-filled d subshell is
+                                energetically favored.</p>
+
+                            <h3><a href="radial-distribution-function-n-l.html">How does the Radial Distribution
+                                    Function for an Orbital Vary with the Principal Quantum Number (n) and the Azimuthal
+                                    Quantum Number (l)?</a></h3>
+                            <p>The radial distribution function (RDF) describes the probability of finding an electron
+                                at a specific distance from the nucleus, regardless of direction. It is calculated by
+                                multiplying the square of the radial wave function by $4\pi r^2$. The RDF provides a
+                                more complete picture of electron density than just the radial wave function alone. As
+                                the principal quantum number ($n$) increases, the number of peaks in the RDF increases,
+                                and the electron density extends further from the nucleus. The outermost peak represents
+                                the most probable distance for finding the electron. The azimuthal quantum number ($l$)
+                                affects the shape of the RDF. For a given $n$, orbitals with lower $l$ values have more
+                                peaks closer to the nucleus, indicating greater penetration. For example, an s orbital
+                                ($l=0$) will have more electron density closer to the nucleus than a p orbital ($l=1$)
+                                with the same principal quantum number.</p>
+
+                            <h3><a href="nodal-surfaces-quantum-numbers.html">What are Nodal Surfaces, and How are They
+                                    Related to the Quantum Numbers n and l?</a></h3>
+                            <p>Nodal surfaces are regions around the nucleus where the probability of finding an
+                                electron is zero. They are a consequence of the wave nature of electrons and are regions
+                                where the wave function changes sign. There are two types of nodal surfaces: radial and
+                                angular. **Radial nodes** are spherical surfaces where the radial wave function is zero.
+                                The number of radial nodes is given by $n - l - 1$. **Angular nodes** are planes or
+                                cones where the angular wave function is zero. The number of angular nodes is equal to
+                                $l$. Therefore, the total number of nodes in an orbital is always $n-1$. For example, a
+                                2p orbital ($n=2$, $l=1$) has one angular node (a plane) and zero radial nodes. A 3d
+                                orbital ($n=3$, $l=2$) has two angular nodes and zero radial nodes.</p>
+
+                            <h3><a href="independent-particle-approximation-limitations.html">Discuss the Limitations of
+                                    the Independent Particle Approximation in Describing the Behavior of Electrons in
+                                    Multi-electron Atoms.</a></h3>
+                            <p>The independent particle approximation (IPA), also known as the mean-field approximation,
+                                is a simplifying assumption made in the study of multi-electron atoms. It treats each
+                                electron as if it is moving in an average field created by the nucleus and all other
+                                electrons, neglecting the instantaneous interactions between individual electrons. This
+                                approach greatly simplifies the complex many-body problem but introduces significant
+                                limitations. The most significant flaw of IPA is its neglect of electron correlation.
+                                Electrons do not move independently; their motion is correlated due to their mutual
+                                repulsion. This correlation leads to electrons avoiding each other more than predicted
+                                by the average field, lowering the overall energy of the system. As a result, IPA
+                                methods like the Hartree-Fock method, tend to overestimate the energy of the system, do
+                                not accurately predict the spatial electron density distributions, and do not explain
+                                phenomena involving excitations and transitions between different electron
+                                configurations. IPA fails to describe properties such as excitation energies, ionization
+                                energies, and electron affinities accurately, especially for highly correlated systems
+                                like those involving transition metals or heavy elements.</p>
+
+                            <h3><a href="electron-correlation-orbital-energies.html">How does the Concept of Electron
+                                    Correlation Impact the Accuracy of Calculated Orbital Energies?</a></h3>
+                            <p>Electron correlation is a crucial factor that significantly impacts the accuracy of
+                                calculated orbital energies in multi-electron atoms. As previously stated, the
+                                independent particle approximation neglects the instantaneous interactions between
+                                electrons, treating them as if they move independently in an average field. This
+                                simplification leads to inaccuracies in calculating orbital energies, particularly for
+                                outer electrons that are more sensitive to electron-electron interactions. Electron
+                                correlation accounts for the fact that electrons do not move in an average field but
+                                instead their motion is correlated due to their mutual electrostatic repulsion. This
+                                correlation leads to electrons avoiding each other more than predicted by the mean-field
+                                approximation, effectively lowering their energy. When we account for electron
+                                correlation, using methods such as configuration interaction (CI) or coupled-cluster
+                                (CC) theory, we obtain orbital energies that are lower and closer to experimental
+                                values, particularly for outer electrons. The energy difference between Hartree-Fock
+                                calculations and experimentally measured energies is called correlation energy. Highly
+                                correlated systems require more sophisticated treatments to capture these
+                                electron-electron interactions accurately, highlighting the limitations of simple
+                                one-electron methods.</p>
+
+                            <h3><a href="particle-in-a-box-derivation.html">Derive the Expression for the Energy of a
+                                    Particle in a One-Dimensional Box Using the Time-Independent Schrödinger
+                                    Equation.</a></h3>
+                            <p>The time-independent Schrödinger equation for a one-dimensional system is given by:
+                                $$\frac{-\hbar^2}{2m} \frac{d^2 \psi(x)}{dx^2} + V(x)\psi(x) = E\psi(x)$$
+                                For a particle in a 1D box of length L, the potential is V(x) = 0 inside the box (0 < x
+                                    < L) and V(x)=∞ outside the box. Inside the box, the Schrödinger equation becomes:
+                                    $$\frac{-\hbar^2}{2m} \frac{d^2 \psi(x)}{dx^2}=E\psi(x)$$ The general solution for
+                                    the wave function is: $$ \psi(x)=A\sin(kx) + B\cos(kx)$$ Because the wave function
+                                    must be zero at x=0 and x=L (the walls of the box) i.e. boundary conditions : At
+                                    x=0, ψ(0)=0, thus B=0 At x=L, ψ(L)=0, thus A\sin(kL)=0 which implies $kL=n\pi$,
+                                    where n=1,2,3,.... Thus $k=\frac{n\pi}{L}$ Substituting this value back to the
+                                    Schrödinger equation, we have $$E=\frac{\hbar^2 k^2}{2m}$$ $$E_n=\frac{\hbar^2 n^2
+                                    \pi^2}{2mL^2}=\frac{h^2 n^2}{8mL^2}$$ Thus the energy of the particle is quantized
+                                    depending on the quantum number 'n' and the length of the box 'L' .</p>
+
+                                    <h3><a href="degeneracy-symmetry-relationship.html">Explain the Concept of
+                                            Degeneracy and its Relationship to the Symmetry of a System. Give Examples
+                                            of Degenerate Orbitals.</a></h3>
+                                    <p>Degeneracy refers to the situation where two or more distinct quantum states have
+                                        the same energy. In quantum mechanics, degeneracy often arises when a system
+                                        possesses certain symmetries. If a system has symmetry, it means that certain
+                                        operations, such as rotations, reflections, or inversions, leave the system
+                                        unchanged. This symmetry leads to orbitals or energy levels that are equivalent
+                                        and have the same energy. For example, in the hydrogen atom, orbitals with the
+                                        same principal quantum number (n) are degenerate in the absence of an external
+                                        field. The 2s and 2p orbitals, for instance, are degenerate in a hydrogen atom.
+                                        Also, the three 2p orbitals (2px, 2py, 2pz) are degenerate, having the same
+                                        energy because they are oriented differently in space, but are otherwise
+                                        equivalent. Another example of degeneracy exists for a free particle (particle
+                                        moving in a free space with no external potential acting on it), for any given
+                                        momentum, it can be moving in different directions, therefore all directions of
+                                        motion for the same momentum value have same energy. In molecules, symmetry also
+                                        leads to degenerate molecular orbitals. This degeneracy is usually lifted when
+                                        an external field or perturbation that breaks the symmetry of the system is
+                                        applied such as in the Zeeman and Stark effects. The study of degeneracy
+                                        provides insight into the inherent symmetries of quantum systems and their
+                                        properties.</p>
+
+                                    <h3><a href="effective-nuclear-charge-ionization-energy-trends.html">How can the
+                                            Concept of Effective Nuclear Charge be Used to Explain the Trends in
+                                            Ionization Energies Across a Period and Down a Group in the Periodic
+                                            Table?</a></h3>
+                                    <p>The concept of effective nuclear charge ($Z_{eff}$) is essential for
+                                        understanding the trends in ionization energies across the periodic table.
+                                        Ionization energy is the energy required to remove an electron from a neutral
+                                        atom in its gaseous state. Across a period (from left to right), the number of
+                                        protons in the nucleus increases, but the added electrons are in the same
+                                        principal quantum level and they shield each other very poorly. As a result,
+                                        $Z_{eff}$ increases across a period. This increase in $Z_{eff}$ leads to a
+                                        stronger attractive force between the nucleus and the valence electrons, making
+                                        them harder to remove, and thus ionization energy increases across a period. The
+                                        increase in $Z_{eff}$ makes electrons more tightly bound to the nucleus, hence
+                                        it requires a lot more energy to remove them. Down a group, the principal
+                                        quantum number $n$ increases, and each additional level adds a new inner shell
+                                        of electrons. These inner shells of electrons effectively shield the valence
+                                        electrons from the full nuclear charge, which leads to a reduced $Z_{eff}$. As
+                                        we move down a group, the shielding effect becomes more dominant than the
+                                        increase in nuclear charge, causing the $Z_{eff}$ to decrease. The reduced
+                                        $Z_{eff}$ weakens the attractive force between the nucleus and the valence
+                                        electrons, making it easier to remove an electron, therefore, ionization energy
+                                        decreases down a group. Therefore, the trends in ionization energies can be
+                                        largely attributed to the changes in the effective nuclear charge experienced by
+                                        the valence electrons.</p>
+
+                                    <h2 id="Advanced"> JEE Advanced level Subjective Questions</h2>
+                                    <h3><a href="hydrogen-fine-structure.html">Develop a theoretical framework to
+                                            explain the observed fine structure splitting in the hydrogen atom spectrum,
+                                            taking into account relativistic effects and spin-orbit coupling.</a></h3>
+
+                                    <p>The fine structure splitting in the hydrogen atom spectrum arises from
+                                        corrections to the simple Bohr model or the non-relativistic Schrödinger
+                                        equation. These corrections account for relativistic effects and the interaction
+                                        between the electron's spin and its orbital motion (spin-orbit coupling). We
+                                        will develop this framework using perturbation theory, treating these effects as
+                                        small corrections to the dominant Coulomb interaction.</p>
+
+                                    <p><strong>1. The Unperturbed Hamiltonian:</strong></p>
+
+                                    <p>The starting point is the Hamiltonian for the non-relativistic hydrogen atom,
+                                        considering only the Coulomb interaction between the proton (fixed at the
+                                        origin) and the electron:</p>
+                                    <p>
+                                        $H_0 = \frac{\mathbf{p}^2}{2m_e} - \frac{e^2}{4\pi\epsilon_0 r}$
+                                    </p>
+                                    <p>where:</p>
+                                    <ul>
+                                        <li>$\mathbf{p}$ is the momentum operator of the electron.</li>
+                                        <li>$m_e$ is the mass of the electron.</li>
+                                        <li>$e$ is the elementary charge.</li>
+                                        <li>$\epsilon_0$ is the permittivity of free space.</li>
+                                        <li>$r$ is the distance between the electron and the proton.</li>
+                                    </ul>
+
+                                    <p>The solutions to the time-independent Schrödinger equation with this Hamiltonian
+                                        give the familiar energy levels:</p>
+
+                                    <p>
+                                        $E_n^{(0)} = - \frac{m_e e^4}{32\pi^2 \epsilon_0^2 \hbar^2} \frac{1}{n^2} = -
+                                        \frac{R_\infty hc}{n^2}$
+                                    </p>
+                                    <p>where:</p>
+                                    <ul>
+                                        <li>$n$ is the principal quantum number ($n = 1, 2, 3, ...$).</li>
+                                        <li>$R_\infty$ is the Rydberg constant.</li>
+                                        <li>$\hbar$ is the reduced Planck constant.</li>
+                                        <li>$c$ is the speed of light.</li>
+                                    </ul>
+
+                                    <p>These energy levels are degenerate with respect to the orbital angular momentum
+                                        quantum number $l$ ($0 \leq l \leq n-1$) and the magnetic quantum number $m_l$
+                                        ($-l \leq m_l \leq l$).</p>
+
+                                    <p><strong>2. Perturbations:</strong></p>
+                                    <p>We consider two main perturbations:</p>
+
+                                    <p><strong>(a) Relativistic Correction ($H_r$):</strong></p>
+
+                                    <p>The kinetic energy term in the non-relativistic Hamiltonian is a classical
+                                        approximation. The relativistic kinetic energy is given by $\sqrt{p^2c^2 +
+                                        m_e^2c^4} - m_e c^2$. Expanding this for small $p$ relative to $m_e c$ gives:
+                                    </p>
+                                    <p>
+                                        $T \approx \frac{p^2}{2m_e} - \frac{p^4}{8m_e^3 c^2} + ...$
+                                    </p>
+                                    <p>The first-order relativistic correction to the Hamiltonian is therefore:</p>
+                                    <p>
+                                        $H_r = -\frac{\mathbf{p}^4}{8m_e^3 c^2}$
+                                    </p>
+                                    <p>To calculate the first-order energy shift due to this perturbation, we use:</p>
+
+                                    <p>
+                                        $\Delta E_{n,l}^{(1)r} = \langle \psi_{n,l,m_l} | H_r | \psi_{n,l,m_l} \rangle$
+                                    </p>
+
+                                    <p>where $\psi_{n,l,m_l}$ are the unperturbed hydrogen atom wavefunctions.
+                                        Substituting $H_r$ and using relations like $\mathbf{p}^2 = 2m_e(H_0 +
+                                        \frac{e^2}{4\pi\epsilon_0 r})$, we can derive (after considerable algebra):</p>
+
+                                    <p>
+                                        $\Delta E_{n,l}^{(1)r} = -\frac{(E_n^{(0)})^2}{2m_e c^2} \left[ \frac{3}{4} -
+                                        \frac{n}{l + \frac{1}{2}} \right]$
+                                    </p>
+
+                                    <p>This correction depends on both $n$ and $l$, thus lifting the degeneracy with
+                                        respect to $l$.</p>
+
+                                    <p><strong>(b) Spin-Orbit Coupling ($H_{SO}$):</strong></p>
+                                    <p>The electron has an intrinsic angular momentum called spin ($\mathbf{S}$), with a
+                                        spin quantum number $s = 1/2$. This spin generates a magnetic dipole moment. The
+                                        electron orbiting the nucleus also creates a magnetic field ($\mathbf{B}$) at
+                                        the electron's position. The interaction between the electron's spin magnetic
+                                        moment and this orbital magnetic field leads to the spin-orbit interaction.</p>
+                                    <p>Classically, the magnetic field seen by the electron is proportional to
+                                        ($\mathbf{v} \times \mathbf{E}$), where $\mathbf{v}$ is the electron's velocity
+                                        and $\mathbf{E}$ is the electric field due to the proton. Quantum mechanically,
+                                        this translates to an interaction Hamiltonian proportional to $\mathbf{L} \cdot
+                                        \mathbf{S}$, where $\mathbf{L}$ is the orbital angular momentum operator.</p>
+                                    <p>
+                                        $H_{SO} = \xi(r) \mathbf{L} \cdot \mathbf{S}$
+                                    </p>
+                                    <p>where $\xi(r)$ is a function of the radial distance, given by:</p>
+
+                                    <p>
+                                        $\xi(r) = \frac{e^2}{8\pi m_e^2 c^2 \epsilon_0} \frac{1}{r^3}$
+                                    </p>
+                                    <p>The first-order energy shift due to spin-orbit coupling is:</p>
+
+                                    <p>
+                                        $\Delta E_{n,l,s,j}^{(1)SO} = \langle \psi_{n,l,s,j,m_j} | H_{SO} |
+                                        \psi_{n,l,s,j,m_j} \rangle$
+                                    </p>
+
+                                    <p>where $\psi_{n,l,s,j,m_j}$ are the eigenstates of the total angular momentum
+                                        operator $\mathbf{J} = \mathbf{L} + \mathbf{S}$, with quantum numbers $j$ and
+                                        $m_j$. We can express $\mathbf{L} \cdot \mathbf{S}$ in terms of the total
+                                        angular momentum operator:</p>
+                                    <p>
+                                        $\mathbf{J}^2 = (\mathbf{L} + \mathbf{S})^2 = \mathbf{L}^2 + \mathbf{S}^2 + 2
+                                        \mathbf{L} \cdot \mathbf{S}$
+                                        <br>
+                                        $\mathbf{L} \cdot \mathbf{S} = \frac{1}{2} (\mathbf{J}^2 - \mathbf{L}^2 -
+                                        \mathbf{S}^2)$
+                                    </p>
+                                    <p>The eigenvalues of these operators are:</p>
+                                    <p>
+                                        $\langle \mathbf{J}^2 \rangle = \hbar^2 j(j+1)$
+                                        <br>
+                                        $\langle \mathbf{L}^2 \rangle = \hbar^2 l(l+1)$
+                                        <br>
+                                        $\langle \mathbf{S}^2 \rangle = \hbar^2 s(s+1) = \hbar^2 \frac{1}{2}\frac{3}{2}
+                                        = \frac{3}{4}\hbar^2$
+                                    </p>
+                                    <p>Substituting these into the expectation value, we get:</p>
+                                    <p>
+                                        $\Delta E_{n,l,j}^{(1)SO} = \frac{e^2 \hbar^2}{16 \pi m_e^2 c^2 \epsilon_0}
+                                        \langle \frac{1}{r^3} \rangle_{n,l} [j(j+1) - l(l+1) - \frac{3}{4}]$
+                                    </p>
+                                    <p>The expectation value $\langle 1/r^3 \rangle_{n,l}$ can be calculated for
+                                        hydrogenic wavefunctions, yielding:</p>
+
+                                    <p>
+                                        $ \langle \frac{1}{r^3} \rangle_{n,l} = \frac{1}{a_0^3 n^3
+                                        l(l+\frac{1}{2})(l+1)} $
+                                    </p>
+
+                                    <p>where $a_0$ is the Bohr radius. Substituting this, we get:</p>
+
+                                    <p>
+                                        $ \Delta E_{n,l,j}^{(1)SO} = \frac{\alpha^2}{4n^3}(m_e c^2) \frac{[j(j+1) -
+                                        l(l+1) - \frac{3}{4}]}{l(l+\frac{1}{2})(l+1)} $
+                                    </p>
+
+                                    <p>where $\alpha = \frac{e^2}{4\pi \epsilon_0 \hbar c}$ is the fine-structure
+                                        constant (approximately 1/137).</p>
+                                    <p>This correction depends on $j$, which can take values $|l \pm \frac{1}{2}|$. For
+                                        a given $l > 0$, this results in two different energy levels, splitting the
+                                        degeneracy further.</p>
+
+                                    <p><strong>3. Total Fine Structure Correction:</strong></p>
+                                    <p>The total first-order fine structure correction is the sum of the relativistic
+                                        correction and the spin-orbit correction:</p>
+                                    <p>
+                                        $\Delta E_{n,l,j}^{(1)}\text{fine} = \Delta E_{n,l}^{(1)r} + \Delta
+                                        E_{n,l,j}^{(1)SO}$
+                                    </p>
+                                    <p>Substituting the expressions and simplifying, we obtain:</p>
+
+                                    <p>
+                                        $\Delta E_{n,l,j}^{(1)}\text{fine} = -\frac{E_n^{(0)}\alpha^2}{n}
+                                        \left[\frac{3}{4} - \frac{n}{j + \frac{1}{2}} \right]$
+                                    </p>
+
+                                    <p><strong>4. Resulting Energy Levels:</strong></p>
+                                    <p>The energy levels of the hydrogen atom including fine structure are given by:</p>
+
+                                    <p>
+                                        $E_{n,l,j} \approx E_n^{(0)} + \Delta E_{n,l,j}^{(1)}\text{fine}$
+                                        <br>
+                                        $E_{n,l,j} \approx E_n^{(0)} \left[ 1 + \frac{\alpha^2}{n^2}\left(
+                                        \frac{n}{(j+\frac{1}{2})} - \frac{3}{4} \right) \right]$
+                                    </p>
+                                    <p>This formula shows that the degeneracy with respect to $l$ is lifted, and for
+                                        each value of $l > 0$, the energy level is further split into two levels
+                                        corresponding to $j = l + 1/2$ and $j = l - 1/2$. For $l = 0$, there is no
+                                        spin-orbit splitting, but the relativistic correction still shifts the energy
+                                        level.</p>
+                                    <p><strong>5. Spectroscopic Notation:</strong></p>
+                                    <p>The fine structure levels are often denoted using spectroscopic notation: $n \
+                                        L_j$, where L represents the orbital angular momentum (S for $l$=0, P for $l$=1,
+                                        D for $l$=2, etc.), and $j$ is the total angular momentum quantum number.</p>
+
+                                    <p>For example, the n=2 level is split into:</p>
+                                    <ul>
+                                        <li>2S₁/₂ ($l$=0, $j$=1/2)</li>
+                                        <li>2P₁/₂ ($l$=1, $j$=1/2)</li>
+                                        <li>2P₃/₂ ($l$=1, $j$=3/2)</li>
+                                    </ul>
+                                    <p>The energy difference between these levels corresponds to the fine structure
+                                        splitting observed in the hydrogen spectrum.</p>
+
+                                    <p><strong>6. Limitations and Further Considerations:</strong></p>
+
+                                    <p>This framework uses first-order perturbation theory. For more accurate results,
+                                        higher-order corrections can be considered. Furthermore, this framework does not
+                                        account for:</p>
+                                    <ul>
+                                        <li><strong>Hyperfine Structure:</strong> Interaction between the electron's
+                                            magnetic moment and the proton's magnetic moment.</li>
+                                        <li><strong>Lamb Shift:</strong> A small energy difference between the 2S₁/₂ and
+                                            2P₁/₂ levels, arising from quantum electrodynamic effects.</li>
+                                    </ul>
+                                    <h3><a href="hartree-fock-derivation.html">Using the Hartree-Fock method, derive the
+                                            equations for the self-consistent field (SCF) procedure to determine the
+                                            approximate electronic wave function and energy of a multi-electron atom.
+                                            Discuss the limitations of this method.</a></h3>
+
+                                    <p>The Hartree-Fock (HF) method is an *ab initio* method used to approximate the
+                                        ground state electronic wave function and energy of a multi-electron atom (or
+                                        molecule). It's based on the approximation that each electron moves
+                                        independently in the average field created by all the other electrons and the
+                                        nuclei.</p>
+
+
+                                    <p><strong>1. The Hamiltonian for a Multi-Electron Atom:</strong></p>
+
+                                    <p>The non-relativistic Hamiltonian for an atom with *N* electrons and a nucleus
+                                        with charge *Z* can be written as:</p>
+                                    <p>
+                                        $\hat{H} = -\frac{\hbar^2}{2m_e} \sum_i \nabla_i^2 - \frac{Ze^2}{4\pi\epsilon_0}
+                                        \sum_i \frac{1}{r_i} + \frac{e^2}{4\pi\epsilon_0} \sum_{i &lt j}
+                                        \frac{1}{r_{ij}}$
+                                    </p>
+                                    <p>Where:</p>
+                                    <ul>
+                                        <li>$\hbar$ is the reduced Planck constant</li>
+                                        <li>$m_e$ is the mass of an electron</li>
+                                        <li>$\nabla_i^2$ is the Laplacian operator for electron *i*</li>
+                                        <li>$e$ is the elementary charge</li>
+                                        <li>$\epsilon_0$ is the permittivity of free space</li>
+                                        <li>$r_i$ is the distance between electron *i* and the nucleus</li>
+                                        <li>$r_{ij}$ is the distance between electrons *i* and *j*</li>
+                                    </ul>
+                                    <p>The terms represent, respectively:</p>
+                                    <ul>
+                                        <li>Kinetic energy of the electrons</li>
+                                        <li>Attraction between the electrons and the nucleus</li>
+                                        <li>Repulsion between the electrons</li>
+                                    </ul>
+
+                                    <p><strong>2. The Hartree Product Wave Function:</strong></p>
+                                    <p>The crucial approximation in the Hartree method (the precursor to Hartree-Fock)
+                                        is to represent the *N*-electron wave function as a simple product of *N*
+                                        one-electron wave functions (spin orbitals), denoted by $\chi_i(r_i, \sigma_i)$,
+                                        where $r_i$ is the spatial coordinate and $\sigma_i$ is the spin coordinate of
+                                        electron *i*:</p>
+                                    <p>
+                                        $\Psi^H(r_1, \sigma_1, r_2, \sigma_2, ..., r_N, \sigma_N) = \chi_1(r_1,
+                                        \sigma_1) \chi_2(r_2, \sigma_2) ... \chi_N(r_N, \sigma_N)$
+                                    </p>
+
+                                    <p>However, this simple product does not satisfy the Pauli Exclusion Principle,
+                                        which requires the total wave function to be antisymmetric with respect to the
+                                        exchange of any two electrons.</p>
+
+                                    <p><strong>3. The Slater Determinant Wave Function:</strong></p>
+                                    <p>The Hartree-Fock method corrects for the Pauli principle by using a Slater
+                                        determinant to represent the *N*-electron wave function:</p>
+                                    <p>
+                                        $\Psi^{HF}(r_1, \sigma_1, ..., r_N, \sigma_N) = \frac{1}{\sqrt{N!}}
+                                        \begin{vmatrix}
+                                        \chi_1(r_1, \sigma_1) & \chi_2(r_1, \sigma_1) & ... & \chi_N(r_1, \sigma_1) \\
+                                        \chi_1(r_2, \sigma_2) & \chi_2(r_2, \sigma_2) & ... & \chi_N(r_2, \sigma_2) \\
+                                        ... & ... & ... & ... \\
+                                        \chi_1(r_N, \sigma_N) & \chi_2(r_N, \sigma_N) & ... & \chi_N(r_N, \sigma_N)
+                                        \end{vmatrix}
+                                        $
+                                    </p>
+                                    <p>The factor of 1/√(N!) ensures normalization. Exchanging any two columns
+                                        (corresponding to exchanging two electrons) changes the sign of the determinant,
+                                        satisfying the antisymmetry requirement.</p>
+
+                                    <p><strong>4. The Variational Principle:</strong></p>
+                                    <p>The Hartree-Fock method utilizes the variational principle, which states that for
+                                        any approximate wave function $\Phi$, the expectation value of the energy is
+                                        always greater than or equal to the true ground state energy $E_0$:</p>
+                                    <p>
+                                        $ \langle \Phi | \hat{H} | \Phi \rangle \geq E_0 $
+                                    </p>
+                                    <p>The goal is to find the set of spin orbitals {$ \chi_i $} that minimizes the
+                                        energy expectation value:</p>
+                                    <p>
+                                        $E = \langle \Psi^{HF} | \hat{H} | \Psi^{HF} \rangle$
+                                    </p>
+
+                                    <p><strong>5. Derivation of the Fock Equations:</strong></p>
+                                    <p>To minimize the energy, we vary the spin orbitals {$ \chi_i $} subject to the
+                                        constraint that they remain orthonormal:</p>
+                                    <p>
+                                        $ \langle \chi_i | \chi_j \rangle = \int \chi_i^*(r, \sigma) \chi_j(r, \sigma)
+                                        d\tau = \delta_{ij} $
+                                    </p>
+                                    <p>Where the integration is over both spatial and spin coordinates ($d\tau = dr
+                                        d\sigma$), and $\delta_{ij}$ is the Kronecker delta.</p>
+                                    <p>Using the Slater determinant wave function and the Hamiltonian, the energy
+                                        expectation value can be expressed as:</p>
+                                    <p>
+                                        $E = \sum_i \langle \chi_i | \hat{h} | \chi_i \rangle + \frac{1}{2} \sum_{i,j}
+                                        \langle \chi_i \chi_j || \chi_i \chi_j \rangle$
+                                    </p>
+                                    <p>Where:</p>
+                                    <ul>
+                                        <li>$\hat{h}$ is the one-electron core Hamiltonian, describing the kinetic
+                                            energy and electron-nucleus attraction for a single electron:
+
+                                            $ \hat{h}(i) = -\frac{\hbar^2}{2m_e} \nabla_i^2 -
+                                            \frac{Ze^2}{4\pi\epsilon_0} \frac{1}{r_i}$</li>
+                                        <li>$ \langle \chi_i \chi_j || \chi_i \chi_j \rangle $ is the anti-symmetrized
+                                            two-electron integral, defined as:
+
+                                            $ \langle \chi_i \chi_j || \chi_i \chi_j \rangle = \int \int \chi_i^*(r_1,
+                                            \sigma_1) \chi_j^*(r_2, \sigma_2) \frac{e^2}{4\pi\epsilon_0 r_{12}}
+                                            [\chi_i(r_1, \sigma_1) \chi_j(r_2, \sigma_2) - \chi_j(r_1, \sigma_1)
+                                            \chi_i(r_2, \sigma_2)] d\tau_1 d\tau_2$</li>
+                                    </ul>
+
+                                    <p>The first term in the energy expression represents the sum of the one-electron
+                                        energies. The second term represents the inter-electronic repulsion, including
+                                        both the classical Coulomb repulsion and the quantum mechanical exchange
+                                        interaction arising from the antisymmetry of the wave function.</p>
+                                    <p>Now, we apply the variational principle by minimizing the energy with respect to
+                                        variations in the spin orbitals, while maintaining orthonormality using Lagrange
+                                        multipliers ($\epsilon_i$):</p>
+                                    <p>
+                                        $ \delta [E - \sum_i \epsilon_i (\langle \chi_i | \chi_i \rangle - 1)] = 0 $
+                                    </p>
+                                    <p>This variation leads to the <strong>Hartree-Fock equations</strong>, also known
+                                        as the <strong>Fock equations</strong>:</p>
+                                    <p>
+                                        $ \mathbf{f(1)} \chi_i(1) = \epsilon_i \chi_i(1) $
+                                    </p>
+                                    <p>Where:</p>
+                                    <ul>
+                                        <li>$\mathbf{f(1)}$ is the <strong>Fock operator</strong> for electron 1. It's
+                                            an effective one-electron operator that describes the average field
+                                            experienced by electron 1:
+
+                                            $ \mathbf{f(1)} = \hat{h}(1) + v^H(1) $
+                                        </li>
+                                        <li>$v^H(1)$ is the <strong>Hartree potential</strong> or <strong>Fock
+                                                potential</strong>, representing the average field created by the other
+                                            N-1 electrons. It consists of two parts: the Coulomb operator ($J_j$) and
+                                            the exchange operator ($K_j$):
+
+                                            $ v^H(1) \chi_i(1) = [\sum_{j \neq i} (J_j(1) - K_j(1))] \chi_i(1)$
+                                        </li>
+                                        <li><strong>Coulomb operator ($J_j(1)$)</strong>: Describes the classical
+                                            electrostatic repulsion between electron 1 and the charge distribution of
+                                            electron *j*:
+
+                                            $ J_j(1) \chi_i(1) = [\int \chi_j^*(r_2, \sigma_2) \frac{e^2}{4\pi\epsilon_0
+                                            r_{12}} \chi_j(r_2, \sigma_2) d\tau_2] \chi_i(1) $
+                                        </li>
+                                        <li><strong>Exchange operator ($K_j(1)$)</strong>: Arises from the antisymmetry
+                                            of the wave function and has no classical analogue. It swaps the coordinates
+                                            of the two electrons in the integral:
+
+                                            $ K_j(1) \chi_i(1) = [\int \chi_j^*(r_2, \sigma_2) \frac{e^2}{4\pi\epsilon_0
+                                            r_{12}} \chi_i(r_2, \sigma_2) d\tau_2] \chi_j(1) $
+                                        </li>
+                                        <li>$\epsilon_i$ is the <strong>orbital energy</strong> of the spin orbital
+                                            $\chi_i$.</li>
+                                    </ul>
+
+                                    <p><strong>6. The Self-Consistent Field (SCF) Procedure:</strong></p>
+                                    <p>The Fock equations are eigenvalue equations, but the Fock operator itself depends
+                                        on the spin orbitals (through the Coulomb and exchange operators). This means we
+                                        need an iterative procedure to solve them:</p>
+                                    <ol>
+                                        <li><strong>Initial Guess:</strong> Make an initial guess for the set of spin
+                                            orbitals {$ \chi_i $}. This guess can be based on atomic orbitals from
+                                            simpler models or random functions.</li>
+                                        <li><strong>Construct the Fock Operator:</strong> Using the current set of spin
+                                            orbitals, calculate the Coulomb and exchange operators and construct the
+                                            Fock operator.</li>
+                                        <li><strong>Solve the Fock Equations:</strong> Solve the Fock equations $
+                                            \mathbf{f(1)} \chi_i(1) = \epsilon_i \chi_i(1)$ to obtain a new set of spin
+                                            orbitals {$ \chi_i' $} and their corresponding orbital energies {$
+                                            \epsilon_i' $}.</li>
+                                        <li><strong>Check for Convergence:</strong> Compare the new set of spin orbitals
+                                            {$ \chi_i' $} with the previous set {$ \chi_i $}. If they are sufficiently
+                                            similar (within a chosen tolerance), the solution has converged, and the
+                                            process is complete.</li>
+                                        <li><strong>Iterate:</strong> If convergence is not achieved, use the new set of
+                                            spin orbitals {$ \chi_i' $} as the input for the next iteration and return
+                                            to step 2.</li>
+                                    </ol>
+
+                                    <p>This iterative process continues until the spin orbitals and the Fock operator
+                                        become self-consistent, meaning that the orbitals used to construct the Fock
+                                        operator are the same as the orbitals obtained by solving the Fock equations.
+                                        Once converged, the resulting spin orbitals approximate the electronic wave
+                                        function, and the total energy of the atom can be calculated.</p>
+
+                                    <p><strong>7. Calculation of the Total Energy:</strong></p>
+                                    <p>The total electronic energy of the atom in the Hartree-Fock approximation is
+                                        given by:</p>
+                                    <p>
+                                        $ E_{HF} = \sum_i \epsilon_i - \frac{1}{2} \sum_{i,j} \langle \chi_i \chi_j ||
+                                        \chi_i \chi_j \rangle $
+                                    </p>
+                                    <p>Note that the sum of the orbital energies overcounts the electron-electron
+                                        interaction, hence the subtraction of the two-electron integral term.</p>
+
+                                    <h4>Limitations of the Hartree-Fock Method:</h4>
+                                    <p>Despite being a significant advancement, the Hartree-Fock method has several
+                                        limitations due to its fundamental approximation of independent electrons moving
+                                        in an average field:</p>
+                                    <ul>
+                                        <li><strong>Neglect of Electron Correlation:</strong> The most significant
+                                            limitation is the neglect of <em>dynamic electron correlation</em>. In
+                                            reality, electrons do not move independently; their motions are
+                                            instantaneously correlated to avoid each other more effectively than
+                                            described by the average field. The HF method only accounts for <em>exchange
+                                                correlation</em>, which arises from the Pauli principle. This lack of
+                                            dynamic correlation leads to:
+                                            <ul>
+                                                <li><strong>Overestimation of the total energy:</strong> The HF energy
+                                                    is always higher than the exact non-relativistic energy.</li>
+                                                <li><strong>Underestimation of bond lengths and overestimation of
+                                                        vibrational frequencies:</strong> Due to the lack of
+                                                    correlation, electrons are too close together, leading to
+                                                    artificially strong bonds.</li>
+                                                <li><strong>Inaccurate description of dissociation:</strong> The HF
+                                                    method often fails to accurately describe the breaking of chemical
+                                                    bonds, as it doesn't correctly account for the behavior of electrons
+                                                    at long distances.</li>
+                                                <li><strong>Poor description of excited states:</strong> The HF method
+                                                    is primarily designed for the ground state, and its application to
+                                                    excited states can be problematic.</li>
+                                            </ul>
+                                        </li>
+                                        <li><strong>Basis Set Dependence:</strong> The accuracy of the HF solution
+                                            depends heavily on the choice of the basis set used to represent the spin
+                                            orbitals. A finite basis set is always used in practice, and the results
+                                            will converge to the Hartree-Fock limit only as the basis set approaches
+                                            completeness.</li>
+                                        <li><strong>Single Determinant Approximation:</strong> The use of a single
+                                            Slater determinant to represent the wave function is a fundamental
+                                            limitation. In reality, the true electronic wave function is a complex
+                                            superposition of many configurations.</li>
+                                        <li><strong>Neglect of Relativistic Effects:</strong> The non-relativistic
+                                            Hamiltonian used in the derivation ignores relativistic effects, which
+                                            become important for heavier elements.</li>
+                                        <li><strong>Size Inconsistency:</strong> For some implementations, the HF method
+                                            can exhibit size inconsistency, meaning that the energy of a system of
+                                            non-interacting fragments is not equal to the sum of the energies of the
+                                            individual fragments.</li>
+                                    </ul>
+                                    <h3><a href="solid-state-quantum-model.html">Propose a quantum mechanical model to
+                                            describe the behavior of electrons in a solid-state material, taking into
+                                            account the periodic potential of the lattice. Discuss how this model can be
+                                            used to explain the electrical conductivity of metals, semiconductors, and
+                                            insulators.</a></h3>
+
+                                    <p>To describe the behavior of electrons in a solid-state material, we can employ a
+                                        quantum mechanical model that builds upon the concept of the free electron gas
+                                        but incorporates the crucial influence of the periodic potential created by the
+                                        lattice of atoms. This model is often referred to as the <strong>Nearly Free
+                                            Electron Model</strong> or the <strong>Band Theory of Solids</strong>.</p>
+
+                                    <p><strong>Foundation: The Single Electron Approximation and Periodic
+                                            Potential</strong></p>
+                                    <p>We begin by simplifying the many-body problem of interacting electrons in a solid
+                                        by considering a <strong>single electron approximation</strong>. In this
+                                        approximation, we assume that each electron moves independently in an effective
+                                        potential that represents the average effect of all the other electrons and the
+                                        positively charged ions in the lattice.</p>
+
+                                    <p>Crucially, this effective potential, denoted as $V(\mathbf{r})$, is
+                                        <strong>periodic</strong> due to the repeating structure of the crystalline
+                                        lattice. This means that $V(\mathbf{r} + \mathbf{R}) = V(\mathbf{r})$, where
+                                        $\mathbf{R}$ is any lattice vector.</p>
+
+                                    <p><strong>The Schrödinger Equation with Periodic Potential</strong></p>
+                                    <p>The behavior of an electron in this periodic potential is governed by the
+                                        time-independent Schrödinger equation:</p>
+
+                                    <p>
+                                        $ -\frac{\hbar^2}{2m} \nabla^2 \psi(\mathbf{r}) + V(\mathbf{r}) \psi(\mathbf{r})
+                                        = E \psi(\mathbf{r}) $
+                                    </p>
+
+                                    <p>where:</p>
+                                    <ul>
+                                        <li>$\hbar$ is the reduced Planck constant.</li>
+                                        <li>$m$ is the mass of the electron.</li>
+                                        <li>$\nabla^2$ is the Laplacian operator.</li>
+                                        <li>$\psi(\mathbf{r})$ is the wavefunction of the electron.</li>
+                                        <li>$E$ is the energy of the electron.</li>
+                                    </ul>
+
+                                    <p><strong>Bloch's Theorem and Bloch Functions</strong></p>
+
+                                    <p>The periodicity of the potential has a profound consequence on the form of the
+                                        solutions to the Schrödinger equation. <strong>Bloch's theorem</strong> states
+                                        that the eigenfunctions of the Hamiltonian with a periodic potential can be
+                                        written in the form of a <strong>Bloch function</strong>:</p>
+
+                                    <p>
+                                        $\psi_{n,\mathbf{k}}(\mathbf{r}) = e^{i\mathbf{k}\cdot\mathbf{r}}
+                                        u_{n,\mathbf{k}}(\mathbf{r})$
+                                    </p>
+
+                                    <p>where:</p>
+                                    <ul>
+                                        <li>$\mathbf{k}$ is the <strong>crystal momentum vector</strong> (often simply
+                                            called the wavevector), which is related to the momentum of the electron.
+                                        </li>
+                                        <li>$n$ is the <strong>band index</strong>, labeling different energy bands.
+                                        </li>
+                                        <li>$u_{n,\mathbf{k}}(\mathbf{r})$ is a function that has the same periodicity
+                                            as the lattice, i.e., $u_{n,\mathbf{k}}(\mathbf{r} + \mathbf{R}) =
+                                            u_{n,\mathbf{k}}(\mathbf{r})$.</li>
+                                    </ul>
+
+                                    <p>This theorem implies that the wavefunction is a product of a plane wave
+                                        ($e^{i\mathbf{k}\cdot\mathbf{r}}$) and a periodic function
+                                        ($u_{n,\mathbf{k}}(\mathbf{r})$).</p>
+
+                                    <p><strong>Energy Bands and Band Gaps</strong></p>
+
+                                    <p>When we solve the Schrödinger equation with the periodic potential, we find that
+                                        the allowed energy levels of the electrons are not continuous, as in the case of
+                                        free electrons. Instead, they form <strong>energy bands</strong>, which are
+                                        ranges of allowed energies separated by <strong>band gaps</strong>, which are
+                                        ranges of forbidden energies.</p>
+
+                                    <p>The relationship between the energy $E$ and the crystal momentum $\mathbf{k}$ is
+                                        called the <strong>dispersion relation</strong>, often written as
+                                        $E_n(\mathbf{k})$. The shape of these energy bands and the size of the band gaps
+                                        are determined by the strength and form of the periodic potential.</p>
+
+                                    <p><strong>Explaining Electrical Conductivity</strong></p>
+                                    <p>The concept of energy bands and band gaps is crucial for understanding the
+                                        electrical conductivity of different types of materials:</p>
+
+                                    <p><strong>1. Metals:</strong></p>
+                                    <p>In metals, the highest occupied energy band, known as the <strong>valence
+                                            band</strong>, is only partially filled with electrons. The energy level up
+                                        to which the electrons are filled at absolute zero temperature is called the
+                                        <strong>Fermi level</strong> ($E_F$). Because there are available empty states
+                                        infinitesimally close to the Fermi level within the same band, electrons can be
+                                        easily excited to these higher energy states by applying a small electric field.
+                                        This movement of electrons under the influence of the electric field constitutes
+                                        an electric current. The conductivity of metals is high due to the abundance of
+                                        readily excitable electrons.</p>
+
+                                    <p><strong>2. Insulators:</strong></p>
+                                    <p>In insulators, the valence band is completely filled, and there is a large energy
+                                        gap, called the <strong>band gap</strong> ($\Delta E$), separating the valence
+                                        band from the next higher energy band, the <strong>conduction band</strong>. The
+                                        Fermi level lies within this large band gap. At normal temperatures, the thermal
+                                        energy ($k_BT$, where $k_B$ is the Boltzmann constant and $T$ is the
+                                        temperature) is much smaller than the band gap ($\Delta E >> k_BT$). Therefore,
+                                        it is very difficult for electrons in the filled valence band to gain enough
+                                        energy to jump across the large band gap into the empty conduction band.
+                                        Consequently, there are very few free electrons available to carry an electric
+                                        current, and the conductivity of insulators is very low.</p>
+
+                                    <p><strong>3. Semiconductors:</strong></p>
+                                    <p>Semiconductors have a band structure similar to insulators, with a filled valence
+                                        band and an empty conduction band. However, the <strong>band gap</strong>
+                                        ($\Delta E$) in semiconductors is significantly smaller than in insulators
+                                        (typically around 1 eV). At room temperature, a small fraction of electrons can
+                                        gain enough thermal energy to be excited from the valence band to the conduction
+                                        band. These thermally excited electrons in the conduction band, along with the
+                                        "holes" (missing electrons) left behind in the valence band, can contribute to
+                                        electrical conductivity. The conductivity of semiconductors is intermediate
+                                        between metals and insulators and is strongly temperature-dependent, increasing
+                                        with temperature as more electrons are thermally excited.</p>
+
+                                    <p>Furthermore, the conductivity of semiconductors can be significantly modified by
+                                        <strong>doping</strong>, the intentional introduction of impurities into the
+                                        crystal lattice. Doping can introduce extra electrons into the conduction band
+                                        (n-type semiconductor) or create extra holes in the valence band (p-type
+                                        semiconductor), significantly increasing the conductivity.</p>
+
+                                    <p><strong>Mathematical Representation of Band Gap:</strong></p>
+                                    <p>The energy difference between the top of the valence band ($E_v$) and the bottom
+                                        of the conduction band ($E_c$) defines the band gap:</p>
+
+                                    <p>
+                                        $\Delta E = E_c - E_v$
+                                    </p>
+                                    <p>For insulators, $\Delta E \gtrsim 3$ eV, for semiconductors $0 < \Delta E
+                                            \lesssim 3$ eV, and for metals, there is no band gap (valence and conduction
+                                            bands overlap).</p>
+
+                                            <p><strong>Limitations and Extensions:</strong></p>
+                                            <p>The nearly free electron model provides a fundamental understanding of
+                                                band structure and its relation to conductivity. However, it relies on
+                                                approximations and has limitations. For instance, it doesn't fully
+                                                account for strong electron-electron interactions or electron-phonon
+                                                interactions, which can be important in some materials. More
+                                                sophisticated models like the Tight-Binding model or Density Functional
+                                                Theory (DFT) can provide more accurate descriptions in such cases.</p>
+
+                                            <h3><a href="radial-node-2s-orbital.html">Calculate the radial node of a 2s
+                                                    orbital using the given wave function.</a></h3>
+                                            <p>The wave function ($\psi$) of the 2s orbital is given by:</p>
+                                            <p>
+                                                $\psi_{2s} = \frac{1}{\sqrt{32\pi}} \left[ \frac{1}{a_0} \right]^{3/2}
+                                                \left[ 2 - \frac{r}{a_0} \right] e^{-r/2a_0}$
+                                            </p>
+                                            <p>A radial node occurs when the wave function is equal to zero. Thus, we
+                                                need to find the value of $r$ for which $\psi_{2s} = 0$. In this case,
+                                                the only term containing $r$ that can be zero is:</p>
+                                            <p>
+                                                $2 - \frac{r}{a_0} = 0$
+                                            </p>
+                                            <p>Solving for $r$ gives the location of the radial node ($r_0$):</p>
+                                            <p>
+                                                $ \frac{r}{a_0} = 2 $
+                                            </p>
+                                            <p>
+                                                $ r_0 = 2a_0 $
+                                            </p>
+                                            <p>Therefore, the radial node of the 2s orbital occurs at $r = 2a_0$.</p>
+                                            <section>
+                                                <h2 id="about-author">
+                                                    About the author
+                                                </h2>
+                                                <p> Written by <strong>Noah Kleij, PhD </strong></p>
+                                                <p>Noah Kleij holds a Doctorate in Organic and General Chemistry from
+                                                    the prestigious University of
+                                                    Manchester, United Kingdom. With a deep passion for chemical
+                                                    sciences, Noah has contributed
+                                                    significantly to advancing knowledge in both organic synthesis and
+                                                    general chemistry principles. Their
+                                                    research encompasses cutting-edge methodologies and innovative
+                                                    problem-solving approaches.</p>
+
+                                                <p>In addition to their academic achievements, Noah is an accomplished
+                                                    author and educator, committed to
+                                                    sharing complex chemical concepts in accessible and engaging ways.
+                                                    Their work not only bridges
+                                                    theoretical and practical chemistry but also inspires the next
+                                                    generation of chemists to explore the
+                                                    field's transformative potential.</p>
+                                            </section>
+        </main>
     </div>
     <script>
         // script.js
-document.addEventListener('DOMContentLoaded', () => {
-    const mainContent = document.querySelector('main');
-    const tableOfContents = document.getElementById('table-of-contents');
+        document.addEventListener('DOMContentLoaded', () => {
+            const mainContent = document.querySelector('main');
+            const tableOfContents = document.getElementById('table-of-contents');
 
-    if (!mainContent || !tableOfContents) {
-        console.error('Main content or table of contents element not found.');
-        return;
-    }
-
-    const headings = mainContent.querySelectorAll('h2, h3, h4');
-    const tocList = document.createElement('ul');
-
-    let currentList = tocList;
-    const stack = [currentList];
-
-    headings.forEach(heading => {
-        const tagName = heading.tagName;
-        const id = heading.id;
-        const text = heading.textContent;
-
-        if (id) {
-            const listItem = document.createElement('li');
-            const link = document.createElement('a');
-            link.href = `#${id}`;
-            link.textContent = text;
-            listItem.appendChild(link);
-
-            if (tagName === 'H2') {
-                while (stack.length > 1) {
-                    stack.pop();
-                }
-                currentList = stack[stack.length - 1];
-                currentList.appendChild(listItem);
-                stack.push(document.createElement('ul'));
-                currentList = stack[stack.length - 1];
-                listItem.appendChild(currentList);
-            } else if (tagName === 'H3') {
-                while (stack.length > 2) {
-                    stack.pop();
-                }
-                currentList = stack[stack.length - 1];
-                currentList.appendChild(listItem);
-                stack.push(document.createElement('ul'));
-                currentList = stack[stack.length - 1];
-                listItem.appendChild(currentList);
-            } else if (tagName === 'H4') {
-                while (stack.length > 3) {
-                    stack.pop();
-                }
-                currentList = stack[stack.length - 1];
-                currentList.appendChild(listItem);
+            if (!mainContent || !tableOfContents) {
+                console.error('Main content or table of contents element not found.');
+                return;
             }
-        }
-    });
 
-    // Remove any empty ul elements that might have been created
-    function removeEmptyLists(list) {
-        Array.from(list.children).forEach(item => {
-            if (item.tagName === 'UL' && item.children.length === 0) {
-                item.remove();
-            } else if (item.tagName === 'LI') {
-                const childUl = item.querySelector('ul');
-                if (childUl) {
-                    removeEmptyLists(childUl);
+            const headings = mainContent.querySelectorAll('h2, h3, h4');
+            const tocList = document.createElement('ul');
+
+            let currentList = tocList;
+            const stack = [currentList];
+
+            headings.forEach(heading => {
+                const tagName = heading.tagName;
+                const id = heading.id;
+                const text = heading.textContent;
+
+                if (id) {
+                    const listItem = document.createElement('li');
+                    const link = document.createElement('a');
+                    link.href = `#${id}`;
+                    link.textContent = text;
+                    listItem.appendChild(link);
+
+                    if (tagName === 'H2') {
+                        while (stack.length > 1) {
+                            stack.pop();
+                        }
+                        currentList = stack[stack.length - 1];
+                        currentList.appendChild(listItem);
+                        stack.push(document.createElement('ul'));
+                        currentList = stack[stack.length - 1];
+                        listItem.appendChild(currentList);
+                    } else if (tagName === 'H3') {
+                        while (stack.length > 2) {
+                            stack.pop();
+                        }
+                        currentList = stack[stack.length - 1];
+                        currentList.appendChild(listItem);
+                        stack.push(document.createElement('ul'));
+                        currentList = stack[stack.length - 1];
+                        listItem.appendChild(currentList);
+                    } else if (tagName === 'H4') {
+                        while (stack.length > 3) {
+                            stack.pop();
+                        }
+                        currentList = stack[stack.length - 1];
+                        currentList.appendChild(listItem);
+                    }
                 }
+            });
+
+            // Remove any empty ul elements that might have been created
+            function removeEmptyLists(list) {
+                Array.from(list.children).forEach(item => {
+                    if (item.tagName === 'UL' && item.children.length === 0) {
+                        item.remove();
+                    } else if (item.tagName === 'LI') {
+                        const childUl = item.querySelector('ul');
+                        if (childUl) {
+                            removeEmptyLists(childUl);
+                        }
+                    }
+                });
             }
+            removeEmptyLists(tocList);
+
+            const tocTitle = document.createElement('h2');
+            tocTitle.textContent = 'Table of Contents';
+            tableOfContents.appendChild(tocTitle);
+            tableOfContents.appendChild(tocList);
         });
-    }
-    removeEmptyLists(tocList);
-
-    const tocTitle = document.createElement('h2');
-    tocTitle.textContent = 'Table of Contents';
-    tableOfContents.appendChild(tocTitle);
-    tableOfContents.appendChild(tocList);
-});
     </script>
 </body>
+
 </html>

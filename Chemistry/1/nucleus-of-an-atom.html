@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Where are protons and neutrons located in an atom?</title>
+    <style>
+      header {
+    background: linear-gradient(135deg, #252525 0%, #303030 100%); /* Subtle gradient for depth */
+    padding: 1.2rem 0; /* Slightly increased padding */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* More pronounced, darker shadow */
+    position: sticky;
+    top: 0;
+    z-index: 1000; /* Increased z-index for better layering */
+    transition: box-shadow 0.3s ease-in-out, transform 0.3s ease-in-out; /* Smooth transition for sticky effect */
+    transform: translateY(0); /* Initial state for smooth sticky animation */
+}
+
+header.sticky-active {
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3); /* Different shadow when sticky */
+    transform: translateY(-5px); /* Slight lift when sticky */
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 30px; /* Slightly increased side padding */
+}
+
+.logo {
+    font-size: 2rem; /* Slightly larger logo */
+    font-weight: 700; /* Bolder logo */
+    color: #7db4ff; /* Updated logo color, slightly lighter */
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4); /* Subtle text shadow for depth */
+    transition: transform 0.3s ease-in-out;
+}
+
+.logo:hover {
+    transform: scale(1.05); /* Gentle scale on hover */
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 30px; /* Use gap for spacing between list items */
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #f0f0f0; /* Slightly brighter text color */
+    position: relative; /* For the underline effect */
+    padding-bottom: 4px; /* Space for the underline */
+    transition: color 0.3s ease-in-out, transform 0.3s ease-in-out;
+    overflow: hidden; /* Clip the pseudo-element */
+}
+
+nav ul li a::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: #7db4ff; /* Same as logo color for consistency */
+    transform: scaleX(0); /* Initially hidden */
+    transform-origin: bottom right;
+    transition: transform 0.4s ease-out;
+}
+
+nav ul li a:hover {
+    color: #90caf9; /* Lighter hover color */
+    transform: translateY(-2px); /* Slight lift on hover */
+}
+
+nav ul li a:hover::before {
+    transform: scaleX(1);
+    transform-origin: bottom left;
+}
+
+/* Optional: Add an active state highlight */
+nav ul li a.active {
+    color: #90caf9;
+    font-weight: 600;
+}
+
+nav ul li a.active::before {
+    transform: scaleX(1);
+}
+
+/* Enhancements for Mobile (consider using JavaScript for more advanced mobile menus) */
+@media (max-width: 1024px) {
+    header {
+        display: hidden;
+    }
+}
+        :root {
+    --primary-bg: #f9f9f9; /* Very light grey for a softer white */
+    --secondary-bg: #ffffff; /* Pure white for content areas */
+    --text-primary: #212121; /* Dark grey for primary text */
+    --text-secondary: #757575; /* Medium grey for secondary text */
+    --accent-color: #2962ff; /* A vibrant blue */
+    --hover-color: #5393ff; /* Lighter blue for hover states */
+    --border-color: #e0e0e0; /* Light grey for borders */
+    --code-bg: #f0f0f0; /* Very light grey for code backgrounds */
+    --code-text: #333333; /* Dark grey for code text */
+    --toc-active: #2962ff;
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.1);
+    --transition-fast: 0.15s ease-in-out;
+    --transition-normal: 0.3s ease-in-out;
+}
+
+body {
+    font-family: 'Roboto', sans-serif; /* A clean and modern sans-serif font */
+    line-height: 1.6;
+    margin: 0;
+    background-color: var(--primary-bg);
+    color: var(--text-primary);
+    padding-bottom: 40px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+}
+
+/* Custom Scrollbar - Light theme version */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #bdbdbd;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: #9e9e9e;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 50px auto;
+    padding: 60px;
+    background-color: var(--secondary-bg);
+    box-shadow: var(--shadow-md);
+    border-radius: 8px;
+    display: grid;
+    grid-template-columns: minmax(250px, 300px) 1fr;
+    gap: 40px;
+}
+
+#table-of-contents {
+    padding: 30px;
+    background-color: var(--secondary-bg);
+    border-radius: 6px;
+    position: sticky;
+    top: 30px;
+    height: fit-content;
+    border: 1px solid var(--border-color);
+}
+
+/* Custom Scrollbar for Table of Contents */
+#table-of-contents::-webkit-scrollbar {
+    width: 6px; /* Thinner scrollbar */
+}
+
+#table-of-contents::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Light background for the track */
+    border-radius: 3px; /* Slightly rounded track */
+}
+
+#table-of-contents::-webkit-scrollbar-thumb {
+    background-color: #bdbdbd; /* Medium grey for the thumb */
+    border-radius: 3px; /* Slightly rounded thumb */
+}
+
+#table-of-contents::-webkit-scrollbar-thumb:hover {
+    background-color: #9e9e9e; /* Darker grey on hover */
+}
+
+#table-of-contents > h2 {
+    font-size: 1.5rem;
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: var(--text-primary);
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 8px;
+    text-align: left;
+}
+
+#table-of-contents ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#table-of-contents li {
+    margin-bottom: 10px;
+    padding-left: 0;
+    border-left: 3px solid transparent;
+    transition: border-left-color var(--transition-fast), color var(--transition-fast);
+}
+
+#table-of-contents li:hover,
+#table-of-contents li.active {
+    border-left-color: var(--toc-active);
+}
+
+#table-of-contents li.active > a {
+    color: var(--toc-active);
+    font-weight: 500;
+}
+
+#table-of-contents a {
+    text-decoration: none;
+    color: var(--text-secondary);
+    display: block;
+    padding: 6px 0;
+    transition: color var(--transition-fast);
+}
+
+#table-of-contents a:hover {
+    color: var(--hover-color);
+}
+
+#table-of-contents ul ul {
+    margin-left: 15px;
+    margin-top: 6px;
+}
+
+/* Main content styles - Focus on readability */
+main {
+    padding: 40px;
+    border-radius: 6px;
+    overflow: hidden;
+    background-color: var(--secondary-bg);
+    box-shadow: var(--shadow-sm);
+}
+
+main > *:not(:last-child) {
+    margin-bottom: 2em;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--text-primary);
+    letter-spacing: -0.01em;
+}
+
+h1 {
+    font-size: 2.5rem;
+    border-bottom: 2px solid var(--accent-color);
+    padding-bottom: 0.4em;
+    margin-bottom: 1em;
+}
+
+h2 {
+    font-size: 2rem;
+    border-bottom: 1px solid var(--accent-color);
+    padding-bottom: 0.3em;
+    margin-bottom: 0.9em;
+    color: var(--accent-color);
+}
+
+h3 {
+    font-size: 1.6rem;
+    margin-bottom: 0.7em;
+}
+
+h4 {
+    font-size: 1.4rem;
+    margin-bottom: 0.6em;
+}
+
+p {
+    margin-bottom: 1.5em;
+    color: var(--text-secondary);
+    orphans: 3;
+    widows: 3;
+    word-break: break-word;
+}
+
+ul, ol {
+    margin-left: 25px;
+    margin-bottom: 1.7em;
+}
+
+li {
+    margin-bottom: 0.7em;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    word-break: break-word;
+}
+
+strong {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+em {
+    font-style: italic;
+    color: var(--accent-color);
+}
+
+a {
+    color: var(--accent-color);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+    border-bottom: 1px solid transparent; /* Subtle underline on hover */
+}
+
+a:hover {
+    color: var(--hover-color);
+    border-bottom-color: var(--hover-color);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 2em;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    background-color: var(--secondary-bg);
+}
+
+th, td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+    word-break: break-word;
+}
+
+th {
+    background-color: #f5f5f5; /* Lighter header background */
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+tbody tr:nth-child(even) {
+    background-color: #fafafa; /* Very light grey for even rows */
+}
+
+/* Code blocks - Light theme styling */
+pre {
+    background-color: var(--code-bg);
+    color: var(--code-text);
+    padding: 12px 18px;
+    border-radius: 4px;
+    overflow-x: auto;
+    font-family: 'Menlo', monospace;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin-bottom: 1.6em;
+    white-space: pre-wrap;
+    border: 1px solid var(--border-color);
+}
+
+code {
+    font-family: 'Menlo', monospace;
+    background-color: #e8e8e8; /* Even lighter background for inline code */
+    color: var(--code-text);
+    padding: 3px 6px;
+    border-radius: 3px;
+    word-break: break-word;
+}
+
+pre code {
+    background-color: transparent;
+    padding: 0;
+}
+
+/* Horizontal rules - Simpler style */
+hr {
+    border: none;
+    height: 1px;
+    background-color: var(--border-color);
+    margin: 2em 0;
+}
+
+/* Blockquotes - Clean separation */
+blockquote {
+    border-left: 3px solid var(--accent-color);
+    padding: 10px 15px;
+    margin: 1.5em 0;
+    font-style: italic;
+    background-color: #f5f5f5;
+    border-radius: 3px;
+    color: var(--text-secondary);
+}
+
+blockquote p {
+    margin-bottom: 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+    .container {
+        max-width: 90%;
+        padding: 50px;
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+
+    #table-of-contents {
+        position: static;
+        margin-bottom: 30px;
+    }
+
+    #table-of-contents > h2 {
+        text-align: center;
+    }
+}
+
+@media (max-width: 768px) {
+    main {
+        padding: 30px;
+    }
+
+    h1 {
+        font-size: 2.2rem;
+    }
+
+    h2 {
+        font-size: 1.8rem;
+    }
+    nav{
+        display:none;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 30px;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    h2 {
+        font-size: 1.6rem;
+    }
+}
+
+              /* Question Container */
+              .question-container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 40px; /* Increased padding for a more spacious feel */
+            background-color: var(--secondary-bg);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 0 6px 20px rgba(0, 0, 0, 0.15); /* More refined shadow */
+            border-radius: 12px; /* Slightly more rounded corners */
+            transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for hover effect */
+        }
+
+        .question-container:hover {
+            transform: translateY(-5px); /* Subtle lift on hover */
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3), 0 10px 30px rgba(0, 0, 0, 0.2); /* Enhanced shadow on hover */
+        }
+
+        .question-statement {
+            font-size: 1.5rem; /* Increased font size for better readability */
+            font-weight: 600; /* Slightly bolder */
+            color: var(--text-primary);
+            margin-bottom: 25px; /* Increased spacing */
+            line-height: 1.6; /* Improved line height */
+        }
+
+        /* Answer Section */
+        .answer-section {
+            margin-top: 40px; /* Increased spacing */
+        }
+
+        .answer-section h2 {
+            font-size: 2rem; /* Larger heading */
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--accent-color);
+            border-bottom: 2px solid var(--accent-color); /* Thicker, more prominent border */
+            padding-bottom: 10px;
+            position: relative; /* For pseudo-element */
+        }
+
+        .answer-section h2::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: -2px;
+            width: 80px;
+            height: 2px;
+            background-color: var(--accent-color); /* Matching border color */
+        }
+
+        .answer-content {
+            font-size: 1.2rem; /* Increased font size */
+            color: var(--text-secondary);
+            line-height: 1.7; /* Improved line height */
+        }
+
+        .answer-content ul,
+        .answer-content ol {
+            margin-left: 30px; /* Increased indentation */
+            margin-bottom: 2em;
+        }
+
+        .answer-content li {
+            margin-bottom: 1em; /* Increased spacing */
+            color: var(--text-secondary);
+            line-height: 1.6;
+            word-break: break-word;
+        }
+
+        .answer-content p:last-of-type {
+            margin-bottom: 0;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .question-container {
+                padding: 30px; /* Adjusted padding for smaller screens */
+                margin: 20px auto;
+            }
+
+            .question-statement {
+                font-size: 1.3rem;
+            }
+
+            .answer-section h2 {
+                font-size: 1.8rem;
+            }
+
+            .answer-content {
+                font-size: 1.1rem;
+            }
+        }
+
+        /* Related Questions */
+        .related-questions {
+            max-width: 900px;
+            margin: 60px auto; /* Increased margin */
+            padding: 40px; /* Increased padding */
+            background-color: var(--secondary-bg);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 0 6px 20px rgba(0, 0, 0, 0.15); /* Same refined shadow as question-container */
+            border-radius: 12px; /* Same rounded corners */
+            transition: transform 0.3s ease, box-shadow 0.3s ease; /* Same hover transition */
+        }
+        .related-questions:hover {
+            transform: translateY(-5px); /* Subtle lift on hover */
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3), 0 10px 30px rgba(0, 0, 0, 0.2); /* Enhanced shadow on hover */
+        }
+
+        .related-questions h2 {
+            font-size: 1.6rem; /* Slightly larger font */
+            font-weight: 700; /* Bold heading */
+            margin-top: 0;
+            margin-bottom: 20px; /* Increased margin */
+            color: var(--text-primary);
+            border-bottom: 2px solid var(--border-color); /* Thicker border */
+            padding-bottom: 12px; /* Increased padding */
+            text-align: left;
+        }
+
+        .related-questions ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .related-questions li {
+            margin-bottom: 15px; /* Increased margin */
+        }
+
+        .related-questions a {
+            text-decoration: none;
+            color: var(--text-secondary);
+            display: block;
+            padding: 10px 0; /* Increased padding */
+            transition: color var(--transition-fast), transform 0.2s ease; /* Added transform transition */
+            position: relative;
+        }
+
+        .related-questions a:hover {
+            color: var(--hover-color);
+            transform: translateX(5px);
+        }
+
+        .related-questions a::before { /* Adds a subtle arrow-like effect */
+            content: '>';
+            position: absolute;
+            left: -15px;
+            opacity: 0;
+            transition: opacity 0.3s ease, left 0.3s ease;
+        }
+
+        .related-questions a:hover::before {
+            opacity: 1;
+            left: -5px;
+        }
+
+        @media (max-width: 768px) {
+            .related-questions {
+                padding: 30px;
+                margin: 40px auto;
+            }
+            .related-questions h2 {
+                font-size: 1.4rem;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    { left: "$", right: "$", display: false },
+                    { left: "$$", right: "$$", display: true }
+                ]
+            });
+        });
+    </script>
+    <!-- Schema Markup -->
+    <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "Question",
+          "name": "Where are protons and neutrons located in an atom?",
+          "text": "Where are protons and neutrons located in an atom?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Nucleus"
+          }
+        }
+    </script>
+</head>
+<body>
+<header>
+        <nav>
+            <div class="logo">Neuron IQ</div>
+            <ul>
+                <li><a href="/index.html">Home</a></li>
+                <li><a href="/subjects.html">Subjects</a></li>
+                <li><a href="/about.html">About</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="question-container">
+        <div class="question-statement">
+            <p>Where are protons and neutrons located in an atom?</p>
+        </div>
+        <div class="answer-section">
+            <h2>Answer: Nucleus</h2>
+            <div class="answer-content">
+                <p>Protons and neutrons are located in the <strong>atomic nucleus</strong>, a small, dense region at the center of an atom.</p>
+<ul>
+<li><p><strong>Nucleus:</strong>  The nucleus is the positively charged core of the atom.  It&#39;s incredibly small compared to the overall size of the atom (about 100,000 times smaller).  Almost all of the atom&#39;s mass is concentrated in the nucleus.</p>
+</li>
+<li><p><strong>Protons:</strong>  Protons are positively charged subatomic particles.  They are located within the nucleus, contributing to its positive charge.</p>
+</li>
+<li><p><strong>Neutrons:</strong> Neutrons are electrically neutral (no charge) subatomic particles.  They are also found residing within the nucleus alongside the protons.</p>
+</li>
+</ul>
+            </div>
+        </div>
+    </div>
+    <div class="related-questions">
+        <h2>Related Questions</h2>
+        <ul>
+            <li><a href="/Chemistry/1/three-main-subatomic-particles.html">What are the three main subatomic particles in an atom?</a></li>
+            <li><a href="negative-subatomic-particle.html">Which subatomic particle has negative charge?</a></li>
+            <li><a href="positive-subatomic-particle.html">Which subatomic particle has positive charge?</a></li>
+            </ul>
+    </div>
+</body>
+</html>
