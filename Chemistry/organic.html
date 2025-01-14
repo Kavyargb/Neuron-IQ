@@ -157,7 +157,61 @@
     </footer>
 
     <!-- JavaScript (Load at the end of body for faster page load) -->
-    <script src="https://www.lactame.com/lib/molgl/5.0.0/molgl.min.js"></script> <!-- Example 3D molecule library if required in future -->
+    <script src="https://www.lactame.com/lib/molgl/5.0.0/molgl.min.js">
+        // Hamburger Menu Toggle
+const hamburgerBtn = document.getElementById('hamburger-btn');
+const navMenu = document.getElementById('nav-menu');
+
+hamburgerBtn.addEventListener('click', () => {
+  navMenu.classList.toggle('show'); 
+});
+
+// Article Search Functionality (Basic Example)
+const articleSearch = document.getElementById('article-search');
+const articleLinks = document.getElementById('article-links').querySelectorAll('a');
+
+articleSearch.addEventListener('input', () => {
+  const searchTerm = articleSearch.value.toLowerCase();
+
+  articleLinks.forEach(link => {
+    const linkText = link.textContent.toLowerCase();
+    if (linkText.includes(searchTerm)) {
+      link.style.display = 'block';
+    } else {
+      link.style.display = 'none';
+    }
+  });
+});
+
+// 3D Molecule Viewer (MolGL Example)
+const molContainer = document.getElementById('mol-container');
+const moleculeSelect = document.getElementById('molecule-select');
+
+// Initialize MolGL viewer 
+let viewer = new MolGL({
+  container: molContainer,
+  style: {
+    stick: {},
+    sphere: { scale: 0.3 }
+  }
+});
+
+// Load a default molecule
+viewer.load('pdb:1crn'); // Example: Load a PDB structure
+
+// Change molecule on selection
+moleculeSelect.addEventListener('change', () => {
+  const selectedMolecule = moleculeSelect.value;
+  // You'll need to map molecule names to appropriate data sources (e.g., PDB IDs, SDF files)
+  if (selectedMolecule === 'methane') {
+    viewer.load('sdf:./molecules/methane.sdf'); // Example: Load from an SDF file
+  } else if (selectedMolecule === 'ethanol') {
+    viewer.load('pdb:1etn');
+  } else if (selectedMolecule === 'benzene') {
+    viewer.load('sdf:./molecules/benzene.sdf');
+  }
+});
+    </script> <!-- Example 3D molecule library if required in future -->
     <script src="js/scripts.js"></script> 
 </body>
 </html>
