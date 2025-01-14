@@ -4,20 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Neuron IQ - Organic Chemistry</title>
-     <link rel="stylesheet" href="style-main.css">
-       <link rel="preconnect" href="https://fonts.googleapis.com">
+    <meta name="description" content="Explore the fascinating world of organic chemistry with interactive articles, quizzes, and 3D molecule visualizations.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="specific-chemistry.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <!-- Stylesheets (Consider using a CSS preprocessor like Sass for better organization) -->
+    <link rel="stylesheet" href="css/style-main.css">
+    <link rel="stylesheet" href="css/style.css"> 
+    <link rel="stylesheet" href="css/specific-chemistry.css">
 </head>
 <body>
     <header>
         <nav>
-            <div class="logo">Neuron IQ</div>
-            <ul>
+            <div class="logo">
+                <a href="/index.html">Neuron IQ</a>
+            </div>
+            <button id="hamburger-btn" aria-label="Toggle navigation">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul id="nav-menu">
                 <li><a href="/index.html">Home</a></li>
-                 <li><a href="/subjects.html">Subjects</a></li>
+                <li><a href="/subjects.html">Subjects</a></li>
                 <li><a href="/about.html">About</a></li>
                 <li><a href="#">Contact</a></li>
             </ul>
@@ -26,51 +40,124 @@
 
     <section class="specific-chemistry-page">
         <aside class="article-list">
-             <h2>Organic Chemistry Articles</h2>
-            <ul>
-                <li><a href="/Chemistry/organic/classification-and-nomenclature-of-organic-compounds.html">Classification and Nomenclature of Organic Compounds</a></li>
-                <li><a href="#">Alkanes, Alkenes, and Alkynes</a></li>
-                <li><a href="#">Functional Groups in Organic Chemistry</a></li>
-                <li><a href="#">Alcohols and Ethers</a></li>
-                 <li><a href="#">Aldehydes and Ketones</a></li>
-                   <li><a href="#">Carboxylic Acids and Esters</a></li>
-                   <li><a href="#">Amines and Amides</a></li>
-                   <li><a href="#">Nomenclature of Organic Compounds</a></li>
-                      <li><a href="#">Isomerism in Organic Molecules</a></li>
-                       <li><a href="#">Reactions of Alkanes</a></li>
-                           <li><a href="#">Grignard Reagents</a></li>
+            <h2>Organic Chemistry Articles</h2>
+            <input type="text" id="article-search" placeholder="Search articles...">
+            <ul id="article-links">
+                <!-- Use JavaScript to dynamically populate this list based on search -->
+                <li><a href="/Chemistry/organic/classification-and-nomenclature-of-organic-compounds.html">Classification and Nomenclature</a></li>
+                <li><a href="#">Alkanes, Alkenes, Alkynes</a></li>
+                <li><a href="#">Functional Groups</a></li>
+                <!-- ... other articles ... -->
+                <li><a href="#">Grignard Reagents</a></li>
             </ul>
         </aside>
 
         <main class="content-area">
-             <h1>Organic Chemistry</h1>
-            <p>Explore the fascinating world of carbon compounds, their structure, properties, and reactions.</p>
+            <div class="hero">
+                <h1>Organic Chemistry</h1>
+                <p>Explore the fascinating world of carbon compounds, their structure, properties, and reactions in an interactive way!</p>
+                <button class="cta-button">Start Learning</button>
+            </div>
 
-             <div class="topic-list-grid">
-                 <h2>Key Topics</h2>
-                  <ul>
-                     <li><a href="#">Hydrocarbons</a></li>
-                     <li><a href="#">Functional Groups</a></li>
-                     <li><a href="#">Alcohols, Aldehydes, Ketones</a></li>
-                     <li><a href="#">Reactions of Alkanes, Alkenes and Alkynes</a></li>
-                     <li><a href="#">Carboxylic Acids and Esters</a></li>
-                      <li><a href="#">Amines and Amides</a></li>
-                       <li><a href="#">Stereochemistry</a></li>
-                       <li><a href="#">Spectroscopy</a></li>
-                     </ul>
-             </div>
+            <div class="topic-list-grid">
+                <h2>Key Topics</h2>
+                <div class="topic-cards">
+                    <!-- Example topic card -->
+                    <div class="topic-card">
+                        <a href="#">
+                            <img src="images/hydrocarbons.jpg" alt="Hydrocarbons"> 
+                            <h3>Hydrocarbons</h3>
+                            <p>Learn about the simplest organic compounds.</p>
+                        </a>
+                    </div>
+                    <div class="topic-card">
+                        <a href="#">
+                            <img src="images/functional.jpg" alt="Functional Groups"> 
+                            <h3>Functional Groups</h3>
+                            <p>Discover the key to organic reactivity.</p>
+                        </a>
+                    </div>
+
+                    <div class="topic-card">
+                        <a href="#">
+                            <img src="images/alcohol.jpg" alt="Alcohols, Aldehydes, Ketones"> 
+                            <h3>Alcohols, Aldehydes, Ketones</h3>
+                            <p>Oxygen-containing functional groups and their properties.</p>
+                        </a>
+                    </div>
+
+                    <div class="topic-card">
+                        <a href="#">
+                            <img src="images/reaction.jpg" alt="Reactions of Alkanes, Alkenes and Alkynes"> 
+                            <h3>Reactions of Alkanes, Alkenes and Alkynes</h3>
+                            <p>Explore addition, substitution, and other key reactions.</p>
+                        </a>
+                    </div>
+
+                    <div class="topic-card">
+                        <a href="#">
+                            <img src="images/acid.jpg" alt="Carboxylic Acids and Esters"> 
+                            <h3>Carboxylic Acids and Esters</h3>
+                            <p>Acidity, esterification, and important derivatives.</p>
+                        </a>
+                    </div>
+
+                    <div class="topic-card">
+                        <a href="#">
+                            <img src="images/amines.jpg" alt="Amines and Amides"> 
+                            <h3>Amines and Amides</h3>
+                            <p>Nitrogen-containing compounds and their basicity.</p>
+                        </a>
+                    </div>
+
+                    <div class="topic-card">
+                        <a href="#">
+                            <img src="images/stereochemistry.jpg" alt="Stereochemistry"> 
+                            <h3>Stereochemistry</h3>
+                            <p>The 3D arrangement of atoms and its impact.</p>
+                        </a>
+                    </div>
+
+                    <div class="topic-card">
+                        <a href="#">
+                            <img src="images/spectroscopy.jpg" alt="Spectroscopy"> 
+                            <h3>Spectroscopy</h3>
+                            <p>Techniques to identify and analyze organic compounds.</p>
+                        </a>
+                    </div>
+                    <!-- ... more topic cards ... -->
+                </div>
+            </div>
+
+            <!-- Interactive 3D Molecule Viewer (Example using MolGL) -->
+            <div class="molecule-viewer">
+                <h2>Interactive Molecule Viewer</h2>
+                <div id="mol-container"></div>
+                <p>Select a molecule: 
+                    <select id="molecule-select">
+                        <option value="methane">Methane</option>
+                        <option value="ethanol">Ethanol</option>
+                        <option value="benzene">Benzene</option>
+                    </select>
+                </p>
+            </div>
         </main>
-
     </section>
 
-   <footer>
-          <p>© 2025 Neuron IQ. All rights reserved.</p>
-        <ul>
-            <li><a href="/about.html">About Us</a></li>
-            <li><a href="#">Contact Us</a></li>
-            <li><a href="#">Privacy Policy</a></li>
-            <li><a href="#">Terms of Use</a></li>
-        </ul>
+    <footer>
+        <div class="footer-content">
+            <p>© 2025 Neuron IQ. All rights reserved.</p>
+            <ul class="footer-links">
+                <li><a href="/about.html">About Us</a></li>
+                <li><a href="#">Contact Us</a></li>
+                <li><a href="#">Privacy Policy</a></li>
+                <li><a href="#">Terms of Use</a></li>
+            </ul>
+        </div>
     </footer>
+
+    <!-- JavaScript (Load at the end of body for faster page load) -->
+    <script src="https://www.lactame.com/lib/molgl/5.0.0/molgl.min.js"></script> <!-- Example 3D molecule library if required in future -->
+    <script src="js/scripts.js"></script> 
 </body>
 </html>
