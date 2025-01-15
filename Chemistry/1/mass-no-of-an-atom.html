@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What is the Mass Number?</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+    <style>
+        :root {
+            --primary-bg: #0a0a0a;
+            --secondary-bg: #1a1a1a;
+            --text-primary: #f0f0f0;
+            --text-secondary: #9e9e9e;
+            --accent-color: #2196f3;
+            --hover-color: #64b5f6;
+            --border-color: #333;
+            --code-bg: #2a2a2a;
+            --code-text: #ddd;
+            --toc-active: #4fc3f7;
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
+            --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.3);
+            --transition-fast: 0.15s ease-in-out;
+            --transition-normal: 0.3s ease-in-out;
+            --gradient-primary: linear-gradient(135deg, #2a2a2a, #1a1a1a); /* Subtle Gradient */
+            --gradient-hover: linear-gradient(135deg, #3a3a3a, #252525); /* Subtle Hover Gradient */
+        }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.7;
+            margin: 0;
+            background-color: var(--primary-bg);
+            color: var(--text-primary);
+            padding-bottom: 60px;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+            background-image: radial-gradient(circle at center, rgba(40, 40, 40, 0.15) 0%, transparent 60%);
+            /* Subtle Dark Background Texture */
+            background-size: 400px 400px;
+            /* Size of radial gradient pattern */
+        }
+        
+        /* Custom Scrollbar - Dark theme with more depth */
+        ::-webkit-scrollbar {
+            width: 12px;
+            /* Slightly Wider scrollbar */
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #222;
+            box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.2);
+            /* Gives the track some depth */
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background-color: #555;
+            border-radius: 10px;
+            /* Rounder scrollbar */
+            border: 3px solid #222;
+            /* Adds some visual separation */
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background-color: #777;
+        }
+        
+        /* Question Container - More visual impact, NO gradient or border animation */
+        .question-container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 40px;
+            background-color: var(--secondary-bg);
+            /* Removed gradient */
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25), 0 12px 35px rgba(0, 0, 0, 0.15);
+            /* Deeper shadows */
+            border-radius: 15px;
+            /* Slightly more rounded */
+            transition: transform var(--transition-normal) ease, box-shadow var(--transition-normal) ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .question-container:hover {
+            transform: translateY(-7px);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.35), 0 20px 40px rgba(0, 0, 0, 0.25);
+            /* More depth */
+        }
+        
+        /* Question Statement - Enhanced Underline */
+        .question-statement {
+            font-size: 1.7rem;
+            /* A bit larger */
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 30px;
+            /* More spacing */
+            line-height: 1.6;
+            position: relative;
+            /* For gradient underline animation */
+            display: inline-block;
+            /* Important for gradient animation */
+        }
+        
+        .question-statement::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            /* Adjust position as needed */
+            left: 0;
+            width: 100%;
+            height: 3px;
+            /* Thicker underline */
+            background: linear-gradient(to right, transparent, var(--accent-color), transparent);
+            /* Gradient underline */
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            /* Smoother animation */
+        }
+        
+        .question-statement:hover::after {
+            transform: scaleX(1);
+        }
+        
+        /* Answer Section - Enhanced Styling */
+        .answer-section {
+            margin-top: 50px;
+        }
+        
+        .answer-section h2 {
+            font-size: 2.2rem;
+            /* A bit larger */
+            font-weight: 700;
+            margin-bottom: 25px;
+            /* More spacing */
+            color: var(--accent-color);
+            border-bottom: 3px solid var(--accent-color);
+            /* Thicker border */
+            padding-bottom: 15px;
+            /* More padding */
+            position: relative;
+        }
+        
+        .answer-section h2::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: -3px;
+            width: 80px;
+            height: 3px;
+            background-color: var(--accent-color);
+            border-radius: 2px;
+            /* Rounded effect for the border */
+            transition: width var(--transition-normal) ease-in-out;
+        }
+        
+        .answer-section h2:hover::after {
+            width: 120px
+        }
+        
+        /* Answer Content - Improved Readability and Animation */
+        .answer-content {
+            font-size: 1.3rem;
+            /* Slightly Larger font */
+            color: var(--text-secondary);
+            line-height: 1.8;
+            animation: fadeIn 0.8s ease-in-out forwards;
+            /* Fade in animation */
+        }
+        
+        .answer-content ul,
+        .answer-content ol {
+            margin-left: 40px;
+            margin-bottom: 2.5em;
+            /* More space below the list */
+        }
+        
+        .answer-content li {
+            margin-bottom: 1.2em;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            word-break: break-word;
+            position: relative;
+            padding-left: 20px;
+            /* Space for checkmark/arrow */
+        }
+        
+        .answer-content li::before {
+            content: '\2022';
+            /* Unicode bullet point */
+            position: absolute;
+            left: 0;
+            top: 0.5em;
+            font-size: 0.8em;
+            color: var(--accent-color)
+        }
+        
+        .answer-content p:last-of-type {
+            margin-bottom: 0;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+        
+            to {
+                opacity: 1;
+            }
+        }
+        
+        /* Gemini Chatbot - Enhanced Styling and User Feedback */
+        .gemini-chat-container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 25px;
+            background: var(--gradient-primary);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25), 0 10px 25px rgba(0, 0, 0, 0.15);
+            border-radius: 15px;
+            /* More rounded */
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            overflow: hidden;
+        }
+        
+        .gemini-input-area {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            transition: box-shadow var(--transition-normal) ease, transform var(--transition-normal) ease;
+            background-color: var(--code-bg);
+            padding: 5px;
+            border-radius: 8px;
+        }
+        
+        .gemini-input-area:hover {
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25), 0 3px 8px rgba(0, 0, 0, 0.15);
+            transform: translateY(-2px);
+        }
+        
+        .gemini-input {
+            flex: 1;
+            padding: 12px 15px;
+            background-color: transparent;
+            /* Transparent for visual consistency */
+            border: 2px solid var(--border-color);
+            /* Make the border slightly more visible */
+            border-radius: 8px;
+            /* More rounded input */
+            color: var(--code-text);
+            font-size: 1.1rem;
+            /* slightly larger */
+            transition: border-color var(--transition-normal) ease;
+        }
+        
+        .gemini-input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+        
+        /* Submit Button - Enhanced Styling and Hover Effect */
+        .gemini-submit-button {
+            padding: 12px 15px;
+            background-color: var(--accent-color);
+            border: none;
+            border-radius: 8px;
+            /* More rounded button */
+            color: var(--text-primary);
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color var(--transition-normal) ease, transform 0.2s ease, box-shadow 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .gemini-submit-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
+            transition: left 0.4s ease;
+        }
+        
+        .gemini-submit-button:hover::before {
+            left: 100%;
+        }
+        
+        .gemini-submit-button:hover {
+            background-color: var(--hover-color);
+            transform: translateY(-2px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 3px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Gemini Response - Enhanced Styling and Animation */
+        .gemini-response {
+            margin-top: 15px;
+            padding: 15px 20px;
+            background-color: #333;
+            /* Slightly darker background */
+            border-radius: 10px;
+            /* More rounded corners */
+            color: #ddd;
+            font-size: 1rem;
+            word-break: break-word;
+            animation: slideIn 0.5s ease-in-out forwards;
+            /* Slide-in animation for messages */
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+        
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .question-container {
+                padding: 25px;
+                margin: 20px auto;
+            }
+        
+            .question-statement {
+                font-size: 1.4rem;
+            }
+        
+            .answer-section h2 {
+                font-size: 1.9rem;
+            }
+        
+            .answer-content {
+                font-size: 1.2rem;
+            }
+        
+            .gemini-chat-container {
+                padding: 15px;
+            }
+        
+            .gemini-input {
+                padding: 10px 12px;
+                font-size: 1rem;
+                /* keep input size consistent across devices */
+            }
+        
+            .gemini-submit-button {
+                padding: 10px 12px;
+            }
+        }
+        
+        /* Related Questions - More interactive and Visually Appealing */
+        .related-questions {
+            max-width: 900px;
+            margin: 60px auto;
+            padding: 40px;
+            background: var(--gradient-primary);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25), 0 10px 25px rgba(0, 0, 0, 0.15);
+            border-radius: 15px;
+            /* More rounded edges */
+            transition: transform var(--transition-normal) ease, box-shadow var(--transition-normal) ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .related-questions::before {
+            /* Adds a cool border effect */
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border: 2px solid transparent;
+            border-radius: 15px;
+            background: linear-gradient(to right, transparent, var(--accent-color), transparent);
+            background-clip: border-box;
+            /* Ensures background doesn't bleed */
+            mask: linear-gradient(white, white), linear-gradient(to right, transparent 10px, white 90%);
+            /* Creates border shape */
+            mask-composite: exclude;
+            /* Masks gradient */
+            transition: background 0.5s ease-in-out;
+        }
+        
+        .related-questions:hover::before {
+            background: linear-gradient(to right, transparent, var(--hover-color), transparent);
+        }
+        
+        .related-questions:hover {
+            transform: translateY(-7px);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.35), 0 20px 40px rgba(0, 0, 0, 0.25);
+        }
+        
+        .related-questions h2 {
+            font-size: 1.7rem;
+            font-weight: 700;
+            margin-top: 0;
+            margin-bottom: 25px;
+            color: var(--text-primary);
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 15px;
+            text-align: left;
+        }
+        
+        .related-questions ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .related-questions li {
+            margin-bottom: 15px;
+        }
+        
+        /* Related Questions Links - Enhanced Styling and Hover Effects */
+        .related-questions a {
+            text-decoration: none;
+            color: var(--text-secondary);
+            display: block;
+            padding: 12px 0;
+            transition: color var(--transition-fast), transform 0.2s ease, background-color 0.2s ease;
+            position: relative;
+            border-radius: 4px;
+            overflow: hidden;
+            /* Prevent potential overflow issues */
+        }
+        
+        .related-questions a::before {
+            /* Hover effect underline */
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(to right, transparent, var(--hover-color), transparent);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease-out;
+        }
+        
+        .related-questions a:hover {
+            color: var(--hover-color);
+            transform: translateX(4px);
+        }
+        
+        .related-questions a:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .related-questions a::after {
+            /* Arrow pseudo element */
+            content: '>';
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2rem;
+            opacity: 0.6;
+        }
+        
+        @media (max-width: 768px) {
+            .related-questions {
+                padding: 30px;
+                margin: 40px auto;
+            }
+        
+            .related-questions h2 {
+                font-size: 1.5rem;
+            }
+        }
+        
+        /* Header - Enhanced Styling and Wave Animation */
+        header {
+            background: var(--gradient-primary);
+            padding: 1.2rem 0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            transition: box-shadow var(--transition-normal) ease-in-out, transform var(--transition-normal) ease-in-out;
+            position: relative;
+            /* For wave effect */
+            overflow: hidden;
+            /* Ensures the wave doesn't bleed over the header */
+        }
+        
+        header::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 150%;
+            /* make it wider to cover even big screens */
+            height: 100px;
+            background: var(--accent-color);
+            border-radius: 50%;
+            /* Makes it wavy */
+            transform: scaleX(1.1) translateY(45%);
+            transition: transform 0.5s ease-in-out;
+            animation: header-wave 5s linear infinite;
+            /* Applies the wave animation */
+            opacity: 0.1;
+        }
+        
+        header:hover::before {
+            transform: scaleX(1.2) translateY(40%)
+        }
+        
+        @keyframes header-wave {
+            0% {
+                transform: scaleX(1.1) translateY(45%) rotate(0deg)
+            }
+        
+            50% {
+                transform: scaleX(1.2) translateY(40%) rotate(180deg)
+            }
+        
+            100% {
+                transform: scaleX(1.1) translateY(45%) rotate(360deg)
+            }
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 30px;
+        }
+        
+        /* Logo - Enhanced Styling and Hover Effect */
+        .logo {
+            font-size: 2.2rem;
+            /* Larger logo text */
+            font-weight: 700;
+            color: #7db4ff;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+            transition: transform var(--transition-normal) ease-in-out;
+            position: relative;
+            /* For gradient underline animation */
+            display: inline-block;
+            /* Important for gradient animation */
+        }
+        
+        .logo:hover {
+            transform: scale(1.05);
+        }
+        
+        .logo::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            /* Adjust position as needed */
+            left: 0;
+            width: 100%;
+            height: 3px;
+            /* Thicker underline */
+            background: linear-gradient(to right, transparent, #64b5f6, transparent);
+            /* Gradient underline */
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            /* Smoother animation */
+        }
+        
+        .logo:hover::after {
+            transform: scaleX(1);
+        }
+        
+        /* Navigation Links - Enhanced Styling and Hover Effects */
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            gap: 30px;
+        }
+        
+        nav ul li a {
+            text-decoration: none;
+            color: #f0f0f0;
+            position: relative;
+            padding-bottom: 4px;
+            transition: color var(--transition-normal) ease-in-out, transform var(--transition-normal) ease-in-out;
+            overflow: hidden;
+        }
+        
+        nav ul li a::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(to right, transparent, #7db4ff, transparent);
+            transform: scaleX(0);
+            transform-origin: bottom right;
+            transition: transform 0.4s ease-out;
+        }
+        
+        nav ul li a:hover {
+            color: #90caf9;
+            transform: translateY(-2px);
+        }
+        
+        nav ul li a:hover::before {
+            transform: scaleX(1);
+            transform-origin: bottom left;
+        }
+        
+        nav ul li a.active {
+            color: #90caf9;
+            font-weight: 600;
+        }
+        
+        nav ul li a.active::before {
+            transform: scaleX(1);
+        }
+        
+        @media (max-width: 1024px) {
+            header {
+                display: none;
+            }
+        }
+        </style>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+          renderMathInElement(document.body, {
+              delimiters: [
+                  { left: "$", right: "$", display: false },
+                  { left: "$$", right: "$$", display: true }
+              ]
+          });
+      });
+  </script>
+    <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "Question",
+          "name": "What is the mass number of an element?",
+          "text": "What is the mass number of an element?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The number of protons and neutrons in the atom."
+          }
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">Neuron IQ</div>
+            <ul>
+                <li><a href="/index.html">Home</a></li>
+                <li><a href="/subjects.html">Subjects</a></li>
+                <li><a href="/about.html">About</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="question-container">
+        <div class="question-statement">
+            <p>What is the mass number of an element?</p>
+        </div>
+        <div class="answer-section">
+            <h2>Answer: no. of protons and neutrons </h2>
+            <div class="answer-content">
+                <p>
+                    <p>The mass number of an element is the <strong>total number of protons and neutrons</strong> found in the nucleus of an atom of that element.</p>
+                    <ul>
+                        <li><strong>Protons:</strong> Positively charged particles in the nucleus, which determine the element's identity (atomic number).</li>
+                        <li><strong>Neutrons:</strong> Neutral (no charge) particles in the nucleus, which contribute to the atom's mass.</li>
+                    </ul>
+                    <p><strong>Formula:</strong> Mass Number ($A$) = Number of Protons ($Z$) + Number of Neutrons ($N$)</p>
+                    <p><strong>Key Points:</strong></p>
+                    <ul>
+                        <li><strong>Whole Number:</strong> The mass number is always a whole number.</li>
+                        <li><strong>Isotopes:</strong> Different atoms of the same element can have different numbers of neutrons, and therefore, different mass numbers. These different forms are called isotopes. For example, Carbon-12 and Carbon-14 are isotopes of carbon. They both have 6 protons (which defines them as carbon) but Carbon-12 has 6 neutrons, while Carbon-14 has 8 neutrons.</li>
+                        <li><strong>Location on Periodic Table:</strong> The mass number is <em>not</em> the atomic weight listed on the periodic table. The atomic weight is a weighted average of the masses of all naturally occurring isotopes of that element.</li>
+                        <li><strong>Notation:</strong> The mass number is often written as a superscript before the element symbol (e.g., ¹²C for Carbon-12) or after the element name (e.g., Carbon-12).</li>
+                    </ul>
+                    <p><strong>In summary, the mass number is a crucial piece of information about an atom, telling us the total number of nucleons (protons and neutrons) in its nucleus.</strong></p>
+                                </p>
+            </div>
+        </div>
+    </div>
+
+     <div class="gemini-chat-container">
+          <div class="gemini-input-area">
+              <input type="text" class="gemini-input" placeholder="Ask me anything...">
+            <button class="gemini-submit-button">Submit</button>
+          </div>
+          <div class="gemini-response">
+           </div>
+        </div>
+
+    <div class="related-questions">
+        <h2>Related Questions</h2>
+        <ul>
+            <li><a href="three-main-subatomic-particles.html">What are the three main subatomic particles in an atom?</a></li>
+            <li><a href="negative-subatomic-particle.html">Which subatomic particle has negative charge?</a></li>
+            <li><a href="positive-subatomic-particle.html">Which subatomic particle has positive charge?</a></li>
+        </ul>
+    </div>
+  <script>
+document.addEventListener('DOMContentLoaded', () => {
+    const geminiInput = document.querySelector('.gemini-input');
+    const geminiSubmitButton = document.querySelector('.gemini-submit-button');
+    const geminiResponse = document.querySelector('.gemini-response');
+    const apiKey = ''; // Your provided API key
+
+    function markdownToHTML(markdownText) {
+        let html = "";
+        const lines = markdownText.split("\n");
+
+        for (const line of lines) {
+            let trimmedLine = line.trim();
+
+            // 1. Headings (h1 to h6)
+            if (trimmedLine.startsWith("#")) {
+                let headingLevel = 0;
+                while (trimmedLine.startsWith("#")) {
+                    headingLevel++;
+                    trimmedLine = trimmedLine.substring(1).trim();
+                }
+                if (headingLevel > 0 && headingLevel <= 6) {
+                    html += `<h${headingLevel}>${trimmedLine}</h${headingLevel}>\n`;
+                } else {
+                    html += `<p>${line}</p>\n`;
+                }
+            }
+            // 2. Unordered Lists
+            else if (trimmedLine.startsWith("* ")) {
+                let listItems = [];
+                let currentLine = trimmedLine;
+                while (currentLine && currentLine.startsWith("* ")) {
+                    listItems.push(`<li>${currentLine.substring(2).trim()}</li>`);
+
+                    lines.shift();
+                    currentLine = lines[0];
+
+                    if (!currentLine) {
+                        break;
+                    }
+
+                    currentLine = currentLine.trim();
+
+                }
+
+                html += `<ul>\n${listItems.join("\n")}\n</ul>\n`
+
+
+                lines.unshift(trimmedLine);
+
+            }
+            // 3. Ordered Lists
+            else if (trimmedLine.match(/^\d+\.\s/)) {
+                let listItems = [];
+                let currentLine = trimmedLine;
+                while (currentLine && currentLine.match(/^\d+\.\s/)) {
+
+                    listItems.push(`<li>${currentLine.substring(currentLine.indexOf('.') + 1).trim()}</li>`);
+                    lines.shift();
+
+                    currentLine = lines[0];
+
+                    if (!currentLine) {
+                        break;
+                    }
+
+                    currentLine = currentLine.trim();
+
+                }
+
+                html += `<ol>\n${listItems.join("\n")}\n</ol>\n`
+
+                lines.unshift(trimmedLine)
+
+
+            }
+
+            // 4. Bold (**) and Italics (*)
+            else {
+                trimmedLine = trimmedLine.replace(/\**(.+?)\**/g, "<strong>$1</strong>"); //Bold
+                trimmedLine = trimmedLine.replace(/\*(.+?)\*/g, "<i>$1</i>"); // Italics
+                html += `<p>${trimmedLine}</p>\n`;
+            }
+
+        }
+
+        return html;
+    }
+
+    geminiSubmitButton.addEventListener('click', async () => {
+        const question = geminiInput.value;
+        geminiResponse.textContent = "Loading...";
+
+        const apiUrl = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=' + apiKey;
+
+        const requestData = {
+            contents: [{
+                parts: [{
+                    text: question
+                }]
+            }],
+        };
+
+        try {
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(requestData),
+            });
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            const data = await response.json();
+            if (data.candidates && data.candidates.length > 0) {
+                const markdownResponse = data.candidates[0].content.parts[0].text;
+                const htmlResponse = markdownToHTML(markdownResponse);
+                geminiResponse.innerHTML = htmlResponse;
+            }
+            else
+                geminiResponse.textContent = "No response found";
+            geminiInput.value = "";
+
+        } catch (error) {
+             console.error('Error fetching from Gemini API:', error);
+            geminiResponse.textContent = "Error getting response, please try again!";
+        }
+    });
+});
+  </script>
+</body>
+</html>
