@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chemical Kinetics - NEURON-IQ</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <script>
+        // Configure MathJax
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #eaf6f6;
+            color: #333;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 25px 8%;
+            background: #fff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 24px;
+            font-weight: 700;
+            color: #2c3e50;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+        }
+
+        .nav-links ul {
+            list-style: none;
+            display: flex;
+            gap: 40px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #555;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #d81b60;
+        }
+
+        .search-section {
+            padding: 25px 8%;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .search-container {
+            width: 100%;
+            max-width: 700px;
+            margin: 0 auto;
+            display: flex;
+            background-color: #fff;
+            border-radius: 50px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.07);
+            overflow: hidden;
+        }
+
+        .search-input {
+            flex-grow: 1;
+            border: none;
+            outline: none;
+            padding: 15px 25px;
+            font-size: 16px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .search-button {
+            border: none;
+            background-color: #e94057;
+            color: white;
+            padding: 0 25px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .search-button svg {
+            width: 22px;
+            height: 22px;
+        }
+
+        /* --- Main Content Container (FIX 1: Improved Readability) --- */
+        .content-container {
+            max-width: 80%;
+            margin: 40px auto;
+            padding: 40px 50px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            line-height: 1.7;
+        }
+
+        .content-container h1,
+        .content-container h2,
+        .content-container h3 {
+            margin-bottom: 15px;
+        }
+
+        .content-container h1 {
+            font-size: 36px;
+            color: #2c3e50;
+        }
+
+        .content-container h2 {
+            font-size: 24px;
+            color: #333;
+            margin-top: 40px;
+            border-bottom: 2px solid #e94057;
+            padding-bottom: 5px;
+        }
+
+        .content-container p {
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+
+        .content-container a {
+            color: #e94057;
+            text-decoration: none;
+        }
+
+        .content-container a:hover {
+            text-decoration: underline;
+        }
+
+        /* --- Floating Search Results Overlay (No changes needed) --- */
+        #search-results-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            z-index: 1000;
+            display: none;
+            justify-content: center;
+            align-items: flex-start;
+            padding-top: 10vh;
+        }
+
+        #search-results-box {
+            background: #fff;
+            width: 100%;
+            max-width: 600px;
+            border-radius: 8px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+
+        .search-results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .search-results-header span {
+            font-weight: 600;
+            color: #555;
+        }
+
+        #close-search-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #888;
+            line-height: 1;
+        }
+
+        #search-results-list {
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+
+        .search-result-item {
+            display: block;
+            text-decoration: none;
+            padding: 15px 20px;
+            border-bottom: 1px solid #f0f0f0;
+            transition: background-color 0.2s ease;
+        }
+
+        .search-result-item:last-child {
+            border-bottom: none;
+        }
+
+        .search-result-item:hover {
+            background-color: #f9f9f9;
+        }
+
+        .search-result-item h3 {
+            font-size: 16px;
+            color: #e94057;
+            margin-bottom: 5px;
+        }
+
+        .search-result-item p {
+            font-size: 13px;
+            color: #666;
+            margin: 0;
+        }
+
+        .content-container img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.07);
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header">
+        <a href="/index.html" class="logo">
+            <svg class="logo-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="50" cy="50" r="48" fill="#2c3e50" />
+                <path
+                    d="M42 30 Q50 20 58 30 Q65 35 60 45 Q70 50 60 55 Q65 65 58 70 Q50 80 42 70 Q35 65 40 55 Q30 50 40 45 Q35 35 42 30Z"
+                    fill="#e94057" />
+            </svg>
+            <span>NEURON-IQ</span>
+        </a>
+        <nav class="nav-links">
+            <ul>
+                <li><a href="/physics/">Physics</a></li>
+                <li><a href="/chemistry/">Chemistry</a></li>
+                <li><a href="/maths/">Maths</a></li>
+                <li><a href="/biology/">Biology</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="search-section">
+        <form class="search-container" id="search-form">
+            <input type="text" id="search-input" class="search-input" placeholder="Search the entire site...">
+            <button type="submit" class="search-button">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                </svg>
+            </button>
+        </form>
+    </section>
+
+    <main class="content-container">
+
+        <h1>Chemical Kinetics</h1>
+        <p>Chemical kinetics is the study of reaction rates and is crucial for understanding the mechanisms of chemical reactions. Here are the key concepts to carry from general chemistry to organic chemistry.</p>
+        
+        <h2>1. Reaction Rates Depend on Concentration and Temperature</h2>
+        <p>Chemical reactions occur when atoms or molecules collide, leading to a rearrangement of chemical bonds. Consequently, the rate of a reaction is proportional to the number of collisions. However, not every collision results in a reaction; only a fraction of them occur with sufficient energy to break and form bonds. Think of a telemarketer: only a small percentage of calls lead to a sale, but the total number of sales is proportional to the total number of calls made.</p>
+        <p>Therefore, any factor that increases the collision rate will increase the reaction rate. The two primary factors are concentration and temperature. Increasing the concentration of reactants means more molecules are in the same volume, leading to more frequent collisions. Increasing the temperature gives molecules more kinetic energy, causing them to move faster and collide more often and with greater force.</p>
+        <img src="/images/chemical-kinetics-rate-proportionality.png" alt="Diagram showing that reaction rate is proportional to temperature and concentration of reacting species.">
+
+        <h2>2. First and Second Order Reactions</h2>
+        <p>Reactions can involve one (unimolecular) or two (bimolecular) chemical species in their rate-determining step. Reactions involving three or more species colliding simultaneously with the right energy are extremely improbable and rarely observed.</p>
+        <p>The <strong>rate of reaction</strong> measures how many molecules are formed per unit volume per second (e.g., in M/s). We can express this relationship mathematically. The rate is proportional to the concentration of reactants (Rate ∝ concentration). By introducing a proportionality constant, <em>k</em>, known as the <strong>rate constant</strong>, we get a rate equation. Each reaction has a unique rate constant that is valid only at a specific temperature.</p>
+        <img src="/images/chemical-kinetics-rate-equations.png" alt="Equations for unimolecular and bimolecular reactions, showing rate of formation and the role of the rate constant k.">
+        <p>For a unimolecular reaction A → B, the rate is k[A]. For a bimolecular reaction A + B → C, the rate is k[A][B], where [A] and [B] are the molar concentrations of the reactants.</p>
+        
+        <h3>Example: The S<sub>N</sub>1 Reaction</h3>
+        <p>In the S<sub>N</sub>1 reaction, the first step is the slow, unimolecular breaking of a bond to form a carbocation and a halide. The second step is a fast, bimolecular reaction where the carbocation reacts with a solvent molecule (like methanol). </p>
+        <img src="/images/chemical-kinetics-sn1-reaction-example.png" alt="Mechanism of an SN1 reaction, detailing the slow unimolecular first step and the fast bimolecular second step.">
+        <p>In the second step, because the solvent (methanol) is present in a very large excess, its concentration remains essentially constant throughout the reaction. Therefore, the rate of this step only appears to depend on the concentration of the carbocation. This is known as a <strong>pseudo-first-order</strong> reaction.</p>
+
+        <h2>3. The Rate of a Reaction is Determined by the Slowest Step</h2>
+        <p>In a multi-step reaction, the overall rate is governed by the slowest step, known as the <strong>rate-determining step</strong>. In the S<sub>N</sub>1 example above, the first step is slow, so the overall reaction rate can be approximated by the rate law of that step alone. The rate of formation of the final product will be directly proportional to the concentration of the starting material (C₄H₉Br) and will not depend on the concentration of the methanol.</p>
+
+        <h2>4. Rate Laws Provide Insight into Reaction Mechanisms</h2>
+        <p>We can use experimentally determined rate laws to learn about a reaction's mechanism. For instance, substitution reactions can occur via an S<sub>N</sub>1 mechanism (unimolecular rate-determining step) or an S<sub>N</sub>2 mechanism (bimolecular rate-determining step). By observing how the reaction rate changes as we vary reactant concentrations, we can distinguish between them.</p>
+        <img src="/images/chemical-kinetics-rate-law-mechanism-insight.png" alt="Experimental data for a substitution reaction, showing that the rate is independent of the nucleophile concentration, indicating an SN1 mechanism.">
+        <p>In the example shown, doubling the concentration of the iodide nucleophile [KI] has no effect on the reaction rate. This indicates that the nucleophile is not involved in the rate-determining step, which strongly supports an S<sub>N</sub>1 mechanism over an S<sub>N</sub>2 mechanism.</p>
+
+        <h2>5. The Reaction Barrier: Activation Energy</h2>
+        <p>A physical chemistry professor once dramatically illustrated activation energy by noting that, thermodynamically, the combustion of human flesh is highly favorable, yet everyone remained intact in his classroom. This was a testament to the existence of activation barriers. Thermodynamics tells us if a reaction is favorable, but it says nothing about how fast it will occur.</p>
+        <p>The rate of a reaction depends on its <strong>activation energy ($E_a$)</strong>, which is the minimum energy required to reach a transition state and proceed to form products.</p>
+        
+        <h3>The Arrhenius Equation</h3>
+        <p>The relationship between activation energy, temperature, and the rate constant is described by the Arrhenius equation. This equation connects the rate constant (<em>k</em>) to the frequency of collisions (<em>A</em>, the pre-exponential factor) and the probability that a given collision will have enough energy to overcome the activation barrier ($e^{-E_a/RT}$).</p>
+        <img src="/images/chemical-kinetics-arrhenius-equation.png" alt="The Arrhenius equation, k = A * e^(-Ea/RT), with terms defined and its utility explained.">
+        <p>Think of it like baseball: the number of home runs hit is the product of the total number of balls hit and the probability that a ball has enough energy to clear the fence. The activation energy is analogous to the height and distance of the fence. The Arrhenius equation is a powerful tool for calculating activation energy and predicting how rate constants change with temperature.</p>
+        <p>A useful rule of thumb derived from this equation is that for many reactions, the rate roughly <strong>doubles for every 10°C increase in temperature</strong>.</p>
+        
+    </main>
+
+    <div id="search-results-overlay">
+        <div id="search-results-box">
+            <div class="search-results-header"><span>Search Results</span><button id="close-search-btn">&times;</button>
+            </div>
+            <div id="search-results-list"></div>
+        </div>
+    </div>
+
+    <script>
+        let searchableData = [];
+        const searchInput = document.getElementById('search-input');
+        const searchResultsOverlay = document.getElementById('search-results-overlay');
+        const searchResultsList = document.getElementById('search-results-list');
+        const closeSearchBtn = document.getElementById('close-search-btn');
+
+        document.addEventListener('DOMContentLoaded', () => {
+            fetch('/contents.json')
+                .then(response => response.json())
+                .then(data => { searchableData = data; })
+                .catch(error => console.error('Error loading search data:', error));
+        });
+
+        let debounceTimer;
+        searchInput.addEventListener('keyup', () => {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => { performSearch(searchInput.value); }, 300);
+        });
+
+        document.getElementById('search-form').addEventListener('submit', e => e.preventDefault());
+
+        function closeOverlay() { searchResultsOverlay.style.display = 'none'; }
+        closeSearchBtn.addEventListener('click', closeOverlay);
+        searchResultsOverlay.addEventListener('click', (event) => {
+            if (event.target === searchResultsOverlay) { closeOverlay(); }
+        });
+
+        function performSearch(query) {
+            if (!query || query.trim() === '') { closeOverlay(); return; }
+            const scoredResults = searchableData.map(item => ({ item, score: calculateScore(item, query) }));
+            const finalResults = scoredResults.filter(result => result.score > 0).sort((a, b) => b.score - a.score).map(result => result.item);
+            displayResults(finalResults);
+        }
+
+        function calculateScore(item, query) {
+            let score = 0;
+            const lowerQuery = query.toLowerCase();
+            if (item.title.toLowerCase() === lowerQuery) score += 100;
+            else if (item.title.toLowerCase().startsWith(lowerQuery)) score += 50;
+            else if (item.title.toLowerCase().includes(lowerQuery)) score += 20;
+            if (item.description.toLowerCase().includes(lowerQuery)) score += 10;
+            if (item.author.toLowerCase().includes(lowerQuery)) score += 5;
+            if (item.category.toLowerCase().includes(lowerQuery)) score += 5;
+            return score;
+        }
+
+        function displayResults(results) {
+            searchResultsList.innerHTML = '';
+            if (results.length === 0) {
+                searchResultsList.innerHTML = `<p style="padding: 20px; text-align: center; color: #888;">No results found.</p>`;
+            } else {
+                results.forEach(item => {
+                    const resultElement = document.createElement('a');
+                    // FIX 2: Use absolute path directly for more robust linking.
+                    resultElement.href = item.src;
+                    resultElement.classList.add('search-result-item');
+                    resultElement.innerHTML = `<h3>${item.title}</h3><p>Category: ${item.category}</p>`;
+                    searchResultsList.appendChild(resultElement);
+                });
+            }
+            searchResultsOverlay.style.display = 'flex';
+        }
+    </script>
+</body>
+
+</html>

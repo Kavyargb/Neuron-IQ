@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Article Title - NEURON-IQ</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+      // Configure MathJax
+      window.MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          displayMath: [['$$', '$$'], ['\\[', '\\]']]
+        }
+      };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #eaf6f6;
+            color: #333;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 25px 8%;
+            background: #fff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 24px;
+            font-weight: 700;
+            color: #2c3e50;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+        }
+
+        .nav-links ul {
+            list-style: none;
+            display: flex;
+            gap: 40px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #555;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #d81b60;
+        }
+
+        .search-section {
+            padding: 25px 8%;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .search-container {
+            width: 100%;
+            max-width: 700px;
+            margin: 0 auto;
+            display: flex;
+            background-color: #fff;
+            border-radius: 50px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.07);
+            overflow: hidden;
+        }
+
+        .search-input {
+            flex-grow: 1;
+            border: none;
+            outline: none;
+            padding: 15px 25px;
+            font-size: 16px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .search-button {
+            border: none;
+            background-color: #e94057;
+            color: white;
+            padding: 0 25px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .search-button svg {
+            width: 22px;
+            height: 22px;
+        }
+
+        /* --- Main Content Container (FIX 1: Improved Readability) --- */
+        .content-container {
+            max-width: 80%;
+            margin: 40px auto;
+            padding: 40px 50px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            line-height: 1.7;
+        }
+
+        .content-container h1,
+        .content-container h2,
+        .content-container h3 {
+            margin-bottom: 15px;
+        }
+
+        .content-container h1 {
+            font-size: 36px;
+            color: #2c3e50;
+        }
+
+        .content-container h2 {
+            font-size: 24px;
+            color: #333;
+            margin-top: 40px;
+            border-bottom: 2px solid #e94057;
+            padding-bottom: 5px;
+        }
+
+        .content-container p {
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+
+        .content-container a {
+            color: #e94057;
+            text-decoration: none;
+        }
+
+        .content-container a:hover {
+            text-decoration: underline;
+        }
+
+        /* --- Floating Search Results Overlay (No changes needed) --- */
+        #search-results-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            z-index: 1000;
+            display: none;
+            justify-content: center;
+            align-items: flex-start;
+            padding-top: 10vh;
+        }
+
+        #search-results-box {
+            background: #fff;
+            width: 100%;
+            max-width: 600px;
+            border-radius: 8px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+
+        .search-results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .search-results-header span {
+            font-weight: 600;
+            color: #555;
+        }
+
+        #close-search-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #888;
+            line-height: 1;
+        }
+
+        #search-results-list {
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+
+        .search-result-item {
+            display: block;
+            text-decoration: none;
+            padding: 15px 20px;
+            border-bottom: 1px solid #f0f0f0;
+            transition: background-color 0.2s ease;
+        }
+
+        .search-result-item:last-child {
+            border-bottom: none;
+        }
+
+        .search-result-item:hover {
+            background-color: #f9f9f9;
+        }
+
+        .search-result-item h3 {
+            font-size: 16px;
+            color: #e94057;
+            margin-bottom: 5px;
+        }
+
+        .search-result-item p {
+            font-size: 13px;
+            color: #666;
+            margin: 0;
+        }
+
+        .content-container img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.07);
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <a href="/index.html" class="logo">
+            <svg class="logo-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="48" fill="#2c3e50"/><path d="M42 30 Q50 20 58 30 Q65 35 60 45 Q70 50 60 55 Q65 65 58 70 Q50 80 42 70 Q35 65 40 55 Q30 50 40 45 Q35 35 42 30Z" fill="#e94057"/></svg>
+            <span>NEURON-IQ</span>
+        </a>
+        <nav class="nav-links">
+            <ul>
+                <li><a href="/physics/">Physics</a></li>
+                <li><a href="/chemistry/">Chemistry</a></li>
+                <li><a href="/maths/">Maths</a></li>
+                <li><a href="/biology/">Biology</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="search-section">
+        <form class="search-container" id="search-form">
+            <input type="text" id="search-input" class="search-input" placeholder="Search the entire site...">
+            <button type="submit" class="search-button">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" /></svg>
+            </button>
+        </form>
+    </section>
+
+    <main class="content-container">
+       
+        <h3>Example Solution</h3>
+        <p>(a) Velocity $\vec{v}$ is defined as the first derivative of position vector with respect to time.</p>
+        $$ \vec{v} = \frac{d\vec{r}}{dt} = t\hat{i} - 2\sqrt{t}\hat{j} + 2\hat{k} \text{ m/s} $$
+        
+        <p>Acceleration $\vec{a}$ is defined as the first derivative of velocity vector with respect to time.</p>
+        $$ \vec{a} = \frac{d\vec{v}}{dt} = \hat{i} - \frac{1}{\sqrt{t}}\hat{j} \text{ m/s}^2 $$
+        
+        <p>(b) Displacement $\Delta\vec{r}$ is defined as the change in place of position vector.</p>
+        $$ \Delta\vec{r} = \vec{r}(4) - \vec{r}(0) = (8\hat{i} - \frac{32}{3}\hat{j} + 8\hat{k}) - (0) = 8\hat{i} - \frac{32}{3}\hat{j} + 8\hat{k} \text{ m} $$
+        
+        <p>Magnitude of displacement $|\Delta\vec{r}| = \sqrt{8^2 + (-\frac{32}{3})^2 + 8^2} \approx 15.55 \text{ m}$</p>
+        
+        <p>Distance $\Delta s$ is defined as the path length and can be calculated by integrating speed over the concerned time interval.</p>
+        $$ \Delta s = \int_0^4 |\vec{v}| dt = \int_0^4 \sqrt{t^2 + (-2\sqrt{t})^2 + 2^2} dt = \int_0^4 \sqrt{t^2 + 4t + 4} dt = \int_0^4 (t+2) dt = \left[ \frac{t^2}{2} + 2t \right]_0^4 = 16 \text{ m} $$
+        
+    </main>
+
+    <div id="search-results-overlay">
+        <div id="search-results-box">
+            <div class="search-results-header"><span>Search Results</span><button id="close-search-btn">&times;</button></div>
+            <div id="search-results-list"></div>
+        </div>
+    </div>
+
+    <script>
+        let searchableData = [];
+        const searchInput = document.getElementById('search-input');
+        const searchResultsOverlay = document.getElementById('search-results-overlay');
+        const searchResultsList = document.getElementById('search-results-list');
+        const closeSearchBtn = document.getElementById('close-search-btn');
+
+        document.addEventListener('DOMContentLoaded', () => {
+            fetch('/contents.json')
+                .then(response => response.json())
+                .then(data => { searchableData = data; })
+                .catch(error => console.error('Error loading search data:', error));
+        });
+
+        let debounceTimer;
+        searchInput.addEventListener('keyup', () => {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => { performSearch(searchInput.value); }, 300);
+        });
+
+        document.getElementById('search-form').addEventListener('submit', e => e.preventDefault());
+
+        function closeOverlay() { searchResultsOverlay.style.display = 'none'; }
+        closeSearchBtn.addEventListener('click', closeOverlay);
+        searchResultsOverlay.addEventListener('click', (event) => {
+            if (event.target === searchResultsOverlay) { closeOverlay(); }
+        });
+
+        function performSearch(query) {
+            if (!query || query.trim() === '') { closeOverlay(); return; }
+            const scoredResults = searchableData.map(item => ({ item, score: calculateScore(item, query) }));
+            const finalResults = scoredResults.filter(result => result.score > 0).sort((a, b) => b.score - a.score).map(result => result.item);
+            displayResults(finalResults);
+        }
+
+        function calculateScore(item, query) {
+            let score = 0;
+            const lowerQuery = query.toLowerCase();
+            if (item.title.toLowerCase() === lowerQuery) score += 100;
+            else if (item.title.toLowerCase().startsWith(lowerQuery)) score += 50;
+            else if (item.title.toLowerCase().includes(lowerQuery)) score += 20;
+            if (item.description.toLowerCase().includes(lowerQuery)) score += 10;
+            if (item.author.toLowerCase().includes(lowerQuery)) score += 5;
+            if (item.category.toLowerCase().includes(lowerQuery)) score += 5;
+            return score;
+        }
+
+        function displayResults(results) {
+            searchResultsList.innerHTML = '';
+            if (results.length === 0) {
+                searchResultsList.innerHTML = `<p style="padding: 20px; text-align: center; color: #888;">No results found.</p>`;
+            } else {
+                results.forEach(item => {
+                    const resultElement = document.createElement('a');
+                    // FIX 2: Use absolute path directly for more robust linking.
+                    resultElement.href = item.src; 
+                    resultElement.classList.add('search-result-item');
+                    resultElement.innerHTML = `<h3>${item.title}</h3><p>Category: ${item.category}</p>`;
+                    searchResultsList.appendChild(resultElement);
+                });
+            }
+            searchResultsOverlay.style.display = 'flex';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alcohols, Phenols and Ethers - NEURON-IQ</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@rdkit/rdkit/dist/RDKit_minimal.js"></script>
+
+    <script>
+    window.MathJax = {
+      loader: {load: ['[tex]/mhchem', '[tex]/cancel']},
+      tex: {
+        packages: {'[+]': ['mhchem', 'cancel']},
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
+
+    
+    <style>
+        /* --- Base & Body Styles --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            background: #f4f7f9; /* Softer background color */
+            color: #444; 
+            line-height: 1.7;
+        }
+        
+        /* --- Header & Nav (UNCHANGED) --- */
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 25px 8%; background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .logo { display: flex; align-items: center; gap: 12px; font-size: 24px; font-weight: 700; color: #2c3e50; text-decoration: none; }
+        .logo-icon { width: 40px; height: 40px; }
+        .nav-links ul { list-style: none; display: flex; gap: 40px; }
+        .nav-links a { text-decoration: none; color: #555; font-weight: 500; transition: color 0.3s ease; }
+        .nav-links a:hover { color: #d81b60; }
+
+        /* --- Search Section (UNCHANGED) --- */
+        .search-section { padding: 25px 8%; border-bottom: 1px solid #ddd; }
+        .search-container { width: 100%; max-width: 700px; margin: 0 auto; display: flex; background-color: #fff; border-radius: 50px; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.07); overflow: hidden; }
+        .search-input { flex-grow: 1; border: none; outline: none; padding: 15px 25px; font-size: 16px; font-family: 'Poppins', sans-serif; }
+        .search-button { border: none; background-color: #e94057; color: white; padding: 0 25px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .search-button svg { width: 22px; height: 22px; }
+        
+        /* --- Main Content Container (Refined) --- */
+        .content-container {
+            max-width: 80%;
+            margin: 40px auto;
+            padding: 40px 60px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+        }
+        .content-container h1, .content-container h2, .content-container h3 { 
+            font-weight: 600;
+            color: #2c3e50;
+            line-height: 1.3;
+        }
+        .content-container h1 { font-size: 38px; margin-bottom: 20px; text-align: center; }
+        .content-container h2 { font-size: 28px; margin: 45px 0 20px 0; border-bottom: 2px solid #e94057; padding-bottom: 10px; }
+        .content-container h3 { font-size: 22px; margin: 30px 0 15px 0; }
+        .content-container p { margin-bottom: 20px; font-size: 16px; color: #555; }
+        .content-container a { color: #e94057; text-decoration: none; font-weight: 500; }
+        .content-container a:hover { text-decoration: underline; }
+        .content-container strong { font-weight: 600; color: #333; }
+        .content-container hr {
+            border: 0;
+            height: 1px;
+            background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0));
+            margin: 60px 0;
+        }
+        .content-container ul, .content-container ol {
+            padding-left: 25px;
+            margin-bottom: 20px;
+        }
+        .content-container li {
+            margin-bottom: 12px;
+            padding-left: 5px;
+        }
+
+        /* --- START: NEW STYLES FOR MOLECULES & REACTIONS --- */
+        .reaction-display {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 30px auto;
+            padding: 20px;
+            background: #fdfdfd;
+            border: 1px solid #edf2f7;
+            border-radius: 10px;
+            overflow-x: auto;
+        }
+        .molecule-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            min-width: 150px;
+        }
+        .molecule {
+            width: 150px;
+            height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .molecule-label {
+            font-size: 13px;
+            color: #666;
+            margin-top: 5px;
+            font-weight: 500;
+        }
+        .plus-sign {
+            font-size: 24px;
+            font-weight: 300;
+            color: #777;
+            padding: 0 10px;
+        }
+        .arrow-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            margin: 0 10px;
+        }
+        .arrow {
+            font-size: 32px;
+            font-weight: bold;
+            color: #e94057;
+        }
+        .arrow.reversible::after {
+            content: '\21CC'; /* Unicode for equilibrium arrows */
+        }
+        .arrow:not(.reversible)::after {
+            content: '\27F6'; /* Unicode for long right arrow */
+        }
+        .reagents-above, .reagents-below {
+            font-size: 12px;
+            color: #5a67d8; /* A nice reagent color */
+            font-family: monospace;
+            white-space: nowrap;
+        }
+        .reagents-above { margin-bottom: 2px; }
+        .reagents-below { margin-top: 2px; }
+        .text-formula {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.1em;
+            color: #333;
+            padding: 0 10px;
+        }
+        /* --- END: NEW STYLES FOR MOLECULES & REACTIONS --- */
+
+        /* --- START: NEW STYLES FOR UI ELEMENTS --- */
+        .note-box {
+            background: #fffbe6;
+            border-left: 4px solid #f0ad4e;
+            padding: 15px 20px;
+            margin: 25px 0;
+            border-radius: 0 4px 4px 0;
+            font-size: 0.95em;
+        }
+        .question-box {
+            margin-top: 30px;
+            border: 1px solid #e2e8f0;
+            padding: 25px;
+            border-radius: 8px;
+            background: #fcfdff;
+        }
+        .question-box > strong {
+            display: block;
+            margin-bottom: 15px;
+            color: #2c3e50;
+            font-size: 1.15em;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        .solution {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px dashed #cbd5e0;
+        }
+        .solution > strong {
+            color: #2f855a; /* Green for "Solution" text */
+            font-size: 1.1em;
+        }
+        /* --- END: NEW STYLES FOR UI ELEMENTS --- */
+
+        /* --- Floating Search Results Overlay (UNCHANGED) --- */
+        #search-results-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); z-index: 1000; display: none; justify-content: center; align-items: flex-start; padding-top: 10vh; }
+        #search-results-box { background: #fff; width: 100%; max-width: 600px; border-radius: 8px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); position: relative; }
+        .search-results-header { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; border-bottom: 1px solid #eee; }
+        .search-results-header span { font-weight: 600; color: #555; }
+        #close-search-btn { background: none; border: none; font-size: 24px; cursor: pointer; color: #888; line-height: 1; }
+        #search-results-list { max-height: 60vh; overflow-y: auto; }
+        .search-result-item { display: block; text-decoration: none; padding: 15px 20px; border-bottom: 1px solid #f0f0f0; transition: background-color 0.2s ease; }
+        .search-result-item:last-child { border-bottom: none; }
+        .search-result-item:hover { background-color: #f9f9f9; }
+        .search-result-item h3 { font-size: 16px; color: #e94057; margin-bottom: 5px; }
+        .search-result-item p { font-size: 13px; color: #666; margin: 0; }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <a href="../index.html" class="logo">
+            <svg class="logo-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="48" fill="#2c3e50"/><path d="M42 30 Q50 20 58 30 Q65 35 60 45 Q70 50 60 55 Q65 65 58 70 Q50 80 42 70 Q35 65 40 55 Q30 50 40 45 Q35 35 42 30Z" fill="#e94057"/></svg>
+            <span>NEURON-IQ</span>
+        </a>
+        <nav class="nav-links">
+            <ul>
+                <li><a href="../physics/">Physics</a></li>
+                <li><a href="../chemistry/">Chemistry</a></li>
+                <li><a href="../maths/">Maths</a></li>
+                <li><a href="../biology/">Biology</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="search-section">
+        <form class="search-container" id="search-form">
+            <input type="text" id="search-input" class="search-input" placeholder="Search the entire site...">
+            <button type="submit" class="search-button">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" /></svg>
+            </button>
+        </form>
+    </section>
+
+    <main class="content-container">
+       <h3 id="introduction">Introduction to Alcohols, Phenols, and Ethers</h3>
+        <p>Alcohols, phenols, and ethers are important classes of organic compounds with wide applications in industry and daily life. They are formed by the substitution of hydrogen atoms in hydrocarbons.</p>
+        <ul>
+            <li><strong>Alcohols:</strong> One or more hydrogen atoms in an <strong>aliphatic</strong> hydrocarbon are replaced by a hydroxyl (–OH) group. Example: Methanol ($\ce{CH3OH}$).</li>
+            <li><strong>Phenols:</strong> One or more hydrogen atoms in an <strong>aromatic</strong> hydrocarbon are replaced by a hydroxyl (–OH) group. Example: Phenol ($\ce{C6H5OH}$).</li>
+            <li><strong>Ethers:</strong> A hydrogen atom in a hydrocarbon is replaced by an alkoxy (R-O–) or aryloxy (Ar-O–) group. They can also be seen as compounds formed by substituting the hydrogen atom of a hydroxyl group in an alcohol or phenol with an alkyl or aryl group. Example: Dimethyl ether ($\ce{CH3OCH3}$).</li>
+        </ul>
+
+        <hr>
+
+        <h3 id="classification">Classification</h3>
+        <h4>Classification of Alcohols and Phenols</h4>
+        <p>Based on the number of hydroxyl groups:</p>
+        <ul>
+            <li><strong>Monohydric:</strong> Contain one –OH group (e.g., Ethanol, $\ce{C2H5OH}$).</li>
+            <li><strong>Dihydric:</strong> Contain two –OH groups (e.g., Ethane-1,2-diol or ethylene glycol).</li>
+            <li><strong>Trihydric:</strong> Contain three –OH groups (e.g., Propane-1,2,3-triol or glycerol).</li>
+        </ul>
+        <p>Monohydric alcohols are further classified based on the hybridization of the carbon atom to which the –OH group is attached.</p>
+        <h5>Compounds containing $\ce{C_{sp^3}-OH}$ bond:</h5>
+        <ul>
+            <li><strong>Primary (1°), Secondary (2°), and Tertiary (3°) Alcohols:</strong> The –OH group is attached to a primary, secondary, or tertiary carbon atom, respectively.</li>
+            <li><strong>Allylic Alcohols:</strong> The –OH group is attached to an $\ce{sp^3}$-hybridized carbon next to a carbon-carbon double bond ($\ce{>C=C-C-OH}$).</li>
+            <li><strong>Benzylic Alcohols:</strong> The –OH group is attached to an $\ce{sp^3}$-hybridized carbon next to an aromatic ring ($\ce{Ar-C-OH}$).</li>
+        </ul>
+        <h5>Compounds containing $\ce{C_{sp^2}-OH}$ bond:</h5>
+        <ul>
+            <li><strong>Vinylic Alcohols:</strong> The –OH group is bonded directly to a carbon-carbon double bond ($\ce{>C=C-OH}$). These are generally unstable and tautomerize to aldehydes or ketones.</li>
+            <li><strong>Phenols:</strong> The –OH group is bonded directly to an $\ce{sp^2}$-hybridized carbon of an aromatic ring.</li>
+        </ul>
+
+        <h4>Classification of Ethers</h4>
+        <ul>
+            <li><strong>Symmetrical (or Simple) Ethers:</strong> The two alkyl or aryl groups attached to the oxygen atom are the same (R-O-R). Example: Diethyl ether ($\ce{C2H5OC2H5}$).</li>
+            <li><strong>Unsymmetrical (or Mixed) Ethers:</strong> The two groups attached to the oxygen atom are different (R-O-R'). Example: Ethyl methyl ether ($\ce{C2H5OCH3}$).</li>
+        </ul>
+
+        <hr>
+        
+        <h3 id="nomenclature">Nomenclature</h3>
+        <h4>Alcohols</h4>
+        <ul>
+            <li><strong>Common Name:</strong> The name of the alkyl group is followed by the word 'alcohol'. Example: $\ce{CH3OH}$ is methyl alcohol.</li>
+            <li><strong>IUPAC Name:</strong> The 'e' at the end of the parent alkane name is replaced by the suffix 'ol'. The position of the –OH group and any substituents are indicated by numbers, with the –OH group getting the lowest possible number. Example: $\ce{CH3CH(OH)CH3}$ is Propan-2-ol.</li>
+        </ul>
+        
+        <h4>Phenols</h4>
+        <ul>
+            <li>The simplest hydroxy derivative of benzene, $\ce{C6H5OH}$, is called phenol. This is both its common name and accepted IUPAC name.</li>
+            <li>Substituted phenols are named as derivatives of phenol. The positions of substituents are indicated by numbers or by the prefixes ortho (1,2-), meta (1,3-), and para (1,4-). Example: 2-Methylphenol is also known as o-cresol.</li>
+        </ul>
+
+        <h4>Ethers</h4>
+        <ul>
+            <li><strong>Common Name:</strong> The names of the two alkyl/aryl groups are written in alphabetical order, followed by the word 'ether'. Example: $\ce{CH3OC2H5}$ is ethyl methyl ether.</li>
+            <li><strong>IUPAC Name:</strong> Ethers are named as alkoxyalkanes. The smaller alkyl group along with the oxygen atom is named as an 'alkoxy' substituent, and the larger alkyl group is considered the parent alkane. Example: $\ce{CH3OC2H5}$ is Methoxyethane. For aromatic ethers, the alkoxy group is treated as a substituent on the benzene ring. Example: $\ce{C6H5OCH3}$ is Methoxybenzene (common name: Anisole).</li>
+        </ul>
+
+        <hr>
+
+        <h3 id="structures">Structures of Functional Groups</h3>
+        <ul>
+            <li><strong>Alcohols:</strong> The C-O-H bond angle in methanol is about 108.9°, slightly less than the tetrahedral angle (109.5°) due to repulsion between the lone pairs on the oxygen atom. The C-O bond is a sigma bond formed by the overlap of an $\ce{sp^3}$ orbital of carbon with an $\ce{sp^3}$ orbital of oxygen.</li>
+            <li><strong>Phenols:</strong> The C-O bond length (136 pm) is shorter than in methanol because the carbon is $\ce{sp^2}$-hybridized and there is partial double bond character due to resonance. The C-O-H bond angle is about 109°.</li>
+            <li><strong>Ethers:</strong> The C-O-C bond angle in ethers (e.g., 111.7° in methoxymethane) is slightly larger than the tetrahedral angle. This is due to the repulsive interaction between the two bulky alkyl/aryl groups attached to the oxygen atom.</li>
+        </ul>
+
+        <hr>
+
+        <h3 id="prep-alcohols">Preparation of Alcohols</h3>
+        <h4>1. From Alkenes</h4>
+        <ul>
+            <li><strong>Acid-catalysed hydration:</strong> Alkenes react with water in the presence of an acid (like $\ce{H2SO4}$) to form alcohols. The addition follows <strong>Markovnikov's rule</strong> (H adds to the carbon with more hydrogens, and OH adds to the carbon with fewer hydrogens).
+            <div class="reaction-display">
+                <div class="molecule-container">
+                    <div class="molecule" id="mol-propene-1"></div>
+                </div>
+                <div class="plus-sign">+</div>
+                <div class="molecule-container">
+                    <div class="molecule" id="mol-h2o-1"></div>
+                </div>
+                <div class="arrow-group">
+                    <div class="reagents-above">H<sup>+</sup></div>
+                    <div class="arrow"></div>
+                </div>
+                <div class="molecule-container">
+                    <div class="molecule" id="mol-propan-2-ol"></div>
+                </div>
+            </div>
+            </li>
+            <li><strong>Hydroboration-oxidation:</strong> This is a two-step process that results in the <strong>anti-Markovnikov</strong> addition of water across the double bond.
+                <ol>
+                    <li>Alkene reacts with diborane ($\ce{B2H6}$) to form a trialkylborane.</li>
+                    <li>The trialkylborane is then oxidized with hydrogen peroxide ($\ce{H2O2}$) in the presence of aqueous NaOH to yield an alcohol.</li>
+                </ol>
+                <div class="reaction-display">
+                    <div class="molecule-container">
+                        <div class="molecule" id="mol-propene-2"></div>
+                    </div>
+                    <div class="arrow-group">
+                        <div class="reagents-above">(i) B<sub>2</sub>H<sub>6</sub>, THF</div>
+                        <div class="arrow"></div>
+                        <div class="reagents-below">(ii) H<sub>2</sub>O<sub>2</sub>, OH<sup>-</sup></div>
+                    </div>
+                    <div class="molecule-container">
+                        <div class="molecule" id="mol-propan-1-ol"></div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+
+        <h4>2. From Carbonyl Compounds</h4>
+        <ul>
+            <li><strong>By reduction of aldehydes and ketones:</strong> Aldehydes are reduced to primary alcohols, and ketones are reduced to secondary alcohols. Common reducing agents include catalytic hydrogenation ($\ce{H2}$ with Ni, Pd, or Pt), sodium borohydride ($\ce{NaBH4}$), and lithium aluminium hydride ($\ce{LiAlH4}$).\
+            <div class="reaction-display">
+                <div class="molecule-container">
+                    <div class="molecule" id="mol-aldehyde-gen"></div>
+                </div>
+                <div class="arrow-group">
+                    <div class="reagents-above">LiAlH<sub>4</sub></div>
+                    <div class="arrow"></div>
+                </div>
+                <div class="molecule-container">
+                    <div class="molecule" id="mol-primary-alc-gen"></div>
+                </div>
+            </div>
+            <div class="reaction-display">
+                <div class="molecule-container">
+                    <div class="molecule" id="mol-ketone-gen"></div>
+                </div>
+                <div class="arrow-group">
+                    <div class="reagents-above">NaBH<sub>4</sub></div>
+                    <div class="arrow"></div>
+                </div>
+                <div class="molecule-container">
+                    <div class="molecule" id="mol-secondary-alc-gen"></div>
+                </div>
+            </div>
+            </li>
+            <li><strong>By reduction of carboxylic acids and esters:</strong> Carboxylic acids and esters are reduced to primary alcohols using a strong reducing agent like $\ce{LiAlH4}$.
+            <div class="reaction-display">
+                <div class="molecule-container">
+                    <div class="molecule" id="mol-acid-gen"></div>
+                </div>
+                <div class="arrow-group">
+                    <div class="reagents-above">(i) LiAlH<sub>4</sub></div>
+                    <div class="arrow"></div>
+                    <div class="reagents-below">(ii) H<sub>2</sub>O</div>
+                </div>
+                <div class="molecule-container">
+                    <div class="molecule" id="mol-primary-alc-gen-2"></div>
+                </div>
+            </div>
+            </li>
+        </ul>
+
+        <h4>3. From Grignard Reagents</h4>
+        <p>Grignard reagents ($\ce{R-MgX}$) react with aldehydes and ketones to form alcohols after hydrolysis.</p>
+        <ul>
+            <li><strong>Methanal (formaldehyde)</strong> gives a <strong>primary alcohol</strong>.</li>
+            <li><strong>Other aldehydes</strong> give a <strong>secondary alcohol</strong>.</li>
+            <li><strong>Ketones</strong> give a <strong>tertiary alcohol</strong>.</li>
+        </ul>
+        <div class="reaction-display">
+            <div class="molecule-container">
+                <div class="molecule" id="mol-carbonyl-gen"></div>
+            </div>
+            <div class="plus-sign">+</div>
+            <div class="molecule-container">
+                <div class="molecule" id="mol-grignard-gen"></div>
+            </div>
+            <div class="arrow-group">
+                <div class="reagents-above">Dry Ether</div>
+                <div class="arrow"></div>
+            </div>
+            <div class="molecule-container">
+                <div class="molecule" id="mol-grignard-adduct"></div>
+            </div>
+            <div class="arrow-group">
+                <div class="reagents-above">H<sub>3</sub>O<sup>+</sup></div>
+                <div class="arrow"></div>
+            </div>
+            <div class="molecule-container">
+                <div class="molecule" id="mol-grignard-alcohol"></div>
+            </div>
+        </div>
+        <hr>
+
+        <h3 id="prep-phenols">Preparation of Phenols</h3>
+        <h4>1. From Haloarenes (Dow's Process)</h4>
+        <p>Chlorobenzene is heated with aqueous NaOH at high temperature (623 K) and pressure (300 atm), followed by acidification.</p>
+        <div class="reaction-display">
+            <div class="molecule-container">
+                <div class="molecule" id="mol-chlorobenzene"></div>
+            </div>
+            <div class="arrow-group">
+                <div class="reagents-above">(i) NaOH, 623K, 300atm</div>
+                <div class="arrow"></div>
+                <div class="reagents-below">(ii) H<sup>+</sup></div>
+            </div>
+            <div class="molecule-container">
+                <div class="molecule" id="mol-phenol-1"></div>
+            </div>
+        </div>
+        
+        <h4>2. From Benzenesulphonic acid</h4>
+        <p>Benzene is sulphonated with oleum, and the resulting benzenesulphonic acid is fused with molten NaOH, followed by acidification.</p>
+        <div class="reaction-display">
+            <div class="molecule-container">
+                <div class="molecule" id="mol-benzene-1"></div>
+            </div>
+            <div class="arrow-group">
+                <div class="reagents-above">Oleum</div>
+                <div class="arrow"></div>
+            </div>
+            <div class="molecule-container">
+                <div class="molecule" id="mol-benzenesulphonic"></div>
+            </div>
+            <div class="arrow-group">
+                <div class="reagents-above">(i) NaOH, fuse</div>
+                <div class="arrow"></div>
+                <div class="reagents-below">(ii) H<sup>+</sup></div>
+            </div>
+            <div class="molecule-container">
+                <div class="molecule" id="mol-phenol-2"></div>
+            </div>
+        </div>
+        
+        <h4>3. From Diazonium Salts</h4>
+        <p>An aromatic primary amine (like aniline) is treated with nitrous acid ($\ce{NaNO2 + HCl}$) at low temperature (273-278 K) to form a diazonium salt, which is then hydrolyzed by warming with water.</p>
+        <div class="reaction-display">
+            <div class="molecule-container">
+                <div class="molecule" id="mol-aniline"></div>
+            </div>
+            <div class="arrow-group">
+                <div class="reagents-above">NaNO<sub>2</sub> + HCl</div>
+                <div class="arrow"></div>
+                <div class="reagents-below">273-278 K</div>
+            </div>
+            <div class="molecule-container">
+                <div class="molecule" id="mol-diazonium"></div>
+            </div>
+            <div class="arrow-group">
+                <div class="reagents-above">H<sub>2</sub>O, warm</div>
+                <div class="arrow"></div>
+            </div>
+            <div class="molecule-container">
+                <div class="molecule" id="mol-phenol-3"></div>
+            </div>
+            <div class="plus-sign">+</div>
+            <div class="text-formula">N<sub>2</sub> + HCl</div>
+        </div>
+
+        <h4>4. From Cumene</h4>
+        <p>This is the major commercial method. Cumene (isopropylbenzene) is oxidized in the presence of air to form cumene hydroperoxide, which is then treated with dilute acid to yield phenol and acetone as a valuable by-product.</p>
+        <div class="reaction-display">
+            <div class="molecule-container">
+                <div class="molecule" id="mol-cumene"></div>
+            </div>
+            <div class="arrow-group">
+                <div class="reagents-above">O<sub>2</sub></div>
+                <div class="arrow"></div>
+            </div>
+            <div class="molecule-container">
+                <div class="molecule" id="mol-cumene-hydroperoxide"></div>
+            </div>
+            <div class="arrow-group">
+                <div class="reagents-above">H<sup>+</sup>, H<sub>2</sub>O</div>
+                <div class="arrow"></div>
+            </div>
+            <div class="molecule-container">
+                <div class="molecule" id="mol-phenol-4"></div>
+            </div>
+            <div class="plus-sign">+</div>
+            <div class="molecule-container">
+                <div class="molecule" id="mol-acetone"></div>
+            </div>
+        </div>
+        <hr>
+
+        <h3 id="phys-props">Physical Properties</h3>
+        <h4>Boiling Points</h4>
+        <p>The boiling points of alcohols and phenols are significantly higher than those of hydrocarbons, ethers, and haloalkanes of comparable molecular masses. This is due to the presence of <strong>intermolecular hydrogen bonding</strong> between the hydroxyl groups.</p>
+        <ul>
+            <li>Boiling point increases with an increase in the number of carbon atoms (due to increased van der Waals forces).</li>
+            <li>Among isomeric alcohols, boiling point decreases with an increase in branching (as this decreases the surface area for van der Waals forces). The order is: <strong>Primary > Secondary > Tertiary</strong>.</li>
+        </ul>
+        <h4>Solubility</h4>
+        <p>Lower molecular mass alcohols are soluble in water because they can form hydrogen bonds with water molecules. However, the solubility decreases as the size of the nonpolar alkyl/aryl (hydrophobic) group increases.</p>
+
+        <hr>
+
+        <h3 id="chem-reactions-oh-cleavage">Chemical Reactions: Cleavage of O-H Bond (Acidity)</h3>
+        <h4>1. Acidity of Alcohols and Phenols</h4>
+        <p>Both alcohols and phenols are weakly acidic (Brønsted acids). They react with active metals like Na, K, and Al to liberate hydrogen gas.</p>
+        <div class="reaction-display text-formula">
+            <span>2 R-OH</span>
+            <span class="plus-sign">+</span>
+            <span>2 Na</span>
+            <div class="arrow-group"><div class="arrow"></div></div>
+            <span>2 R-O<sup>-</sup>Na<sup>+</sup></span>
+            <span class="plus-sign">+</span>
+            <span>H<sub>2</sub> ↑</span>
+        </div>
+        <div class="reaction-display">
+            <div class="text-formula">2</div>
+            <div class="molecule-container">
+                <div class="molecule" id="mol-ex-phenol-na"></div>
+            </div>
+            <div class="plus-sign">+</div>
+            <div class="text-formula">2 Na</div>
+            <div class="arrow-group"><div class="arrow"></div></div>
+            <div class="text-formula">2</div>
+            <div class="molecule-container">
+                <div class="molecule" id="mol-ex-phenoxide-na"></div>
+            </div>
+            <div class="plus-sign">+</div>
+            <div class="text-formula">H<sub>2</sub> ↑</div>
+        </div>
+        
+        <h5>Comparison of Acidity:</h5>
+        <ul>
+            <li><strong>Phenols are much more acidic than alcohols.</strong> This is because the phenoxide ion formed after losing a proton is highly stabilized by resonance, where the negative charge is delocalized over the benzene ring. The alkoxide ion from an alcohol has no such resonance stabilization; in fact, the alkyl group destabilizes it via a +I effect.</li>
+            <li><strong>Acidity of Alcohols:</strong> The acidic strength of alcohols decreases in the order: <strong>Primary > Secondary > Tertiary</strong>. This is because electron-releasing alkyl groups (+I effect) increase the electron density on the oxygen, making the O-H bond less polar and the release of $\ce{H+}$ more difficult.</li>
+            <li><strong>Effect of Substituents on Phenol Acidity:</strong>
+                <ul>
+                    <li><strong>Electron-withdrawing groups</strong> (like $\ce{-NO2}$, $\ce{-CN}$, -X) increase the acidity of phenols, especially when at the ortho and para positions, as they help delocalize the negative charge of the phenoxide ion.</li>
+                    <li><strong>Electron-donating groups</strong> (like $\ce{-CH3}$, $\ce{-OCH3}$) decrease the acidity of phenols as they intensify the negative charge on the phenoxide ion, destabilizing it.</li>
+                </ul>
+            </li>
+        </ul>
+        
+        <h4>2. Esterification</h4>
+        <p>Alcohols and phenols react with carboxylic acids, acid chlorides, or acid anhydrides to form esters. The reaction with a carboxylic acid is reversible and is carried out in the presence of a small amount of concentrated $\ce{H2SO4}$ (Fischer esterification).</p>
+        <div class="reaction-display">
+            <div class="molecule-container">
+                <div class="molecule" id="mol-ester-alc"></div>
+            </div>
+            <div class="plus-sign">+</div>
+            <div class="molecule-container">
+                <div class="molecule" id="mol-ester-acid"></div>
+            </div>
+            <div class="arrow-group">
+                <div class="reagents-above">H<sup>+</sup></div>
+                <div class="arrow reversible"></div>
+            </div>
+            <div class="molecule-container">
+                <div class="molecule" id="mol-ester-prod"></div>
+            </div>
+            <div class="plus-sign">+</div>
+            <div class="molecule-container">
+                <div class="molecule" id="mol-h2o-2"></div>
+            </div>
+        </div>
+        <p>The introduction of an acetyl group ($\ce{CH3CO-}$) is known as acetylation. For example, the acetylation of salicylic acid produces aspirin.</p>
+
+        <hr>
+
+        <h3 id="chem-reactions-co-cleavage">Chemical Reactions: Cleavage of C-O Bond</h3>
+        <h4>1. Reaction of Alcohols with Hydrogen Halides (HX)</h4>
+        <p>Alcohols react with HX to form alkyl halides. The reactivity of alcohols is <strong>3° > 2° > 1°</strong>. This forms the basis of the <strong>Lucas test</strong> (using conc. HCl + anhy. $\ce{ZnCl2}$) to distinguish between primary, secondary, and tertiary alcohols.</p>
+        <div class="reaction-display">
+            <div class="molecule-container">
+                <div class="molecule" id="mol-co-alc"></div>
+            </div>
+            <div class="plus-sign">+</div>
+            <div class="text-formula">HBr</div>
+            <div class="arrow-group">
+                <div class="arrow"></div>
+            </div>
+            <div class="molecule-container">
+                <div class="molecule" id="mol-co-halide"></div>
+            </div>
+            <div class="plus-sign">+</div>
+            <div class="molecule-container">
+                <div class="molecule" id="mol-h2o-3"></div>
+            </div>
+        </div>
+        
+        <h4>2. Dehydration of Alcohols</h4>
+        <p>Alcohols undergo dehydration (removal of a water molecule) to form alkenes when treated with a protic acid like concentrated $\ce{H2SO4}$ or $\ce{H3PO4}$, or over catalysts like alumina at high temperatures. The ease of dehydration follows the order: <strong>3° > 2° > 1°</strong>.</p>
+        <p>If more than one alkene can be formed, the major product is the more substituted alkene (<strong>Saytzeff's Rule</strong>).</p>
+        <div class="reaction-display">
+            <div class="molecule-container">
+                <div class="molecule" id="mol-dehyd-ethanol"></div>
+            </div>
+            <div class="arrow-group">
+                <div class="reagents-above">Conc. H<sub>2</sub>SO<sub>4</sub></div>
+                <div class="arrow"></div>
+                <div class="reagents-below">443 K</div>
+            </div>
+            <div class="molecule-container">
+                <div class="molecule" id="mol-dehyd-ethene"></div>
+            </div>
+            <div class="plus-sign">+</div>
+            <div class="molecule-container">
+                <div class="molecule" id="mol-h2o-4"></div>
+            </div>
+        </div>
+        <div class="note-box">
+        Note: At a lower temperature (413 K), the dehydration of ethanol gives ethoxyethane (an ether) as the major product.
+        </div>
+        
+        <h4>3. Oxidation of Alcohols</h4>
+        <ul>
+            <li><strong>Primary Alcohols:</strong> Can be oxidized to aldehydes using mild oxidizing agents like pyridinium chlorochromate (PCC). Strong oxidizing agents like acidified $\ce{KMnO4}$ or $\ce{K2Cr2O7}$ oxidize them directly to carboxylic acids.</li>
+            <li><strong>Secondary Alcohols:</strong> Are oxidized to ketones using common oxidizing agents like chromic anhydride ($\ce{CrO3}$).</li>
+            <li><strong>Tertiary Alcohols:</strong> Do not undergo oxidation under normal conditions. Under harsh conditions, they undergo cleavage of C-C bonds to give a mixture of carboxylic acids with fewer carbon atoms.</li>
+        </ul>
+        <p><strong>Catalytic Dehydrogenation:</strong> When vapors of alcohols are passed over heated copper at 573 K:</p>
+        <ul>
+            <li>1° alcohols give aldehydes.</li>
+            <li>2° alcohols give ketones.</li>
+            <li>3° alcohols undergo dehydration to give alkenes.</li>
+        </ul>
+
+        <hr>
+
+        <h3 id="chem-reactions-phenols">Specific Reactions of Phenols</h3>
+        <h4>1. Electrophilic Aromatic Substitution</h4>
+        <p>The –OH group is a powerful activating group and is <em>ortho-</em> and <em>para-</em>directing.</p>
+        <ul>
+            <li><strong>Nitration:</strong>
+                <ul>
+                    <li>With dilute $\ce{HNO3}$ at low temperature, it gives a mixture of o-nitrophenol and p-nitrophenol. (o-isomer is steam volatile due to intramolecular H-bonding).</li>
+                    <li>With concentrated $\ce{HNO3}$, it gives 2,4,6-trinitrophenol (Picric acid).</li>
+                </ul>
+            </li>
+            <li><strong>Halogenation:</strong>
+                <ul>
+                    <li>With $\ce{Br2}$ in a non-polar solvent like $\ce{CS2}$ at low temperature, it gives a mixture of o-bromophenol and p-bromophenol (major).</li>
+                    <li>With aqueous bromine (bromine water), it gives a white precipitate of 2,4,6-tribromophenol.</li>
+                </ul>
+            </li>
+        </ul>
+        
+        <h4>2. Kolbe's Reaction</h4>
+        <p>Phenol is treated with NaOH to form sodium phenoxide, which is more reactive. The phenoxide then undergoes electrophilic substitution with carbon dioxide (a weak electrophile) under pressure, followed by acidification, to form 2-hydroxybenzoic acid (salicylic acid).</p>
+        
+        <h4>3. Reimer-Tiemann Reaction</h4>
+        <p>Phenol is treated with chloroform ($\ce{CHCl3}$) in the presence of aqueous NaOH. An aldehyde group (–CHO) is introduced, mainly at the ortho position. This forms 2-hydroxybenzaldehyde (salicylaldehyde).</p>
+        
+        <h4>4. Reaction with Zinc Dust</h4>
+        <p>When phenol is heated with zinc dust, it is reduced to benzene.</p>
+        <div class="reaction-display">
+            <div class="molecule-container">
+                <div class="molecule" id="mol-phenol-reduct"></div>
+            </div>
+            <div class="plus-sign">+</div>
+            <div class="molecule-container">
+                <div class="molecule" id="mol-zinc"></div>
+            </div>
+            <div class="arrow-group">
+                <div class="reagents-above">Heat (Δ)</div>
+                <div class="arrow"></div>
+            </div>
+            <div class="molecule-container">
+                <div class="molecule" id="mol-benzene-reduct"></div>
+            </div>
+            <div class="plus-sign">+</div>
+            <div class="molecule-container">
+                <div class="molecule" id="mol-zno"></div>
+            </div>
+        </div>
+        
+        <h4>5. Oxidation</h4>
+        <p>Oxidation of phenol with strong oxidizing agents like chromic acid ($\ce{Na2Cr2O7/H2SO4}$) produces a conjugated diketone known as benzoquinone.</p>
+
+        <hr>
+
+        <h3 id="commercial-alcohols">Commercially Important Alcohols</h3>
+        <h4>1. Methanol ($\ce{CH3OH}$)</h4>
+        <p>Also known as 'wood spirit'. It is now produced by catalytic hydrogenation of carbon monoxide at high pressure and temperature. It is highly poisonous.</p>
+        <div class="reaction-display text-formula">
+            <span>CO + 2 H<sub>2</sub></span>
+            <div class="arrow-group">
+                <div class="reagents-above">ZnO-Cr<sub>2</sub>O<sub>3</sub> catalyst</div>
+                <div class="arrow"></div>
+                <div class="reagents-below">200-300 atm, 573-673 K</div>
+            </div>
+            <span>CH<sub>3</sub>OH</span>
+        </div>
+        
+        <h4>2. Ethanol ($\ce{C2H5OH}$)</h4>
+        <p>Obtained commercially by fermentation of sugars. It is the main constituent of alcoholic beverages. Denatured alcohol is commercial ethanol made unfit for drinking by adding poisonous substances like methanol or pyridine.</p>
+        <div class="reaction-display text-formula">
+            <span>C<sub>12</sub>H<sub>22</sub>O<sub>11</sub> (Sucrose) + H<sub>2</sub>O</span>
+            <div class="arrow-group">
+                <div class="reagents-above">Invertase</div>
+                <div class="arrow"></div>
+            </div>
+            <span>C<sub>6</sub>H<sub>12</sub>O<sub>6</sub> (Glucose) + C<sub>6</sub>H<sub>12</sub>O<sub>6</sub> (Fructose)</span>
+        </div>
+        <div class="reaction-display text-formula">
+            <span>C<sub>6</sub>H<sub>12</sub>O<sub>6</sub></span>
+            <div class="arrow-group">
+                <div class="reagents-above">Zymase</div>
+                <div class="arrow"></div>
+            </div>
+            <span>2 C<sub>2</sub>H<sub>5</sub>OH + 2 CO<sub>2</sub></span>
+        </div>
+
+        <hr>
+
+        <h3 id="ethers">Ethers: Preparation & Properties</h3>
+        <h4>Preparation of Ethers</h4>
+        <ul>
+            <li><strong>By dehydration of alcohols:</strong>
+                <p>This method is suitable for preparing symmetrical ethers from primary alcohols. The reaction is carried out at a lower temperature (e.g., 413 K for ethanol) than that for alkene formation.</p>
+                <div class="reaction-display text-formula">
+                    <span>2 R-OH</span>
+                    <div class="arrow-group">
+                        <div class="reagents-above">H<sup>+</sup>, 413 K</div>
+                        <div class="arrow"></div>
+                    </div>
+                    <span>R-O-R</span>
+                    <span class="plus-sign">+</span>
+                    <span>H<sub>2</sub>O</span>
+                </div>
+            </li>
+            <li><strong>Williamson Synthesis:</strong>
+                <p>This is a very important laboratory method for preparing both symmetrical and unsymmetrical ethers. It involves the reaction of an alkyl halide with a sodium alkoxide or sodium phenoxide. The reaction follows an $\ce{S_N2}$ mechanism.</p>
+                <div class="reaction-display">
+                    <div class="molecule-container">
+                        <div class="molecule" id="mol-williamson-halide"></div>
+                    </div>
+                    <div class="plus-sign">+</div>
+                    <div class="molecule-container">
+                        <div class="molecule" id="mol-williamson-alkoxide"></div>
+                    </div>
+                    <div class="arrow-group">
+                        <div class="arrow"></div>
+                    </div>
+                    <div class="molecule-container">
+                        <div class="molecule" id="mol-williamson-ether"></div>
+                    </div>
+                    <div class="plus-sign">+</div>
+                    <div class="molecule-container">
+                        <div class="molecule" id="mol-williamson-salt"></div>
+                    </div>
+                </div>
+                <div class="note-box">
+                <strong>Limitation:</strong> For best results, the alkyl halide should be primary. If a secondary or tertiary alkyl halide is used, elimination becomes the major reaction, producing an alkene instead of an ether, because alkoxides are also strong bases.
+                </div>
+            </li>
+        </ul>
+        
+        <h4>Physical Properties</h4>
+        <p>The boiling points of ethers are much lower than those of alcohols of comparable molecular mass because ethers cannot form intermolecular hydrogen bonds. Their boiling points are comparable to those of alkanes. Ethers are sparingly soluble in water as they can form hydrogen bonds with water molecules through their oxygen atom.</p>
+        
+        <h4>Chemical Reactions</h4>
+        <ul>
+            <li><strong>Cleavage of C–O bond by hydrogen halides:</strong> Ethers are relatively unreactive. The C–O bond can be cleaved by heating with concentrated hydrogen halides (HI or HBr).
+                <div class="reaction-display">
+                    <div class="molecule-container">
+                        <div class="molecule" id="mol-ether-cleavage-ether"></div>
+                    </div>
+                    <div class="plus-sign">+</div>
+                    <div class="text-formula">HI</div>
+                    <div class="arrow-group">
+                        <div class="reagents-above">Heat (Δ)</div>
+                        <div class="arrow"></div>
+                    </div>
+                    <div class="molecule-container">
+                        <div class="molecule" id="mol-ether-cleavage-halide"></div>
+                    </div>
+                    <div class="plus-sign">+</div>
+                    <div class="molecule-container">
+                        <div class="molecule" id="mol-ether-cleavage-alc"></div>
+                    </div>
+                </div>
+                If excess HX is used, the alcohol formed will also be converted to an alkyl halide. The order of reactivity is $\ce{HI > HBr > HCl}$. In unsymmetrical ethers, the halide ion attacks the smaller alkyl group (if both are 1° or 2°, via $\ce{S_N2}$ mechanism). If one group is tertiary, it forms the tertiary halide (via $\ce{S_N1}$ mechanism).
+            </li>
+            <li><strong>Electrophilic substitution in aromatic ethers:</strong> The alkoxy group (–OR) is an activating and <em>ortho-</em>, <em>para-</em>directing group. Aromatic ethers like anisole readily undergo halogenation, nitration, and Friedel-Crafts reactions.</li>
+        </ul>
+
+        <hr>
+
+        <h3 id="summary">Chapter Summary</h3>
+        <p>Alcohols and phenols are characterized by the hydroxyl (–OH) group, while ethers contain an ether linkage (C–O–C). Their properties are dictated by these functional groups. Alcohols are prepared from alkenes, carbonyl compounds, and Grignard reagents. Phenols are synthesized from haloarenes, sulphonic acids, diazonium salts, or cumene. The hydrogen bonding in alcohols and phenols leads to high boiling points and water solubility. Phenols are significantly more acidic than alcohols due to resonance stabilization of the phenoxide ion. Alcohols undergo dehydration to form alkenes and oxidation to form aldehydes, ketones, or carboxylic acids. Phenols undergo electrophilic substitution at ortho and para positions. Ethers are prepared by alcohol dehydration or Williamson synthesis. They are cleaved by strong acids like HI and HBr. Aromatic ethers also undergo electrophilic substitution.</p>
+        
+        <hr>
+
+        <h3 id="exercises">Chapter Exercises (with Solutions)</h3>
+        <div class="question-box">
+            <strong>7.1 Write IUPAC names of the following compounds:</strong>
+            <p>(i) $\ce{CH3-CH(CH3)-CH(OH)-C(CH3)2-CH3}$</p>
+            <p>(ii) $\ce{H3C-CH(OH)-CH2-CH(OH)-CH(C2H5)-CH2-CH3}$</p>
+            <p>(iii) $\ce{CH3-CH(OH)-CH(OH)-CH3}$</p>
+            <p>(iv) $\ce{HO-CH2-CH(OH)-CH2-OH}$</p>
+            <p>(v) o-cresol with an additional methyl group at position 3.</p>
+            <p>(vi) Phenol with methyl groups at positions 2 and 6.</p>
+            <p>(vii) Phenol with methyl groups at positions 2 and 4.</p>
+            <p>(viii) p-cresol with a methyl group at position 2.</p>
+            <p>(ix) $\ce{CH3-O-CH2-CH(CH3)-CH3}$</p>
+            <p>(x) $\ce{C6H5-O-C2H5}$</p>
+            <p>(xi) $\ce{C6H5-O-C7H15(n-)}$</p>
+            <p>(xii) $\ce{CH3-CH2-O-CH(CH3)-CH2-CH3}$</p>
+
+            <div class="solution">
+                <strong>Solution:</strong>
+                <p>(i) 3,4,4-Trimethylpentan-2-ol</p>
+                <p>(ii) 5-Ethylheptane-2,4-diol</p>
+                <p>(iii) Butane-2,3-diol</p>
+                <p>(iv) Propane-1,2,3-triol (Glycerol)</p>
+                <p>(v) Assuming a methyl group at position 3 on o-cresol (2-methylphenol), the compound is 2,3-Dimethylphenol.</p>
+                <p>(vi) 2,6-Dimethylphenol</p>
+                <p>(vii) 2,4-Dimethylphenol</p>
+                <p>(viii) 2,4-Dimethylphenol</p>
+                <p>(ix) 1-Methoxy-2-methylpropane</p>
+                <p>(x) Ethoxybenzene (Phenetole)</p>
+                <p>(xi) 1-Phenoxyheptane</p>
+                <p>(xii) 3-Ethoxyhexane</p>
+            </div>
+        </div>
+
+        <div class="question-box">
+            <strong>7.9 Give the equations of reactions for the preparation of phenol from cumene.</strong>
+            <div class="solution">
+                <strong>Solution:</strong>
+                <p>The preparation of phenol from cumene (isopropylbenzene) involves two steps, which can be summarized in the following reaction scheme:</p>
+                <div class="reaction-display">
+                    <div class="molecule-container">
+                        <div class="molecule" id="mol-ex-cumene"></div>
+                    </div>
+                    <div class="arrow-group">
+                        <div class="reagents-above">O<sub>2</sub></div>
+                        <div class="arrow"></div>
+                    </div>
+                    <div class="molecule-container">
+                        <div class="molecule" id="mol-ex-cumene-hydro"></div>
+                    </div>
+                    <div class="arrow-group">
+                        <div class="reagents-above">H<sup>+</sup>, H<sub>2</sub>O</div>
+                        <div class="arrow"></div>
+                    </div>
+                    <div class="molecule-container">
+                        <div class="molecule" id="mol-ex-phenol"></div>
+                    </div>
+                    <div class="plus-sign">+</div>
+                    <div class="molecule-container">
+                        <div class="molecule" id="mol-ex-acetone"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="question-box">
+            <strong>7.14 Give two reactions that show the acidic nature of phenol. Compare acidity of phenol with that of ethanol.</strong>
+            <div class="solution">
+                <strong>Solution:</strong>
+                <p>Two reactions that demonstrate the acidic nature of phenol are:</p>
+                <p><strong>1. Reaction with Active Metals:</strong> Phenol reacts with active metals like sodium to liberate hydrogen gas, forming sodium phenoxide.</p>
+                 <div class="reaction-display">
+                    <div class="text-formula">2</div>
+                    <div class="molecule-container">
+                        <div class="molecule" id="mol-ex-phenol-naoh"></div>
+                    </div>
+                    <div class="plus-sign">+</div>
+                    <div class="text-formula">2 Na</div>
+                    <div class="arrow-group"><div class="arrow"></div></div>
+                    <div class="text-formula">2</div>
+                    <div class="molecule-container">
+                        <div class="molecule" id="mol-ex-phenoxide-naoh"></div>
+                    </div>
+                    <div class="plus-sign">+</div>
+                    <div class="text-formula">H<sub>2</sub> ↑</div>
+                </div>
+                <p><strong>2. Reaction with Sodium Hydroxide:</strong> Unlike alcohols, phenol is acidic enough to react with a strong base like sodium hydroxide (NaOH) to form a salt (sodium phenoxide) and water. This shows it is a stronger acid than water.</p>
+                <div class="reaction-display">
+                    <div class="molecule-container">
+                        <div class="molecule" id="mol-ex-phenol-naoh"></div>
+                    </div>
+                    <div class="plus-sign">+</div>
+                    <div class="text-formula">NaOH</div>
+                    <div class="arrow-group"><div class="arrow"></div></div>
+                    <div class="molecule-container">
+                        <div class="molecule" id="mol-ex-phenoxide-naoh"></div>
+                    </div>
+                    <div class="plus-sign">+</div>
+                    <div class="text-formula">H<sub>2</sub>O</div>
+                </div>
+                
+                <p><strong>Comparison of Acidity: Phenol vs. Ethanol</strong></p>
+                <p><strong>Phenol is significantly more acidic than ethanol.</strong></p>
+                <ul>
+                    <li><strong>Ethanol ($\ce{C2H5OH}$):</strong> When ethanol loses a proton, it forms the ethoxide ion ($\ce{C2H5O-}$). The ethyl group ($\ce{-C2H5}$) is an electron-donating group (+I effect), which increases the electron density on the oxygen atom. This destabilizes the negative charge on the ethoxide ion, making it a stronger base and ethanol a weaker acid.</li>
+                    <li><strong>Phenol ($\ce{C6H5OH}$):</strong> When phenol loses a proton, it forms the phenoxide ion ($\ce{C6H5O-}$). The negative charge on the oxygen atom is delocalized into the benzene ring through resonance. This delocalization stabilizes the phenoxide ion, making it a weaker base and phenol a stronger acid.</li>
+                </ul>
+                <p>Because the phenoxide ion is much more stable than the ethoxide ion, phenol is a much stronger acid than ethanol. The pKa of phenol is about 10, while the pKa of ethanol is about 16.</p>
+            </div>
+        </div>
+
+        <div class="question-box">
+            <strong>7.19 Write the mechanism of acid dehydration of ethanol to yield ethene.</strong>
+            <div class="solution">
+                <strong>Solution:</strong>
+                <p>The acid-catalyzed dehydration of ethanol to ethene at 443 K occurs in three steps. The overall reaction is:</p>
+                <div class="reaction-display">
+                    <div class="molecule-container">
+                        <div class="molecule" id="mol-ex-ethanol-dehyd"></div>
+                    </div>
+                    <div class="arrow-group">
+                        <div class="reagents-above">H<sub>2</sub>SO<sub>4</sub>, 443 K</div>
+                        <div class="arrow"></div>
+                    </div>
+                    <div class="molecule-container">
+                        <div class="molecule" id="mol-ex-ethene-dehyd"></div>
+                    </div>
+                </div>
+
+                <p><strong>Step 1: Protonation of alcohol</strong><br>
+                The alcohol accepts a proton from the acid in a fast, reversible step to form a protonated alcohol (oxonium ion).<br>
+                $\ce{CH3CH2OH + H+ <=> CH3CH2\overset{+}{O}H2}$
+                </p>
+                <p><strong>Step 2: Formation of carbocation</strong><br>
+                The protonated alcohol loses a molecule of water to form a primary carbocation. This is the slowest step and is therefore the rate-determining step of the reaction.<br>
+                $\ce{CH3CH2\overset{+}{O}H2 ->[slow] \overset{+}{C}H2CH3 + H2O}$
+                </p>
+                <p><strong>Step 3: Elimination of a proton</strong><br>
+                A base (like water or the conjugate base of the acid) removes a proton from the carbocation to form an alkene. The acid catalyst is regenerated.<br>
+                $\ce{\overset{+}{C}H2CH2H + Base: -> CH2=CH2 + H-Base+}$
+                </p>
+            </div>
+        </div>
+
+        <div class="question-box">
+            <strong>7.26 How is 1-propoxypropane synthesised from propan-1-ol? Write mechanism of this reaction.</strong>
+            <div class="solution">
+                <strong>Solution:</strong>
+                <p>1-propoxypropane (a symmetrical ether) can be synthesized from propan-1-ol by <strong>acid-catalyzed dehydration</strong> under controlled temperature (around 413 K). If the temperature is higher (around 443 K), the major product would be propene (elimination).</p>
+                <p><strong>Overall Reaction:</strong></p>
+                <div class="reaction-display">
+                    <div class="text-formula">2</div>
+                    <div class="molecule-container">
+                        <div class="molecule" id="mol-ex-propanol"></div>
+                    </div>
+                    <div class="arrow-group">
+                        <div class="reagents-above">H<sup>+</sup>, 413 K</div>
+                        <div class="arrow"></div>
+                    </div>
+                    <div class="molecule-container">
+                        <div class="molecule" id="mol-ex-propoxypropane"></div>
+                    </div>
+                    <div class="plus-sign">+</div>
+                    <div class="text-formula">H<sub>2</sub>O</div>
+                </div>
+                
+                <p><strong>Mechanism ($\ce{S_N2}$ Pathway):</strong></p>
+                <p>The mechanism involves the protonation of one alcohol molecule, followed by a nucleophilic attack from a second alcohol molecule. This is preferred for primary alcohols as they do not form stable carbocations.</p>
+                 <p><strong>Step 1: Protonation of propan-1-ol</strong><br>
+                One molecule of the alcohol is protonated by the acid catalyst.
+                <br>$\ce{CH3CH2CH2OH + H+ <=> CH3CH2CH2\overset{+}{O}H2}$
+                </p>
+                <p><strong>Step 2: Nucleophilic attack by a second alcohol molecule</strong><br>
+                A second molecule of propan-1-ol acts as a nucleophile and attacks the protonated alcohol, displacing a molecule of water. This is a bimolecular ($\ce{S_N2}$) step.
+                <br>$\ce{CH3CH2CH2OH + CH3CH2CH2\overset{+}{O}H2 -> [CH3CH2CH2-\overset{+}{O}(H)-CH2CH2CH3] + H2O}$
+                </p>
+                <p><strong>Step 3: Deprotonation to form the ether</strong><br>
+                The resulting protonated ether loses a proton to a base (e.g., water) to form the final ether product and regenerate the acid catalyst.
+                <br>$\ce{[CH3CH2CH2-\overset{+}{O}(H)-CH2CH2CH3] + H2O <=> CH3CH2CH2-O-CH2CH2CH3 + H3O+}$
+                </p>
+            </div>
+        </div>        
+    </main>
+
+    <div id="search-results-overlay">
+        <div id="search-results-box">
+            <div class="search-results-header"><span>Search Results</span><button id="close-search-btn">&times;</button></div>
+            <div id="search-results-list"></div>
+        </div>
+    </div>
+
+    <script>
+        let searchableData = [];
+        const searchInput = document.getElementById('search-input');
+        const searchResultsOverlay = document.getElementById('search-results-overlay');
+        const searchResultsList = document.getElementById('search-results-list');
+        const closeSearchBtn = document.getElementById('close-search-btn');
+
+        document.addEventListener('DOMContentLoaded', () => {
+            fetch('../contents.json')
+                .then(response => response.json())
+                .then(data => { searchableData = data; })
+                .catch(error => console.error('Error loading search data:', error));
+        });
+
+        let debounceTimer;
+        searchInput.addEventListener('keyup', () => {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => { performSearch(searchInput.value); }, 300);
+        });
+
+        document.getElementById('search-form').addEventListener('submit', e => e.preventDefault());
+
+        function closeOverlay() { searchResultsOverlay.style.display = 'none'; }
+        closeSearchBtn.addEventListener('click', closeOverlay);
+        searchResultsOverlay.addEventListener('click', (event) => {
+            if (event.target === searchResultsOverlay) { closeOverlay(); }
+        });
+
+        function performSearch(query) {
+            if (!query || query.trim() === '') { closeOverlay(); return; }
+            const scoredResults = searchableData.map(item => ({ item, score: calculateScore(item, query) }));
+            const finalResults = scoredResults.filter(result => result.score > 0).sort((a, b) => b.score - a.score).map(result => result.item);
+            displayResults(finalResults);
+        }
+
+        function calculateScore(item, query) {
+            let score = 0;
+            const lowerQuery = query.toLowerCase();
+            if (item.title.toLowerCase() === lowerQuery) score += 100;
+            else if (item.title.toLowerCase().startsWith(lowerQuery)) score += 50;
+            else if (item.title.toLowerCase().includes(lowerQuery)) score += 20;
+            if (item.description.toLowerCase().includes(lowerQuery)) score += 10;
+            if (item.author.toLowerCase().includes(lowerQuery)) score += 5;
+            if (item.category.toLowerCase().includes(lowerQuery)) score += 5;
+            return score;
+        }
+
+        function displayResults(results) {
+            searchResultsList.innerHTML = '';
+            if (results.length === 0) {
+                searchResultsList.innerHTML = `<p style="padding: 20px; text-align: center; color: #888;">No results found.</p>`;
+            } else {
+                results.forEach(item => {
+                    const resultElement = document.createElement('a');
+                    resultElement.href = item.src; 
+                    resultElement.classList.add('search-result-item');
+                    resultElement.innerHTML = `<h3>${item.title}</h3><p>Category: ${item.category}</p>`;
+                    searchResultsList.appendChild(resultElement);
+                });
+            }
+            searchResultsOverlay.style.display = 'flex';
+        }
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            window.initRDKitModule().then(function(RDKit) {
+                window.RDKit = RDKit;
+                drawAllMolecules();
+            }).catch(e => {
+                console.error("RDKit initialization failed.", e);
+                document.querySelectorAll('.molecule').forEach(el => {
+                    el.innerHTML = '<p style="color: #ff5555; font-size: 0.8em;">Error: RDKit.js failed to load.</p>';
+                });
+            });
+        });
+
+        function drawAllMolecules() {
+            if (!window.RDKit) {
+                console.error("RDKit not initialized yet.");
+                return;
+            }
+
+            const moleculeData = {
+                // Prep of Alcohols
+                'mol-propene-1': { smiles: 'C=CC', label: 'Propene' },
+                'mol-h2o-1': { smiles: 'O', label: 'Water' },
+                'mol-propan-2-ol': { smiles: 'CC(C)O', label: 'Propan-2-ol' },
+                'mol-propene-2': { smiles: 'C=CC', label: 'Propene' },
+                'mol-propan-1-ol': { smiles: 'CCCO', label: 'Propan-1-ol' },
+                'mol-aldehyde-gen': { smiles: '*C(=O)[H]', label: 'Aldehyde' },
+                'mol-primary-alc-gen': { smiles: '*C([H])([H])O', label: 'Primary Alcohol' },
+                'mol-ketone-gen': { smiles: '*C(=O)*', label: 'Ketone' },
+                'mol-secondary-alc-gen': { smiles: '*C(O)*', label: 'Secondary Alcohol' },
+                'mol-acid-gen': { smiles: '*C(=O)O', label: 'Carboxylic Acid' },
+                'mol-primary-alc-gen-2': { smiles: '*C([H])([H])O', label: 'Primary Alcohol' },
+                'mol-carbonyl-gen': { smiles: 'C=O', label: 'Carbonyl' },
+                'mol-grignard-gen': { smiles: 'C[Mg]Br', label: 'Grignard Reagent' },
+                'mol-grignard-adduct': { smiles: 'C(C)(O[Mg]Br)', label: 'Adduct' },
+                'mol-grignard-alcohol': { smiles: 'CC(C)O', label: 'Alcohol' },
+
+                // Prep of Phenols
+                'mol-chlorobenzene': { smiles: 'c1ccc(Cl)cc1', label: 'Chlorobenzene' },
+                'mol-phenol-1': { smiles: 'c1ccc(O)cc1', label: 'Phenol' },
+                'mol-benzene-1': { smiles: 'c1ccccc1', label: 'Benzene' },
+                'mol-benzenesulphonic': { smiles: 'c1ccc(S(=O)(=O)O)cc1', label: 'Benzenesulphonic acid' },
+                'mol-phenol-2': { smiles: 'c1ccc(O)cc1', label: 'Phenol' },
+                'mol-aniline': { smiles: 'c1ccc(N)cc1', label: 'Aniline' },
+                'mol-diazonium': { smiles: 'c1ccc([N+]#N)cc1', label: 'Benzenediazonium salt' },
+                'mol-phenol-3': { smiles: 'c1ccc(O)cc1', label: 'Phenol' },
+                'mol-cumene': { smiles: 'c1ccccc1C(C)C', label: 'Cumene' },
+                'mol-cumene-hydroperoxide': { smiles: 'c1ccccc1C(C)(C)OO', label: 'Cumene hydroperoxide' },
+                'mol-phenol-4': { smiles: 'c1ccc(O)cc1', label: 'Phenol' },
+                'mol-acetone': { smiles: 'CC(=O)C', label: 'Acetone' },
+
+                // Esterification
+                'mol-ester-alc': { smiles: 'CCO', label: 'Alcohol (R\'-OH)' },
+                'mol-ester-acid': { smiles: '*C(=O)O', label: 'Carboxylic Acid (RCOOH)' },
+                'mol-ester-prod': { smiles: '*C(=O)OCC', label: 'Ester (RCOOR\')' },
+                'mol-h2o-2': { smiles: 'O', label: 'Water' },
+
+                // C-O Cleavage
+                'mol-co-alc': { smiles: 'CCO', label: 'Alcohol' },
+                'mol-co-halide': { smiles: 'CCBr', label: 'Alkyl Halide' },
+                'mol-h2o-3': { smiles: 'O', label: 'Water' },
+                'mol-dehyd-ethanol': { smiles: 'CCO', label: 'Ethanol' },
+                'mol-dehyd-ethene': { smiles: 'C=C', label: 'Ethene' },
+                'mol-h2o-4': { smiles: 'O', label: 'Water' },
+                
+                // Phenol Reactions
+                'mol-phenol-reduct': { smiles: 'c1ccc(O)cc1', label: 'Phenol' },
+                'mol-zinc': { smiles: '[Zn]', label: 'Zn' },
+                'mol-benzene-reduct': { smiles: 'c1ccccc1', label: 'Benzene' },
+                'mol-zno': { smiles: 'O=[Zn]', label: 'ZnO' },
+
+                // Ethers
+                'mol-williamson-halide': { smiles: '*C[Cl]', label: 'Alkyl Halide (R-X)' },
+                'mol-williamson-alkoxide': { smiles: '*CO[Na]', label: 'Sodium Alkoxide (R\'-ONa)' },
+                'mol-williamson-ether': { smiles: '*COC*', label: 'Ether (R-O-R\')' },
+                'mol-williamson-salt': { smiles: '[Na]Cl', label: 'NaX' },
+                'mol-ether-cleavage-ether': { smiles: 'COCC', label: 'Ether' },
+                'mol-ether-cleavage-halide': { smiles: 'CI', label: 'Alkyl Halide' },
+                'mol-ether-cleavage-alc': { smiles: 'CCO', label: 'Alcohol' },
+                
+                // Exercises
+                'mol-ex-cumene': { smiles: 'c1ccccc1C(C)C', label: 'Cumene' },
+                'mol-ex-cumene-hydro': { smiles: 'c1ccccc1C(C)(C)OO', label: 'Cumene hydroperoxide' },
+                'mol-ex-phenol': { smiles: 'c1ccc(O)cc1', label: 'Phenol' },
+                'mol-ex-acetone': { smiles: 'CC(=O)C', label: 'Acetone' },
+                'mol-ex-phenol-na': { smiles: 'c1ccc(O)cc1', label: 'Phenol' },
+                'mol-ex-phenoxide-na': { smiles: 'c1ccc(O[Na])cc1', label: 'Sodium phenoxide' },
+                'mol-ex-phenol-naoh': { smiles: 'c1ccc(O)cc1', label: 'Phenol' },
+                'mol-ex-phenoxide-naoh': { smiles: 'c1ccc(O[Na])cc1', 'label': 'Sodium phenoxide' },
+                'mol-ex-ethanol-dehyd': { smiles: 'CCO', label: 'Ethanol' },
+                'mol-ex-ethene-dehyd': { smiles: 'C=C', label: 'Ethene' },
+                'mol-ex-propanol': { smiles: 'CCCO', label: 'Propan-1-ol' },
+                'mol-ex-propoxypropane': { smiles: 'CCCOCCC', label: '1-Propoxypropane' },
+            };
+
+            for (const id in moleculeData) {
+                const element = document.getElementById(id);
+                if (element) {
+                    const data = moleculeData[id];
+                    try {
+                        const mol = window.RDKit.get_mol(data.smiles);
+                        if (mol) {
+                            const svg = mol.get_svg(150, 100);
+                            element.innerHTML = svg;
+                            
+                            const parent = element.parentElement;
+                            // Remove any existing label to prevent duplicates on redraw
+                            if (parent.querySelector('.molecule-label')) {
+                                parent.querySelector('.molecule-label').remove();
+                            }
+                            
+                            if (data.label) {
+                                const labelDiv = document.createElement('div');
+                                labelDiv.className = 'molecule-label';
+                                labelDiv.innerText = data.label;
+                                parent.appendChild(labelDiv);
+                            }
+                        } else {
+                            throw new Error(`Invalid SMILES: ${data.smiles}`);
+                        }
+                        mol.delete(); 
+                    } catch (e) {
+                        console.error(`Error drawing molecule ${id}:`, e);
+                        element.innerHTML = `<p style="color: #ff5555; font-size: 0.8em; text-align: center;">Error:<br>Invalid SMILES</p>`;
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+</html>

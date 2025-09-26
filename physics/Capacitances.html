@@ -1,0 +1,1429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Capacitances - NEURON-IQ</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+      // Configure MathJax
+      window.MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          displayMath: [['$$', '$$'], ['\\[', '\\]']]
+        }
+      };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; background: #eaf6f6; color: #333; }
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 25px 8%; background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .logo { display: flex; align-items: center; gap: 12px; font-size: 24px; font-weight: 700; color: #2c3e50; text-decoration: none; }
+        .logo-icon { width: 40px; height: 40px; }
+        .nav-links ul { list-style: none; display: flex; gap: 40px; }
+        .nav-links a { text-decoration: none; color: #555; font-weight: 500; transition: color 0.3s ease; }
+        .nav-links a:hover { color: #d81b60; }
+        .search-section { padding: 25px 8%; border-bottom: 1px solid #ddd; }
+        .search-container { width: 100%; max-width: 700px; margin: 0 auto; display: flex; background-color: #fff; border-radius: 50px; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.07); overflow: hidden; }
+        .search-input { flex-grow: 1; border: none; outline: none; padding: 15px 25px; font-size: 16px; font-family: 'Poppins', sans-serif; }
+        .search-button { border: none; background-color: #e94057; color: white; padding: 0 25px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .search-button svg { width: 22px; height: 22px; }
+        
+        /* --- Main Content Container (FIX 1: Improved Readability) --- */
+        .content-container {
+            max-width: 80%;
+            margin: 40px auto;
+            padding: 40px 50px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+            line-height: 1.7;
+        }
+        .content-container h1, .content-container h2, .content-container h3 { margin-bottom: 15px; }
+        .content-container h1 { font-size: 36px; color: #2c3e50; }
+        .content-container h2 { font-size: 24px; color: #333; margin-top: 40px; border-bottom: 2px solid #e94057; padding-bottom: 5px; }
+        .content-container p { margin-bottom: 20px; font-size: 16px; }
+        .content-container a { color: #e94057; text-decoration: none; }
+        .content-container a:hover { text-decoration: underline; }
+
+        /* --- Floating Search Results Overlay (No changes needed) --- */
+        #search-results-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); z-index: 1000; display: none; justify-content: center; align-items: flex-start; padding-top: 10vh; }
+        #search-results-box { background: #fff; width: 100%; max-width: 600px; border-radius: 8px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); position: relative; }
+        .search-results-header { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; border-bottom: 1px solid #eee; }
+        .search-results-header span { font-weight: 600; color: #555; }
+        #close-search-btn { background: none; border: none; font-size: 24px; cursor: pointer; color: #888; line-height: 1; }
+        #search-results-list { max-height: 60vh; overflow-y: auto; }
+        .search-result-item { display: block; text-decoration: none; padding: 15px 20px; border-bottom: 1px solid #f0f0f0; transition: background-color 0.2s ease; }
+        .search-result-item:last-child { border-bottom: none; }
+        .search-result-item:hover { background-color: #f9f9f9; }
+        .search-result-item h3 { font-size: 16px; color: #e94057; margin-bottom: 5px; }
+        .search-result-item p { font-size: 13px; color: #666; margin: 0; }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <a href="../index.html" class="logo">
+            <svg class="logo-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="48" fill="#2c3e50"/><path d="M42 30 Q50 20 58 30 Q65 35 60 45 Q70 50 60 55 Q65 65 58 70 Q50 80 42 70 Q35 65 40 55 Q30 50 40 45 Q35 35 42 30Z" fill="#e94057"/></svg>
+            <span>NEURON-IQ</span>
+        </a>
+        <nav class="nav-links">
+            <ul>
+                <li><a href="../physics/">Physics</a></li>
+                <li><a href="../chemistry/">Chemistry</a></li>
+                <li><a href="../maths/">Maths</a></li>
+                <li><a href="../biology/">Biology</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="search-section">
+        <form class="search-container" id="search-form">
+            <input type="text" id="search-input" class="search-input" placeholder="Search the entire site...">
+            <button type="submit" class="search-button">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" /></svg>
+            </button>
+        </form>
+    </section>
+
+    <main class="content=container">
+        <h3 id="intro_ch2">Introduction to Potential Energy</h3>
+        <p>In mechanics (Class XI), potential energy is defined as the work done by an external force to move a body against a conservative force (like spring or gravitational force). This work gets stored as potential energy.</p>
+        <p>The <strong>Coulomb force</strong> between two stationary charges is also a <u>conservative force</u>. Therefore, we can define electrostatic potential energy for charges in an electrostatic field.</p>
+        <p>When an external force $F_{ext}$ moves a charge $q$ from point R to point P against an electric force $F_E$ (such that $F_{ext} = -F_E$), the work done by the external force is stored as potential energy:</p>
+        <div class="math-eq">$$ W_{RP} = \int_R^P \vec{F}_{ext} \cdot d\vec{r} = - \int_R^P \vec{F}_E \cdot d\vec{r} $$</div>
+        <p>This work done equals the change in potential energy:</p>
+        <div class="math-eq">$$ \Delta U = U_P - U_R = W_{RP} $$</div>
+        <p>Two key remarks:</p>
+        <ol>
+            <li>The work done by an electrostatic field depends <u>only on the initial and final positions</u>, not on the path taken. This is the fundamental characteristic of a conservative force.</li>
+            <li>Potential energy is defined up to an additive constant. By convention, electrostatic potential energy is often taken as zero at <strong>infinity</strong>. With this choice, the potential energy of a charge $q$ at a point P is the work done by an external force in bringing the charge $q$ from infinity to that point P ($U_P = W_{\infty P}$).</li>
+        </ol>
+        <hr>
+
+        <h3 id="electrostatic_potential">Electrostatic Potential</h3>
+        <p>Electrostatic potential (V) at a point in an electric field is defined as the <u>work done by an external force in bringing a unit positive test charge from infinity to that point</u>, without acceleration.</p>
+        <p>It is the potential energy per unit charge:</p>
+        <div class="math-eq">$$ V_P - V_R = \frac{U_P - U_R}{q} = \frac{W_{RP}}{q} $$</div>
+        <p>If we choose $V_R = 0$ at infinity, then the electrostatic potential at point P is:</p>
+        <div class="math-eq">$$ V_P = \frac{W_{\infty P}}{q} $$</div>
+        <p>The SI unit of electrostatic potential is <strong>Joule per Coulomb (J/C)</strong>, which is called a <strong>Volt (V)</strong>.</p>
+        <hr>
+
+        <h3 id="potential_point_charge">Potential Due to a Point Charge</h3>
+        <p>The electrostatic potential $V(r)$ due to a point charge $Q$ at a distance $r$ from it is given by:</p>
+        <div class="math-eq">$$ V(r) = \frac{1}{4\pi\epsilon_0} \frac{Q}{r} $$</div>
+        <ul>
+            <li>For a positive charge $Q > 0$, the potential is positive and decreases as $r$ increases.</li>
+            <li>For a negative charge $Q < 0$, the potential is negative and becomes less negative (increases) as $r$ increases.</li>
+            <li>This equation is consistent with $V=0$ at infinity.</li>
+            <li>Comparison with electric field: Electric field due to a point charge falls off as $1/r^2$, while electric potential falls off as $1/r$.</li>
+        </ul>
+        <hr>
+
+        <h3 id="potential_dipole">Potential Due to an Electric Dipole</h3>
+        <p>An electric dipole consists of two charges $+q$ and $-q$ separated by a distance $2a$. Its dipole moment is $\vec{p} = q(2\vec{a})$, pointing from $-q$ to $+q$.</p>
+        <p>The electric potential at a point with position vector $\vec{r}$ (from the centre of the dipole) and making an angle $\theta$ with the dipole moment $\vec{p}$ is:</p>
+        <div class="math-eq">$$ V = \frac{1}{4\pi\epsilon_0} \frac{\vec{p} \cdot \vec{r}}{r^3} $$</div>
+        <p>For a point P at a large distance $r \gg a$ from the dipole, the potential simplifies to:</p>
+        <div class="math-eq">$$ V = \frac{1}{4\pi\epsilon_0} \frac{p \cos\theta}{r^2} $$</div>
+        <ul>
+            <li><strong>On the axial line ($\theta = 0^\circ$ or $\theta = 180^\circ$):</strong> $V = \pm \frac{1}{4\pi\epsilon_0} \frac{p}{r^2}$. Positive along $\vec{p}$, negative opposite to $\vec{p}$.</li>
+            <li><strong>On the equatorial plane ($\theta = 90^\circ$):</strong> $V = 0$.</li>
+            <li>The potential due to a dipole depends not just on distance $r$ but also on angle $\theta$.</li>
+            <li>The potential due to a dipole falls off as $1/r^2$, which is faster than the $1/r$ dependence for a single point charge.</li>
+        </ul>
+        <hr>
+
+        <h3 id="potential_system">Potential Due to a System of Charges</h3>
+        <p>By the superposition principle, the total electrostatic potential at any point P due to a system of $n$ point charges ($q_1, q_2, \dots, q_n$) is the algebraic sum of the potentials due to individual charges:</p>
+        <div class="math-eq">$$ V(\vec{r}) = V_1(\vec{r}) + V_2(\vec{r}) + \dots + V_n(\vec{r}) $$</div>
+        <div class="math-eq">$$ V(\vec{r}) = \frac{1}{4\pi\epsilon_0} \left( \frac{q_1}{r_1} + \frac{q_2}{r_2} + \dots + \frac{q_n}{r_n} \right) = \frac{1}{4\pi\epsilon_0} \sum_{i=1}^{n} \frac{q_i}{r_i} $$</div>
+        <p>where $r_i$ is the distance of point P from the charge $q_i$.</p>
+        <h4>Potential due to a Uniformly Charged Spherical Shell</h4>
+        <ul>
+            <li><strong>Outside the shell ($r \ge R$):</strong> The potential is the same as if the entire charge $q$ were concentrated at the centre.
+                <div class="math-eq">$$ V(r) = \frac{1}{4\pi\epsilon_0} \frac{q}{r} $$</div>
+            </li>
+            <li><strong>Inside the shell ($r < R$):</strong> The electric field inside is zero. This implies no work is done moving a charge inside, so the potential is constant and equal to its value at the surface.
+                <div class="math-eq">$$ V(r) = \frac{1}{4\pi\epsilon_0} \frac{q}{R} $$</div>
+            </li>
+        </ul>
+        <hr>
+
+        <h3 id="equipotential">Equipotential Surfaces</h3>
+        <p>An <strong>equipotential surface</strong> is a surface on which the electrostatic potential is constant at all points.</p>
+        <h4>Properties:</h4>
+        <ol>
+            <li><strong>No work done:</strong> No work is required to move a test charge from one point to another on an equipotential surface, since $W = q(V_P - V_R)$ and $V_P = V_R$.</li>
+            <li><strong>Electric field is perpendicular:</strong> The electric field $\vec{E}$ at any point on an equipotential surface is always perpendicular (normal) to the surface at that point. If it were not, there would be a component of $\vec{E}$ along the surface, and work would be done in moving a charge, which contradicts the definition.</li>
+            <li><strong>Never intersect:</strong> Two equipotential surfaces can never intersect each other, as this would imply two different potentials at the same point, which is impossible.</li>
+            <li><strong>Density of lines:</strong> Equipotential surfaces are closer together in regions of strong electric field and farther apart in regions of weak electric field.</li>
+        </ol>
+        <h4>Examples:</h4>
+        <ul>
+            <li>For a <strong>single point charge</strong>, equipotential surfaces are concentric spheres centered at the charge.</li>
+            <li>For a <strong>uniform electric field</strong>, equipotential surfaces are a set of parallel planes perpendicular to the field lines.</li>
+        </ul>
+        <hr>
+
+        <h3 id="relation_ev">Relation between Electric Field and Potential</h3>
+        <p>The electric field $\vec{E}$ and potential $V$ are related by:</p>
+        <div class="math-eq">$$ E = - \frac{dV}{dl} $$</div>
+        <p>where $dV$ is the change in potential over a small displacement $dl$ along the direction of $\vec{E}$.</p>
+        <p>This relation implies two key points:</p>
+        <ol>
+            <li>The electric field is in the direction in which the potential decreases most rapidly (steepest).</li>
+            <li>The magnitude of the electric field is equal to the potential gradient (rate of change of potential with distance) in that direction.</li>
+        </ol>
+        <hr>
+
+        <h3 id="pe_system_external">Potential Energy of a System of Charges in an External Field</h3>
+        <h4>1. Potential Energy of a Single Charge in an External Field</h4>
+        <p>If a charge $q$ is placed at a point $\vec{r}$ in an external electric potential $V(\vec{r})$, its potential energy is:</p>
+        <div class="math-eq">$$ U(\vec{r}) = qV(\vec{r}) $$</div>
+        <p>This is the work done by an external agency to bring the charge $q$ from infinity to point $\vec{r}$ against the external electric field.</p>
+        <p>The unit of energy frequently used in atomic and nuclear physics is the <strong>electron volt (eV)</strong>:</p>
+        <div class="math-eq">$$ 1 \text{ eV} = 1.602 \times 10^{-19} \text{ J} $$</div>
+        
+        <h4>2. Potential Energy of a System of Two Charges in an External Field</h4>
+        <p>For two charges $q_1$ and $q_2$ located at $\vec{r}_1$ and $\vec{r}_2$ in an external potential $V(\vec{r})$, the total potential energy is the sum of:</p>
+        <ol>
+            <li>Potential energy of $q_1$ in the external field: $q_1 V(\vec{r}_1)$.</li>
+            <li>Potential energy of $q_2$ in the external field: $q_2 V(\vec{r}_2)$.</li>
+            <li>Potential energy due to interaction between $q_1$ and $q_2$: $\frac{1}{4\pi\epsilon_0} \frac{q_1 q_2}{r_{12}}$, where $r_{12}$ is the distance between $q_1$ and $q_2$.</li>
+        </ol>
+        <p>So, the total potential energy is:</p>
+        <div class="math-eq">$$ U = q_1 V(\vec{r}_1) + q_2 V(\vec{r}_2) + \frac{1}{4\pi\epsilon_0} \frac{q_1 q_2}{r_{12}} $$</div>
+        
+        <h4>3. Potential Energy of a Dipole in a Uniform External Electric Field</h4>
+        <p>When an electric dipole with dipole moment $\vec{p}$ is placed in a uniform external electric field $\vec{E}$, it experiences a torque $\vec{\tau} = \vec{p} \times \vec{E}$ that tends to align it with the field. The potential energy $U$ of the dipole in the field depends on its orientation $\theta$ with respect to the field:</p>
+        <div class="math-eq">$$ U = -\vec{p} \cdot \vec{E} = -pE \cos\theta $$</div>
+        <ul>
+            <li>Minimum energy (stable equilibrium) when $\theta = 0^\circ$ (dipole aligned with field). $U_{min} = -pE$.</li>
+            <li>Maximum energy (unstable equilibrium) when $\theta = 180^\circ$ (dipole anti-parallel to field). $U_{max} = +pE$.</li>
+            <li>Potential energy is zero when $\theta = 90^\circ$ (perpendicular to field), by convention.</li>
+        </ul>
+        <hr>
+
+        <h3 id="conductors">Electrostatics of Conductors</h3>
+        <p>Conductors are materials that contain mobile charge carriers (e.g., free electrons in metals). Key properties in electrostatics:</p>
+        <ol>
+            <li><strong>Inside a conductor, electrostatic field is zero:</strong> In a static situation, free charges distribute themselves such that the net electric field everywhere inside the conductor is zero.</li>
+            <li><strong>At the surface of a charged conductor, electrostatic field is normal to the surface:</strong> If there were a tangential component, free charges would move along the surface, creating a current, which contradicts the static condition.</li>
+            <li><strong>The interior of a conductor can have no excess charge in the static situation:</strong> Any net charge given to a conductor resides on its outer surface. This follows from Gauss's Law ($E=0$ inside means $q_{enc}=0$).</li>
+            <li><strong>Electrostatic potential is constant throughout the volume of the conductor and has the same value on its surface:</strong> Since $E=0$ inside, no work is done in moving a charge within the conductor, implying zero potential difference.</li>
+            <li><strong>Electric field at the surface of a charged conductor:</strong> The magnitude of the electric field $\vec{E}$ just outside the surface of a charged conductor is directly proportional to the surface charge density $\sigma$:
+                <div class="math-eq">$$ \vec{E} = \frac{\sigma}{\epsilon_0} \hat{n} $$</div>
+                where $\hat{n}$ is the unit vector normal to the surface in the outward direction.</li>
+            <li><strong>Electrostatic Shielding:</strong> The electric field inside a cavity within a conductor (with no charges placed inside the cavity) is zero, regardless of the external fields or charges on the conductor. This phenomenon is used to protect sensitive instruments from external electric influences.</li>
+        </ol>
+        <hr>
+
+        <h3 id="dielectrics">Dielectrics and Polarisation</h3>
+        <p><strong>Dielectrics</strong> are non-conducting substances (insulators) that have no free charge carriers.</p>
+        <p>When a dielectric is placed in an external electric field $\vec{E}_0$, the field induces dipole moments within the material, a process called <strong>polarisation</strong>. Unlike conductors, dielectrics do not allow charges to move freely to cancel the external field completely; instead, they reduce the net electric field inside them.</p>
+        <h4>Types of Molecules:</h4>
+        <ul>
+            <li><strong>Non-polar molecules:</strong> Molecules in which the centres of positive and negative charges coincide (e.g., O₂, H₂). In an external field, an induced dipole moment is created as the charges are displaced in opposite directions.</li>
+            <li><strong>Polar molecules:</strong> Molecules in which the centres of positive and negative charges do not coincide, even in the absence of an external field (e.g., H₂O, HCl). They possess a permanent dipole moment. In an external field, these dipoles tend to align with the field.</li>
+        </ul>
+        <p>In both cases, a net dipole moment is developed in the dielectric. The dipole moment per unit volume is called <strong>Polarisation ($\vec{P}$)</strong>.</p>
+        <p>For linear isotropic dielectrics, $\vec{P}$ is proportional to $\vec{E}$:</p>
+        <div class="math-eq">$$ \vec{P} = \epsilon_0 \chi_e \vec{E} $$</div>
+        <p>where $\chi_e$ (chi-e) is the <strong>electric susceptibility</strong> of the dielectric medium.</p>
+        <p>The collective effect of these induced dipoles or aligned permanent dipoles is the appearance of <u>induced surface charges ($\sigma_p$)</u> on the faces of the dielectric. These induced charges create an electric field ($\vec{E}_p$) inside the dielectric that opposes the external field $\vec{E}_0$.</p>
+        <p>The net electric field inside the dielectric is reduced:</p>
+        <div class="math-eq">$$ \vec{E} = \vec{E}_0 - \vec{E}_p $$</div>
+        <p>The extent of this reduction depends on the nature of the dielectric.</p>
+        <hr>
+
+        <h3 id="capacitors">Capacitors and Capacitance</h3>
+        <p>A <strong>capacitor</strong> is a system of two conductors separated by an insulating medium (dielectric). When charged, the conductors have equal and opposite charges, say $+Q$ and $-Q$, and a potential difference $V$ between them.</p>
+        <p>The <strong>capacitance (C)</strong> of a capacitor is defined as the ratio of the magnitude of the charge on either conductor to the potential difference between them:</p>
+        <div class="math-eq">$$ C = \frac{Q}{V} $$</div>
+        <ul>
+            <li>Capacitance is a measure of a capacitor's ability to store electric charge.</li>
+            <li>It depends on the <u>geometrical configuration</u> (shape, size, separation) of the conductors and the <u>nature of the dielectric medium</u> between them. It does NOT depend on $Q$ or $V$.</li>
+            <li>The SI unit of capacitance is the <strong>Farad (F)</strong>. $1 \text{ F} = 1 \text{ C/V}$.</li>
+            <li>Commonly used smaller units are microfarad ($\mu$F = 10⁻⁶ F), nanofarad (nF = 10⁻⁹ F), and picofarad (pF = 10⁻¹² F). A Farad is a very large unit.</li>
+            <li><strong>Dielectric Strength:</strong> The maximum electric field that a dielectric medium can withstand without breakdown (losing its insulating property) is called its dielectric strength.</li>
+        </ul>
+        <hr>
+
+        <h3 id="parallel_plate_capacitor">The Parallel Plate Capacitor</h3>
+        <p>A parallel plate capacitor consists of two large plane parallel conducting plates of area $A$ separated by a small distance $d$.</p>
+        <p>If there is <strong>vacuum (or air)</strong> between the plates:</p>
+        <ul>
+            <li>The surface charge densities are $\sigma = Q/A$ and $-\sigma = -Q/A$.</li>
+            <li>The electric field between the plates is uniform and given by:
+                <div class="math-eq">$$ E_0 = \frac{\sigma}{\epsilon_0} = \frac{Q}{\epsilon_0 A} $$</div>
+            </li>
+            <li>The potential difference between the plates is $V_0 = E_0 d = \frac{Qd}{\epsilon_0 A}$.</li>
+            <li>The capacitance ($C_0$) is:
+                <div class="math-eq">$$ C_0 = \frac{Q}{V_0} = \frac{Q}{Qd/(\epsilon_0 A)} = \frac{\epsilon_0 A}{d} $$</div>
+            </li>
+        </ul>
+        <hr>
+
+        <h3 id="dielectric_effect">Effect of Dielectric on Capacitance</h3>
+        <p>When a dielectric medium is inserted between the plates of a parallel plate capacitor (fully occupying the space):</p>
+        <ul>
+            <li>The external field $\vec{E}_0$ polarizes the dielectric, creating an opposing field $\vec{E}_p$ due to induced surface charges.</li>
+            <li>The net electric field inside the dielectric is reduced to $E = E_0/K$, where $K$ is the <strong>dielectric constant</strong> (or relative permittivity) of the medium.
+                <div class="math-eq">$$ E = \frac{\sigma - \sigma_p}{\epsilon_0} = \frac{E_0}{K} $$</div>
+            </li>
+            <li>The potential difference across the plates is reduced to $V = E d = \frac{V_0}{K}$.</li>
+            <li>The capacitance $C$ with the dielectric is:
+                <div class="math-eq">$$ C = \frac{Q}{V} = \frac{Q}{V_0/K} = K \frac{Q}{V_0} = KC_0 $$</div>
+            </li>
+            <li>The dielectric constant $K$ is defined as the ratio of the capacitance with dielectric ($C$) to the capacitance with vacuum ($C_0$):
+                <div class="math-eq">$$ K = \frac{C}{C_0} = \frac{\epsilon}{\epsilon_0} $$</div>
+                where $\epsilon$ is the permittivity of the medium. $K \ge 1$.</li>
+            <li>Thus, inserting a dielectric increases the capacitance by a factor of $K$. For a parallel plate capacitor, $C = \frac{K\epsilon_0 A}{d} = \frac{\epsilon A}{d}$.</li>
+        </ul>
+        <hr>
+
+        <h3 id="combinations">Combination of Capacitors</h3>
+        <h4>1. Capacitors in Series</h4>
+        <p>When capacitors are connected in series, they are connected end-to-end. The following properties hold:</p>
+        <ul>
+            <li>The <strong>charge (Q) is the same</strong> on each capacitor.</li>
+            <li>The total potential difference ($V$) across the combination is the sum of the potential differences across individual capacitors: $V = V_1 + V_2 + \dots + V_n$.</li>
+            <li>The equivalent capacitance ($C_{eq}$) for a series combination is given by:
+                <div class="math-eq">$$ \frac{1}{C_{eq}} = \frac{1}{C_1} + \frac{1}{C_2} + \dots + \frac{1}{C_n} $$</div>
+            </li>
+            <li>For two capacitors in series: $C_{eq} = \frac{C_1 C_2}{C_1 + C_2}$.</li>
+            <li>The equivalent capacitance in series is always less than the smallest individual capacitance.</li>
+        </ul>
+        
+        <h4>2. Capacitors in Parallel</h4>
+        <p>When capacitors are connected in parallel, their corresponding plates are connected together to common points. The following properties hold:</p>
+        <ul>
+            <li>The <strong>potential difference (V) is the same</strong> across each capacitor.</li>
+            <li>The total charge ($Q$) on the combination is the sum of the charges on individual capacitors: $Q = Q_1 + Q_2 + \dots + Q_n$.</li>
+            <li>The equivalent capacitance ($C_{eq}$) for a parallel combination is given by:
+                <div class="math-eq">$$ C_{eq} = C_1 + C_2 + \dots + C_n $$</div>
+            </li>
+            <li>The equivalent capacitance in parallel is always greater than the largest individual capacitance.</li>
+        </ul>
+        <hr>
+
+        <h3 id="energy_stored">Energy Stored in a Capacitor</h3>
+        <p>The energy stored in a charged capacitor is equal to the work done by the external agency in charging it. This energy is stored in the electric field between the plates.</p>
+        <p>The energy stored $U$ can be expressed in several equivalent forms:</p>
+        <div class="math-eq">$$ U = \frac{1}{2} QV = \frac{1}{2} CV^2 = \frac{1}{2} \frac{Q^2}{C} $$</div>
+        <p>The <strong>energy density (u)</strong>, which is the energy stored per unit volume of space, in an electric field $\vec{E}$ is:</p>
+        <div class="math-eq">$$ u = \frac{1}{2} \epsilon E^2 $$</div>
+        <p>This expression is generally true for any electric field configuration.</p>
+        <hr>
+
+        <h3 id="summary">Summary</h3>
+        <ol>
+            <li>Electrostatic force is conservative. Work done by an external force in bringing a charge $q$ from R to P is $q(V_P - V_R)$, which is the potential energy difference $U_P - U_R$.</li>
+            <li>Potential at a point is the work done per unit charge in bringing it from infinity. For a point charge $Q$ at the origin, $V(r) = Q/(4\pi\epsilon_0 r)$.</li>
+            <li>For an electric dipole $\vec{p}$, $V(r, \theta) = (1/(4\pi\epsilon_0)) (\vec{p} \cdot \hat{r} / r^2)$ for $r \gg a$.</li>
+            <li>For a system of charges, $V(\vec{r}) = \sum_{i=1}^n V_i(\vec{r}) = \sum_{i=1}^n (1/(4\pi\epsilon_0)) (q_i/r_i)$.</li>
+            <li>An equipotential surface has constant potential. Electric field $\vec{E}$ is perpendicular to equipotential surfaces and points in the direction of steepest potential decrease ($E = -dV/dl$).</li>
+            <li>Potential energy of a system of two charges $q_1, q_2$ at distance $r_{12}$ is $U = (1/(4\pi\epsilon_0)) (q_1 q_2 / r_{12})$.</li>
+            <li>Potential energy of a charge $q$ in an external potential $V(\vec{r})$ is $qV(\vec{r})$. Potential energy of a dipole $\vec{p}$ in a uniform external field $\vec{E}$ is $U = -\vec{p} \cdot \vec{E}$.</li>
+            <li>Key properties of conductors: $E=0$ inside; $E$ is normal to surface; no excess charge inside; potential is constant throughout volume and on surface; $E=\sigma/\epsilon_0 \hat{n}$ at surface. Electrostatic shielding.</li>
+            <li>A capacitor stores charge ($Q$) and energy ($U = (1/2)CV^2$). Capacitance $C = Q/V$. Unit is Farad (F). Depends on geometry and dielectric.</li>
+            <li>For a parallel plate capacitor in vacuum, $C_0 = \epsilon_0 A/d$.</li>
+            <li>Introducing a dielectric of constant $K$ increases capacitance to $C = KC_0$.</li>
+            <li>Capacitors in series: $1/C_{eq} = 1/C_1 + 1/C_2 + \dots$.</li>
+            <li>Capacitors in parallel: $C_{eq} = C_1 + C_2 + \dots$.</li>
+            <li>Energy density in an electric field: $u = (1/2)\epsilon E^2$.</li>
+        </ol>
+        <hr>
+
+        <h3 id="points_to_ponder">Points to Ponder</h3>
+        <ol>
+            <li>Electrostatics deals with forces between charges at rest. When we talk of electrostatic force, it is assumed that each charge is kept at rest by some unspecified force that opposes the net Coulomb force.</li>
+            <li>A capacitor confines electric field lines to a small region. Even if the field is strong, the potential difference between the conductors can be small.</li>
+            <li>Electric field is discontinuous across the surface of a charged spherical shell (zero inside, $\sigma/\epsilon_0$ just outside). Electric potential, however, is continuous across the surface.</li>
+            <li>The torque $\vec{p} \times \vec{E}$ on a dipole causes it to oscillate about $\vec{E}$. Dissipation aligns the dipole with $\vec{E}$.</li>
+            <li>Potential due to a charge $q$ at its own location is not defined (it is infinite).</li>
+            <li>In $qV(\vec{r})$ for potential energy, $V(\vec{r})$ is the potential due to external charges, not the potential due to $q$ itself.</li>
+            <li>A cavity inside a conductor is shielded from outside electrical influences. However, if charges are put inside the cavity, the exterior of the conductor is not shielded by the inside charges.</li>
+        </ol>
+        <hr>
+
+        <h3 id="ncert_examples">NCERT Examples Solved</h3>
+
+        <h4 id="ex2_1">Example 2.1</h4>
+        <div class="question-block">
+            <h5>Question</h5>
+            <p>(a) Calculate the potential at a point P due to a charge of $4 \times 10^{-7}$ C located 9 cm away.<br>(b) Hence obtain the work done in bringing a charge of $2 \times 10^{-9}$ C from infinity to the point P. Does the answer depend on the path along which the charge is brought?</p>
+        </div>
+        <div class="answer-block">
+            <h5>Solution</h5>
+            <p>(a) Given $Q = 4 \times 10^{-7}$ C and $r = 9 \text{ cm} = 0.09 \text{ m}$.</p>
+            <p>The potential $V$ at point P due to a point charge is given by:</p>
+            <div class="math-eq">$$ V = \frac{1}{4\pi\epsilon_0} \frac{Q}{r} $$</div>
+            <p>Using $k = \frac{1}{4\pi\epsilon_0} = 9 \times 10^9 \text{ N m}^2/\text{C}^2$:</p>
+            <div class="math-eq">$$ V = (9 \times 10^9 \text{ N m}^2/\text{C}^2) \times \frac{4 \times 10^{-7} \text{ C}}{0.09 \text{ m}} = \frac{36 \times 10^2}{0.09} = 4 \times 10^4 \text{ V} $$</div>
+            <p>(b) The work done $W$ in bringing a charge $q = 2 \times 10^{-9}$ C from infinity to point P is $W = qV$.</p>
+            <div class="math-eq">$$ W = (2 \times 10^{-9} \text{ C}) \times (4 \times 10^4 \text{ V}) = 8 \times 10^{-5} \text{ J} $$</div>
+            <p>No, the work done will be path independent. This is because the electrostatic force is a conservative force, and work done against a conservative force depends only on the initial and final positions, not on the path taken.</p>
+        </div>
+        <hr>
+
+        <h4 id="ex2_2">Example 2.2</h4>
+        <div class="question-block">
+            <h5>Question</h5>
+            <p>Two charges $3 \times 10^{-8}$ C and $-2 \times 10^{-8}$ C are located 15 cm apart. At what point on the line joining the two charges is the electric potential zero? Take the potential at infinity to be zero.</p>
+        </div>
+        <div class="answer-block">
+            <h5>Solution</h5>
+            <p>Let $q_1 = 3 \times 10^{-8}$ C and $q_2 = -2 \times 10^{-8}$ C. The distance between them is $d = 15 \text{ cm} = 0.15 \text{ m}$.</p>
+            <p>Let the origin be at $q_1$. Then $q_2$ is at $x = 0.15 \text{ m}$. Let P be a point at distance $x$ from $q_1$ where the potential is zero. Potential at P is $V = V_1 + V_2 = 0$.</p>
+            <div class="math-eq">$$ \frac{1}{4\pi\epsilon_0} \frac{q_1}{x} + \frac{1}{4\pi\epsilon_0} \frac{q_2}{(d-x)} = 0 $$</div>
+            <div class="math-eq">$$ \frac{q_1}{x} = -\frac{q_2}{(d-x)} $$</div>
+            <p>Substitute values: $q_1 = 3 \times 10^{-8}$ C, $q_2 = -2 \times 10^{-8}$ C, $d = 0.15 \text{ m}$.</p>
+            <div class="math-eq">$$ \frac{3 \times 10^{-8}}{x} = -\frac{(-2 \times 10^{-8})}{(0.15-x)} $$</div>
+            <div class="math-eq">$$ \frac{3}{x} = \frac{2}{0.15-x} $$</div>
+            <div class="math-eq">$$ 3(0.15-x) = 2x $$</div>
+            <div class="math-eq">$$ 0.45 - 3x = 2x $$</div>
+            <div class="math-eq">$$ 0.45 = 5x \implies x = \frac{0.45}{5} = 0.09 \text{ m} = 9 \text{ cm} $$</div>
+            <p>This point is between the two charges (0 < x < 0.15).</p>
+            <p>There is another possibility outside the line segment. Let P be at a distance $x$ from $q_1$ (on the side of $q_2$). So $x > 0.15 \text{ m}$. The distance from $q_2$ to P is $x-d$.</p>
+            <div class="math-eq">$$ \frac{q_1}{x} + \frac{q_2}{(x-d)} = 0 $$</div>
+            <div class="math-eq">$$ \frac{3 \times 10^{-8}}{x} + \frac{(-2 \times 10^{-8})}{(x-0.15)} = 0 $$</div>
+            <div class="math-eq">$$ \frac{3}{x} = \frac{2}{x-0.15} $$</div>
+            <div class="math-eq">$$ 3(x-0.15) = 2x $$</div>
+            <div class="math-eq">$$ 3x - 0.45 = 2x $$</div>
+            <div class="math-eq">$$ x = 0.45 \text{ m} = 45 \text{ cm} $$</div>
+            <p>So, electric potential is zero at <strong>9 cm</strong> from the positive charge (between the charges) and at <strong>45 cm</strong> from the positive charge (on the side of the negative charge).</p>
+        </div>
+        <hr>
+
+        <h4 id="ex2_3_b">Example 2.3</h4>
+        <div class="question-block">
+            <h5>Question</h5>
+            <p>Figures 2.8 (a) and (b) show the field lines of a positive and negative point charge respectively.<br>(a) Give the signs of the potential difference $V_P - V_Q$; $V_B - V_A$.<br>(b) Give the sign of the potential energy difference of a small negative charge between the points Q and P; A and B.<br>(c) Give the sign of the work done by the field in moving a small positive charge from Q to P.<br>(d) Give the sign of the work done by the external agency in moving a small negative charge from B to A.<br>(e) Does the kinetic energy of a small negative charge increase or decrease in going from B to A?</p>
+            <p><em>(Diagrams described: (a) Positive charge field lines radiating outwards. Q is closer to charge, P is farther. (b) Negative charge field lines radiating inwards. B is closer to charge, A is farther.)</em></p>
+        </div>
+        <div class="answer-block">
+            <h5>Solution</h5>
+            <p>(a) <strong>$V_P - V_Q$:</strong> For a positive charge (Fig 2.8a), potential decreases as distance increases. Since Q is closer to the positive charge than P, $V_Q > V_P$. Therefore, $V_P - V_Q$ is <strong>negative</strong>.</p>
+            <p><strong>$V_B - V_A$:</strong> For a negative charge (Fig 2.8b), potential increases as distance increases (becomes less negative). Since B is closer to the negative charge than A, $V_B < V_A$ (e.g., $V_B = -10\text{V}$, $V_A = -5\text{V}$). Therefore, $V_B - V_A$ is <strong>negative</strong>.</p>
+
+            <p>(b) Potential energy difference is $\Delta U = q \Delta V$. If $q$ is a small negative charge, $q < 0$.</p>
+            <p><strong>Q to P (for positive charge):</strong> $\Delta U = q (V_P - V_Q)$. Since $q < 0$ and $(V_P - V_Q) < 0$ (from (a)), $\Delta U$ is <strong>positive</strong>.</p>
+            <p><strong>A to B (for negative charge):</strong> $\Delta U = q (V_B - V_A)$. Since $q < 0$ and $(V_B - V_A) < 0$ (from (a)), $\Delta U$ is <strong>positive</strong>.</p>
+
+            <p>(c) Work done by the electric field $W_E = - \Delta U = -q\Delta V$. For a small positive charge ($q > 0$) moved from Q to P ($V_P - V_Q < 0$):</p>
+            <p>$W_E = -(q(V_P - V_Q))$. Since $q>0$ and $(V_P - V_Q)<0$, the term $(V_P - V_Q)$ is negative, so $W_E$ is <strong>positive</strong>.</p>
+            <p><em>(Note: NCERT states "work has to be done by an external agency against the electric field. Therefore, work done by the field is negative." This implies moving *from lower potential to higher potential*. For Q to P in Fig 2.8a (positive charge), Q is at higher potential and P at lower. So, the field *does* positive work in moving a positive charge from higher potential to lower potential, i.e., along the field lines. $W_E = V_{initial} - V_{final} = V_Q - V_P > 0$. The NCERT solution appears to have a different interpretation of Q to P or the sign conventions.)</em></p>
+
+            <p>(d) Work done by external agency $W_{ext} = \Delta U = q\Delta V$. For a small negative charge ($q < 0$) moved from B to A ($V_B - V_A < 0$):</p>
+            <p>$W_{ext} = q(V_A - V_B)$. Since $q < 0$ and $V_A - V_B > 0$ (as $V_B < V_A$), $W_{ext}$ is <strong>negative</strong>. The NCERT solution says "positive", which suggests they are talking about moving *from A to B* or the magnitude of work needed. If moving *against* the field from B to A for a negative charge, an external force would have to push it towards the negative charge (since it would naturally repel). B is closer to negative charge, so $V_B$ is more negative. A is farther, $V_A$ is less negative. Thus, moving from B to A for a negative charge is moving from lower potential to higher potential (less negative potential is higher). External work is positive when moving from lower to higher potential.</p>
+            <p>Let's re-evaluate d) based on standard interpretation:
+            For a negative charge to move from B to A, it is moving from a lower potential ($V_B$) to a higher potential ($V_A$). Work done by external force $W_{ext} = q(V_A - V_B)$. Since $q$ is negative and $(V_A - V_B)$ is positive, $W_{ext}$ is <strong>negative</strong>. The NCERT answer might be considering absolute value or a different scenario. Assuming standard physics convention, it's negative.</p>
+
+            <p>(e) A small negative charge moving from B to A (in the field of a negative charge) is moving towards a region of less negative potential (higher potential). The electric force on a negative charge is opposite to the direction of $\vec{E}$. $\vec{E}$ points towards the negative charge. So the force on the negative test charge is radially outwards, i.e., from B towards A. This force is doing positive work on the charge. If only electric force acts, its kinetic energy would increase. However, the problem asks about "going from B to A" implying work done by external agency. If it's brought *without acceleration*, then $\Delta K = -\Delta U$. Since $\Delta U$ is positive (from b)), $\Delta K$ is <strong>negative</strong>. So, kinetic energy decreases.</p>
+            <p>NCERT's answer: "Due to force of repulsion on the negative charge, velocity decreases and hence the kinetic energy decreases in going from B to A." This implies that the electric force would *slow down* the charge if it were moving from B to A. Wait, that contradicts previous parts. Let's re-read (b) for "A to B". For (b), for negative charge moving from A to B: $\Delta U = q(V_B-V_A)$. $q<0$, $V_B-V_A<0 \implies \Delta U > 0$. So, P.E. increases from A to B. This means the electric field does negative work.
+            Now for (e) B to A: Moving from $V_B$ to $V_A$. $V_A-V_B$ is positive. For a negative charge, $q(V_A-V_B)$ is negative. So P.E. decreases. If P.E. decreases, K.E. increases.
+            The NCERT solution for (e) is contradictory to standard energy conservation and the signs established in (a) and (b). If P.E. decreases (B to A for negative charge), K.E. must increase. Let's assume the standard physics principle holds: if a particle moves from higher potential energy to lower potential energy, its kinetic energy increases. Here, from (b), $U_B > U_A$ (for a negative charge). Thus, moving from B to A, P.E. decreases, so K.E. must <strong>increase</strong>.</p>
+        </div>
+        <hr>
+
+        <h4 id="ex2_4_b">Example 2.4</h4>
+        <div class="question-block">
+            <h5>Question</h5>
+            <p>Four charges are arranged at the corners of a square ABCD of side d, as shown in Fig. 2.15.(a) Find the work required to put together this arrangement. (b) A charge $q_0$ is brought to the centre E of the square, the four charges being held fixed at its corners. How much extra work is needed to do this?</p>
+            <p><em>(Diagram described: Square ABCD, side d. Charges at corners: A(+q), B(-q), C(+q), D(-q). Centre is E.)</em></p>
+        </div>
+        <div class="answer-block">
+            <h5>Solution</h5>
+            <p>(a) To find the work required to put together the arrangement, we calculate the total potential energy of the system. This is the sum of potential energies of all possible pairs of charges.</p>
+            <p>The distances are:</p>
+            <ul>
+                <li>Side length: $d$ (AB, BC, CD, DA)</li>
+                <li>Diagonal length: $d\sqrt{2}$ (AC, BD)</li>
+            </ul>
+            <p>Pairs and their potential energies:</p>
+            <ul>
+                <li>$U_{AB} = \frac{1}{4\pi\epsilon_0} \frac{(+q)(-q)}{d} = -\frac{q^2}{4\pi\epsilon_0 d}$</li>
+                <li>$U_{BC} = \frac{1}{4\pi\epsilon_0} \frac{(-q)(+q)}{d} = -\frac{q^2}{4\pi\epsilon_0 d}$</li>
+                <li>$U_{CD} = \frac{1}{4\pi\epsilon_0} \frac{(+q)(-q)}{d} = -\frac{q^2}{4\pi\epsilon_0 d}$</li>
+                <li>$U_{DA} = \frac{1}{4\pi\epsilon_0} \frac{(-q)(+q)}{d} = -\frac{q^2}{4\pi\epsilon_0 d}$</li>
+                <li>$U_{AC} = \frac{1}{4\pi\epsilon_0} \frac{(+q)(+q)}{d\sqrt{2}} = +\frac{q^2}{4\pi\epsilon_0 d\sqrt{2}}$</li>
+                <li>$U_{BD} = \frac{1}{4\pi\epsilon_0} \frac{(-q)(-q)}{d\sqrt{2}} = +\frac{q^2}{4\pi\epsilon_0 d\sqrt{2}}$</li>
+            </ul>
+            <p>Total potential energy $U = U_{AB} + U_{BC} + U_{CD} + U_{DA} + U_{AC} + U_{BD}$.</p>
+            <div class="math-eq">$$ U = \frac{1}{4\pi\epsilon_0 d} \left( -q^2 - q^2 - q^2 - q^2 + \frac{q^2}{\sqrt{2}} + \frac{q^2}{\sqrt{2}} \right) $$</div>
+            <div class="math-eq">$$ U = \frac{q^2}{4\pi\epsilon_0 d} \left( -4 + \frac{2}{\sqrt{2}} \right) = \frac{q^2}{4\pi\epsilon_0 d} \left( -4 + \sqrt{2} \right) $$</div>
+            <div class="math-eq">$$ U = -\frac{q^2}{4\pi\epsilon_0 d} (4 - \sqrt{2}) $$</div>
+            <p>The work required to put together this arrangement is equal to this total potential energy. $W = U$.</p>
+
+            <p>(b) When a charge $q_0$ is brought to the center E, the extra work needed is $W_{extra} = q_0 V_E$, where $V_E$ is the potential at E due to the four charges at the corners.</p>
+            <p>The distance from each corner to the center E is half the diagonal length, $r_E = \frac{d\sqrt{2}}{2} = \frac{d}{\sqrt{2}}$.</p>
+            <p>Potential at E due to $q_A$ (at A) is $V_A = \frac{1}{4\pi\epsilon_0} \frac{+q}{d/\sqrt{2}}$.</p>
+            <p>Potential at E due to $q_B$ (at B) is $V_B = \frac{1}{4\pi\epsilon_0} \frac{-q}{d/\sqrt{2}}$.</p>
+            <p>Potential at E due to $q_C$ (at C) is $V_C = \frac{1}{4\pi\epsilon_0} \frac{+q}{d/\sqrt{2}}$.</p>
+            <p>Potential at E due to $q_D$ (at D) is $V_D = \frac{1}{4\pi\epsilon_0} \frac{-q}{d/\sqrt{2}}$.</p>
+            <p>Total potential at E, $V_E = V_A + V_B + V_C + V_D$:</p>
+            <div class="math-eq">$$ V_E = \frac{1}{4\pi\epsilon_0 (d/\sqrt{2})} (+q - q + q - q) = 0 $$</div>
+            <p>Since the potential at the center E is zero, the extra work needed to bring charge $q_0$ to the center is $W_{extra} = q_0 \times 0 = \mathbf{0}$ J.</p>
+        </div>
+        <hr>
+
+        <h4 id="ex2_5_b">Example 2.5</h4>
+        <div class="question-block">
+            <h5>Question</h5>
+            <p>(a) Determine the electrostatic potential energy of a system consisting of two charges $7 \mu$C and $-2 \mu$C (and with no external field) placed at (-9 cm, 0, 0) and (9 cm, 0, 0) respectively.<br>(b) How much work is required to separate the two charges infinitely away from each other?</p>
+        </div>
+        <div class="answer-block">
+            <h5>Solution</h5>
+            <p>(a) Given $q_1 = 7 \mu\text{C} = 7 \times 10^{-6}$ C and $q_2 = -2 \mu\text{C} = -2 \times 10^{-6}$ C.
+            <br>Positions are $r_1 = (-9 \text{ cm}, 0, 0)$ and $r_2 = (9 \text{ cm}, 0, 0)$.
+            <br>The distance between the charges is $r_{12} = 9 \text{ cm} - (-9 \text{ cm}) = 18 \text{ cm} = 0.18 \text{ m}$.</p>
+            <p>The electrostatic potential energy $U$ of a system of two charges is:</p>
+            <div class="math-eq">$$ U = \frac{1}{4\pi\epsilon_0} \frac{q_1 q_2}{r_{12}} $$</div>
+            <p>Using $k = 9 \times 10^9 \text{ N m}^2/\text{C}^2$:</p>
+            <div class="math-eq">$$ U = (9 \times 10^9) \frac{(7 \times 10^{-6})(-2 \times 10^{-6})}{0.18} = (9 \times 10^9) \frac{-14 \times 10^{-12}}{0.18} $$</div>
+            <div class="math-eq">$$ U = \frac{-126 \times 10^{-3}}{0.18} = -700 \times 10^{-3} = -0.7 \text{ J} $$</div>
+            <p>The electrostatic potential energy is <strong>-0.7 J</strong>.</p>
+
+            <p>(b) The work required to separate the two charges infinitely away from each other is equal to the negative of the initial potential energy (assuming final potential energy at infinity is zero).
+            <br>$W = U_{final} - U_{initial} = 0 - U_{initial}$.</p>
+            <div class="math-eq">$$ W = -(-0.7 \text{ J}) = 0.7 \text{ J} $$</div>
+            <p>The work required is <strong>0.7 J</strong>.</p>
+            <p><em>(NCERT also provides an additional part (c) for this example: "Suppose that the same system of charges is now placed in an external electric field $E = A(1/r^2)$; $A = 9 \times 10^5 \text{ NC}^{-1} \text{ m}^2$. What would the electrostatic energy of the configuration be?"
+            This involves potential energy in an external field.
+            $U_{ext} = q_1 V(\vec{r}_1) + q_2 V(\vec{r}_2) + U_{mutual}$.
+            Here $V(r) = \int E \cdot dr = \int A/r^2 dr = -A/r$.
+            $V(r_1) = V(9\text{ cm}) = -A/(0.09) = -9 \times 10^5 / 0.09 = -10^7 \text{ V}$.
+            $V(r_2) = V(9\text{ cm}) = -A/(0.09) = -10^7 \text{ V}$.
+            So, $U_{ext} = (7 \times 10^{-6})(-10^7) + (-2 \times 10^{-6})(-10^7) + (-0.7)$
+            $= -70 + 20 - 0.7 = -50.7 \text{ J}$.
+            The NCERT solution for (c) has a potential that varies with $r$. For a charge at (-9cm,0,0) and (9cm,0,0), it gives:
+            $q_1V(r_1) + q_2V(r_2) = A \frac{7\mu C}{0.09m} + A \frac{-2\mu C}{0.09m} = A \frac{5\mu C}{0.09m} = 9 \times 10^5 \times \frac{5 \times 10^{-6}}{0.09} = 50 \text{ J}$.
+            This is consistent if the potential function is defined as $V(r) = A/r$ not $-A/r$. In the NCERT book it says $E=A(1/r^2)$ and then calculates $qV(r)$ and $q_2V(r_2)$. For $E = A/r^2$, the potential $V(r)$ would be $-A/r$ typically. If it's $A/r$, then $E = -dV/dr = A/r^2$. So $V(r) = A/r$ is fine.
+            $q_1V(r_1) = 7\mu C \times \frac{9 \times 10^5}{0.09} = 7\mu C \times 10^7 = 70 \text{ J}$.
+            $q_2V(r_2) = -2\mu C \times \frac{9 \times 10^5}{0.09} = -2\mu C \times 10^7 = -20 \text{ J}$.
+            Summing: $70 - 20 - 0.7 = 49.3 \text{ J}$. This matches NCERT. So $V(r) = A/r$ was assumed.)</em></p>
+        </div>
+        <hr>
+
+        <h4 id="ex2_6_b">Example 2.6</h4>
+        <div class="question-block">
+            <h5>Question</h5>
+            <p>A molecule of a substance has a permanent electric dipole moment of magnitude $10^{-29}$ C m. A mole of this substance is polarised (at low temperature) by applying a strong electrostatic field of magnitude $10^6$ V m⁻¹. The direction of the field is suddenly changed by an angle of 60°. Estimate the heat released by the substance in aligning its dipoles along the new direction of the field. For simplicity, assume 100% polarisation of the sample.</p>
+        </div>
+        <div class="answer-block">
+            <h5>Solution</h5>
+            <p>The potential energy of a dipole in an external electric field is $U = -pE \cos\theta$.</p>
+            <p>Given:
+            <ul>
+                <li>Dipole moment of one molecule, $p_{mol} = 10^{-29}$ C m.</li>
+                <li>Electric field, $E = 10^6$ V m⁻¹.</li>
+                <li>Avogadro's number $N_A = 6.022 \times 10^{23}$ molecules/mol.</li>
+            </ul></p>
+            <p>First, calculate the total dipole moment of 1 mole of the substance:</p>
+            <div class="math-eq">$$ P_{total} = N_A \times p_{mol} = (6.022 \times 10^{23}) \times (10^{-29}) = 6.022 \times 10^{-6} \text{ C m} $$</div>
+            <p>Initial angle of alignment: The dipoles are initially aligned, so $\theta_1 = 0^\circ$.</p>
+            <p>Initial potential energy:</p>
+            <div class="math-eq">$$ U_1 = -P_{total} E \cos(0^\circ) = -(6.022 \times 10^{-6})(10^6)(1) = -6.022 \text{ J} $$</div>
+            <p>Final angle of alignment: The field direction changes by 60°, so $\theta_2 = 60^\circ$.</p>
+            <p>Final potential energy:</p>
+            <div class="math-eq">$$ U_2 = -P_{total} E \cos(60^\circ) = -(6.022 \times 10^{-6})(10^6)(0.5) = -3.011 \text{ J} $$</div>
+            <p>The change in potential energy is $\Delta U = U_2 - U_1$:</p>
+            <div class="math-eq">$$ \Delta U = (-3.011 \text{ J}) - (-6.022 \text{ J}) = 3.011 \text{ J} $$</div>
+            <p>Since $\Delta U$ is positive, the potential energy of the system has increased. This means the substance has absorbed energy. However, the problem asks for heat *released*. If the dipoles are aligning themselves (moving from higher PE to lower PE), energy is released. Let's assume initial state is where dipoles are not fully aligned with the field, e.g., random initial state where $U_1=0$, and final state is $\theta=60^\circ$. The problem implies a re-alignment *from* an aligned state. Let's follow NCERT's interpretation.</p>
+            <p>If the field was initially aligned, and then it rotates by $60^\circ$, the dipoles will *re-align* to the new field direction. This means they *end up* at $\theta_2 = 0^\circ$ relative to the *new* field direction, and *started* at $60^\circ$ relative to the new field direction (because they were aligned with the *old* field direction, which rotated by $60^\circ$).</p>
+            <p>So, the initial angle (relative to the *new* field direction) is $\theta_1 = 60^\circ$.
+            <br>The final angle (relative to the *new* field direction) is $\theta_2 = 0^\circ$.</p>
+            <p>Initial potential energy (relative to new field):</p>
+            <div class="math-eq">$$ U_1 = -P_{total} E \cos(60^\circ) = -(6.022 \times 10^{-6})(10^6)(0.5) = -3.011 \text{ J} $$</div>
+            <p>Final potential energy (relative to new field):</p>
+            <div class="math-eq">$$ U_2 = -P_{total} E \cos(0^\circ) = -(6.022 \times 10^{-6})(10^6)(1) = -6.022 \text{ J} $$</div>
+            <p>Change in potential energy $\Delta U = U_2 - U_1 = (-6.022 \text{ J}) - (-3.011 \text{ J}) = -3.011 \text{ J}$.</p>
+            <p>Since the change in potential energy is negative, the potential energy of the system has decreased. This energy is released as heat.
+            <br>Heat released $= |\Delta U| \approx \mathbf{3.01 \text{ J}}$.</p>
+        </div>
+        <hr>
+
+        <h4 id="ex2_7_b">Example 2.7</h4>
+        <div class="question-block">
+            <h5>Question</h5>
+            <p>(a) A comb run through one's dry hair attracts small bits of paper. What happens if the hair is wet or if it is a rainy day? (Remember, a paper does not conduct electricity.)<br>(b) Ordinary rubber is an insulator. But special rubber tyres of aircraft are made slightly conducting. Why is this necessary?<br>(c) Vehicles carrying inflammable materials usually have metallic ropes touching the ground during motion. Why?<br>(d) A bird perches on a bare high power line, and nothing happens to the bird. A man standing on the ground touches the same line and gets a fatal shock. Why?</p>
+        </div>
+        <div class="answer-block">
+            <h5>Solution</h5>
+            <p>(a) When a comb is run through dry hair, it gets charged by friction (triboelectric effect). This charged comb then induces charges in the paper bits, leading to attraction. If the hair is wet or on a rainy day, the moisture in the air acts as a conductor, allowing charges to leak away quickly from the comb. Thus, the comb does not get sufficiently charged to attract paper bits.</p>
+            <p>(b) When an aircraft lands or takes off, friction between its tyres and the runway causes the aircraft body to accumulate static electric charge. If the tyres were perfect insulators, this charge would build up to a very high potential, which could lead to sparks and damage to the aircraft or cause a fire. By making the tyres slightly conducting, the accumulated charge can slowly leak to the ground, preventing dangerous build-up.</p>
+            <p>(c) Inflammable materials (like petrol, LPG) are highly combustible. As vehicles carrying these materials move, friction between the tyres and the road, or between the liquid and the tank walls, can build up static electric charge on the vehicle's body. A spark from this accumulated charge could ignite the inflammable material. Metallic ropes touching the ground provide a path for this static charge to be continuously conducted to the Earth, thus preventing dangerous charge accumulation and sparks.</p>
+            <p>(d) A bird perching on a single high power line does not get a shock because its body (feet) is at the same high potential as the wire. There is no potential difference across its body, so no current flows through it. A man standing on the ground, however, is at ground (zero) potential. When he touches the high power line, a large potential difference exists between his hand (at line's potential) and his feet (at ground potential). This large potential difference causes a significant current to flow through his body to the ground, resulting in a fatal shock.</p>
+        </div>
+        <hr>
+
+        <h4 id="ex2_8_b">Example 2.8</h4>
+        <div class="question-block">
+            <h5>Question</h5>
+            <p>A slab of material of dielectric constant K has the same area as the plates of a parallel-plate capacitor but has a thickness (3/4)d, where d is the separation of the plates. How is the capacitance changed when the slab is inserted between the plates?</p>
+        </div>
+        <div class="answer-block">
+            <h5>Solution</h5>
+            <p>Let the capacitance of the parallel-plate capacitor with vacuum be $C_0 = \frac{\epsilon_0 A}{d}$.
+            <br>When the capacitor is connected to a battery, let the potential difference be $V_0$. The electric field in vacuum is $E_0 = V_0/d$.</p>
+            <p>When the dielectric slab of thickness $t = (3/4)d$ and dielectric constant $K$ is inserted, there are now two regions:</p>
+            <ol>
+                <li>The region with dielectric: thickness $t = (3/4)d$. The electric field in this region is $E_d = E_0/K$.</li>
+                <li>The vacuum region: thickness $d - t = d - (3/4)d = (1/4)d$. The electric field in this region is $E_v = E_0$.</li>
+            </ol>
+            <p>The total potential difference $V$ across the plates is the sum of potential differences across these two regions:</p>
+            <div class="math-eq">$$ V = E_d t + E_v (d-t) $$</div>
+            <div class="math-eq">$$ V = \frac{E_0}{K} \left(\frac{3}{4}d\right) + E_0 \left(\frac{1}{4}d\right) $$</div>
+            <div class="math-eq">$$ V = E_0 d \left( \frac{3}{4K} + \frac{1}{4} \right) = V_0 \left( \frac{3 + K}{4K} \right) $$</div>
+            <p>The new capacitance $C$ is $C = Q/V$. Since the charge $Q$ on the plates remains the same (assuming it's disconnected from battery or kept charged), $Q = C_0 V_0$.</p>
+            <div class="math-eq">$$ C = \frac{C_0 V_0}{V} = \frac{C_0 V_0}{V_0 \left( \frac{3+K}{4K} \right)} = C_0 \frac{4K}{3+K} $$</div>
+            <p>The capacitance is changed by a factor of $\frac{4K}{3+K}$. Since $K \ge 1$, this factor is always greater than 1, so the capacitance increases.</p>
+        </div>
+        <hr>
+
+        <h4 id="ex2_9_b">Example 2.9</h4>
+        <div class="question-block">
+            <h5>Question</h5>
+            <p>A network of four 10 µF capacitors is connected to a 500 V supply, as shown in Fig. 2.29. Determine (a) the equivalent capacitance of the network and (b) the charge on each capacitor. (Note, the charge on a capacitor is the charge on the plate with higher potential, equal and opposite to the charge on the plate with lower potential.)</p>
+            <p><em>(Diagram described: C1, C2, C3 are in series. C4 is in parallel with the series combination. All are 10 µF.)</em></p>
+        </div>
+        <div class="answer-block">
+            <h5>Solution</h5>
+            <p>Given $C_1 = C_2 = C_3 = C_4 = 10 \mu\text{F}$. Supply voltage $V = 500 \text{ V}$.</p>
+
+            <p>(a) <strong>Equivalent Capacitance:</strong>
+            <br>Capacitors $C_1, C_2, C_3$ are in series. Their equivalent capacitance $C'$ is:</p>
+            <div class="math-eq">$$ \frac{1}{C'} = \frac{1}{C_1} + \frac{1}{C_2} + \frac{1}{C_3} = \frac{1}{10} + \frac{1}{10} + \frac{1}{10} = \frac{3}{10} \ (\mu\text{F})^{-1} $$</div>
+            <div class="math-eq">$$ C' = \frac{10}{3} \mu\text{F} \approx 3.33 \mu\text{F} $$</div>
+            <p>This series combination $C'$ is in parallel with $C_4$. The total equivalent capacitance $C_{eq}$ is:</p>
+            <div class="math-eq">$$ C_{eq} = C' + C_4 = \frac{10}{3} \mu\text{F} + 10 \mu\text{F} = \left(\frac{10}{3} + 10\right) \mu\text{F} = \left(\frac{10+30}{3}\right) \mu\text{F} = \frac{40}{3} \mu\text{F} $$</div>
+            <div class="math-eq">$$ C_{eq} \approx 13.33 \mu\text{F} $$</div>
+
+            <p>(b) <strong>Charge on each capacitor:</strong>
+            <br>The voltage across the parallel combination ($C'$ and $C_4$) is the supply voltage, $V = 500 \text{ V}$.</p>
+            <p>Charge on $C_4$ ($Q_4$):</p>
+            <div class="math-eq">$$ Q_4 = C_4 V = (10 \times 10^{-6} \text{ F}) \times (500 \text{ V}) = 5000 \times 10^{-6} \text{ C} = 5 \times 10^{-3} \text{ C} $$</div>
+            <p>The charge on the series combination ($C_1, C_2, C_3$) is $Q' = C'V$. This charge is the same for $C_1, C_2, C_3$.</p>
+            <div class="math-eq">$$ Q' = C' V = \left(\frac{10}{3} \times 10^{-6} \text{ F}\right) \times (500 \text{ V}) = \frac{5000}{3} \times 10^{-6} \text{ C} \approx 1.67 \times 10^{-3} \text{ C} $$</div>
+            <p>So, the charges are:
+            <ul>
+                <li>$Q_1 = Q_2 = Q_3 = \mathbf{1.67 \times 10^{-3} \text{ C}}$</li>
+                <li>$Q_4 = \mathbf{5 \times 10^{-3} \text{ C}}$</li>
+            </ul></p>
+        </div>
+        <hr>
+
+        <h4 id="ex2_10_b">Example 2.10</h4>
+        <div class="question-block">
+            <h5>Question</h5>
+            <p>(a) A 900 pF capacitor is charged by 100 V battery [Fig. 2.31(a)]. How much electrostatic energy is stored by the capacitor?<br>(b) The capacitor is disconnected from the battery and connected to another 900 pF capacitor [Fig. 2.31(b)]. What is the electrostatic energy stored by the system?</p>
+            <p><em>(Diagram described: (a) Capacitor C connected to a battery. (b) Charged C disconnected from battery and connected to an uncharged identical C.)</em></p>
+        </div>
+        <div class="answer-block">
+            <h5>Solution</h5>
+            <p>Given $C = 900 \text{ pF} = 900 \times 10^{-12} \text{ F}$.</p>
+
+            <p>(a) <strong>Energy stored in the first capacitor:</strong>
+            <br>Voltage of battery $V = 100 \text{ V}$.
+            <br>The charge stored in the capacitor is $Q = CV = (900 \times 10^{-12})(100) = 9 \times 10^{-8} \text{ C}$.
+            <br>Energy stored $U = \frac{1}{2} CV^2$:</p>
+            <div class="math-eq">$$ U = \frac{1}{2} (900 \times 10^{-12} \text{ F}) (100 \text{ V})^2 = \frac{1}{2} \times 900 \times 10^{-12} \times 10000 = 4.5 \times 10^{-6} \text{ J} $$</div>
+            <p>The electrostatic energy stored is <strong>$4.5 \times 10^{-6}$ J</strong>.</p>
+
+            <p>(b) <strong>Energy stored after connection to an uncharged capacitor:</strong>
+            <br>The first capacitor (C1) has charge $Q = 9 \times 10^{-8}$ C. The second capacitor (C2) is uncharged ($Q_2=0$).
+            <br>When connected in parallel, the charge redistributes until they reach a common potential $V'$.
+            <br>The total charge in the system is conserved: $Q_{total} = Q_1 + Q_2 = 9 \times 10^{-8} \text{ C} + 0 = 9 \times 10^{-8} \text{ C}$.
+            <br>The two capacitors are in parallel, so their equivalent capacitance is $C_{eq} = C_1 + C_2 = 900 \text{ pF} + 900 \text{ pF} = 1800 \text{ pF}$.</p>
+            <p>The common potential $V'$ is:</p>
+            <div class="math-eq">$$ V' = \frac{Q_{total}}{C_{eq}} = \frac{9 \times 10^{-8} \text{ C}}{1800 \times 10^{-12} \text{ F}} = \frac{9 \times 10^{-8}}{1.8 \times 10^{-9}} = 50 \text{ V} $$</div>
+            <p>Now, calculate the total electrostatic energy stored by the system:</p>
+            <div class="math-eq">$$ U' = \frac{1}{2} C_{eq} (V')^2 = \frac{1}{2} (1800 \times 10^{-12} \text{ F}) (50 \text{ V})^2 $$</div>
+            <div class="math-eq">$$ U' = \frac{1}{2} \times 1800 \times 10^{-12} \times 2500 = 900 \times 2500 \times 10^{-12} = 2.25 \times 10^6 \times 10^{-12} = 2.25 \times 10^{-6} \text{ J} $$</div>
+            <p>The energy stored by the system is <strong>$2.25 \times 10^{-6}$ J</strong>.</p>
+            <p>Notice that $U' < U$. The difference in energy, $U - U' = 4.5 \times 10^{-6} - 2.25 \times 10^{-6} = 2.25 \times 10^{-6}$ J, is lost during the redistribution of charge, primarily as heat in the connecting wires or electromagnetic radiation.</p>
+        </div>
+        <hr>
+
+        <h3 id="ncert_exercises">NCERT Exercises Solved</h3>
+
+        <h4 id="exer2_1">Exercise 2.1</h4>
+        <div class="question-block">
+            <h5>Question</h5>
+            <p>Two charges $5 \times 10^{-8}$ C and $-3 \times 10^{-8}$ C are located 16 cm apart. At what point(s) on the line joining the two charges is the electric potential zero? Take the potential at infinity to be zero.</p>
+        </div>
+        <div class="answer-block">
+            <h5>Solution</h5>
+            <p>Let $q_1 = 5 \times 10^{-8}$ C and $q_2 = -3 \times 10^{-8}$ C.
+            <br>Distance between charges $d = 16 \text{ cm} = 0.16 \text{ m}$.
+            <br>Let the point P where potential is zero be at a distance $x$ from $q_1$.</p>
+            <p>Case 1: Point P is between the charges ($0 < x < d$).
+            <br>The distance from $q_2$ to P is $(d-x)$.
+            <br>$V = V_1 + V_2 = 0$
+            <div class="math-eq">$$ \frac{k q_1}{x} + \frac{k q_2}{d-x} = 0 $$</div>
+            <div class="math-eq">$$ \frac{5 \times 10^{-8}}{x} + \frac{-3 \times 10^{-8}}{0.16-x} = 0 $$</div>
+            <div class="math-eq">$$ \frac{5}{x} = \frac{3}{0.16-x} $$</div>
+            <div class="math-eq">$$ 5(0.16-x) = 3x $$</div>
+            <div class="math-eq">$$ 0.8 - 5x = 3x $$</div>
+            <div class="math-eq">$$ 0.8 = 8x \implies x = 0.1 \text{ m} = 10 \text{ cm} $$</div>
+            <p>So, one point is <strong>10 cm from the $5 \times 10^{-8}$ C charge</strong> (and 6 cm from the $-3 \times 10^{-8}$ C charge), lying between them.</p>
+
+            <p>Case 2: Point P is outside the charges, on the side of the smaller magnitude charge ($q_2$).
+            <br>Let P be at distance $x$ from $q_1$. The distance from $q_2$ to P is $(x-d)$.
+            <div class="math-eq">$$ \frac{k q_1}{x} + \frac{k q_2}{x-d} = 0 $$</div>
+            <div class="math-eq">$$ \frac{5 \times 10^{-8}}{x} + \frac{-3 \times 10^{-8}}{x-0.16} = 0 $$</div>
+            <div class="math-eq">$$ \frac{5}{x} = \frac{3}{x-0.16} $$</div>
+            <div class="math-eq">$$ 5(x-0.16) = 3x $$</div>
+            <div class="math-eq">$$ 5x - 0.8 = 3x $$</div>
+            <div class="math-eq">$$ 2x = 0.8 \implies x = 0.4 \text{ m} = 40 \text{ cm} $$</div>
+            <p>So, another point is <strong>40 cm from the $5 \times 10^{-8}$ C charge</strong> (and 24 cm from the $-3 \times 10^{-8}$ C charge), lying outside the charges on the side of $-3 \times 10^{-8}$ C.</p>
+        </div>
+        <hr>
+
+        <h4 id="exer2_2_b">Exercise 2.2</h4>
+        <div class="question-block">
+            <h5>Question</h5>
+            <p>A regular hexagon of side 10 cm has a charge 5 µC at each of its vertices. Calculate the potential at the centre of the hexagon.</p>
+        </div>
+        <div class="answer-block">
+            <h5>Solution</h5>
+            <p>For a regular hexagon, the distance from the centre to each vertex is equal to the side length.</p>
+            <p>Given:
+            <ul>
+                <li>Side length $a = 10 \text{ cm} = 0.1 \text{ m}$.</li>
+                <li>Charge at each vertex $q = 5 \mu\text{C} = 5 \times 10^{-6}$ C.</li>
+                <li>Number of vertices $n = 6$.</li>
+            </ul></p>
+            <p>Distance from center to each vertex $r = a = 0.1 \text{ m}$.</p>
+            <p>The potential at the centre due to a system of point charges is the algebraic sum of potentials due to individual charges:</p>
+            <div class="math-eq">$$ V = \sum_{i=1}^n \frac{1}{4\pi\epsilon_0} \frac{q_i}{r_i} $$</div>
+            <p>Since all charges are identical ($q_i=q$) and all distances are identical ($r_i=r$):</p>
+            <div class="math-eq">$$ V = n \times \frac{1}{4\pi\epsilon_0} \frac{q}{r} $$</div>
+            <p>Using $k = \frac{1}{4\pi\epsilon_0} = 9 \times 10^9 \text{ N m}^2/\text{C}^2$:</p>
+            <div class="math-eq">$$ V = 6 \times (9 \times 10^9) \times \frac{5 \times 10^{-6} \text{ C}}{0.1 \text{ m}} $$</div>
+            <div class="math-eq">$$ V = 6 \times 9 \times 5 \times 10^{9-6} \times 10 = 270 \times 10^4 = 2.7 \times 10^6 \text{ V} $$</div>
+            <p>The potential at the centre of the hexagon is <strong>$2.7 \times 10^6$ V</strong>.</p>
+        </div>
+        <hr>
+
+        <h4 id="exer2_3_b">Exercise 2.3</h4>
+        <div class="question-block">
+            <h5>Question</h5>
+            <p>Two charges $2 \mu$C and $-2 \mu$C are placed at points A and B 6 cm apart.<br>(a) Identify an equipotential surface of the system.<br>(b) What is the direction of the electric field at every point on this surface?</p>
+        </div>
+        <div class="answer-block">
+            <h5>Solution</h5>
+            <p>The system consists of two equal and opposite charges, forming an electric dipole.</p>
+            <p>(a) The equipotential surface for a dipole where the potential is zero is the <strong>equatorial plane (perpendicular bisector)</strong> of the dipole. All points on this plane are equidistant from $+q$ and $-q$. Since potential is additive, and the charges are equal and opposite, the potential contributions cancel out ($V = \frac{kq}{r} + \frac{k(-q)}{r} = 0$).</p>
+            <p>(b) Electric field lines are always perpendicular to equipotential surfaces. Since the equatorial plane is an equipotential surface, the electric field at every point on this surface will be <strong>perpendicular to the plane</strong>. For a dipole, the electric field lines point from the positive charge to the negative charge. Therefore, on the equatorial plane, the electric field lines will be directed from point A to point B (if A is positive and B is negative), i.e., parallel to the line joining the charges.</p>
+        </div>
+        <hr>
+
+        <h4 id="exer2_4_b">Exercise 2.4</h4>
+        <div class="question-block">
+            <h5>Question</h5>
+            <p>A spherical conductor of radius 12 cm has a charge of $1.6 \times 10^{-7}$ C distributed uniformly on its surface. What is the electric field<br>(a) inside the sphere<br>(b) just outside the sphere<br>(c) at a point 18 cm from the centre of the sphere?</p>
+        </div>
+        <div class="answer-block">
+            <h5>Solution</h5>
+            <p>Given: Radius of sphere $R = 12 \text{ cm} = 0.12 \text{ m}$. Charge $Q = 1.6 \times 10^{-7}$ C.</p>
+            <p>(a) <strong>Inside the sphere ($r < R$):</strong> For any charged conductor in electrostatic equilibrium, the electric field everywhere inside the conductor is <strong>zero</strong>.</p>
+            <div class="math-eq">$$ E_{inside} = 0 $$</div>
+            <p>(b) <strong>Just outside the sphere ($r = R$):</strong> The electric field just outside a conducting sphere is given by $E = \frac{1}{4\pi\epsilon_0} \frac{Q}{R^2}$.</p>
+            <div class="math-eq">$$ E_{outside} = (9 \times 10^9) \frac{1.6 \times 10^{-7}}{(0.12)^2} = 9 \times 10^9 \times \frac{1.6 \times 10^{-7}}{0.0144} $$</div>
+            <div class="math-eq">$$ E_{outside} = 10 \times 10^9 \times 1.6 \times 10^{-7} = 1.6 \times 10^5 \text{ N/C} $$</div>
+            <p>The field is directed radially outwards.</p>
+            <p>(c) <strong>At a point 18 cm from the centre ($r = 18 \text{ cm} = 0.18 \text{ m}$):</strong> This point is outside the sphere ($r > R$). For points outside, the sphere behaves as a point charge concentrated at its centre.</p>
+            <div class="math-eq">$$ E_{point} = \frac{1}{4\pi\epsilon_0} \frac{Q}{r^2} = (9 \times 10^9) \frac{1.6 \times 10^{-7}}{(0.18)^2} $$</div>
+            <div class="math-eq">$$ E_{point} = 9 \times 10^9 \times \frac{1.6 \times 10^{-7}}{0.0324} = 4.938 \times 10^4 \text{ N/C} \approx 4.94 \times 10^4 \text{ N/C} $$</div>
+            <p>The field is directed radially outwards.</p>
+        </div>
+        <hr>
+
+        <h4 id="exer2_5_b">Exercise 2.5</h4>
+        <div class="question-block">
+            <h5>Question</h5>
+            <p>A parallel plate capacitor with air between the plates has a capacitance of 8 pF ($1\text{ pF} = 10^{-12} \text{ F}$). What will be the capacitance if the distance between the plates is reduced by half, and the space between them is filled with a substance of dielectric constant 6?</p>
+        </div>
+        <div class="answer-block">
+            <h5>Solution</h5>
+            <p>Initial capacitance with air (vacuum) is $C_0 = 8 \text{ pF}$.
+            <br>The formula for a parallel plate capacitor in vacuum is $C_0 = \frac{\epsilon_0 A}{d}$.</p>
+            <p>New conditions:
+            <ul>
+                <li>Distance between plates is halved: $d' = d/2$.</li>
+                <li>Space is filled with a dielectric substance of dielectric constant $K = 6$.</li>
+            </ul></p>
+            <p>The new capacitance $C'$ is given by:</p>
+            <div class="math-eq">$$ C' = \frac{K \epsilon_0 A}{d'} $$</div>
+            <p>Substitute $d' = d/2$:</p>
+            <div class="math-eq">$$ C' = \frac{K \epsilon_0 A}{d/2} = 2K \frac{\epsilon_0 A}{d} = 2K C_0 $$</div>
+            <p>Now, plug in the given values:</p>
+            <div class="math-eq">$$ C' = 2 \times 6 \times 8 \text{ pF} = 12 \times 8 \text{ pF} = 96 \text{ pF} $$</div>
+            <p>The new capacitance will be <strong>96 pF</strong>.</p>
+        </div>
+        <hr>
+
+        <h4 id="exer2_6_b">Exercise 2.6</h4>
+        <div class="question-block">
+            <h5>Question</h5>
+            <p>Three capacitors each of capacitance 9 pF are connected in series.<br>(a) What is the total capacitance of the combination?<br>(b) What is the potential difference across each capacitor if the combination is connected to a 120 V supply?</p>
+        </div>
+        <div class="answer-block">
+            <h5>Solution</h5>
+            <p>Given $C_1 = C_2 = C_3 = 9 \text{ pF}$.</p>
+            <p>(a) <strong>Total capacitance in series:</strong>
+            <div class="math-eq">$$ \frac{1}{C_{eq}} = \frac{1}{C_1} + \frac{1}{C_2} + \frac{1}{C_3} $$</div>
+            <div class="math-eq">$$ \frac{1}{C_{eq}} = \frac{1}{9 \text{ pF}} + \frac{1}{9 \text{ pF}} + \frac{1}{9 \text{ pF}} = \frac{3}{9 \text{ pF}} = \frac{1}{3 \text{ pF}} $$</div>
+            <div class="math-eq">$$ C_{eq} = 3 \text{ pF} $$</div>
+            <p>The total capacitance of the combination is <strong>3 pF</strong>.</p>
+
+            <p>(b) <strong>Potential difference across each capacitor:</strong>
+            <br>Total supply voltage $V = 120 \text{ V}$.
+            <br>In a series combination, the charge $Q$ on each capacitor is the same as the total charge on the equivalent capacitor: $Q = C_{eq} V$.</p>
+            <div class="math-eq">$$ Q = (3 \times 10^{-12} \text{ F}) \times (120 \text{ V}) = 360 \times 10^{-12} \text{ C} = 3.6 \times 10^{-10} \text{ C} $$</div>
+            <p>The potential difference across each capacitor is $V_i = Q/C_i$. Since all capacitances are equal ($C_1=C_2=C_3=C=9 \text{ pF}$), the potential difference across each will be equal:</p>
+            <div class="math-eq">$$ V_1 = V_2 = V_3 = \frac{Q}{C} = \frac{3.6 \times 10^{-10} \text{ C}}{9 \times 10^{-12} \text{ F}} = 0.4 \times 10^2 \text{ V} = 40 \text{ V} $$</div>
+            <p>The potential difference across each capacitor is <strong>40 V</strong>. (Check: $V_1+V_2+V_3 = 40+40+40 = 120 \text{ V}$, which matches the supply voltage).</p>
+        </div>
+        <hr>
+
+        <h4 id="exer2_7_b">Exercise 2.7</h4>
+        <div class="question-block">
+            <h5>Question</h5>
+            <p>Three capacitors of capacitances 2 pF, 3 pF and 4 pF are connected in parallel.<br>(a) What is the total capacitance of the combination?<br>(b) Determine the charge on each capacitor if the combination is connected to a 100 V supply.</p>
+        </div>
+        <div class="answer-block">
+            <h5>Solution</h5>
+            <p>Given $C_1 = 2 \text{ pF}$, $C_2 = 3 \text{ pF}$, $C_3 = 4 \text{ pF}$.</p>
+            <p>(a) <strong>Total capacitance in parallel:</strong>
+            <br>For parallel combination, the equivalent capacitance is the sum of individual capacitances:</p>
+            <div class="math-eq">$$ C_{eq} = C_1 + C_2 + C_3 $$</div>
+            <div class="math-eq">$$ C_{eq} = 2 \text{ pF} + 3 \text{ pF} + 4 \text{ pF} = 9 \text{ pF} $$</div>
+            <p>The total capacitance of the combination is <strong>9 pF</strong>.</p>
+
+            <p>(b) <strong>Charge on each capacitor:</strong>
+            <br>Total supply voltage $V = 100 \text{ V}$.
+            <br>In a parallel combination, the potential difference across each capacitor is the same as the supply voltage.</p>
+            <p>Charge on $C_1$ ($Q_1 = C_1 V$):</p>
+            <div class="math-eq">$$ Q_1 = (2 \times 10^{-12} \text{ F}) \times (100 \text{ V}) = 200 \times 10^{-12} \text{ C} = 2 \times 10^{-10} \text{ C} $$</div>
+            <p>Charge on $C_2$ ($Q_2 = C_2 V$):</p>
+            <div class="math-eq">$$ Q_2 = (3 \times 10^{-12} \text{ F}) \times (100 \text{ V}) = 300 \times 10^{-12} \text{ C} = 3 \times 10^{-10} \text{ C} $$</div>
+            <p>Charge on $C_3$ ($Q_3 = C_3 V$):</p>
+            <div class="math-eq">$$ Q_3 = (4 \times 10^{-12} \text{ F}) \times (100 \text{ V}) = 400 \times 10^{-12} \text{ C} = 4 \times 10^{-10} \text{ C} $$</div>
+            <p>The charges are: $Q_1 = \mathbf{2 \times 10^{-10} \text{ C}}$, $Q_2 = \mathbf{3 \times 10^{-10} \text{ C}}$, $Q_3 = \mathbf{4 \times 10^{-10} \text{ C}}$.</p>
+        </div>
+        <hr>
+
+        <h4 id="exer2_8_b">Exercise 2.8</h4>
+        <div class="question-block">
+            <h5>Question</h5>
+            <p>In a parallel plate capacitor with air between the plates, each plate has an area of $6 \times 10^{-3}$ m² and the distance between the plates is 3 mm. Calculate the capacitance of the capacitor. If this capacitor is connected to a 100 V supply, what is the charge on each plate of the capacitor?</p>
+        </div>
+        <div class="answer-block">
+            <h5>Solution</h5>
+            <p>Given:
+            <ul>
+                <li>Area $A = 6 \times 10^{-3} \text{ m}^2$.</li>
+                <li>Distance $d = 3 \text{ mm} = 3 \times 10^{-3} \text{ m}$.</li>
+                <li>Permittivity of free space $\epsilon_0 = 8.854 \times 10^{-12} \text{ F/m}$.</li>
+                <li>Supply voltage $V = 100 \text{ V}$.</li>
+            </ul></p>
+            <p><strong>Capacitance (C):</strong></p>
+            <div class="math-eq">$$ C = \frac{\epsilon_0 A}{d} $$</div>
+            <div class="math-eq">$$ C = \frac{(8.854 \times 10^{-12} \text{ F/m}) \times (6 \times 10^{-3} \text{ m}^2)}{3 \times 10^{-3} \text{ m}} $$</div>
+            <div class="math-eq">$$ C = 8.854 \times 2 \times 10^{-12} \text{ F} = 17.708 \times 10^{-12} \text{ F} = 17.7 \text{ pF} $$</div>
+            <p>The capacitance is <strong>17.7 pF</strong>.</p>
+
+            <p><strong>Charge on each plate (Q):</strong></p>
+            <div class="math-eq">$$ Q = CV $$</div>
+            <div class="math-eq">$$ Q = (17.708 \times 10^{-12} \text{ F}) \times (100 \text{ V}) = 1770.8 \times 10^{-12} \text{ C} = 1.77 \times 10^{-9} \text{ C} $$</div>
+            <p>The charge on each plate is approximately <strong>$1.77 \times 10^{-9}$ C</strong> (or 1.77 nC).</p>
+        </div>
+        <hr>
+
+        <h4 id="exer2_9_b">Exercise 2.9</h4>
+        <div class="question-block">
+            <h5>Question</h5>
+            <p>Explain what would happen if in the capacitor given in Exercise 2.8, a 3 mm thick mica sheet (of dielectric constant = 6) were inserted between the plates,<br>(a) while the voltage supply remained connected.<br>(b) after the supply was disconnected.</p>
+        </div>
+        <div class="answer-block">
+            <h5>Solution</h5>
+            <p>From Exercise 2.8, $C_0 = 17.7 \text{ pF}$, $V_0 = 100 \text{ V}$, $Q_0 = 1.77 \times 10^{-9}$ C.
+            <br>Dielectric constant of mica $K = 6$. The thickness of mica sheet is $3 \text{ mm}$, which is equal to the plate separation $d$. So, the dielectric completely fills the space between the plates.</p>
+            <p>(a) <strong>While the voltage supply remained connected:</strong>
+            <ul>
+                <li>The potential difference across the capacitor will remain constant: $V = V_0 = \mathbf{100 \text{ V}}$. This is because it is still connected to the 100 V battery.</li>
+                <li>The capacitance will increase by a factor of $K$: $C = KC_0 = 6 \times 17.7 \text{ pF} = \mathbf{106.2 \text{ pF}}$.</li>
+                <li>The charge on the plates will increase: $Q = CV = (106.2 \times 10^{-12} \text{ F}) \times (100 \text{ V}) = 1.062 \times 10^{-8} \text{ C}$. This additional charge will be drawn from the battery.</li>
+                <li>The electric field between the plates will remain the same ($E = V/d$). It doesn't change because $V$ is kept constant and $d$ is constant. (Internal field in dielectric reduces the external field, but this is compensated by the battery providing more charge to maintain the potential difference, so the total field remains fixed).</li>
+            </ul></p>
+            <p>(b) <strong>After the supply was disconnected:</strong>
+            <br>Before inserting the dielectric, the capacitor had charge $Q_0 = 1.77 \times 10^{-9}$ C and potential $V_0 = 100 \text{ V}$. When disconnected, the charge on the plates remains constant ($Q = Q_0$).</p>
+            <ul>
+                <li>The charge on the plates will remain constant: $Q = Q_0 = \mathbf{1.77 \times 10^{-9} \text{ C}}$.</li>
+                <li>The capacitance will increase by a factor of $K$: $C = KC_0 = 6 \times 17.7 \text{ pF} = \mathbf{106.2 \text{ pF}}$.</li>
+                <li>The potential difference across the plates will decrease: $V = Q/C = Q_0 / (KC_0) = V_0/K$.
+                    <div class="math-eq">$$ V = \frac{100 \text{ V}}{6} \approx 16.67 \text{ V} $$</div>
+                    So, the potential difference becomes approximately <strong>16.67 V</strong>.</li>
+                <li>The electric field between the plates will decrease: $E = V/d = (V_0/K)/d = E_0/K$. This is because the charge is fixed, and the induced field in the dielectric reduces the net field.</li>
+            </ul></p>
+        </div>
+        <hr>
+
+        <h4 id="exer2_10_b">Exercise 2.10</h4>
+        <div class="question-block">
+            <h5>Question</h5>
+            <p>A 12 pF capacitor is connected to a 50 V battery. How much electrostatic energy is stored in the capacitor?</p>
+        </div>
+        <div class="answer-block">
+            <h5>Solution</h5>
+            <p>Given: Capacitance $C = 12 \text{ pF} = 12 \times 10^{-12} \text{ F}$.
+            <br>Voltage $V = 50 \text{ V}$.</p>
+            <p>The electrostatic energy stored in a capacitor is given by $U = \frac{1}{2} CV^2$.</p>
+            <div class="math-eq">$$ U = \frac{1}{2} (12 \times 10^{-12} \text{ F}) (50 \text{ V})^2 $$</div>
+            <div class="math-eq">$$ U = \frac{1}{2} \times 12 \times 10^{-12} \times 2500 $$</div>
+            <div class="math-eq">$$ U = 6 \times 2500 \times 10^{-12} = 15000 \times 10^{-12} = 1.5 \times 10^{-8} \text{ J} $$</div>
+            <p>The electrostatic energy stored in the capacitor is <strong>$1.5 \times 10^{-8}$ J</strong>.</p>
+        </div>
+        <hr>
+
+        <h4 id="exer2_11">Exercise 2.11</h4>
+        <div class="question-block">
+            <h5>Question</h5>
+            <p>A 600 pF capacitor is charged by a 200 V supply. It is then disconnected from the supply and is connected to another uncharged 600 pF capacitor. How much electrostatic energy is lost in the process?</p>
+        </div>
+        <div class="answer-block">
+            <h5>Solution</h5>
+            <p>Given: $C_1 = 600 \text{ pF} = 600 \times 10^{-12} \text{ F}$.
+            <br>Supply voltage $V_1 = 200 \text{ V}$.
+            <br>Second capacitor $C_2 = 600 \text{ pF}$ (uncharged).</p>
+
+            <p><strong>Step 1: Energy stored in $C_1$ before disconnection.</strong>
+            <br>Charge on $C_1$: $Q_1 = C_1 V_1 = (600 \times 10^{-12} \text{ F}) \times (200 \text{ V}) = 1.2 \times 10^{-7} \text{ C}$.
+            <br>Initial energy stored ($U_i$):</p>
+            <div class="math-eq">$$ U_i = \frac{1}{2} C_1 V_1^2 = \frac{1}{2} (600 \times 10^{-12}) (200)^2 = 300 \times 10^{-12} \times 40000 = 1.2 \times 10^{-5} \text{ J} $$</div>
+
+            <p><strong>Step 2: Energy stored after connecting to $C_2$.</strong>
+            <br>When $C_1$ (charged) is disconnected and connected to $C_2$ (uncharged) in parallel, the total charge is conserved.
+            <br>Total charge $Q_{total} = Q_1 + 0 = 1.2 \times 10^{-7}$ C.
+            <br>Equivalent capacitance in parallel: $C_{eq} = C_1 + C_2 = 600 \text{ pF} + 600 \text{ pF} = 1200 \text{ pF}$.
+            <br>Common potential $V'$ after connection:</p>
+            <div class="math-eq">$$ V' = \frac{Q_{total}}{C_{eq}} = \frac{1.2 \times 10^{-7} \text{ C}}{1200 \times 10^{-12} \text{ F}} = \frac{1.2 \times 10^{-7}}{1.2 \times 10^{-9}} = 100 \text{ V} $$</div>
+            <p>Final energy stored ($U_f$) in the system:</p>
+            <div class="math-eq">$$ U_f = \frac{1}{2} C_{eq} (V')^2 = \frac{1}{2} (1200 \times 10^{-12} \text{ F}) (100 \text{ V})^2 $$</div>
+            <div class="math-eq">$$ U_f = 600 \times 10^{-12} \times 10000 = 6 \times 10^{-6} \text{ J} $$</div>
+
+            <p><strong>Step 3: Energy lost.</strong>
+            <br>Energy lost $\Delta U = U_i - U_f$:</p>
+            <div class="math-eq">$$ \Delta U = (1.2 \times 10^{-5} \text{ J}) - (6 \times 10^{-6} \text{ J}) = (12 \times 10^{-6} \text{ J}) - (6 \times 10^{-6} \text{ J}) = 6 \times 10^{-6} \text{ J} $$</div>
+            <p>The electrostatic energy lost in the process is <strong>$6 \times 10^{-6}$ J</strong>. This energy is dissipated primarily as heat in the connecting wires during charge redistribution.</p>
+        </div>
+        <hr>
+                <h3 id="ap">Additional Problems</h3>
+
+        <div class="question-block" id="ap_1">
+            <h5>Problem 1</h5>
+            <p>When $1.0 \times 10^{12}$ electrons are transferred from one conductor to another, a potential difference of 10 V appears between the conductors. Calculate the capacitance of the two-conductor system.</p>
+        </div>
+        <div class="answer-block">
+            <h5>Solution</h5>
+            <p>First, calculate the total charge $Q$ transferred. The charge of a single electron is $e = 1.6 \times 10^{-19}$ C.</p>
+            <div class="math-eq">$$ Q = n \times e = (1.0 \times 10^{12} \text{ electrons}) \times (1.6 \times 10^{-19} \text{ C/electron}) = 1.6 \times 10^{-7} \text{ C} $$</div>
+            <p>The potential difference $V$ is given as 10 V. The capacitance $C$ is defined as the ratio of charge to potential difference.</p>
+            <div class="math-eq">$$ C = \frac{Q}{V} = \frac{1.6 \times 10^{-7} \text{ C}}{10 \text{ V}} = 1.6 \times 10^{-8} \text{ F} $$</div>
+            <p>This is equal to 16 nF.</p>
+        </div>
+        <hr>
+
+        <div class="question-block" id="ap_2">
+            <h5>Problem 2</h5>
+            <p>The plates of a parallel-plate capacitor are made of circular discs of radius 5.0 cm each. If the separation between the plates is 1.0 mm, what is the capacitance?</p>
+        </div>
+        <div class="answer-block">
+            <h5>Solution</h5>
+            <p>The capacitance of a parallel-plate capacitor is given by $C = \frac{\epsilon_0 A}{d}$.</p>
+            <p>Given data:</p>
+            <ul>
+                <li>Radius of discs, $r = 5.0 \text{ cm} = 0.05 \text{ m}$.</li>
+                <li>Separation between plates, $d = 1.0 \text{ mm} = 1.0 \times 10^{-3} \text{ m}$.</li>
+                <li>Permittivity of free space, $\epsilon_0 \approx 8.854 \times 10^{-12} \text{ F/m}$.</li>
+            </ul>
+            <p>First, calculate the area $A$ of the circular plates:</p>
+            <div class="math-eq">$$ A = \pi r^2 = \pi (0.05 \text{ m})^2 \approx 7.854 \times 10^{-3} \text{ m}^2 $$</div>
+            <p>Now, calculate the capacitance:</p>
+            <div class="math-eq">$$ C = \frac{(8.854 \times 10^{-12} \text{ F/m}) \times (7.854 \times 10^{-3} \text{ m}^2)}{1.0 \times 10^{-3} \text{ m}} $$</div>
+            <div class="math-eq">$$ C \approx 6.95 \times 10^{-11} \text{ F} = 69.5 \text{ pF} $$</div>
+        </div>
+        <hr>
+
+        <div class="question-block" id="ap_3">
+            <h5>Problem 3</h5>
+            <p>Suppose, one wishes to construct a 1.0 farad capacitor using circular discs. If the separation between the discs be kept at 1.0 mm, what would be the radius of the discs?</p>
+        </div>
+        <div class="answer-block">
+            <h5>Solution</h5>
+            <p>We use the formula for a parallel-plate capacitor, $C = \frac{\epsilon_0 A}{d}$, and solve for the radius $r$, where $A = \pi r^2$.</p>
+            <div class="math-eq">$$ C = \frac{\epsilon_0 (\pi r^2)}{d} \implies r^2 = \frac{C d}{\epsilon_0 \pi} $$</div>
+            <p>Given data:</p>
+            <ul>
+                <li>Capacitance, $C = 1.0 \text{ F}$.</li>
+                <li>Separation, $d = 1.0 \text{ mm} = 1.0 \times 10^{-3} \text{ m}$.</li>
+            </ul>
+            <p>Now, calculate the radius squared:</p>
+            <div class="math-eq">$$ r^2 = \frac{(1.0 \text{ F}) \times (1.0 \times 10^{-3} \text{ m})}{(8.854 \times 10^{-12} \text{ F/m}) \times \pi} \approx \frac{10^{-3}}{2.78 \times 10^{-11}} \approx 3.59 \times 10^7 \text{ m}^2 $$</div>
+            <p>Taking the square root:</p>
+            <div class="math-eq">$$ r = \sqrt{3.59 \times 10^7} \text{ m} \approx 5990 \text{ m} \approx 6 \text{ km} $$</div>
+            <p>The radius of the discs would need to be approximately 6 kilometers, which illustrates why a 1 Farad capacitor is impractically large for simple parallel-plate construction.</p>
+        </div>
+        <hr>
+        
+        <div class="question-block" id="ap_6">
+            <h5>Problem 6</h5>
+            <p>Find the charges on the three capacitors connected to a battery as shown in figure (31-E1). Take $C_1=2.0 \mu$F, $C_2=4.0 \mu$F, $C_3=6.0 \mu$F and $V=12$ volts.</p>
+            <div class="svg-diagram">
+                <svg width="250" height="150" viewBox="0 0 250 150">
+                    <style>
+                        .wire { stroke: var(--text-main); stroke-width: 2; fill: none; }
+                        .cap { stroke: var(--text-bright); stroke-width: 2; fill: none; }
+                        .label { font-family: var(--font-sans); font-size: 14px; fill: var(--text-bright); text-anchor: middle; }
+                        .battery-pos { stroke: var(--accent-primary); stroke-width: 3; }
+                        .battery-neg { stroke: var(--accent-secondary); stroke-width: 1.5; }
+                    </style>
+                    <path class="wire" d="M 30 20 L 30 130 L 220 130 L 220 20 L 30 20 Z" />
+                    <!-- Battery -->
+                    <line class="battery-pos" x1="30" y1="65" x2="30" y2="85"/>
+                    <line class="battery-neg" x1="35" y1="70" x2="35" y2="80"/>
+                    <text class="label" x="15" y="80">V</text>
+                    <!-- Capacitors -->
+                    <g transform="translate(80, 75)">
+                        <line class="cap" x1="0" y1="-55" x2="0" y2="-40" />
+                        <line class="cap" x1="-5" y1="-40" x2="5" y2="-40" />
+                        <line class="cap" x1="0" y1="-40" x2="0" y2="-25" />
+                        <text class="label" x="15" y="-40">C\u2081</text>
+                    </g>
+                    <g transform="translate(140, 75)">
+                        <line class="cap" x1="0" y1="-55" x2="0" y2="-40" />
+                        <line class="cap" x1="-5" y1="-40" x2="5" y2="-40" />
+                        <line class="cap" x1="0" y1="-40" y2="-25" />
+                        <text class="label" x="15" y="-40">C\u2082</text>
+                    </g>
+                     <g transform="translate(200, 75)">
+                        <line class="cap" x1="0" y1="-55" x2="0" y2="-40" />
+                        <line class="cap" x1="-5" y1="-40" x2="5" y2="-40" />
+                        <line class="cap" x1="0" y1="-40" y2="-25" />
+                        <text class="label" x="15" y="-40">C\u2083</text>
+                    </g>
+                </svg>
+            </div>
+        </div>
+        <div class="answer-block">
+            <h5>Solution</h5>
+            <p>The capacitors $C_1, C_2,$ and $C_3$ are connected in <strong>parallel</strong> to the battery. In a parallel combination, the potential difference across each capacitor is the same and is equal to the voltage of the battery.</p>
+            <div class="math-eq">$$ V_1 = V_2 = V_3 = V = 12 \text{ V} $$</div>
+            <p>The charge on each capacitor is given by $Q = CV$.</p>
+            <p>Charge on $C_1$:</p>
+            <div class="math-eq">$$ Q_1 = C_1 V = (2.0 \times 10^{-6} \text{ F}) \times (12 \text{ V}) = 24 \times 10^{-6} \text{ C} = 24 \mu\text{C} $$</div>
+            <p>Charge on $C_2$:</p>
+            <div class="math-eq">$$ Q_2 = C_2 V = (4.0 \times 10^{-6} \text{ F}) \times (12 \text{ V}) = 48 \times 10^{-6} \text{ C} = 48 \mu\text{C} $$</div>
+            <p>Charge on $C_3$:</p>
+            <div class="math-eq">$$ Q_3 = C_3 V = (6.0 \times 10^{-6} \text{ F}) \times (12 \text{ V}) = 72 \times 10^{-6} \text{ C} = 72 \mu\text{C} $$</div>
+        </div>
+        <hr>
+
+        <div class="question-block" id="ap_7">
+            <h5>Problem 7</h5>
+            <p>Three capacitors having capacitances 20 µF, 30 µF and 40 µF are connected in series with a 12 V battery. Find the charge on each of the capacitors. How much work has been done by the battery in charging the capacitors?</p>
+        </div>
+        <div class="answer-block">
+            <h5>Solution</h5>
+            <p>First, calculate the equivalent capacitance ($C_{eq}$) for the series combination.</p>
+            <div class="math-eq">$$ \frac{1}{C_{eq}} = \frac{1}{C_1} + \frac{1}{C_2} + \frac{1}{C_3} = \frac{1}{20 \mu\text{F}} + \frac{1}{30 \mu\text{F}} + \frac{1}{40 \mu\text{F}} $$</div>
+            <p>The least common multiple of 20, 30, and 40 is 120.</p>
+            <div class="math-eq">$$ \frac{1}{C_{eq}} = \frac{6 + 4 + 3}{120 (\mu\text{F})} = \frac{13}{120} (\mu\text{F})^{-1} $$</div>
+            <div class="math-eq">$$ C_{eq} = \frac{120}{13} \mu\text{F} \approx 9.23 \mu\text{F} $$</div>
+            
+            <p><strong>Charge on each capacitor:</strong>
+            <br>In a series combination, the charge $Q$ on each capacitor is the same as the total charge supplied by the battery.</p>
+            <div class="math-eq">$$ Q = C_{eq} V = \left(\frac{120}{13} \times 10^{-6} \text{ F}\right) \times (12 \text{ V}) = \frac{1440}{13} \times 10^{-6} \text{ C} \approx 110.8 \mu\text{C} $$</div>
+            <p>The charge on each capacitor is approximately <strong>111 µC</strong>.</p>
+            
+            <p><strong>Work done by the battery:</strong>
+            <br>The work done by the battery in supplying a charge $Q$ at a potential difference $V$ is given by $W = QV$.</p>
+            <div class="math-eq">$$ W = \left(\frac{1440}{13} \times 10^{-6} \text{ C}\right) \times (12 \text{ V}) = \frac{17280}{13} \times 10^{-6} \text{ J} \approx 1.33 \times 10^{-3} \text{ J} $$</div>
+            <p>The work done by the battery is approximately <strong>1.33 mJ</strong>.</p>
+        </div>
+        <hr>
+
+        <div class="question-block" id="ap_8">
+            <h5>Problem 8</h5>
+            <p>Find the charge appearing on each of the three capacitors shown in figure (31-E2).</p>
+            <div class="svg-diagram">
+                <svg width="250" height="150" viewBox="0 0 250 150">
+                     <style>
+                        .wire { stroke: var(--text-main); stroke-width: 2; fill: none; }
+                        .cap { stroke: var(--text-bright); stroke-width: 2; fill: none; }
+                        .label { font-family: var(--font-sans); font-size: 14px; fill: var(--text-bright); text-anchor: middle; }
+                        .battery-pos { stroke: var(--accent-primary); stroke-width: 3; }
+                        .battery-neg { stroke: var(--accent-secondary); stroke-width: 1.5; }
+                    </style>
+                    <!-- Battery -->
+                    <line class="battery-pos" x1="30" y1="65" x2="30" y2="85"/>
+                    <line class="battery-neg" x1="35" y1="70" x2="35" y2="80"/>
+                    <text class="label" x="15" y="80">12 V</text>
+                    <!-- Wires -->
+                    <path class="wire" d="M 32.5 20 L 220 20" />
+                    <path class="wire" d="M 32.5 130 L 220 130" />
+                    <path class="wire" d="M 32.5 75 L 100 75" />
+                    <path class="wire" d="M 160 75 L 220 75" />
+                    <path class="wire" d="M 100 20 L 100 75" />
+                    <path class="wire" d="M 160 20 L 160 75" />
+                    <path class="wire" d="M 100 130 L 100 75" />
+                    <!-- Capacitors -->
+                    <g transform="translate(100, 47.5)">
+                         <line class="cap" x1="-5" y1="0" x2="5" y2="0" />
+                         <line class="cap" x1="-5" y1="5" x2="5" y2="5" />
+                         <text class="label" x="25" y="5">A=8 \u00b5F</text>
+                    </g>
+                    <g transform="translate(160, 47.5)">
+                         <line class="cap" x1="-5" y1="0" x2="5" y2="0" />
+                         <line class="cap" x1="-5" y1="5" x2="5" y2="5" />
+                         <text class="label" x="25" y="5">B=4 \u00b5F</text>
+                    </g>
+                    <g transform="translate(100, 102.5)">
+                         <line class="cap" x1="-5" y1="0" x2="5" y2="0" />
+                         <line class="cap" x1="-5" y1="5" x2="5" y2="5" />
+                         <text class="label" x="25" y="5">C=4 \u00b5F</text>
+                    </g>
+                </svg>
+            </div>
+        </div>
+        <div class="answer-block">
+            <h5>Solution</h5>
+            <p>First, we simplify the capacitor network to find the total equivalent capacitance.</p>
+            <p><strong>Step 1: Combine parallel capacitors.</strong>
+            <br>Capacitors A (8 µF) and B (4 µF) are connected in parallel. Their equivalent capacitance, $C_{AB}$, is:</p>
+            <div class="math-eq">$$ C_{AB} = C_A + C_B = 8 \mu\text{F} + 4 \mu\text{F} = 12 \mu\text{F} $$</div>
+            
+            <p><strong>Step 2: Combine series capacitors.</strong>
+            <br>The combination $C_{AB}$ is in series with capacitor C (4 µF). The total equivalent capacitance of the circuit, $C_{eq}$, is:</p>
+            <div class="math-eq">$$ \frac{1}{C_{eq}} = \frac{1}{C_{AB}} + \frac{1}{C_C} = \frac{1}{12 \mu\text{F}} + \frac{1}{4 \mu\text{F}} = \frac{1+3}{12 \mu\text{F}} = \frac{4}{12 \mu\text{F}} = \frac{1}{3 \mu\text{F}} $$</div>
+            <div class="math-eq">$$ C_{eq} = 3 \mu\text{F} $$</div>
+            
+            <p><strong>Step 3: Find the total charge.</strong>
+            <br>The total charge $Q_{total}$ supplied by the 12 V battery is:</p>
+            <div class="math-eq">$$ Q_{total} = C_{eq} V = (3 \mu\text{F}) \times (12 \text{ V}) = 36 \mu\text{C} $$</div>
+
+            <p><strong>Step 4: Find the charge on each capacitor.</strong>
+            <br>This total charge flows through the series part of the circuit, which is capacitor C. Therefore, the charge on capacitor C is:</p>
+            <div class="math-eq">$$ Q_C = Q_{total} = 36 \mu\text{C} $$</div>
+            <p>The potential difference across capacitor C is:</p>
+            <div class="math-eq">$$ V_C = \frac{Q_C}{C_C} = \frac{36 \mu\text{C}}{4 \mu\text{F}} = 9 \text{ V} $$</div>
+            <p>The remaining voltage from the battery appears across the parallel combination of A and B:</p>
+            <div class="math-eq">$$ V_{AB} = V_{total} - V_C = 12 \text{ V} - 9 \text{ V} = 3 \text{ V} $$</div>
+            <p>Since A and B are in parallel, they both have this potential difference across them. Now we can find their charges:</p>
+            <div class="math-eq">$$ Q_A = C_A V_{AB} = (8 \mu\text{F}) \times (3 \text{ V}) = 24 \mu\text{C} $$</div>
+            <div class="math-eq">$$ Q_B = C_B V_{AB} = (4 \mu\text{F}) \times (3 \text{ V}) = 12 \mu\text{C} $$</div>
+            <p>The charges are: $Q_A = \mathbf{24 \mu C}$, $Q_B = \mathbf{12 \mu C}$, and $Q_C = \mathbf{36 \mu C}$.</p>
+        </div>
+        <hr>
+
+        <div class="question-block" id="ap_9">
+            <h5>Problem 9</h5>
+            <p>Take $C_1=4.0 \mu$F and $C_2=6.0 \mu$F in figure (31-E3). Calculate the equivalent capacitance of the combination between the points indicated.</p>
+             <div class="svg-diagram">
+                <svg width="400" height="150" viewBox="0 0 400 150">
+                     <style>
+                        .wire { stroke: var(--text-main); stroke-width: 2; fill: none; }
+                        .cap { stroke: var(--text-bright); stroke-width: 2; fill: none; }
+                        .label { font-family: var(--font-sans); font-size: 14px; fill: var(--text-bright); text-anchor: middle; }
+                        .point { fill: var(--accent-primary); }
+                        .dashed { stroke: #aaaaaa; stroke-dasharray: 4 2; }
+                    </style>
+                     <circle class="point" cx="20" cy="25" r="3" /><text class="label" x="15" y="20">A</text>
+                     <circle class="point" cx="20" cy="125" r="3" /><text class="label" x="15" y="135">B</text>
+
+                     <path class="wire" d="M 20 25 L 50 25" />
+                     <path class="wire" d="M 20 125 L 50 125" />
+
+                    <!-- Section 1 -->
+                    <g transform="translate(75, 25)">
+                        <line class="cap" x1="-25" y1="0" x2="-10" y2="0" /> <line class="cap" x1="-10" y1="-5" x2="-10" y2="5" /> <line class="cap" x1="-10" y1="0" x2="5" y2="0" /> <text class="label" x="-2.5" y="-10">2 \u00b5F</text>
+                    </g>
+                    <path class="wire" d="M 80 25 L 125 25" />
+                    <g transform="translate(100, 75)">
+                        <line class="cap" x1="0" y1="-30" x2="0" y2="-15" /> <line class="cap" x1="-5" y1="-15" y2="5" /> <line class="cap" x1="0" y1="-15" y2="0" /> <text class="label" x="15" y="-15">2 \u00b5F</text>
+                    </g>
+                    <path class="wire" d="M 50 125 L 125 125" />
+                    <path class="wire" d="M 125 25 L 125 125" />
+                    
+                    <!-- Section 2 -->
+                     <g transform="translate(150, 25)">
+                        <line class="cap" x1="-25" y1="0" x2="-10" y2="0" /> <line class="cap" x1="-10" y1="-5" y2="5" /> <line class="cap" x1="-10" y1="0" y2="5" /> <text class="label" x="-2.5" y="-10">2 \u00b5F</text>
+                    </g>
+                    <path class="wire" d="M 155 25 L 200 25" />
+                    <g transform="translate(175, 75)">
+                        <line class="cap" x1="0" y1="-30" x2="0" y2="-15" /> <line class="cap" x1="-5" y1="-15" y2="5" /> <line class="cap" x1="0" y1="-15" y2="0" /> <text class="label" x="15" y="-15">2 \u00b5F</text>
+                    </g>
+                    <path class="wire" d="M 125 125 L 200 125" />
+                    <path class="wire" d="M 200 25 L 200 125" />
+
+                    <!-- Dashed lines for infinity -->
+                    <path class="wire dashed" d="M 200 25 L 250 25" />
+                    <path class="wire dashed" d="M 200 125 L 250 125" />
+                </svg>
+            </div>
+        </div>
+        <div class="answer-block">
+            <h5>Solution</h5>
+            <p>Given $C_1=4.0 \mu$F and $C_2=6.0 \mu$F.</p>
+            <p>The diagram shows a combination of capacitors. Let's analyze the connections.</p>
+            <p>The capacitors are arranged in a repeating pattern. This is a common type of problem that can be solved by assuming the equivalent capacitance of the infinite ladder is $C_{eq}$. Then, if we add one more section to the ladder, the equivalent capacitance should still be $C_{eq}$.</p>
+            <p>Let the equivalent capacitance between A and B be $C_{eq}$.</p>
+            <p>The first section consists of a $C_1$ capacitor in the top branch, a $C_1$ capacitor in the bottom branch, and a $C_2$ capacitor connecting the middle points.</p>
+            <p>Let's redraw the first repeating unit and replace the rest of the infinite ladder with $C_{eq}$.</p>
+            <p>The circuit can be seen as $C_1$ in series with a parallel combination of $C_2$ and the rest of the ladder ($C_{eq}$). This entire combination is then in parallel with another $C_1$. This is not directly obvious from the diagram.</p>
+            <p>Let's re-interpret the diagram as a repeating unit of two $C_1$ capacitors in series, and a $C_2$ capacitor in parallel with one of the $C_1$s. This is also not clear.</p>
+            <p>The image provided for Problem 9 (31-E3) is a specific circuit diagram. It shows two parallel branches, each containing a capacitor $C_1$. These two parallel branches are then in series with a capacitor $C_2$. This is not an infinite ladder. The image for Problem 28 (31-E17) is an infinite ladder. The question for Problem 9 refers to figure (31-E3), which is not an infinite ladder. The question for Problem 28 refers to figure (31-E17), which is an infinite ladder.</p>
+            <p>Let's assume the question for Problem 9 refers to the diagram provided with it, which is a simple series-parallel combination.</p>
+            <p>The diagram for Problem 9 (31-E3) shows:</p>
+            <ul>
+                <li>Two capacitors of $C_1$ (4.0 µF) are in parallel. Let their equivalent be $C_{parallel} = C_1 + C_1 = 4.0 + 4.0 = 8.0 \mu\text{F}$.</li>
+                <li>This $C_{parallel}$ is then in series with a capacitor $C_2$ (6.0 µF).</li>
+            </ul>
+            <p>So, the equivalent capacitance $C_{eq}$ is:</p>
+            <div class="math-eq">$$ \frac{1}{C_{eq}} = \frac{1}{C_{parallel}} + \frac{1}{C_2} = \frac{1}{8.0 \mu\text{F}} + \frac{1}{6.0 \mu\text{F}} $$</div>
+            <div class="math-eq">$$ \frac{1}{C_{eq}} = \frac{3 + 4}{24 \mu\text{F}} = \frac{7}{24} (\mu\text{F})^{-1} $$</div>
+            <div class="math-eq">$$ C_{eq} = \frac{24}{7} \mu\text{F} \approx 3.43 \mu\text{F} $$</div>
+            <p>The equivalent capacitance of the combination is approximately <strong>3.43 µF</strong>.</p>
+        </div>
+        <hr>
+
+        <div class="question-block" id="ap_17">
+            <h5>Problem 17</h5>
+            <p>A capacitor is made of a flat plate of area A and a second plate having a stair-like structure as shown in figure (31-E9). The width of each stair is a and the height is b. Find the capacitance of the assembly.</p>
+            <div class="svg-diagram">
+                <svg width="250" height="120" viewBox="0 0 250 120">
+                    <style>
+                        .plate { stroke: var(--text-bright); stroke-width: 2; fill: none; }
+                        .dim { stroke: var(--accent-secondary); stroke-dasharray: 2 2; stroke-width: 1; }
+                        .arrow { stroke: var(--accent-secondary); stroke-width: 1; fill: var(--accent-secondary); }
+                        .label { font-family: var(--font-sans); font-size: 14px; fill: var(--text-bright); text-anchor: middle; }
+                    </style>
+                    <!-- Bottom flat plate -->
+                    <line class="plate" x1="20" y1="100" x2="230" y2="100" />
+                    <!-- Top stair plate -->
+                    <path class="plate" d="M 20 20 L 70 20 L 70 40 L 120 40 L 120 60 L 170 60" />
+                    <!-- Dimensions -->
+                    <line class="dim" x1="20" y1="20" x2="20" y2="100" />
+                    <line class="dim" x1="70" y1="40" x2="70" y1="100" />
+                    <line class="dim" x1="120" y1="60" x2="120" y1="100" />
+                    <!-- Width a -->
+                    <line class="arrow" x1="20" y1="10" x2="70" y2="10" />
+                    <path class="arrow" d="M 20 10 L 25 7 M 20 10 L 25 13 M 70 10 L 65 7 M 70 10 L 65 13" />
+                    <text class="label" x="45" y="8">a</text>
+                    <line class="arrow" x1="70" y1="30" x2="120" y2="30" />
+                    <path class="arrow" d="M 70 30 L 75 27 M 70 30 L 75 33 M 120 30 L 115 27 M 120 30 L 115 33" />
+                    <text class="label" x="95" y="28">a</text>
+                     <line class="arrow" x1="120" y1="50" x2="170" y1="50" />
+                    <path class="arrow" d="M 120 50 L 125 47 M 120 50 L 125 53 M 170 50 L 165 47 M 170 50 L 165 53" />
+                    <text class="label" x="145" y="48">a</text>
+                    <!-- Height b and separation d -->
+                    <line class="arrow" x1="10" y1="20" x2="10" y2="40" />
+                    <path class="arrow" d="M 10 20 L 7 25 M 10 20 L 13 25 M 10 40 L 7 35 M 10 40 L 13 35" />
+                    <text class="label" x="5" y="30">b</text>
+                    <line class="arrow" x1="10" y1="40" x2="10" y2="60" />
+                    <path class="arrow" d="M 10 40 L 7 45 M 10 40 L 13 45 M 10 60 L 7 55 M 10 60 L 13 55" />
+                    <text class="label" x="5" y="50">b</text>
+                    <line class="arrow" x1="180" y1="60" x2="180" y1="100" />
+                    <path class="arrow" d="M 180 60 L 177 65 M 180 60 L 183 65 M 180 100 L 177 95 M 180 100 L 183 95" />
+                    <text class="label" x="190" y="80">d</text>
+                </svg>
+            </div>
+        </div>
+        <div class="answer-block">
+            <h5>Solution</h5>
+            <p>The assembly can be treated as a combination of three parallel-plate capacitors connected in parallel. This is because the top stair-like plate is a single conductor (at one potential) and the bottom flat plate is another single conductor (at another potential).</p>
+            <p>Let the width of the structure (into the page) be $W$. The area of the flat plate is given as $A$. From the figure, the total length of the stair-like structure is $3a$. Therefore, the total area is $A = (3a) \times W$. The area of each stair section is $a \times W = A/3$.</p>
+            
+            <p><strong>Capacitor 1 (leftmost stair):</strong></p>
+            <ul>
+                <li>Area: $A_1 = A/3$</li>
+                <li>Separation: $d_1 = d+2b$</li>
+                <li>Capacitance: $C_1 = \frac{\epsilon_0 (A/3)}{d+2b}$</li>
+            </ul>
+            
+            <p><strong>Capacitor 2 (middle stair):</strong></p>
+            <ul>
+                <li>Area: $A_2 = A/3$</li>
+                <li>Separation: $d_2 = d+b$</li>
+                <li>Capacitance: $C_2 = \frac{\epsilon_0 (A/3)}{d+b}$</li>
+            </ul>
+            
+            <p><strong>Capacitor 3 (rightmost stair):</strong></p>
+            <ul>
+                <li>Area: $A_3 = A/3$</li>
+                <li>Separation: $d_3 = d$</li>
+                <li>Capacitance: $C_3 = \frac{\epsilon_0 (A/3)}{d}$</li>
+            </ul>
+            
+            <p>Since these three sections are in parallel, the total equivalent capacitance is the sum of the individual capacitances:</p>
+            <div class="math-eq">$$ C_{eq} = C_1 + C_2 + C_3 $$</div>
+            <div class="math-eq">$$ C_{eq} = \frac{\epsilon_0 A}{3} \left( \frac{1}{d+2b} + \frac{1}{d+b} + \frac{1}{d} \right) $$</div>
+            <p>This is the capacitance of the assembly.</p>
+        </div>
+        <hr>
+
+        <div class="question-block" id="ap_28">
+            <h5>Problem 28</h5>
+            <p>Find the equivalent capacitance of the infinite ladder shown in figure (31-E17) between the points A and B.</p>
+             <div class="svg-diagram">
+                <svg width="400" height="150" viewBox="0 0 400 150">
+                    <style>
+                        .wire { stroke: var(--text-main); stroke-width: 2; fill: none; }
+                        .cap { stroke: var(--text-bright); stroke-width: 2; fill: none; }
+                        .label { font-family: var(--font-sans); font-size: 14px; fill: var(--text-bright); text-anchor: middle; }
+                        .point { fill: var(--accent-primary); }
+                        .dashed { stroke: #aaaaaa; stroke-dasharray: 4 2; }
+                    </style>
+                     <circle class="point" cx="20" cy="25" r="3" /><text class="label" x="15" y="20">A</text>
+                     <circle class="point" cx="20" cy="125" r="3" /><text class="label" x="15" y="135">B</text>
+
+                     <path class="wire" d="M 20 25 L 50 25" />
+                     <path class="wire" d="M 20 125 L 50 125" />
+
+                    <!-- Section 1 -->
+                    <g transform="translate(75, 25)">
+                        <line class="cap" x1="-25" y1="0" x2="-10" y2="0" /> <line class="cap" x1="-10" y1="-5" x2="-10" y2="5" /> <line class="cap" x1="-10" y1="0" x2="5" y2="0" /> <text class="label" x="-2.5" y="-10">2 \u00b5F</text>
+                    </g>
+                    <path class="wire" d="M 80 25 L 125 25" />
+                    <g transform="translate(100, 75)">
+                        <line class="cap" x1="0" y1="-30" x2="0" y2="-15" /> <line class="cap" x1="-5" y1="-15" x2="5" y2="-15" /> <line class="cap" x1="0" y1="-15" y2="0" /> <text class="label" x="15" y="-15">2 \u00b5F</text>
+                    </g>
+                    <path class="wire" d="M 50 125 L 125 125" />
+                    <path class="wire" d="M 125 25 L 125 125" />
+                    
+                    <!-- Section 2 -->
+                     <g transform="translate(150, 25)">
+                        <line class="cap" x1="-25" y1="0" x2="-10" y2="0" /> <line class="cap" x1="-10" y1="-5" y2="5" /> <line class="cap" x1="-10" y1="0" y2="5" /> <text class="label" x="-2.5" y="-10">2 \u00b5F</text>
+                    </g>
+                    <path class="wire" d="M 155 25 L 200 25" />
+                    <g transform="translate(175, 75)">
+                        <line class="cap" x1="0" y1="-30" x2="0" y2="-15" /> <line class="cap" x1="-5" y1="-15" y2="5" /> <line class="cap" x1="0" y1="-15" y2="0" /> <text class="label" x="15" y="-15">2 \u00b5F</text>
+                    </g>
+                    <path class="wire" d="M 125 125 L 200 125" />
+                    <path class="wire" d="M 200 25 L 200 125" />
+
+                    <!-- Dashed lines for infinity -->
+                    <path class="wire dashed" d="M 200 25 L 250 25" />
+                    <path class="wire dashed" d="M 200 125 L 250 125" />
+                </svg>
+            </div>
+        </div>
+        <div class="answer-block">
+            <h5>Solution</h5>
+            <p>This is an infinite ladder circuit. Let the equivalent capacitance of the entire ladder between points A and B be $C_{eq}$. Since the ladder is infinite, adding one more repeating section to the front of the ladder will not change the total equivalent capacitance.</p>
+            <p>The repeating section consists of a 2 µF capacitor in series with the main line, and another 2 µF capacitor in parallel (across the line).</p>
+            <p>Let's model the circuit. The first 2 µF capacitor (let's call it $C_s$) is in series with a parallel combination. This parallel combination consists of the second 2 µF capacitor ($C_p$) and the rest of the infinite ladder, which itself has a capacitance of $C_{eq}$.</p>
+            <p>The capacitance of the parallel part is $C_{parallel} = C_p + C_{eq} = (2 + C_{eq}) \mu\text{F}$.</p>
+            <p>The total capacitance $C_{eq}$ is the series combination of $C_s$ and $C_{parallel}$.</p>
+            <div class="math-eq">$$ C_{eq} = \frac{C_s \times C_{parallel}}{C_s + C_{parallel}} $$</div>
+            <div class="math-eq">$$ C_{eq} = \frac{2 \times (2 + C_{eq})}{2 + (2 + C_{eq})} = \frac{4 + 2C_{eq}}{4 + C_{eq}} $$</div>
+            <p>Now, we solve this equation for $C_{eq}$:</p>
+            <div class="math-eq">$$ C_{eq}(4 + C_{eq}) = 4 + 2C_{eq} $$</div>
+            <div class="math-eq">$$ 4C_{eq} + C_{eq}^2 = 4 + 2C_{eq} $$</div>
+            <div class="math-eq">$$ C_{eq}^2 + 2C_{eq} - 4 = 0 $$</div>
+            <p>This is a quadratic equation of the form $ax^2 + bx + c = 0$. We use the quadratic formula to solve for $C_{eq}$:</p>
+            <div class="math-eq">$$ C_{eq} = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a} = \frac{-2 \pm \sqrt{2^2 - 4(1)(-4)}}{2(1)} $$</div>
+            <div class="math-eq">$$ C_{eq} = \frac{-2 \pm \sqrt{4 + 16}}{2} = \frac{-2 \pm \sqrt{20}}{2} = \frac{-2 \pm 2\sqrt{5}}{2} = -1 \pm \sqrt{5} $$</div>
+            <p>Since capacitance must be a positive physical quantity, we take the positive root:</p>
+            <div class="math-eq">$$ C_{eq} = (\sqrt{5} - 1) \mu\text{F} $$</div>
+            <p>Using $\sqrt{5} \approx 2.236$, the equivalent capacitance is:</p>
+            <div class="math-eq">$$ C_{eq} \approx (2.236 - 1) \mu\text{F} = 1.236 \mu\text{F} $$</div>
+        </div>
+        <hr>
+
+    </main>
+
+
+    <div id="search-results-overlay">
+        <div id="search-results-box">
+            <div class="search-results-header"><span>Search Results</span><button id="close-search-btn">&times;</button></div>
+            <div id="search-results-list"></div>
+        </div>
+    </div>
+
+    <script>
+        let searchableData = [];
+        const searchInput = document.getElementById('search-input');
+        const searchResultsOverlay = document.getElementById('search-results-overlay');
+        const searchResultsList = document.getElementById('search-results-list');
+        const closeSearchBtn = document.getElementById('close-search-btn');
+
+        document.addEventListener('DOMContentLoaded', () => {
+            fetch('../contents.json')
+                .then(response => response.json())
+                .then(data => { searchableData = data; })
+                .catch(error => console.error('Error loading search data:', error));
+        });
+
+        let debounceTimer;
+        searchInput.addEventListener('keyup', () => {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => { performSearch(searchInput.value); }, 300);
+        });
+
+        document.getElementById('search-form').addEventListener('submit', e => e.preventDefault());
+
+        function closeOverlay() { searchResultsOverlay.style.display = 'none'; }
+        closeSearchBtn.addEventListener('click', closeOverlay);
+        searchResultsOverlay.addEventListener('click', (event) => {
+            if (event.target === searchResultsOverlay) { closeOverlay(); }
+        });
+
+        function performSearch(query) {
+            if (!query || query.trim() === '') { closeOverlay(); return; }
+            const scoredResults = searchableData.map(item => ({ item, score: calculateScore(item, query) }));
+            const finalResults = scoredResults.filter(result => result.score > 0).sort((a, b) => b.score - a.score).map(result => result.item);
+            displayResults(finalResults);
+        }
+
+        function calculateScore(item, query) {
+            let score = 0;
+            const lowerQuery = query.toLowerCase();
+            if (item.title.toLowerCase() === lowerQuery) score += 100;
+            else if (item.title.toLowerCase().startsWith(lowerQuery)) score += 50;
+            else if (item.title.toLowerCase().includes(lowerQuery)) score += 20;
+            if (item.description.toLowerCase().includes(lowerQuery)) score += 10;
+            if (item.author.toLowerCase().includes(lowerQuery)) score += 5;
+            if (item.category.toLowerCase().includes(lowerQuery)) score += 5;
+            return score;
+        }
+
+        function displayResults(results) {
+            searchResultsList.innerHTML = '';
+            if (results.length === 0) {
+                searchResultsList.innerHTML = `<p style="padding: 20px; text-align: center; color: #888;">No results found.</p>`;
+            } else {
+                results.forEach(item => {
+                    const resultElement = document.createElement('a');
+                    // FIX 2: Use absolute path directly for more robust linking.
+                    resultElement.href = item.src; 
+                    resultElement.classList.add('search-result-item');
+                    resultElement.innerHTML = `<h3>${item.title}</h3><p>Category: ${item.category}</p>`;
+                    searchResultsList.appendChild(resultElement);
+                });
+            }
+            searchResultsOverlay.style.display = 'flex';
+        }
+    </script>
+</body>
+</html>

@@ -3,47 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEURON-IQ - Home</title>
+    <title>NEURON-IQ - Maths</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Poppins', sans-serif;
-            background: #eaf6f6;
-            color: #333;
-            overflow-x: hidden;
-            position: relative;
-            min-height: 100vh;
-        }
-
-        /* --- Decorative Floral Elements --- */
-        .floral-decoration {
-            position: absolute;
-            pointer-events: none;
-            z-index: -1;
-            opacity: 0.9;
-        }
+        /* CSS is identical to index.html for consistent design */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; background: #eaf6f6; color: #333; overflow-x: hidden; position: relative; min-height: 100vh; }
+        .floral-decoration { position: absolute; pointer-events: none; z-index: -1; opacity: 0.9; }
         .top-right { top: -50px; right: -80px; width: 450px; transform: rotate(10deg); }
         .bottom-left { bottom: -70px; left: -100px; width: 400px; }
-
-        /* --- Header & Navigation --- */
         .header { display: flex; justify-content: space-between; align-items: center; padding: 25px 8%; }
         .logo { display: flex; align-items: center; gap: 12px; font-size: 24px; font-weight: 700; color: #2c3e50; text-decoration: none; }
         .logo-icon { width: 40px; height: 40px; }
         .nav-links ul { list-style: none; display: flex; gap: 40px; }
         .nav-links a { text-decoration: none; color: #555; font-weight: 500; transition: color 0.3s ease; }
         .nav-links a:hover { color: #d81b60; }
-
-        /* --- Main Content & Search --- */
-        .main-content { display: flex; flex-direction: column; align-items: center; text-align: center; margin-top: 8vh; padding: 0 20px; }
+        .main-content { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 40px 20px; }
         .main-content h1 { font-size: 48px; font-weight: 700; color: #2c3e50; margin-bottom: 15px; }
         .main-content p { font-size: 16px; color: #666; max-width: 600px; margin-bottom: 35px; }
         .search-container { width: 100%; max-width: 700px; display: flex; background-color: #fff; border-radius: 50px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08); overflow: hidden; }
@@ -51,21 +29,9 @@
         .search-button { border: none; background-color: #e94057; color: white; padding: 0 25px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background-color 0.3s ease; }
         .search-button:hover { background-color: #d81b60; }
         .search-button svg { width: 22px; height: 22px; }
-
-        /* --- Search Results --- */
         #results-container { margin-top: 40px; width: 100%; max-width: 700px; display: flex; flex-direction: column; gap: 15px; margin-bottom: 50px; }
         .results-placeholder { color: #888; margin-top: 20px; }
-        .result-item {
-            display: block; /* Make the whole item clickable */
-            text-decoration: none; /* Remove underline from link */
-            background: #fff;
-            padding: 20px 25px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
-            text-align: left;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            cursor: pointer;
-        }
+        .result-item { display: block; text-decoration: none; background: #fff; padding: 20px 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06); text-align: left; transition: transform 0.2s ease, box-shadow 0.2s ease; cursor: pointer; }
         .result-item:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08); }
         .result-item h3 { font-size: 18px; color: #e94057; margin-bottom: 5px; }
         .result-item p { font-size: 14px; color: #555; margin-bottom: 10px; line-height: 1.6; }
@@ -77,7 +43,7 @@
     <img src="https://i.pinimg.com/originals/4d/81/2c/4d812cdeb0e25d62ab8a97e1769c8c8f.png" alt="Floral decoration" class="floral-decoration bottom-left">
 
     <header class="header">
-        <a href="#" class="logo">
+        <a href="/index.html" class="logo">
             <svg class="logo-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="48" fill="#2c3e50"/><path d="M42 30 Q50 20 58 30 Q65 35 60 45 Q70 50 60 55 Q65 65 58 70 Q50 80 42 70 Q35 65 40 55 Q30 50 40 45 Q35 35 42 30Z" fill="#e94057"/></svg>
             <span>NEURON-IQ</span>
         </a>
@@ -92,41 +58,37 @@
     </header>
 
     <main class="main-content">
-        <h1>What do you want to study?</h1>
-        <p>Explore Physics, Chemistry, Maths, and Biology. Your journey to knowledge starts here.</p>
+        <h1>Explore the World of Maths</h1>
+        <p>From Sets to Vectors, find the topics you're looking for.</p>
         <form class="search-container" id="search-form">
-            <input type="text" id="search-input" class="search-input" placeholder="e.g., 'Quantum Mechanics' or 'Organic Chemistry'">
+            <input type="text" id="search-input" class="search-input" placeholder="Search within Maths topics...">
             <button type="submit" class="search-button">
                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" /></svg>
             </button>
         </form>
         <div id="results-container">
-            <p class="results-placeholder">Type something in the search bar to begin.</p>
+            <p class="results-placeholder">Loading Maths content...</p>
         </div>
     </main>
 
     <script>
-        let searchableData = [];
+        let mathsData = [];
 
         const searchForm = document.getElementById('search-form');
         const searchInput = document.getElementById('search-input');
         const resultsContainer = document.getElementById('results-container');
 
         document.addEventListener('DOMContentLoaded', () => {
-            fetch('contents.json')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
+            fetch('/contents.json')
+                .then(response => response.json())
                 .then(data => {
-                    searchableData = data;
-                    console.log('Data loaded successfully!');
+                    mathsData = data.filter(item => item.category.toLowerCase() === 'maths');
+                    
+                    displayResults(mathsData);
                 })
                 .catch(error => {
-                    console.error('Error fetching search data:', error);
-                    resultsContainer.innerHTML = `<p class="results-placeholder" style="color: red;">Error: Could not load content data. Please check if contents.json is present and correctly formatted.</p>`;
+                    console.error('Error fetching data:', error);
+                    resultsContainer.innerHTML = `<p class="results-placeholder" style="color: red;">Error: Could not load content.</p>`;
                 });
         });
 
@@ -137,15 +99,16 @@
             clearTimeout(debounceTimer);
             debounceTimer = setTimeout(() => {
                 performSearch(searchInput.value);
-            }, 300); // Debounce for 300ms
+            }, 300);
         });
 
         function performSearch(query) {
             if (!query || query.trim() === '') {
-                displayResults([]);
+                displayResults(mathsData); 
                 return;
             }
-            const scoredResults = searchableData.map(item => ({
+
+            const scoredResults = mathsData.map(item => ({
                 item,
                 score: calculateScore(item, query)
             }));
@@ -157,31 +120,21 @@
         function calculateScore(item, query) {
             let score = 0;
             const lowerQuery = query.toLowerCase();
-
             if (item.title.toLowerCase() === lowerQuery) score += 100;
             else if (item.title.toLowerCase().startsWith(lowerQuery)) score += 50;
-            else if (item.title.toLowerCase().includes(lowerQuery)) score += 20; 
-
+            else if (item.title.toLowerCase().includes(lowerQuery)) score += 20;
             if (item.description.toLowerCase().includes(lowerQuery)) {
-                const matches = (item.description.toLowerCase().match(new RegExp(lowerQuery, "g")) || []).length;
-                score += matches * 5; 
+                score += (item.description.toLowerCase().match(new RegExp(lowerQuery, "g")) || []).length * 5;
             }
             if (item.author.toLowerCase().includes(lowerQuery)) score += 10;
-            if (item.category.toLowerCase().includes(lowerQuery)) score += 10;
-
             return score;
         }
 
         function displayResults(results) {
-            resultsContainer.innerHTML = '';
-
-            if (searchInput.value.trim() === '') {
-                 resultsContainer.innerHTML = `<p class="results-placeholder">Type something in the search bar to begin.</p>`;
-                 return;
-            }
+            resultsContainer.innerHTML = ''; 
 
             if (results.length === 0) {
-                resultsContainer.innerHTML = `<p class="results-placeholder">No results found for "${searchInput.value}".</p>`;
+                resultsContainer.innerHTML = `<p class="results-placeholder">No matching maths content found.</p>`;
                 return;
             }
 
@@ -189,7 +142,6 @@
                 const resultElement = document.createElement('a');
                 resultElement.href = item.src;
                 resultElement.classList.add('result-item');
-                
                 resultElement.innerHTML = `
                     <h3>${item.title}</h3>
                     <p>${item.description}</p>

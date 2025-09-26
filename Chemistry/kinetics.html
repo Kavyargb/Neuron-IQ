@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chemical Kinetics - NEURON-IQ</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+      // Configure MathJax
+      window.MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          displayMath: [['$$', '$$'], ['\\[', '\\]']]
+        }
+      };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; background: #eaf6f6; color: #333; }
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 25px 8%; background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .logo { display: flex; align-items: center; gap: 12px; font-size: 24px; font-weight: 700; color: #2c3e50; text-decoration: none; }
+        .logo-icon { width: 40px; height: 40px; }
+        .nav-links ul { list-style: none; display: flex; gap: 40px; }
+        .nav-links a { text-decoration: none; color: #555; font-weight: 500; transition: color 0.3s ease; }
+        .nav-links a:hover { color: #d81b60; }
+        .search-section { padding: 25px 8%; border-bottom: 1px solid #ddd; }
+        .search-container { width: 100%; max-width: 700px; margin: 0 auto; display: flex; background-color: #fff; border-radius: 50px; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.07); overflow: hidden; }
+        .search-input { flex-grow: 1; border: none; outline: none; padding: 15px 25px; font-size: 16px; font-family: 'Poppins', sans-serif; }
+        .search-button { border: none; background-color: #e94057; color: white; padding: 0 25px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .search-button svg { width: 22px; height: 22px; }
+        
+        /* --- Main Content Container (FIX 1: Improved Readability) --- */
+        .content-container {
+            max-width: 80%;
+            margin: 40px auto;
+            padding: 40px 50px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+            line-height: 1.7;
+        }
+        .content-container h1, .content-container h2, .content-container h3 { margin-bottom: 15px; }
+        .content-container h1 { font-size: 36px; color: #2c3e50; }
+        .content-container h2 { font-size: 24px; color: #333; margin-top: 40px; border-bottom: 2px solid #e94057; padding-bottom: 5px; }
+        .content-container p { margin-bottom: 20px; font-size: 16px; }
+        .content-container a { color: #e94057; text-decoration: none; }
+        .content-container a:hover { text-decoration: underline; }
+
+        /* --- Floating Search Results Overlay (No changes needed) --- */
+        #search-results-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); z-index: 1000; display: none; justify-content: center; align-items: flex-start; padding-top: 10vh; }
+        #search-results-box { background: #fff; width: 100%; max-width: 600px; border-radius: 8px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); position: relative; }
+        .search-results-header { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; border-bottom: 1px solid #eee; }
+        .search-results-header span { font-weight: 600; color: #555; }
+        #close-search-btn { background: none; border: none; font-size: 24px; cursor: pointer; color: #888; line-height: 1; }
+        #search-results-list { max-height: 60vh; overflow-y: auto; }
+        .search-result-item { display: block; text-decoration: none; padding: 15px 20px; border-bottom: 1px solid #f0f0f0; transition: background-color 0.2s ease; }
+        .search-result-item:last-child { border-bottom: none; }
+        .search-result-item:hover { background-color: #f9f9f9; }
+        .search-result-item h3 { font-size: 16px; color: #e94057; margin-bottom: 5px; }
+        .search-result-item p { font-size: 13px; color: #666; margin: 0; }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <a href="../index.html" class="logo">
+            <svg class="logo-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="48" fill="#2c3e50"/><path d="M42 30 Q50 20 58 30 Q65 35 60 45 Q70 50 60 55 Q65 65 58 70 Q50 80 42 70 Q35 65 40 55 Q30 50 40 45 Q35 35 42 30Z" fill="#e94057"/></svg>
+            <span>NEURON-IQ</span>
+        </a>
+        <nav class="nav-links">
+            <ul>
+                <li><a href="../physics/">Physics</a></li>
+                <li><a href="../chemistry/">Chemistry</a></li>
+                <li><a href="../maths/">Maths</a></li>
+                <li><a href="../biology/">Biology</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="search-section">
+        <form class="search-container" id="search-form">
+            <input type="text" id="search-input" class="search-input" placeholder="Search the entire site...">
+            <button type="submit" class="search-button">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" /></svg>
+            </button>
+        </form>
+    </section>
+
+    <main class="content-container">
+       <h3 id="kinetics_intro"><strong>Chemical Kinetics</strong></h3>
+
+        <h4>1. Introduction</h4>
+        <p>In thermodynamics, we have studied whether a reaction will take place or not and if it does then up to what extent. In this chapter (chemical kinetics), we will study about how fast a chemical reaction takes place and what are the different factors affecting this rate of chemical reaction. How to optimise the conditions so as to maximize the output in optimum time. The last part of the chapter will be dealing with the mechanism of a chemical reaction and catalysis.</p>
+
+        <h4>Rate/Velocity of chemical reaction:</h4>
+        <p>The rate of change of concentration with time of different chemical species taking part in a chemical reaction is known as <strong>rate of reaction of that species</strong>.</p>
+        <p>$$ \text{Rate} = \frac{\Delta c}{\Delta t} = \frac{\text{mol / lit.}}{\text{sec}} = \text{mol lit}^{-1} \text{time}^{-1} = \text{mol dm}^{-3} \text{time}^{-1} $$</p>
+        <p>For gaseous reactions, when the concentration of gases is expressed in terms of their partial pressure, then units of the rate equation will be atm s⁻¹.</p>
+        <p>Rate is always defined in such a manner so that it is always a positive quantity.</p>
+
+        <h4>Types of Rates of chemical reaction:</h4>
+        <p>For a reaction $\ce{R -> P}$</p>
+        <p><strong>Average rate</strong> = $\frac{\text{Total change in concentration}}{\text{Total time taken}} = \frac{\Delta c}{\Delta t} = - \frac{\Delta[R]}{\Delta t} = \frac{\Delta[P]}{\Delta t}$</p>
+        <p><strong>Instantaneous rate:</strong> rate of reaction at a particular instant.</p>
+        <p>$$ R_{\text{instantaneous}} = \lim_{\Delta t \to 0} \frac{\Delta c}{\Delta t} = \frac{dc}{dt} = - \frac{d[R]}{dt} = \frac{d[P]}{dt} $$</p>
+        <p>Instantaneous rate can be determined by drawing a tangent at time 't' on a curve drawn for concentration versus time.</p>
+        <p><strong>Initial Rate:</strong> Instantaneous rate at ‘t = 0’ is called the initial rate [slope of tangent at t = 0].</p>
+
+        <div class="svg-diagram">
+    <svg viewBox="0 0 320 220" xmlns="http://www.w3.org/2000/svg">
+        <title>Improved Graph of Concentration vs. Time</title>
+        <defs>
+            <marker id="arrowhead-kinetics" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--text-main, #fff)" />
+            </marker>
+        </defs>
+        <style>
+            .axis { stroke: black; stroke-width: 1.5; marker-end: url(#arrowhead-kinetics); }
+            .grid-line { stroke: black; stroke-width: 0.5; stroke-dasharray: 2 3; }
+            
+            .label, .equation {
+                font-family: var(--font-sans), sans-serif;
+                font-size: 6px;
+                fill: black;
+                text-anchor: middle;
+            }
+            .equation { font-size: 5px; }
+            .sub { font-size: 75%; baseline-shift: sub; }
+            .sup { font-size: 75%; baseline-shift: super; }
+
+            .reactant-curve { stroke: var(--accent-primary, #ff007f); stroke-width: 2.5; fill: none; }
+            .data-point { fill: black; }
+            .helper-line { stroke: black; stroke-width: 1; stroke-dasharray: 2 2; }
+            
+            /* Rate-specific styles */
+            .avg-rate-secant { stroke: var(--accent-secondary, #ffa500); stroke-width: 2; }
+            .avg-rate-triangle { fill: var(--accent-secondary, #ffa500); fill-opacity: 0.2; stroke: var(--accent-secondary, #ffa500); stroke-width: 1; }
+            .inst-rate-tangent { stroke: #00e0b0; stroke-width: 2; stroke-dasharray: 4 2; }
+        </style>
+
+        <!-- === Axes and Grid === -->
+        <g id="axes-and-grid">
+            <line class="axis" x1="40" y1="190" x2="310" y2="190" />
+            <text class="label" x="175" y="205">Time (t)</text>
+            <line class="axis" x1="50" y1="200" x2="50" y2="20" />
+            <text class="label" x="20" y="110" transform="rotate(-90 20 110)">Concentration [R]</text>
+        </g>
+
+        <!-- === Concentration Curve === -->
+        <g id="curve">
+            <path class="reactant-curve" d="M 50 40 C 90 45, 180 90, 300 190" />
+        </g>
+        
+        <!-- === Average Rate Demonstration === -->
+        <g id="average-rate" >
+            <!-- Points and Secant Line -->
+            <circle class="data-point" cx="80" cy="58" r="3" />
+            <circle class="data-point" cx="240" cy="151" r="3" />
+            <line class="avg-rate-secant" x1="80" y1="58" x2="240" y2="151" />
+            <!-- Helper lines and rise/run triangle -->
+            <path class="helper-line" d="M 50 58 H 80 M 50 151 H 240 M 80 58 V 190 M 240 151 V 190" />
+            <polygon class="avg-rate-triangle" points="80,58 240,151 80,151" />
+            
+            <!-- Labels -->
+            <text class="label" x="35" y="61">[R]<tspan class="sub">1</tspan></text>
+            <text class="label" x="35" y="154">[R]<tspan class="sub">2</tspan></text>
+            <text class="label" x="80" y="202">t<tspan class="sub">1</tspan></text>
+            <text class="label" x="240" y="202">t<tspan class="sub">2</tspan></text>
+
+            <!-- Equation -->
+            <text class="equation" x="160" y="30" text-anchor="middle">
+                Average Rate = 
+                <tspan style="font-size:1.5em; vertical-align:middle;">-</tspan>
+                <tspan style="font-size:1.5em; vertical-align:middle;">Δ</tspan>[R] /
+                <tspan style="font-size:1.5em; vertical-align:middle;">Δ</tspan>t = 
+                -([R]<tspan class="sub">2</tspan> - [R]<tspan class="sub">1</tspan>) / (t<tspan class="sub">2</tspan> - t<tspan class="sub">1</tspan>)
+            </text>
+            <text class="equation" x="160" y="95" fill="var(--accent-secondary, #ffa500)" text-anchor="middle">
+                Slope of Secant
+            </text>
+        </g>
+
+        <!-- === Instantaneous Rate Demonstration === -->
+        <g id="instantaneous-rate">
+            <!-- Point and Tangent Line -->
+            <circle class="data-point" cx="150" cy="100" r="3" fill="#00e0b0" />
+            <line class="inst-rate-tangent" x1="80" y1="75" x2="220" y2="125" />
+            <path class="helper-line" d="M 150 100 V 190" />
+            
+            <!-- Labels -->
+            <text class="label" x="150" y="202">t</text>
+            <text class="equation" x="245" y="145" text-anchor="middle" fill="#00e0b0">
+                Rate at time t = -d[R]/dt
+            </text>
+             <text class="label" x="245" y="160" text-anchor="middle" fill="#00e0b0">
+                (Slope of Tangent)
+            </text>
+        </g>
+    </svg>
+</div>
+
+        <h4>Relation between reaction rates of different species involved in a reaction:</h4>
+        <p>For the reaction: $\ce{N2 + 3H2 -> 2NH3}$</p>
+        <p>Rate of reaction of $\ce{N2} = -\frac{d[\ce{N2}]}{dt}$</p>
+        <p>Rate of reaction of $\ce{H2} = -\frac{d[\ce{H2}]}{dt}$</p>
+        <p>Rate of reaction of $\ce{NH3} = +\frac{d[\ce{NH3}]}{dt}$</p>
+        <p>These rates are not all equal. Therefore, by convention the rate of a reaction is defined as:</p>
+        <p>$$ \text{Rate of reaction} = -\frac{d[\ce{N2}]}{dt} = -\frac{1}{3}\frac{d[\ce{H2}]}{dt} = +\frac{1}{2}\frac{d[\ce{NH3}]}{dt} $$</p>
+        <p><strong>Note:</strong> Rate of reaction value is dependent on the stoichiometric coefficients used in the reaction while the rate of any species will be a fixed value under given conditions.</p>
+
+        <div class="question-block">
+            <h5>Example 1:</h5>
+            <p>For each reaction below, express the rates of change of [product] and [reactant] in the correct relationship to each other.</p>
+            <p>(a) $\ce{2O3(g) -> 3O2(g)}$</p>
+            <p>(b) $\ce{2HOF(g) -> 2HF(g) + O2(g)}$</p>
+        </div>
+        <div class="answer-block">
+            <p>(a) Rate = $-\frac{1}{2}\frac{d[\ce{O3}]}{dt} = +\frac{1}{3}\frac{d[\ce{O2}]}{dt}$. Or, $-\frac{d[\ce{O3}]}{dt} = \frac{2}{3}\frac{d[\ce{O2}]}{dt}$</p>
+            <p>(b) Rate = $-\frac{1}{2}\frac{d[\ce{HOF}]}{dt} = +\frac{1}{2}\frac{d[\ce{HF}]}{dt} = +\frac{d[\ce{O2}]}{dt}$. Or, $-\frac{d[\ce{HOF}]}{dt} = +\frac{d[\ce{HF}]}{dt} = +2\frac{d[\ce{O2}]}{dt}$</p>
+        </div>
+
+        <div class="question-block">
+            <h5>Example 2:</h5>
+            <p>From the concentrations of R at different times given below, calculate the average rate of the reaction: $\ce{R -> P}$ during different intervals of time.</p>
+            <table>
+                <tr>
+                    <td>t/s</td>
+                    <td>0</td>
+                    <td>5</td>
+                    <td>10</td>
+                    <td>20</td>
+                    <td>30</td>
+                </tr>
+                <tr>
+                    <td>$10^3 \times [R] / \text{mol L}^{-1}$</td>
+                    <td>160</td>
+                    <td>80</td>
+                    <td>40</td>
+                    <td>10</td>
+                    <td>2.5</td>
+                </tr>
+            </table>
+        </div>
+        <div class="answer-block">
+            <p>We can determine the average rate for each interval using $r_{av} = -\frac{[R_2] - [R_1]}{t_2 - t_1}$.</p>
+            <table>
+                <tr><th>Interval (s)</th><th>$[R_1]$ (M)</th><th>$[R_2]$ (M)</th><th>$t_1$ (s)</th><th>$t_2$ (s)</th><th>$r_{av} \times 10^3$ (M s⁻¹)</th></tr>
+                <tr><td>0 - 5</td><td>0.160</td><td>0.080</td><td>0</td><td>5</td><td>$-\frac{(0.080-0.160)}{5-0} = 16$</td></tr>
+                <tr><td>5 - 10</td><td>0.080</td><td>0.040</td><td>5</td><td>10</td><td>$-\frac{(0.040-0.080)}{10-5} = 8$</td></tr>
+                <tr><td>10 - 20</td><td>0.040</td><td>0.010</td><td>10</td><td>20</td><td>$-\frac{(0.010-0.040)}{20-10} = 3$</td></tr>
+                <tr><td>20 - 30</td><td>0.010</td><td>0.0025</td><td>20</td><td>30</td><td>$-\frac{(0.0025-0.010)}{30-20} = 0.75$</td></tr>
+            </table>
+        </div>
+
+        <h3 id="factors-affecting-rate">2. Factors affecting rate of chemical reaction:</h3>
+        <ol>
+            <li>Concentration</li>
+            <li>Temperature</li>
+            <li>Nature of reactants and products</li>
+            <li>Catalyst</li>
+            <li>pH of the solution</li>
+            <li>Dielectric constant of the medium</li>
+            <li>Radiations/light</li>
+            <li>Pressure</li>
+            <li>Electrical and magnetic field</li>
+        </ol>
+        <p>The first four factors generally affect the rate of almost all reactions while other factors are specific to some reactions only.</p>
+        <p><strong>Effect of concentration:</strong> We know from the law of mass action that Rate is proportional to the concentration of reactants. "So, the rate of reaction decreases with the passage of time, since the concentration of reactants decreases."</p>
+
+<div class="svg-diagram">
+    <svg viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg">
+        <title>Improved Graph of Rate vs. Time</title>
+        <defs>
+            <marker id="arrowhead-rate" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--text-main)" />
+            </marker>
+        </defs>
+        <style>
+            .axis { stroke: black; stroke-width: 1.5; marker-end: url(#arrowhead-rate); }
+            .grid-line { stroke: black; stroke-width: 0.7; stroke-dasharray: 2 3; }
+            
+            .label, .annotation {
+                font-family: var(--font-sans), sans-serif;
+                font-size: 5px;
+                fill: black;
+                text-anchor: middle;
+            }
+            .annotation { text-anchor: start; font-size: 5px; }
+            .sub { font-size: 75%; baseline-shift: sub; }
+            
+            .rate-curve { stroke: hotpink; stroke-width: 2.5; fill: none; }
+            .initial-rate-point { fill: black; stroke: black; stroke-width: 1; }
+            .helper-line { stroke: black; stroke-width: 1; stroke-dasharray: 3 3; }
+        </style>
+
+        <!-- === Axes and Grid === -->
+        <g id="axes-and-grid">
+            <path class="grid-line" d="M 50 60 H 280 M 50 90 H 280 M 50 120 H 280 M 50 150 H 280" />
+            <line class="axis" x1="40" y1="170" x2="290" y2="170" />
+            <text class="label" x="165" y="185">Time (t)</text>
+            <line class="axis" x1="50" y1="180" x2="50" y2="20" />
+            <text class="label" x="20" y="100" transform="rotate(-90 20 100)">Reaction Rate</text>
+        </g>
+
+        <!-- === Rate Curve and Key Features === -->
+        <g id="rate-curve-group">
+            <path class="rate-curve" d="M 50 40 C 90 60, 150 120, 280 165" />
+            
+            <!-- Initial Rate -->
+            <circle class="initial-rate-point" cx="50" cy="40" r="4" />
+            <line class="helper-line" x1="50" y1="40" x2="100" y2="40" />
+            <text class="label" x="125" y="44" text-anchor="start" style="font-weight: bold;">
+                Initial Rate (r<tspan class="sub">0</tspan>)
+            </text>
+            <text class="label" x="125" y="58" text-anchor="start">
+                (Maximum rate at t=0)
+            </text>
+
+            <!-- Annotation -->
+            <text class="annotation" x="80" y="110">
+                <tspan x="80" dy="1.2em">Rate decreases as reactants</tspan>
+                <tspan x="80" dy="1.2em">are consumed, lowering their</tspan>
+                <tspan x="80" dy="1.2em">concentration.</tspan>
+            </text>
+        </g>
+    </svg>
+</div>
+
+        <p><strong>Effect of temperature:</strong> Most of the chemical reactions are accelerated by increases in T. This will be discussed in detail further.</p>
+        <p><strong>Effect of nature of reactants and Products:</strong></p>
+        <ul>
+            <li><strong>(a) Physical state of reactants:</strong> Gaseous state > Liquid state > Solid state. This is the decreasing order of rate of reaction because collisions in a homogeneous system are more effective than in a heterogeneous system.</li>
+            <li><strong>(b) Physical size of reactants:</strong> As we decrease the particle size, the rate of reaction increases since the surface area increases.</li>
+            <li><strong>(c) Chemical nature of reactants:</strong> If more bonds are to be broken, the rate of reaction will be slow. Similarly, if bond strength is more, the rate of reaction will be slow.</li>
+        </ul>
+        <p><strong>Effect of Catalyst:</strong></p>
+        <ul>
+            <li>Presence of a <strong>positive catalyst</strong> lowers the activation energy, hence increasing the rate of reaction.</li>
+            <li>Presence of a <strong>negative catalyst (inhibitor)</strong> increases the activation energy, hence decreasing the rate of reaction.</li>
+        </ul>
+        <p><strong>Effect of pH of solution:</strong> Few reactions take place only in a particular medium. E.g., $\ce{Fe(CN)6^{4-} + Tl^{3+} -> [Fe(CN)6]^{3-}}$. This reaction takes place with an appreciable rate in acidic medium, but does not take place in basic medium.</p>
+        <p><strong>Effect of dielectric constant of the medium:</strong> The greater the dielectric constant of the medium, the greater will be the rate of ionic reactions.</p>
+        <p><strong>Effect of radiations/light:</strong> Radiation is useful for photochemical reactions.</p>
+        <p><strong>Effect of pressure:</strong> Pressure is an important factor for gaseous reactions.</p>
+        <p><strong>Effect of electrical & Magnetic field:</strong> Electric and magnetic fields are rate-determining factors if a reaction involves polar species.</p>
+
+        <h3 id="rate-law">3. Rate Law (Dependence of rate on concentration of reactants):</h3>
+        <p>The representation of the rate of reaction in terms of the concentration of the reactants is called the <strong>rate law</strong>. It can only be established by experiments.</p>
+        <p>Generally, rate law expressions are not simple and these may differ for the same reaction on conditions under which the reaction is being carried out. But for a large number of reactions starting with pure reactants, we can obtain simple rate laws. For these reactions:</p>
+        <p>$$ \text{Rate} \propto (\text{conc.})^{\text{order}} $$</p>
+        <p>$$ \text{Rate} = k (\text{conc.})^{\text{order}} $$</p>
+        <p>This is the differential rate equation or rate expression/Rate law.</p>
+        <ul>
+            <li>Where <strong>k = Rate constant = specific reaction rate</strong> = rate of reaction when concentration is unity.</li>
+            <li>unit of k = (conc)$^{1-\text{order}}$ time$^{-1}$</li>
+            <li>k depends on temperature only and not on concentration.</li>
+            <li><strong>Note:</strong> The value of k is a constant for a given reaction, and depends only on temperature.</li>
+        </ul>
+
+        <h4>Order of reaction:</h4>
+        <p>Let there be a reaction, $m_1A + m_2B \rightarrow \text{products}$.<br>
+        Now, if on the basis of experiment, we find that</p>
+        <p>$$ \text{Rate} \propto [A]^p [B]^q $$</p>
+        <p>where, p may or may not be equal to $m_1$ and similarly q may or may not be equal to $m_2$.</p>
+        <ul>
+            <li>p is the <strong>order of reaction with respect to reactant A</strong>.</li>
+            <li>q is the <strong>order of reaction with respect to reactant B</strong>.</li>
+            <li>(p + q) is the <strong>overall order of the reaction</strong>.</li>
+        </ul>
+        <p><strong>Note:</strong> Order of a reaction can be 'zero' or any whole number, it can be a fractional number and it can even be negative with respect to a particular reactant. But the overall order is not found to be negative for any reaction till observed.</p>
+        
+        <h5>Examples showing different values of order of reactions:</h5>
+        <table>
+            <thead>
+                <tr>
+                    <th>Reaction</th>
+                    <th>Rate law</th>
+                    <th>Order</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>(i) $\ce{2N2O5(g) -> 4NO2(g) + O2(g)}$</td>
+                    <td>$R = k[\ce{N2O5}]^1$</td>
+                    <td>1</td>
+                </tr>
+                <tr>
+                    <td>(ii) $\ce{5Br^-(aq) + BrO3^-(aq) + 6H^+(aq) -> 3Br2(l) + 3H2O(l)}$</td>
+                    <td>$R = k[\ce{Br^-}][\ce{BrO3^-}][\ce{H+}]^2$</td>
+                    <td>1 + 1 + 2 = 4</td>
+                </tr>
+                <tr>
+                    <td>(iii) $\ce{H2(para) -> H2(ortho)}$</td>
+                    <td>$R = k[\ce{H2(para)}]^{3/2}$</td>
+                    <td>3/2</td>
+                </tr>
+                <tr>
+                    <td>(iv) $\ce{NO2(g) + CO(g) -> NO(g) + CO2(g)}$</td>
+                    <td>$R = k[\ce{NO2}]^2[\ce{CO}]^0$</td>
+                    <td>2 + 0 = 2</td>
+                </tr>
+                <tr>
+                    <td>(v) $\ce{2O3(g) -> 3O2(g)}$</td>
+                    <td>$R = k[\ce{O3}]^2[\ce{O2}]^{-1}$</td>
+                    <td>2 - 1 = 1</td>
+                </tr>
+                <tr>
+                    <td>(vi) $\ce{H2 + Cl2 ->[hv] 2HCl}$</td>
+                    <td>$R = k[\ce{H2}]^0[\ce{Cl2}]^0$</td>
+                    <td>0 + 0 = 0</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>The reaction (ii) does not take place in one single step. It is almost impossible for all the 12 molecules of the reactants to be in a state of encounter simultaneously. Such a reaction is called a <strong>complex reaction</strong> and takes place in a sequence of a number of <strong>elementary reactions</strong>. For an elementary reaction the sum of stoichiometric coefficients = order of the reactions. But for complex reactions, order is to be experimentally calculated.</p>
+
+        <h4>Molecularity:</h4>
+        <p>The number of molecules that react in an <strong>elementary step</strong> is the molecularity of the elementary reaction. Molecularity is defined only for elementary reactions and not for complex reactions. No elementary reactions involving more than three molecules are known, because of the very low probability of near-simultaneous collision of more than three molecules.</p>
+        <p>The rate law for the elementary reaction $\ce{aA + bB -> products}$ is $\text{rate} = k[A]^a[B]^b$, where $a+b = 1, 2, \text{or } 3$.</p>
+        <p>For an elementary reaction, the orders in the rate law equal the coefficients of the reactants. While the order is defined for complex as well as elementary reactions and is always experimentally calculated by the mechanism of the reaction, usually by the slowest step of the mechanism known as the <strong>rate-determining step (RDS)</strong> of the reaction.</p>
+        
+        <h5>Comparison B/W Molecularity and order of reaction</h5>
+        <table>
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Molecularity of Reaction</th>
+                    <th>Order of Reaction</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1.</td>
+                    <td>It is defined as the number of molecules of reactant taking part in a chemical reaction. E.g., $\ce{NH4NO2 -> N2 + 2H2O}$, m = 1</td>
+                    <td>It is defined as the sum of the power of concentration terms that appear in the rate law. $\ce{NH4NO2 -> N2 + 2H2O}$. Rate = k[$\ce{NH4NO2}$]</td>
+                </tr>
+                <tr>
+                    <td>2.</td>
+                    <td>It is always a whole number; it can neither be zero nor fractional.</td>
+                    <td>It may be zero, fractional, or integer.</td>
+                </tr>
+                <tr>
+                    <td>3.</td>
+                    <td>It is derived from the RDS in the mechanism of reaction.</td>
+                    <td>It is derived from the rate expression.</td>
+                </tr>
+                <tr>
+                    <td>4.</td>
+                    <td>It is a theoretical value.</td>
+                    <td>It is an experimental value.</td>
+                </tr>
+                <tr>
+                    <td>5.</td>
+                    <td>Reactions with molecularity > 3 are rare. (not > 4 as in image)</td>
+                    <td>Reactions with order of reaction > 4 are also rare.</td>
+                </tr>
+                <tr>
+                    <td>6.</td>
+                    <td>Molecularity is independent of pressure and temperature.</td>
+                    <td>Order of reaction depends upon pressure and temperature.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="question-block">
+            <h5>Example 3:</h5>
+            <p>Write the units of the rate constants for (i) Zeroth order, (ii) half order, (iii) first order, (iv) 3/2 order, (v) second order reactions.</p>
+        </div>
+        <div class="answer-block">
+            <p>Unit of Rate Constant = (Mole)$^{1-n}$ (Litre)$^{n-1}$ Sec⁻¹, where n is the order of the reaction.</p>
+            <p>(i) For Zeroth order (n=0): Mole$^{1-0}$ Litre$^{0-1}$ Sec⁻¹ = Mole Litre⁻¹ Sec⁻¹</p>
+            <p>(ii) For half order (n=1/2): Mole$^{1-1/2}$ Litre$^{1/2-1}$ Sec⁻¹ = Mole$^{1/2}$ Litre$^{-1/2}$ Sec⁻¹</p>
+            <p>(iii) For first order (n=1): Mole$^{1-1}$ Litre$^{1-1}$ Sec⁻¹ = Sec⁻¹</p>
+            <p>(iv) For 3/2 order (n=3/2): Mole$^{1-3/2}$ Litre$^{3/2-1}$ Sec⁻¹ = Mole$^{-1/2}$ Litre$^{1/2}$ Sec⁻¹</p>
+            <p>(v) For second order (n=2): Mole$^{1-2}$ Litre$^{2-1}$ Sec⁻¹ = Mole⁻¹ Litre Sec⁻¹</p>
+        </div>
+
+        <div class="question-block">
+            <h5>Example 4:</h5>
+            <p>The reaction $\ce{CO(g) + NO2(g) -> CO2 + NO}$ is second order in $\ce{NO2}$ and zero order in $\ce{CO}$ at temperatures less than 500K.</p>
+            <p>(a) Write the rate expression for the reaction.</p>
+            <p>(b) How will the reaction rate change if the $\ce{NO2}$ concentration is halved?</p>
+        </div>
+        <div class="answer-block">
+            <p>(a) Rate = $k[\ce{NO2}]^2[\ce{CO}]^0 = k[\ce{NO2}]^2$. The rate expression is $-\frac{d[CO]}{dt} = -\frac{d[NO_2]}{dt} = k[NO_2]^2$.</p>
+            <p>(b) Let the initial rate be $R_1 = k[\ce{NO2}]^2$. If the concentration of $\ce{NO2}$ is halved, the new concentration is $[\ce{NO2}]/2$. The new rate is $R_2 = k ([\ce{NO2}]/2)^2 = k \frac{[\ce{NO2}]^2}{4} = \frac{R_1}{4}$. The rate becomes one-fourth.</p>
+        </div>
+
+        <div class="question-block">
+            <h5>Example 5:</h5>
+            <p>In a catalytic experiment involving the Haber's process, $\ce{N2 + 3H2 -> 2NH3}$, the rate of reaction was measured as rate = $2 \times 10^{-4}$ M s⁻¹. If there were no side reactions, express the rate of reaction in terms of (a) $\ce{N2}$ (b) $\ce{H2}$?</p>
+        </div>
+        <div class="answer-block">
+            <p>The rate of reaction is given by: Rate = $-\frac{d[\ce{N2}]}{dt} = -\frac{1}{3}\frac{d[\ce{H2}]}{dt} = +\frac{1}{2}\frac{d[\ce{NH3}]}{dt} = 2 \times 10^{-4}$ M s⁻¹.</p>
+            <p>(a) The rate of reaction in terms of $\ce{N2}$ is the rate of disappearance of $\ce{N2}$: $-\frac{d[\ce{N2}]}{dt} = \text{Rate} = 2 \times 10^{-4}$ M s⁻¹.</p>
+            <p>(b) The rate of reaction in terms of $\ce{H2}$ is the rate of disappearance of $\ce{H2}$: $-\frac{d[\ce{H2}]}{dt} = 3 \times \text{Rate} = 3 \times (2 \times 10^{-4}) = 6 \times 10^{-4}$ M s⁻¹.</p>
+        </div>
+
+        <div class="question-block">
+            <h5>Example 6:</h5>
+            <p>For a reaction $\ce{A + 3B -> Product}$, Rate = $\{–d[A]/dt\} = k[A]^2[B]$, the expression for the rate of reaction in terms of change in the concentration of B, $\{–d[B]/dt\}$, will be:</p>
+            <p>(A) $k[A]^2[B]$ (B) $k[A]^2[3B]$ (C) $3k[A]^2[B]$ (D) $(1/3)k[A]^2[B]$</p>
+        </div>
+        <div class="answer-block">
+            <p>From the stoichiometry, the rate of reaction can be expressed as: Rate = $-\frac{d[A]}{dt} = -\frac{1}{3}\frac{d[B]}{dt}$.</p>
+            <p>We are given that Rate = $\{–d[A]/dt\} = k[A]^2[B]$.</p>
+            <p>Therefore, $-\frac{1}{3}\frac{d[B]}{dt} = k[A]^2[B]$.</p>
+            <p>Multiplying by 3, we get the rate of change of B: $-\frac{d[B]}{dt} = 3k[A]^2[B]$.</p>
+            <p>So the correct answer is (C).</p>
+        </div>
+
+        <div class="question-block">
+            <h5>Example 7:</h5>
+            <p>The rate of a certain reaction depends on concentration according to the equation: $-\frac{dC}{dt} = \frac{K_1 C}{1 + K_2 C}$. What will be the order of reaction, when concentration (C) is: (a) very-very high, (b) very-very low.</p>
+        </div>
+        <div class="answer-block">
+            <p>(a) When C is very-very high, $K_2 C \gg 1$. So, $1 + K_2 C \approx K_2 C$.</p>
+            <p>The rate equation becomes: $-\frac{dC}{dt} = \frac{K_1 C}{K_2 C} = \frac{K_1}{K_2} = \text{constant}$.</p>
+            <p>This is a <strong>zero order reaction</strong>.</p>
+            <p>(b) When C is very-very low, $K_2 C \ll 1$. So, $1 + K_2 C \approx 1$.</p>
+            <p>The rate equation becomes: $-\frac{dC}{dt} = \frac{K_1 C}{1} = K_1 C$.</p>
+            <p>This is a <strong>first order reaction</strong>.</p>
+        </div>
+
+        <h3 id="integrated-rate-laws">4. Integrated rate laws:</h3>
+        <h4>Zero order reactions:</h4>
+        <p>For a zero order reaction $\ce{A -> Products}$</p>
+        <p>The general rate law is, Rate = $k[\text{conc.}]^0 = k = \text{constant}$.</p>
+        <p>So, $-\frac{d[A]}{dt} = k \implies d[A] = -k dt$.</p>
+        <p>If $C_0$ is the initial concentration of a reactant and $C_t$ is the concentration at time 't', then integrating gives:</p>
+        <p>$$ [A]_t - [A]_0 = -kt \implies [A]_t = [A]_0 - kt $$</p>
+        <p>or in terms of $C_t$ and $C_0$: $C_t = C_0 - kt$.</p>
+        <p>The unit of k is the same as that of Rate = mol lit⁻¹ sec⁻¹.</p>
+        <p>Time for completion ($C_t = 0$): $t_{completion} = \frac{C_0}{k}$.</p>
+
+<div class="svg-diagram">
+    <svg viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg">
+        <title>Improved Graph for a Zero-Order Reaction</title>
+        <defs>
+            <marker id="arrowhead-zero-order" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--text-main)" />
+            </marker>
+        </defs>
+        <style>
+            .axis { stroke: black; stroke-width: 1.5; marker-end: url(#arrowhead-zero-order); }
+            .grid-line { stroke: black; stroke-width: 0.7; stroke-dasharray: 2 3; }
+            
+            .label, .equation {
+                font-family: var(--font-sans), sans-serif;
+                font-size: 5px;
+                fill: var(--text-main);
+                text-anchor: middle;
+            }
+            .equation { font-size: 5.5px; }
+            .sub { font-size: 75%; baseline-shift: sub; }
+            
+            .zero-order-line { stroke: hotpink; stroke-width: 2.5; fill: none; }
+            .intercept-point { fill: hotpink; }
+            .slope-triangle { fill: rgb(116, 116, 24); fill-opacity: 0.2; stroke: var(--accent-secondary); stroke-width: 1; stroke-dasharray: 3 3; }
+        </style>
+
+        <!-- === Axes and Grid === -->
+        <g id="axes-and-grid">
+            <path class="grid-line" d="M 50 70 H 280 M 50 100 H 280 M 50 130 H 280" />
+            <line class="axis" x1="40" y1="170" x2="290" y2="170" />
+            <text class="label" x="165" y="185">Time (t)</text>
+            <line class="axis" x1="50" y1="180" x2="50" y2="20" />
+            <text class="label" x="20" y="100" transform="rotate(-90 20 100)">Concentration [R]</text>
+        </g>
+
+        <!-- === Plot and Annotations === -->
+        <g id="plot-and-labels">
+            <!-- Straight line plot -->
+            <line class="zero-order-line" x1="50" y1="40" x2="270" y2="160" />
+
+            <!-- Slope Triangle to illustrate rise/run -->
+            <polygon class="slope-triangle" points="50,40 270,160 50,160" />
+            <text class="label" x="15" y="100" style="font-style: italic;">
+                Rise = Δ[R]
+            </text>
+            <text class="label" x="160" y="175" style="font-style: italic;">
+                Run = Δt
+            </text>
+
+            <!-- Y-intercept Label -->
+            <circle class="intercept-point" cx="50" cy="40" r="3" />
+            <text class="label" x="65" y="35" text-anchor="start">
+                [R]<tspan class="sub">0</tspan>
+            </text>
+            
+            <!-- Equations -->
+            <g text-anchor="middle">
+                <text class="equation" x="160" y="30">
+                    Integrated Rate Law: [R]<tspan class="sub">t</tspan> = -kt + [R]<tspan class="sub">0</tspan>
+                </text>
+                <text class="label" x="160" y="45" style="font-family: monospace;">
+                    ( y = mx + c )
+                </text>
+                <text class="equation" x="160" y="90">
+                    Slope = <tspan dx="-2" dy="0">Δ[R] / Δt</tspan> = -k
+                </text>
+            </g>
+        </g>
+    </svg>
+</div>
+
+        <p><strong>$t_{1/2}$ (Half-life period):</strong> The time taken for the concentration to become half of its initial value.</p>
+        <p>At $t_{1/2}$, $C_t = \frac{C_0}{2}$.</p>
+        <p>$\frac{C_0}{2} = C_0 - kt_{1/2} \implies kt_{1/2} = C_0 - \frac{C_0}{2} = \frac{C_0}{2}$.</p>
+        <p>$$ t_{1/2} = \frac{C_0}{2k} $$</p>
+        <p>So, for a zero-order reaction, $t_{1/2} \propto C_0$.</p>
+        <h5>Examples of zero order reactions:</h5>
+        <p>Generally, decomposition of gases on metal surfaces at high concentrations follows zero order kinetics.</p>
+        <ul>
+            <li>$\ce{2PH3(g) ->[Ni] 2P + 3H2}$; Rate = $k[\ce{PH3}]^0$</li>
+            <li>$\ce{2HI(g) ->[Au] H2 + I2}$</li>
+            <li>$\ce{2NH3(g) ->[Pt] N2 + 3H2}$</li>
+            <li>$\ce{H2 + Cl2 ->[hv] 2HCl}$; Rate = $k[\ce{H2}]^0[\ce{Cl2}]^0$</li>
+        </ul>
+
+        <h4>First Order Reactions:</h4>
+        <p>Let a 1st order reaction be $\ce{A -> Products}$.</p>
+        <p>Initial concentration (t=0): $a$. Concentration at time t: $(a-x)$.</p>
+        <p>Rate = $-\frac{d[A]}{dt} = k[A]^1 \implies -\frac{d(a-x)}{dt} = k(a-x) \implies \frac{dx}{dt} = k(a-x)$.</p>
+        <p>Separating variables and integrating:</p>
+        <p>$\int \frac{dx}{a-x} = \int k dt \implies -\ln(a-x) = kt + C$.</p>
+        <p>At t=0, x=0, so $C = -\ln(a)$.</p>
+        <p>$-\ln(a-x) = kt - \ln(a) \implies \ln(a) - \ln(a-x) = kt \implies \ln\left(\frac{a}{a-x}\right) = kt$.</p>
+        <p>In terms of initial concentration $C_0$ and concentration at time t, $C_t$:</p>
+        <p>$$ k = \frac{1}{t}\ln\left(\frac{C_0}{C_t}\right) \quad \text{or} \quad k = \frac{2.303}{t}\log\left(\frac{C_0}{C_t}\right) $$</p>
+        <p>This is sometimes called the <strong>Wilhelmy formula</strong>. Another form is the exponential decay form: $C_t = C_0 e^{-kt}$.</p>
+        <p><strong>Half-life time ($t_{1/2}$):</strong></p>
+        <p>At $t_{1/2}$, $C_t = \frac{C_0}{2}$.</p>
+        <p>$k = \frac{2.303}{t_{1/2}}\log\left(\frac{C_0}{C_0/2}\right) = \frac{2.303}{t_{1/2}}\log(2)$.</p>
+        <p>$$ t_{1/2} = \frac{2.303 \log(2)}{k} = \frac{\ln(2)}{k} = \frac{0.693}{k} $$</p>
+        <p>The half-life period for a 1st order reaction is a constant, independent of the initial concentration.</p>
+        
+        <h5>Graphical Representation:</h5>
+
+<div class="svg-diagram">
+    <svg viewBox="0 0 420 220" xmlns="http://www.w3.org/2000/svg">
+        <title>Improved Graphs for a First-Order Reaction</title>
+        <defs>
+            <marker id="arrowhead-first-order" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--text-main)" />
+            </marker>
+        </defs>
+        <style>
+            .axis { stroke: black; stroke-width: 1.5; marker-end: url(#arrowhead-first-order); }
+            .grid-line { stroke: black; stroke-width: 0.7; stroke-dasharray: 2 3; }
+            
+            .label, .equation, .title {
+                font-family: var(--font-sans), sans-serif;
+                font-size: 5px;
+                fill: black;
+                text-anchor: middle;
+            }
+            .title { font-size: 6px; font-weight: bold; }
+            .equation { font-size: 5.5px; }
+            .sub { font-size: 75%; baseline-shift: sub; }
+            
+            .plot-line { stroke: hotpink; stroke-width: 2.5; fill: none; }
+            .intercept-point { fill: hotpink; }
+            .slope-triangle { fill: rgb(122, 122, 40); fill-opacity: 0.2; stroke: rgb(122, 122, 40); stroke-width: 1; stroke-dasharray: 3 3; }
+        </style>
+
+        <!-- === Left Graph: log[R] vs. Time === -->
+        <g id="graph-logR-vs-t">
+            <text class="title" x="110" y="20">Plot of log[R] vs. Time</text>
+            <!-- Axes and Grid -->
+            <line class="axis" x1="20" y1="190" x2="200" y2="190" />
+            <text class="label" x="110" y="205">Time (t)</text>
+            <line class="axis" x1="30" y1="200" x2="30" y2="40" />
+            <text class="label" x="10" y="120" transform="rotate(-90 10 120)">log[R]</text>
+            <!-- Plot and Annotations -->
+            <line class="plot-line" x1="30" y1="60" x2="190" y2="180" />
+            <polygon class="slope-triangle" points="30,60 190,180 30,180" />
+            <circle class="intercept-point" cx="30" cy="60" r="3" />
+            <text class="label" x="45" y="55" text-anchor="start">log[R]<tspan class="sub">0</tspan></text>
+            
+            <text class="equation" x="110" y="110">Slope = -k / 2.303</text>
+            <text class="equation" x="110" y="45" text-anchor="middle">
+                log[R]<tspan class="sub">t</tspan> = (-k/2.303)t + log[R]<tspan class="sub">0</tspan>
+            </text>
+        </g>
+
+        <!-- === Right Graph: Time vs. log([R]₀/[R]) === -->
+        <g id="graph-t-vs-logRatio">
+            <text class="title" x="315" y="20">Plot of Time vs. log([R]₀/[R])</text>
+            <!-- Axes and Grid -->
+            <line class="axis" x1="225" y1="190" x2="405" y2="190" />
+            <text class="label" x="315" y="205">log([R]<tspan class="sub">0</tspan>/[R]<tspan class="sub">t</tspan>)</text>
+            <line class="axis" x1="235" y1="200" x2="235" y2="40" />
+            <text class="label" x="215" y="120" transform="rotate(-90 215 120)">Time (t)</text>
+            <!-- Plot and Annotations -->
+            <line class="plot-line" x1="235" y1="190" x2="395" y2="70" />
+            <polygon class="slope-triangle" points="235,190 395,70 395,190" />
+            <circle class="intercept-point" cx="235" cy="190" r="3" />
+            
+            <text class="equation" x="315" y="120">Slope = 2.303 / k</text>
+            <text class="equation" x="315" y="45" text-anchor="middle">
+                t = (2.303/k) log([R]<tspan class="sub">0</tspan>/[R]<tspan class="sub">t</tspan>)
+            </text>
+        </g>
+    </svg>
+</div>
+
+        <h5>Examples of 1st order reactions:</h5>
+        <ol>
+            <li>Decomposition of azoisopropane: $\ce{(CH3)2CHN=NCH(CH3)2(g) -> N2(g) + C6H14(g)}$</li>
+            <li>Conversion of N-chloro acetanilide into p-chloroacetanilide.</li>
+            <li>$\ce{H2O2 -> H2O + 1/2 O2(g)}$</li>
+            <li>$\ce{NH4NO2 -> 2H2O + N2(g)}$</li>
+            <li><strong>Radioactive decay:</strong> All radioactive decays are always first order kinetics. E.g., $\ce{^226_88Ra -> ^222_86Rn + ^4_2He}$</li>
+        </ol>
+
+        <h4>Second order reaction:</h4>
+        <p>Case 1: $\ce{2A -> Products}$. Rate = $k[A]^2$.</p>
+        <p>Integrated rate law: $$ \frac{1}{[A]_t} = kt + \frac{1}{[A]_0} $$</p>
+        <p>Half-life: $$ t_{1/2} = \frac{1}{k[A]_0} $$</p>
+        <p>Case 2: $\ce{A + B -> Products}$. Rate = $k[A][B]$.</p>
+        <p>Integrated rate law (if $[A]_0 \neq [B]_0$): $$ k t = \frac{1}{([A]_0 - [B]_0)} \ln \frac{[B]_0[A]_t}{[A]_0[B]_t} $$</p>
+        
+        <h4>Pseudo first order reaction:</h4>
+        <p>A second order (or higher order) reaction can be converted into a first order reaction if one of the reactants is taken in large excess. Such first order reactions are known as pseudo first order reactions. Example: Hydrolysis of an ester.</p>
+        <p>$\ce{CH3COOCH3 + H2O ->[H+] CH3COOH + CH3OH}$</p>
+        <p>Rate = $k[\ce{CH3COOCH3}][\ce{H2O}]$. If water is the solvent (large excess), its concentration remains nearly constant. So, Rate = $k'[\ce{CH3COOCH3}]$, where $k' = k[\ce{H2O}]$. The reaction behaves as first order.</p>
+
+        <div class="question-block">
+            <h5>Summary Table: Characteristics of Reactions of the Type $\ce{A -> Products}$</h5>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Zero Order</th>
+                    <th>First Order</th>
+                    <th>Second Order</th>
+                    <th>n<sup>th</sup> Order (n≠1)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Differential Rate Law</strong></td>
+                    <td>$-\frac{d[A]}{dt} = k$</td>
+                    <td>$-\frac{d[A]}{dt} = k[A]$</td>
+                    <td>$-\frac{d[A]}{dt} = k[A]^2$</td>
+                    <td>$-\frac{d[A]}{dt} = k[A]^n$</td>
+                </tr>
+                <tr>
+                    <td><strong>Integrated Rate Law</strong></td>
+                    <td>$[A]_t = [A]_0 - kt$</td>
+                    <td>$\ln[A]_t = -kt + \ln[A]_0$</td>
+                    <td>$\frac{1}{[A]_t} = kt + \frac{1}{[A]_0}$</td>
+                    <td>$\frac{1}{[A]_t^{n-1}} = (n-1)kt + \frac{1}{[A]_0^{n-1}}$</td>
+                </tr>
+                <tr>
+                    <td><strong>Linear graph</strong></td>
+                    <td>$[A]_t$ vs t</td>
+                    <td>$\ln[A]_t$ vs t</td>
+                    <td>$\frac{1}{[A]_t}$ vs t</td>
+                    <td>$\frac{1}{[A]_t^{n-1}}$ vs t</td>
+                </tr>
+                <tr>
+                    <td><strong>Half-life ($t_{1/2}$)</strong></td>
+                    <td>$\frac{[A]_0}{2k}$</td>
+                    <td>$\frac{0.693}{k}$</td>
+                    <td>$\frac{1}{k[A]_0}$</td>
+                    <td>$t_{1/2} \propto \frac{1}{[A]_0^{n-1}}$</td>
+                </tr>
+                <tr>
+                    <td><strong>Unit of k</strong></td>
+                    <td>mol L⁻¹ s⁻¹</td>
+                    <td>s⁻¹</td>
+                    <td>L mol⁻¹ s⁻¹</td>
+                    <td>(conc)$^{1-n}$ s⁻¹</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 id="arrhenius-equation-and-temperature-dependence">Arrhenius Equation and Temperature Dependence</h3>
+        <p>The rate of most chemical reactions increases with temperature. The relationship between the rate constant (k), temperature (T), and activation energy ($E_a$) is given by the <strong>Arrhenius equation</strong>.</p>
+        <p>$$ k = A e^{-E_a/RT} $$</p>
+        <ul>
+            <li><strong>k:</strong> Rate constant</li>
+            <li><strong>A:</strong> Pre-exponential factor or frequency factor. It relates to the frequency of collisions and the orientation factor.</li>
+            <li><strong>$E_a$:</strong> Activation energy. The minimum energy that colliding molecules must possess for a reaction to occur.</li>
+            <li><strong>R:</strong> Ideal gas constant (8.314 J K⁻¹ mol⁻¹)</li>
+            <li><strong>T:</strong> Absolute temperature (in Kelvin)</li>
+        </ul>
+        <p>The term $e^{-E_a/RT}$ represents the fraction of molecules that have kinetic energy equal to or greater than the activation energy.</p>
+        <p><strong>Activation Energy ($E_a$):</strong> It is the energy barrier that must be overcome for reactants to be converted into products. A catalyst provides an alternative reaction pathway with a lower activation energy, thus increasing the reaction rate.</p>
+        <div class="svg-diagram">
+            <svg viewBox="0 0 250 150" xmlns="http://www.w3.org/2000/svg">
+                <title>Activation Energy Profile</title>
+                <style>
+                    .axis { stroke: black; stroke-width: 1; marker-end: url(#arrowhead); }
+                    .curve-uncatalyzed { stroke: hotpink; stroke-width: 1.5; fill: none; }
+                    .curve-catalyzed { stroke: rgb(190, 190, 87); stroke-width: 1.5; fill: none; stroke-dasharray: 4,2; }
+                    .level-line { stroke: black; stroke-width: 0.5; stroke-dasharray: 2,2; }
+                    .text-label { font-family: sans-serif; font-size: 5px; fill: var(--text-main); }
+                </style>
+                <line class="axis" x1="20" y1="130" x2="240" y2="130"/>
+                <text class="text-label" x="130" y="140" text-anchor="middle">Reaction Progress</text>
+                <line class="axis" x1="30" y1="140" x2="30" y2="10"/>
+                <text class="text-label" x="15" y="75" transform="rotate(-90 15 75)">Potential Energy</text>
+                
+                <line class="level-line" x1="30" y1="110" x2="60" y2="110"/>
+                <text class="text-label" x="45" y="105" text-anchor="middle">Reactants</text>
+                <line class="level-line" x1="190" y1="90" x2="230" y2="90"/>
+                <text class="text-label" x="210" y="85" text-anchor="middle">Products</text>
+                <text class="text-label" x="150" y="105" text-anchor="middle">$\Delta H$</text>
+
+                <path class="curve-uncatalyzed" d="M 60 110 Q 125 20, 190 90"/>
+                <path class="curve-catalyzed" d="M 60 110 Q 125 50, 190 90"/>
+                
+                <path d="M125 110 L 125 25" class="level-line"/>
+                <path d="M125 110 L 125 55" class="level-line"/>
+                <text class="text-label" x="100" y="60">$E_a$ (uncatalyzed)</text>
+                <text class="text-label" x="150" y="75">$E_a'$ (catalyzed)</text>
+            </svg>
+        </div>
+        
+        <h4>Logarithmic Form of Arrhenius Equation</h4>
+        <p>Taking the natural logarithm of both sides:</p>
+        <p>$$ \ln k = \ln A - \frac{E_a}{RT} $$</p>
+        <p>This equation is in the form of a straight line ($y = c + mx$). A plot of $\ln k$ versus $1/T$ gives a straight line with:</p>
+        <ul>
+            <li>Slope ($m$) = $-\frac{E_a}{R}$</li>
+            <li>y-intercept ($c$) = $\ln A$</li>
+        </ul>
+        <p>To compare rate constants at two different temperatures, $T_1$ and $T_2$:</p>
+        <p>$$ \ln\left(\frac{k_2}{k_1}\right) = \frac{E_a}{R}\left(\frac{1}{T_1} - \frac{1}{T_2}\right) $$</p>
+
+        <h3 id="reaction-mechanism">Reaction Mechanism</h3>
+        <p>Most chemical reactions occur through a series of simple, single-step reactions called <strong>elementary reactions</strong>. The sequence of these elementary reactions that leads from reactants to products is called the <strong>reaction mechanism</strong>.</p>
+        <ul>
+            <li><strong>Elementary Reaction:</strong> A reaction that occurs in a single step. The molecularity of an elementary reaction is the number of reactant molecules colliding. For an elementary reaction, the order of reaction with respect to each reactant is equal to its stoichiometric coefficient.</li>
+            <li><strong>Complex Reaction:</strong> A reaction that occurs in more than one step.</li>
+            <li><strong>Rate-Determining Step (RDS):</strong> In a multi-step reaction, the overall rate is governed by the slowest step in the sequence. This slowest step is the rate-determining step.</li>
+            <li><strong>Reaction Intermediate:</strong> A species that is formed in one step and consumed in a subsequent step. It does not appear in the overall balanced equation.</li>
+        </ul>
+        <h4>Steady-State Approximation</h4>
+        <p>For a complex reaction, if a reaction intermediate is highly reactive, its concentration remains low and nearly constant during the reaction. The steady-state approximation assumes that the rate of formation of the intermediate is equal to its rate of consumption.</p>
+        <p>$$ \frac{d[\text{Intermediate}]}{dt} \approx 0 $$</p>
+        <p>This approximation is used to derive a rate law in terms of reactants and products only, by eliminating the concentration of the intermediate.</p>
+        <hr>
+
+        <h3 id="radioactivity">Radioactivity</h3>
+        <p><strong>Radioactivity</strong> is the spontaneous emission of particles (alpha, beta) or electromagnetic radiation (gamma rays) from the unstable nuclei of certain elements.</p>
+        <h4>Kinetics of Nuclear Disintegration</h4>
+        <p>Radioactive decay is a random process and follows <strong>first-order kinetics</strong>.</p>
+        <p>The rate of decay is proportional to the number of radioactive nuclei (N) present at that time:</p>
+        <p>$$ \text{Rate} = -\frac{dN}{dt} = \lambda N $$</p>
+        <p>where $\lambda$ is the <strong>decay constant</strong>. Integrating this equation gives:</p>
+        <p>$$ N_t = N_0 e^{-\lambda t} $$</p>
+        <p>where $N_0$ is the number of nuclei at t=0 and $N_t$ is the number of nuclei at time t.</p>
+        <p><strong>Half-life ($t_{1/2}$):</strong> The time required for half of the radioactive nuclei to decay.</p>
+        <p>$$ t_{1/2} = \frac{\ln 2}{\lambda} = \frac{0.693}{\lambda} $$</p>
+        <p><strong>Average life ($t_{avg}$):</strong> The average lifetime of a radioactive nucleus.</p>
+        <p>$$ t_{avg} = \frac{1}{\lambda} = \frac{t_{1/2}}{0.693} = 1.44 t_{1/2} $$</p>
+        <p><strong>Activity (A):</strong> The rate of decay, measured in disintegrations per second (dps). 1 dps = 1 Becquerel (Bq). Another common unit is the Curie (Ci), where $1 \text{ Ci} = 3.7 \times 10^{10}$ Bq.</p>
+        <p>Activity is also proportional to the number of nuclei: $A = \lambda N$. Therefore, $A_t = A_0 e^{-\lambda t}$.</p>
+        
+        <h4>Carbon Dating</h4>
+        <p>A method for determining the age of organic materials based on the decay of the radioactive isotope Carbon-14 ($\ce{^14C}$), which has a half-life of approximately 5730 years. The ratio of $\ce{^14C}$ to stable $\ce{^12C}$ in living organisms is constant. After death, the organism stops taking in carbon, and the $\ce{^14C}$ decays, changing the ratio. By measuring the current activity (or ratio), the age of the sample can be calculated using the first-order decay equation.</p>        
+    </main>
+
+    <div id="search-results-overlay">
+        <div id="search-results-box">
+            <div class="search-results-header"><span>Search Results</span><button id="close-search-btn">&times;</button></div>
+            <div id="search-results-list"></div>
+        </div>
+    </div>
+
+    <script>
+        let searchableData = [];
+        const searchInput = document.getElementById('search-input');
+        const searchResultsOverlay = document.getElementById('search-results-overlay');
+        const searchResultsList = document.getElementById('search-results-list');
+        const closeSearchBtn = document.getElementById('close-search-btn');
+
+        document.addEventListener('DOMContentLoaded', () => {
+            fetch('../contents.json')
+                .then(response => response.json())
+                .then(data => { searchableData = data; })
+                .catch(error => console.error('Error loading search data:', error));
+        });
+
+        let debounceTimer;
+        searchInput.addEventListener('keyup', () => {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => { performSearch(searchInput.value); }, 300);
+        });
+
+        document.getElementById('search-form').addEventListener('submit', e => e.preventDefault());
+
+        function closeOverlay() { searchResultsOverlay.style.display = 'none'; }
+        closeSearchBtn.addEventListener('click', closeOverlay);
+        searchResultsOverlay.addEventListener('click', (event) => {
+            if (event.target === searchResultsOverlay) { closeOverlay(); }
+        });
+
+        function performSearch(query) {
+            if (!query || query.trim() === '') { closeOverlay(); return; }
+            const scoredResults = searchableData.map(item => ({ item, score: calculateScore(item, query) }));
+            const finalResults = scoredResults.filter(result => result.score > 0).sort((a, b) => b.score - a.score).map(result => result.item);
+            displayResults(finalResults);
+        }
+
+        function calculateScore(item, query) {
+            let score = 0;
+            const lowerQuery = query.toLowerCase();
+            if (item.title.toLowerCase() === lowerQuery) score += 100;
+            else if (item.title.toLowerCase().startsWith(lowerQuery)) score += 50;
+            else if (item.title.toLowerCase().includes(lowerQuery)) score += 20;
+            if (item.description.toLowerCase().includes(lowerQuery)) score += 10;
+            if (item.author.toLowerCase().includes(lowerQuery)) score += 5;
+            if (item.category.toLowerCase().includes(lowerQuery)) score += 5;
+            return score;
+        }
+
+        function displayResults(results) {
+            searchResultsList.innerHTML = '';
+            if (results.length === 0) {
+                searchResultsList.innerHTML = `<p style="padding: 20px; text-align: center; color: #888;">No results found.</p>`;
+            } else {
+                results.forEach(item => {
+                    const resultElement = document.createElement('a');
+                    // FIX 2: Use absolute path directly for more robust linking.
+                    resultElement.href = item.src; 
+                    resultElement.classList.add('search-result-item');
+                    resultElement.innerHTML = `<h3>${item.title}</h3><p>Category: ${item.category}</p>`;
+                    searchResultsList.appendChild(resultElement);
+                });
+            }
+            searchResultsOverlay.style.display = 'flex';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kinematics - NEURON-IQ</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+      // Configure MathJax
+      window.MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          displayMath: [['$$', '$$'], ['\\[', '\\]']]
+        }
+      };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; background: #eaf6f6; color: #333; }
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 25px 8%; background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .logo { display: flex; align-items: center; gap: 12px; font-size: 24px; font-weight: 700; color: #2c3e50; text-decoration: none; }
+        .logo-icon { width: 40px; height: 40px; }
+        .nav-links ul { list-style: none; display: flex; gap: 40px; }
+        .nav-links a { text-decoration: none; color: #555; font-weight: 500; transition: color 0.3s ease; }
+        .nav-links a:hover { color: #d81b60; }
+        .search-section { padding: 25px 8%; border-bottom: 1px solid #ddd; }
+        .search-container { width: 100%; max-width: 700px; margin: 0 auto; display: flex; background-color: #fff; border-radius: 50px; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.07); overflow: hidden; }
+        .search-input { flex-grow: 1; border: none; outline: none; padding: 15px 25px; font-size: 16px; font-family: 'Poppins', sans-serif; }
+        .search-button { border: none; background-color: #e94057; color: white; padding: 0 25px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .search-button svg { width: 22px; height: 22px; }
+        
+        /* --- Main Content Container (FIX 1: Improved Readability) --- */
+        .content-container {
+            max-width: 80%; 
+            margin: 40px auto;
+            padding: 40px 50px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+            line-height: 1.7;
+        }
+        .content-container h1, .content-container h2, .content-container h3 { margin-bottom: 15px; }
+        .content-container h1 { font-size: 36px; color: #2c3e50; }
+        .content-container h2 { font-size: 24px; color: #333; margin-top: 40px; border-bottom: 2px solid #e94057; padding-bottom: 5px; }
+        .content-container p { margin-bottom: 20px; font-size: 16px; }
+        .content-container a { color: #e94057; text-decoration: none; }
+        .content-container a:hover { text-decoration: underline; }
+
+        /* --- Floating Search Results Overlay (No changes needed) --- */
+        #search-results-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); z-index: 1000; display: none; justify-content: center; align-items: flex-start; padding-top: 10vh; }
+        #search-results-box { background: #fff; width: 100%; max-width: 600px; border-radius: 8px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); position: relative; }
+        .search-results-header { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; border-bottom: 1px solid #eee; }
+        .search-results-header span { font-weight: 600; color: #555; }
+        #close-search-btn { background: none; border: none; font-size: 24px; cursor: pointer; color: #888; line-height: 1; }
+        #search-results-list { max-height: 60vh; overflow-y: auto; }
+        .search-result-item { display: block; text-decoration: none; padding: 15px 20px; border-bottom: 1px solid #f0f0f0; transition: background-color 0.2s ease; }
+        .search-result-item:last-child { border-bottom: none; }
+        .search-result-item:hover { background-color: #f9f9f9; }
+        .search-result-item h3 { font-size: 16px; color: #e94057; margin-bottom: 5px; }
+        .search-result-item p { font-size: 13px; color: #666; margin: 0; }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <a href="../index.html" class="logo">
+            <svg class="logo-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="48" fill="#2c3e50"/><path d="M42 30 Q50 20 58 30 Q65 35 60 45 Q70 50 60 55 Q65 65 58 70 Q50 80 42 70 Q35 65 40 55 Q30 50 40 45 Q35 35 42 30Z" fill="#e94057"/></svg>
+            <span>NEURON-IQ</span>
+        </a>
+        <nav class="nav-links">
+            <ul>
+                <li><a href="../physics/">Physics</a></li>
+                <li><a href="../chemistry/">Chemistry</a></li>
+                <li><a href="../maths/">Maths</a></li>
+                <li><a href="../biology/">Biology</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="search-section">
+        <form class="search-container" id="search-form">
+            <input type="text" id="search-input" class="search-input" placeholder="Search the entire site...">
+            <button type="submit" class="search-button">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" /></svg>
+            </button>
+        </form>
+    </section>
+
+    <main class="content-container">
+<article>
+    <h1>Kinematics</h1>
+
+    <section>
+        <h2>KINEMATICS</h2>
+        <p>In kinematics we study how a body moves without knowing why it moves. All particles of a rigid body in translation motion move in identical fashion hence any of the particles of a rigid body in translation motion can be used to represent translation motion of the body. This is why, while analyzing its translation motion, a rigid body is considered a particle and kinematics of translation motion as particle kinematics.</p>
+        <p>Particle kinematics deals with nature of motion i.e. how fast and on what path an object moves and relates the position, velocity, acceleration, and time without any reference to mass, force and energy. In other words, it is study of geometry of motion.</p>
+
+        <h3>Types of Translation Motion</h3>
+        <p>A body in translation motion can move on either a straight-line path or curvilinear path.</p>
+
+        <h4>Rectilinear Motion</h4>
+        <p>Translation motion on straight-line path is known as rectilinear translation. It is also known as one-dimensional motion. A car running on a straight road, train running on a straight track and a ball thrown vertically upwards or dropped from a height etc are very common examples of rectilinear translation.</p>
+
+        <h4>Curvilinear Motion</h4>
+        <p>Translation motion of a body on curvilinear path is known as curvilinear translation. If the trajectory is in a plane, the motion is known as two-dimensional motion. A ball thrown at some angle with the horizontal describes a curvilinear trajectory in a vertical plane; a stone tied to a string when whirled describes a circular path and an insect crawling on the floor or on a wall are examples of two-dimensional motion.</p>
+        <p>If path is not in a plane and requires a region of space or volume, the motion is known as three-dimensional motion or motion is space. An insect flying randomly in a room, motion of a football in soccer game over considerable duration of time etc are common examples of three-dimensional motion.</p>
+
+<svg width="1200" height="500" viewBox="0 0 1200 500" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Node Gradients -->
+    <linearGradient id="grad-level1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8B5CF6;" />
+      <stop offset="100%" style="stop-color:#D946EF;" />
+    </linearGradient>
+    <linearGradient id="grad-level2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3B82F6;" />
+      <stop offset="100%" style="stop-color:#22D3EE;" />
+    </linearGradient>
+    <linearGradient id="grad-level3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10B981;" />
+      <stop offset="100%" style="stop-color:#84CC16;" />
+    </linearGradient>
+    
+    <!-- Drop Shadow Filter for depth -->
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="3" dy="5" stdDeviation="5" flood-color="#000000" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+  
+  <style>
+    .node-text {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      fill: #F9FAFB;
+      text-anchor: middle;
+    }
+    .title {
+        font-size: 18px;
+        font-weight: 600;
+    }
+    .subtitle {
+        font-size: 16px;
+        font-weight: 400;
+    }
+    .or {
+        font-size: 14px;
+        font-weight: 400;
+        font-style: italic;
+        opacity: 0.8;
+    }
+    .connector-line {
+      stroke: #6B7280; /* A neutral gray color */
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      fill: none;
+    }
+  </style>
+
+  <!-- Connectors -->
+  <path class="connector-line" d="M600 85 V 125 M300 125 H 900 M300 125 V 155 M900 125 V 155 M900 235 V 265 M725 265 H 1075 M725 265 V 295 M1075 265 V 295" />
+  
+  <!-- Nodes are wrapped in a single group with the filter for a cleaner effect -->
+  <g filter="url(#shadow)">
+    <!-- Level 1: Translation Motion -->
+    <g transform="translate(480, 20)">
+      <rect width="240" height="65" rx="15" fill="url(#grad-level1)" />
+      <text x="120" y="38" class="node-text title" dominant-baseline="middle">Translation Motion</text>
+    </g>
+    
+    <!-- Level 2: Rectilinear Motion -->
+    <g transform="translate(180, 155)">
+      <rect width="240" height="110" rx="15" fill="url(#grad-level2)" />
+      <text x="120" y="35" class="node-text">
+          <tspan x="120" class="title">Rectilinear Motion</tspan>
+          <tspan x="120" dy="1.5em" class="or">Or</tspan>
+          <tspan x="120" dy="1.6em" class="subtitle">One Dimensional Motion</tspan>
+      </text>
+    </g>
+    
+    <!-- Level 2: Curvilinear Motion -->
+    <g transform="translate(780, 155)">
+      <rect width="240" height="80" rx="15" fill="url(#grad-level2)" />
+      <text x="120" y="45" class="node-text title" dominant-baseline="middle">Curvilinear Motion</text>
+    </g>
+    
+    <!-- Level 3: Motion in a Plane -->
+    <g transform="translate(605, 295)">
+      <rect width="240" height="110" rx="15" fill="url(#grad-level3)" />
+      <text x="120" y="35" class="node-text">
+          <tspan x="120" class="title">Motion in a Plane</tspan>
+          <tspan x="120" dy="1.5em" class="or">Or</tspan>
+          <tspan x="120" dy="1.6em" class="subtitle">Two Dimensional Motion</tspan>
+      </text>
+    </g>
+    
+    <!-- Level 3: Motion in Space -->
+    <g transform="translate(955, 295)">
+      <rect width="240" height="110" rx="15" fill="url(#grad-level3)" />
+      <text x="120" y="35" class="node-text">
+          <tspan x="120" class="title">Motion in Space</tspan>
+          <tspan x="120" dy="1.5em" class="or">Or</tspan>
+          <tspan x="120" dy="1.6em" class="subtitle">Three Dimensional Motion</tspan>
+      </text>
+    </g>
+  </g>
+</svg>
+
+        <p>Translation Motion branches into Rectilinear Motion (One Dimensional Motion) and Curvilinear Motion. Curvilinear Motion further branches into Motion in a Plane (Two Dimensional Motion) and Motion in Space (Three Dimensional Motion).</p>
+
+        <h3>Reference Frame</h3>
+        <p>Motion of a body can only be observed if it changes its position with respect to some other body. Therefore, for a motion to be observed there must be a body, which is changing its position with respect to other body and a person who is observing motion. The person observing motion is known as observer. The observer for the purpose of investigation must have its own clock to measure time and a point in the space attached with the other body as origin and a set of coordinate axes. These two things the time measured by the clock and the coordinate system are collectively known as reference frame.</p>
+        <p>In this way, motion of the moving body is expressed in terms of its position coordinates changing with time.</p>
+    </section>
+
+    <hr>
+
+    <section>
+        <h2>Position Vector, Velocity and Acceleration Vector</h2>
+        <p>For analyzing translation motion, we assume the moving body as a particle and represent it as mathematical point. Consider a particle P moving on a curvilinear path.</p>
+
+        <h3>Position-Vector</h3>
+        <p>It describes position of a particle relative to other particle and is a vector from the later towards the first. To study motion of a particle we have to assume a reference frame fixed with some other body. The vector drawn from the origin of the coordinate system representing the reference frame to the location of the particle P is known as position vector of the particle P.</p>
+        <p>Consider a particle P moving in space traces a path shown in the figure. Its position continuously changes with time and so does the position vector. At an instant of time, its position vector is shown in the following figure.</p>
+
+        <svg width="1000" height="480" viewBox="0 0 1000 480" xmlns="http://www.w3.org/2000/svg">
+  <!-- Author: AI, based on user request -->
+  <!-- Description: Diagrams illustrating position and displacement vectors in 3D space. -->
+  <defs>
+    <!-- Arrowhead for vectors and axes -->
+    <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#374151"/>
+    </marker>
+    <!-- A more vibrant arrowhead for the displacement vector -->
+    <marker id="arrowhead-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#D97706"/>
+    </marker>
+    <!-- Small arrowhead for the path direction -->
+    <marker id="path-arrow" markerWidth="6" markerHeight="4" refX="5" refY="2" orient="auto">
+        <path d="M0,0 L6,2 L0,4 Z" fill="#4338CA"/>
+    </marker>
+  </defs>
+
+  <style>
+    .axis { stroke: #6B7280; stroke-width: 1.5; marker-end: url(#arrowhead); }
+    .label-axis { font-family: 'Times New Roman', serif; font-size: 22px; fill: #374151; }
+    .label-point { font-family: 'Times New Roman', serif; font-size: 24px; font-weight: bold; fill: #111827; }
+    .label-math { font-family: 'Times New Roman', serif; font-style: italic; font-size: 24px; fill: #111827; }
+    .title { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 22px; font-weight: 600; text-anchor: middle; fill: #1F2937; }
+    .path { stroke: #4338CA; stroke-width: 2.5; fill: none; }
+    .vector { stroke: #374151; stroke-width: 2.5; marker-end: url(#arrowhead); }
+    .vector-accent { stroke: #D97706; stroke-width: 3; marker-end: url(#arrowhead-accent); }
+    .point { fill: #F9FAFB; stroke: #374151; stroke-width: 2; }
+  </style>
+
+  <!-- === Diagram 1: Position Vector === -->
+  <g id="PositionVectorDiagram">
+    <title>Position Vector</title>
+    <!-- Axes -->
+    <g transform="translate(200, 320)">
+      <line class="axis" x1="0" y1="0" x2="0" y2="-250" /> <!-- Y-axis -->
+      <line class="axis" x1="0" y1="0" x2="250" y2="0" /> <!-- X-axis -->
+      <line class="axis" x1="0" y1="0" x2="-100" y2="75" /> <!-- Z-axis -->
+      <text class="label-axis" x="255" y="5">x</text>
+      <text class="label-axis" x="-5" y="-255">y</text>
+      <text class="label-axis" x="-115" y="80">z</text>
+      <text class="label-point" x="-25" y="15">O</text>
+    </g>
+    <!-- Path -->
+    <path id="trajectory1" class="path" d="M150, 200 C 200, 50, 350, 100, 400, 250" marker-mid="url(#path-arrow)" />
+    <text class="label-point" x="180" y="80">Path</text>
+    <!-- Point P -->
+    <circle class="point" cx="300" cy="95" r="5" fill="#374151"/>
+    <text class="label-point" x="310" y="95">P</text>
+    <!-- Vector r -->
+    <line class="vector" x1="200" y1="320" x2="296" y2="99" />
+    <g class="label-math" transform="translate(235, 190)">
+      <text>r</text>
+      <path d="M0, -20 L12, -20" stroke="#374151" stroke-width="2" marker-end="url(#arrowhead)"/>
+    </g>
+    <!-- Title -->
+    <text class="title" x="250" y="440">Position Vector</text>
+  </g>
+
+  <!-- === Diagram 2: Displacement Vector === -->
+  <g id="DisplacementVectorDiagram" transform="translate(500, 0)">
+    <title>Displacement Vector</title>
+    <!-- Axes -->
+    <g transform="translate(200, 320)">
+      <line class="axis" x1="0" y1="0" x2="0" y2="-250" /> <!-- Y-axis -->
+      <line class="axis" x1="0" y1="0" x2="250" y2="0" /> <!-- X-axis -->
+      <line class="axis" x1="0" y1="0" x2="-100" y2="75" /> <!-- Z-axis -->
+      <text class="label-axis" x="255" y="5">x</text>
+      <text class="label-axis" x="-5" y="-255">y</text>
+      <text class="label-axis" x="-115" y="80">z</text>
+      <text class="label-point" x="-25" y="15">O</text>
+    </g>
+    <!-- Path -->
+    <path id="trajectory2" class="path" d="M150, 200 C 200, 50, 350, 100, 400, 250" marker-mid="url(#path-arrow)"/>
+    <!-- Points A and B -->
+    <circle class="point" cx="380" cy="222" r="5" />
+    <text class="label-point" x="395" y="225">A</text>
+    <circle class="point" cx="265" cy="85" r="5" />
+    <text class="label-point" x="270" y="75">B</text>
+    <!-- Vectors -->
+    <line class="vector" x1="200" y1="320" x2="376" y2="225" /> <!-- r_i -->
+    <line class="vector" x1="200" y1="320" x2="262" y2="89" /> <!-- r_f -->
+    <line class="vector-accent" x1="380" y1="222" x2="265" y2="85"/> <!-- Delta r -->
+    <!-- Labels -->
+    <g class="label-math" transform="translate(325, 280)">
+      <text>r<tspan baseline-shift="sub" font-size="0.7em">i</tspan></text>
+      <path d="M0,-20 L12,-20" stroke="#374151" stroke-width="2" marker-end="url(#arrowhead)"/>
+    </g>
+    <g class="label-math" transform="translate(195, 180)">
+      <text>r<tspan baseline-shift="sub" font-size="0.7em">f</tspan></text>
+      <path d="M0,-20 L12,-20" stroke="#374151" stroke-width="2" marker-end="url(#arrowhead)"/>
+    </g>
+    <g class="label-math" transform="translate(300, 140)">
+      <text fill="#C2410C">Δr</text>
+      <path d="M5,-20 L20,-20" stroke="#D97706" stroke-width="2.5" marker-end="url(#arrowhead-accent)"/>
+    </g>
+    <text class="label-math" x="330" y="80">Δs</text>
+  </g>
+</svg>
+
+        <h3>Displacement and Distance Traveled</h3>
+        <p>Displacement is measure of change in place i.e. position of particle. It is defined by a vector from the initial position to the final position. Let the particle moves from point A to B on the curvilinear path. The vector $\vec{AB} = \Delta\vec{r}$ is displacement.</p>
+        <p>Distance traveled is length of the path traversed. We can say it "path length". Here in the figure length of the curve $\Delta s$ from A to B is the distance traveled.</p>
+        <p>Distance traveled between two places is greater than the magnitude of displacement vector wherever particle changes its direction during its motion. In unidirectional motion, both of them are equal.</p>
+        
+        <h3>Average Velocity and Average Speed</h3>
+        <p>Average velocity of a particle in a time interval is that constant velocity with which particle would have covered the same displacement in the same time interval as it covers in its actual motion. It is defined as the ratio of displacement to the concerned time interval.</p>
+<svg width="600" height="500" viewBox="0 0 600 500" xmlns="http://www.w3.org/2000/svg">
+  <!-- Author: AI, based on user request -->
+  <!-- Description: A modern SVG diagram illustrating displacement vector (Δr) as the change in position vectors (ri to rf). -->
+  <defs>
+    <!-- Arrowhead definitions -->
+    <marker id="arrow-dark" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#374151" />
+    </marker>
+    <marker id="arrow-accent" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#F59E0B" />
+    </marker>
+    <marker id="arrow-path" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#3B82F6" />
+    </marker>
+  </defs>
+
+  <style>
+    .axis { stroke: #9CA3AF; stroke-width: 1.5; marker-end: url(#arrow-dark); }
+    .path { stroke: #3B82F6; stroke-width: 3; fill: none; }
+    .path-direction { stroke: #3B82F6; stroke-width: 2; fill: none; marker-end: url(#arrow-path); }
+    .vector { stroke: #374151; stroke-width: 3; marker-end: url(#arrow-dark); }
+    .vector-accent { stroke: #F59E0B; stroke-width: 4; marker-end: url(#arrow-accent); }
+    .point { fill: #F9FAFB; stroke: #1F2937; stroke-width: 2; }
+    .label { font-family: 'Times New Roman', serif; font-size: 24px; fill: #1F2937; }
+    .label-vector { font-family: 'Times New Roman', serif; font-style: italic; font-size: 28px; fill: #1F2937; }
+  </style>
+
+  <!-- Coordinate System -->
+  <g id="axes">
+    <g transform="translate(120, 400)">
+      <line class="axis" x1="0" y1="0" x2="380" y2="0" /> <!-- x-axis -->
+      <line class="axis" x1="0" y1="0" x2="0" y2="-380" /> <!-- y-axis -->
+      <line class="axis" x1="0" y1="0" x2="-90" y2="65" /> <!-- z-axis -->
+      <text class="label" x="390" y="5">x</text>
+      <text class="label" x="5" y="-380">y</text>
+      <text class="label" x="-110" y="75">z</text>
+      <text class="label" x="-25" y="20">O</text>
+    </g>
+  </g>
+  
+  <!-- Main Diagram -->
+  <g id="diagram-elements">
+    <!-- Path and Points -->
+    <path class="path" d="M480,310 C 380,80 230,120 200,60" />
+    <path class="path-direction" d="M470,300 C 455,270 440,260" />
+    <circle class="point" cx="425" cy="245" r="5" />
+    <circle class="point" cx="225" cy="70" r="5" />
+    
+    <!-- Vectors -->
+    <line class="vector" x1="120" y1="400" x2="422" y2="248" /> <!-- ri -->
+    <line class="vector" x1="120" y1="400" x2="222" y2="73" /> <!-- rf -->
+    <line class="vector-accent" x1="425" y1="245" x2="225" y2="70" /> <!-- Δr -->
+
+    <!-- Labels -->
+    <text class="label" x="435" y="248">
+      A (t<tspan baseline-shift="sub" font-size="0.7em">i</tspan>)
+    </text>
+    <text class="label" x="235" y="65">
+      B (t<tspan baseline-shift="sub" font-size="0.7em">f</tspan>)
+    </text>
+    <text class="label" x="350" y="60">Δs</text>
+
+    <!-- Vector Labels (with arrow symbols) -->
+    <g class="label-vector" transform="translate(300, 350)">
+        <text>r</text>
+        <text x="10" font-size="0.7em" baseline-shift="sub">i</text>
+        <path d="M0 -22 L 18 -22" stroke="#374151" stroke-width="2" marker-end="url(#arrow-dark)"/>
+    </g>
+    <g class="label-vector" transform="translate(130, 210)">
+        <text>r</text>
+        <text x="10" font-size="0.7em" baseline-shift="sub">f</text>
+        <path d="M0 -22 L 18 -22" stroke="#374151" stroke-width="2" marker-end="url(#arrow-dark)"/>
+    </g>
+    <g class="label-vector" transform="translate(310, 140)">
+        <text fill="#C2410C">Δr</text>
+        <path d="M5 -22 L 28 -22" stroke="#F59E0B" stroke-width="2.5" marker-end="url(#arrow-accent)"/>
+    </g>
+  </g>
+</svg>        <p>If the particle moves from point A to point B in time interval $t_i$ to $t_f$, the average velocity $\vec{v}_{av}$ in this time interval is given by the following equation.</p>
+        $$ \vec{v}_{av} = \frac{\Delta\vec{r}}{\Delta t} = \frac{\vec{r}_f - \vec{r}_i}{t_f - t_i} $$
+        <p>Similar to average velocity, average speed in a time interval is that constant speed with which particle would travel the same distance on the same path in the same time interval as it travels in its actual motion. It is defined as the ratio of distance traveled to the concerned time interval.</p>
+        <p>If in moving from point A to B, the particle travels path length i.e. distance $\Delta s$ in time interval $t_i$ to $t_f$, its average speed $c_{av}$ is given by the following equation.</p>
+        $$ c_{av} = \frac{\Delta s}{\Delta t} = \frac{\text{Path Length}}{t_f - t_i} $$
+        <p>Average speed in a time interval is greater than the magnitude of average velocity vector wherever particle changes its direction during its motion. In unidirectional motion, both of them are equal.</p>
+        
+        <h3>Instantaneous Velocity and Speed</h3>
+        <p>If we assume the time interval $\Delta t$ to be infinitesimally small i.e. $\Delta t \to 0$, the point B approaches A making the chord AB to coincide with the tangent at A. Now we can express the instantaneous velocity by the following equations.</p>
+<svg width="550" height="500" viewBox="0 0 550 500" xmlns="http://www.w3.org/2000/svg">
+  <!-- Author: AI, based on user request -->
+  <!-- Description: A modern SVG diagram illustrating position (r) and velocity (v) vectors for a particle moving along a path. -->
+  <defs>
+    <!-- Arrowhead definitions -->
+    <marker id="arrow-dark" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#374151" />
+    </marker>
+    <marker id="arrow-accent-green" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#10B981" />
+    </marker>
+    <marker id="arrow-path" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#4F46E5" />
+    </marker>
+  </defs>
+
+  <style>
+    .axis { stroke: #9CA3AF; stroke-width: 1.5; marker-end: url(#arrow-dark); }
+    .path { stroke: #4F46E5; stroke-width: 3; fill: none; }
+    .path-direction { stroke: #4F46E5; stroke-width: 2; fill: none; marker-end: url(#arrow-path); }
+    .vector { stroke: #374151; stroke-width: 3; marker-end: url(#arrow-dark); }
+    .vector-accent { stroke: #10B981; stroke-width: 4; marker-end: url(#arrow-accent-green); }
+    .point { fill: #F9FAFB; stroke: #1F2937; stroke-width: 2; }
+    .label { font-family: 'Times New Roman', serif; font-size: 24px; fill: #1F2937; }
+    .label-vector { font-family: 'Times New Roman', serif; font-style: italic; font-size: 28px; fill: #1F2937; }
+  </style>
+
+  <!-- Coordinate System -->
+  <g id="axes">
+    <g transform="translate(120, 400)">
+      <line class="axis" x1="0" y1="0" x2="380" y2="0" /> <!-- x-axis -->
+      <line class="axis" x1="0" y1="0" x2="0" y2="-380" /> <!-- y-axis -->
+      <line class="axis" x1="0" y1="0" x2="-90" y2="65" /> <!-- z-axis -->
+      <text class="label" x="390" y="5">x</text>
+      <text class="label" x="5" y="-380">y</text>
+      <text class="label" x="-110" y="75">z</text>
+      <text class="label" x="-25" y="20">O</text>
+    </g>
+  </g>
+  
+  <!-- Main Diagram -->
+  <g id="diagram-elements">
+    <!-- Path and Point A -->
+    <path class="path" d="M450,300 C 350,80 300,150 350,180" />
+    <path class="path-direction" d="M440,285 C 425,255 410,245" />
+    <circle class="point" cx="350" cy="180" r="5" />
+    
+    <!-- Vectors -->
+    <line class="vector" x1="120" y1="400" x2="347" y2="183" /> <!-- Position vector r -->
+    <line class="vector-accent" x1="350" y1="180" x2="390" y2="70" /> <!-- Velocity vector v -->
+
+    <!-- Labels -->
+    <text class="label" x="365" y="185">A (t)</text>
+    
+    <!-- Vector Labels (with arrow symbols) -->
+    <g class="label-vector" transform="translate(250, 300)">
+        <text>r</text>
+        <path d="M-2 -22 L 8 -22" stroke="#374151" stroke-width="2" marker-end="url(#arrow-dark)"/>
+    </g>
+    <g class="label-vector" transform="translate(400, 115)">
+        <text fill="#059669">v</text>
+        <path d="M-2 -22 L 8 -22" stroke="#10B981" stroke-width="2.5" marker-end="url(#arrow-accent-green)"/>
+    </g>
+  </g>
+</svg>        $$ \vec{v} = \lim_{\Delta t \to 0} \frac{\Delta\vec{r}}{\Delta t} = \frac{d\vec{r}}{dt} $$
+        <p>The instantaneous velocity equals to the rate of change in its position vector with time. Its direction is along the tangent to the path. Instantaneous speed is defined as the time rate of distance traveled.</p>
+        $$ c = \lim_{\Delta t \to 0} \frac{\Delta s}{\Delta t} = \frac{ds}{dt} $$
+        <p>You can easily conceive that when $\Delta t \to 0$, not only the chord AB but also the arc AB both approach to coincide with each other and with the tangent. Therefore $ds = |d\vec{r}|$. Now we can say that speed equals to magnitude of instantaneous velocity.</p>
+        <p>Instantaneous speed tells us how fast a particle moves at an instant and instantaneous velocity tells us in what direction and with what speed a particle moves at an instant of time.</p>
+
+        <h4>Example 1:</h4>
+        <p>A particle moves in a straight line for 20 seconds with velocity 3 m/s and then moves with velocity 4 m/s for another 20 seconds and finally moves with velocity 5m/s for next 20 seconds. What is the average velocity of the particle?</p>
+        <p>(A) 3 m/s (B) 4 m/s (C) 5 m/s (D) 6 m/s</p>
+        <p><strong>Ans. (B)</strong></p>
+        <p><strong>Sol.</strong> Average velocity = $\frac{\text{Total Displacement}}{\text{Total time}}$</p>
+        $$ = \frac{s_1 + s_2 + s_3}{t_1 + t_2 + t_3} = \frac{v_1t_1 + v_2t_2 + v_3t_3}{t_1 + t_2 + t_3} $$
+        $$ = \frac{3 \times 20 + 4 \times 20 + 5 \times 20}{20 + 20 + 20} = \frac{240}{60} = 4 \text{ m/sec} $$
+    </section>
+
+    <hr>
+    
+    <section>
+        <h2>ACCELERATION</h2>
+        <p>Instantaneous acceleration $\vec{a}$ is measure of how fast velocity of a body changes i.e. how fast direction of motion and speed change with time.</p>
+        <p>At an instant, it equals to the rate of change in velocity vector $\vec{v}$ with time.</p>
+        $$ \vec{a} = \frac{d\vec{v}}{dt} $$
+        <p>A vector quantity changes, when its magnitude or direction or both change. Accordingly, acceleration vector may have two components, one responsible to change only speed and the other responsible to change only direction of motion.</p>
+<svg width="600" height="550" viewBox="0 0 600 550" xmlns="http://www.w3.org/2000/svg">
+  <!-- Author: AI, based on user request -->
+  <!-- Description: A modern SVG diagram illustrating total acceleration (a) and its tangential (a_T) and normal (a_n) components. -->
+  <defs>
+    <!-- Arrowhead definitions -->
+    <marker id="arrow-axis" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#6B7280" />
+    </marker>
+    <marker id="arrow-path" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#3B82F6" />
+    </marker>
+    <marker id="arrow-velocity" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#22C55E" />
+    </marker>
+    <marker id="arrow-accel" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#EF4444" />
+    </marker>
+    <marker id="arrow-component" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#4B5567" />
+    </marker>
+  </defs>
+
+  <style>
+    .axis { stroke: #9CA3AF; stroke-width: 1.5; marker-end: url(#arrow-axis); }
+    .path { stroke: #3B82F6; stroke-width: 3; fill: none; }
+    .path-direction { stroke: #3B82F6; stroke-width: 2; fill: none; marker-end: url(#arrow-path); }
+    .vector-velocity { stroke: #22C55E; stroke-width: 3.5; marker-end: url(#arrow-velocity); }
+    .vector-accel { stroke: #EF4444; stroke-width: 4; marker-end: url(#arrow-accel); }
+    .vector-component { stroke: #4B5567; stroke-width: 3; marker-end: url(#arrow-component); }
+    .dashed-line { stroke: #6B7280; stroke-width: 2; stroke-dasharray: 4 4; }
+    .point { fill: #F9FAFB; stroke: #1F2937; stroke-width: 2; }
+    .label { font-family: 'Times New Roman', serif; font-size: 24px; fill: #1F2937; }
+    .label-vector { font-family: 'Times New Roman', serif; font-style: italic; font-size: 28px; fill: #1F2937; }
+  </style>
+
+  <!-- Coordinate System -->
+  <g id="axes" transform="translate(150, 400)">
+    <line class="axis" x1="0" y1="0" x2="0" y2="-380" /> <!-- z-axis -->
+    <line class="axis" x1="0" y1="0" x2="380" y2="0" /> <!-- y-axis -->
+    <line class="axis" x1="0" y1="0" x2="-120" y2="80" /> <!-- x-axis -->
+    <text class="label" x="-140" y="90">x</text>
+    <text class="label" x="390" y="5">y</text>
+    <text class="label" x="5" y="-380">z</text>
+    <text class="label" x="-25" y="20">O</text>
+  </g>
+  
+  <!-- Main Diagram -->
+  <g id="diagram-elements">
+    <!-- Path and Point P -->
+    <path class="path" d="M450, 450 C 480, 250, 300, 150, 250, 250" />
+    <path class="path-direction" d="M450, 450 C 460, 400, 460, 350"/>
+    <circle class="point" cx="380" cy="200" r="5" />
+    <text class="label" x="395" y="195">P</text>
+    <text class="label" x="460" y="400">A</text>
+    <text class="label" x="180" y="220">B</text>
+    
+    <!-- Vector Construction Lines -->
+    <line class="dashed-line" x1="420" y1="160" x2="360" y2="140" />
+    <line class="dashed-line" x1="320" y1="180" x2="360" y2="140" />
+
+    <!-- Vectors -->
+    <line class="vector-velocity" x1="380" y1="200" x2="440" y2="100" /> <!-- Velocity v -->
+    <line class="vector-component" x1="380" y1="200" x2="420" y2="160" /> <!-- Tangential acceleration a_T -->
+    <line class="vector-component" x1="380" y1="200" x2="320" y2="180" /> <!-- Normal acceleration a_n -->
+    <line class="vector-accel" x1="380" y1="200" x2="360" y2="140" /> <!-- Total acceleration a -->
+
+    <!-- Vector Labels (with arrow symbols) -->
+    <g class="label-vector" transform="translate(450, 100)">
+        <text fill="#16A34A">v</text>
+        <path d="M-2 -22 L 8 -22" stroke="#22C55E" stroke-width="2.5" marker-end="url(#arrow-velocity)"/>
+    </g>
+    <g class="label-vector" transform="translate(430, 130)">
+        <text>a</text><text x="12" font-size="0.7em" baseline-shift="sub">T</text>
+        <path d="M0 -22 L 18 -22" stroke="#4B5567" stroke-width="2" marker-end="url(#arrow-component)"/>
+    </g>
+     <g class="label-vector" transform="translate(280, 175)">
+        <text>a</text><text x="12" font-size="0.7em" baseline-shift="sub">n</text>
+        <path d="M0 -22 L 18 -22" stroke="#4B5567" stroke-width="2" marker-end="url(#arrow-component)"/>
+    </g>
+    <g class="label-vector" transform="translate(300, 130)">
+        <text fill="#DC2626">a</text>
+        <path d="M-2 -22 L 8 -22" stroke="#EF4444" stroke-width="2.5" marker-end="url(#arrow-accel)"/>
+    </g>
+  </g>
+</svg>        <p>Component of acceleration responsible to change speed must be in the direction of motion. It is known as tangential component of acceleration $\vec{a}_T$. The component responsible to change direction of motion must be perpendicular to the direction of motion. It is known as normal component of acceleration $\vec{a}_n$.</p>
+        <p>Acceleration vector $\vec{a}$ of a particle moving on a curvilinear path and its tangential and Normal components are shown in the figure.</p>
+    </section>
+
+    <hr>
+
+    <section>
+        <h2>Curvilinear translation in cartesian coordinate system: Superposition of Three Rectilinear Motions</h2>
+        <p>Consider a particle moving on a three dimensional curvilinear path AB. At an instant of time t it is at point P (x, y, z) moving with velocity $\vec{v}$ and acceleration $\vec{a}$. Its position vector is defined by equations</p>
+        $$ \vec{r} = x\hat{i} + y\hat{j} + z\hat{k} $$
+        <p>Differentiating it with respect to time, we get velocity vector.</p>
+        $$ \vec{v} = \frac{d\vec{r}}{dt} = \frac{dx}{dt}\hat{i} + \frac{dy}{dt}\hat{j} + \frac{dz}{dt}\hat{k} = v_x\hat{i} + v_y\hat{j} + v_z\hat{k} $$
+        <p>Here $v_x = dx/dt, v_y = dy/dt$ and $v_z = dz/dt$ are the components of velocity vectors in the x, y and z–directions respectively. Now the acceleration can be obtained by differentiating velocity vector $\vec{v}$ with respect to time.</p>
+        <center>
+            <img src="/images/Path in 3D cartesian coordinates.png" alt="Path in 3D Cartesian Coordinates">
+        </center>
+        $$ \vec{a} = \frac{d\vec{v}}{dt} = \frac{dv_x}{dt}\hat{i} + \frac{dv_y}{dt}\hat{j} + \frac{dv_z}{dt}\hat{k} = a_x\hat{i} + a_y\hat{j} + a_z\hat{k} $$
+        <p>Acceleration vector can also be obtained by differentiating position vector twice with respect to time. In the above two equations, $a_x = d^2x/dt^2 = dv_x/dt$, $a_y = d^2y/dt^2 = dv_y/dt$ and $a_z = d^2z/dt^2 = dv_z/dt$ are the components of acceleration vectors in the x, y and z-directions respectively.</p>
+        <p>In the above equations, we can analyze each of the components x, y and z of motion as three individual rectilinear motions each along one of the axes x, y and z.</p>
+        <ul>
+            <li>Along the x-axis: $v_x = \frac{dx}{dt}$ and $a_x = \frac{dv_x}{dt}$</li>
+            <li>Along the y-axis: $v_y = \frac{dy}{dt}$ and $a_y = \frac{dv_y}{dt}$</li>
+            <li>Along the z-axis: $v_z = \frac{dz}{dt}$ and $a_z = \frac{dv_z}{dt}$</li>
+        </ul>
+        <p>A curvilinear motion can be analyzed as superposition of three simultaneous rectilinear motions each along one of the coordinate axes.</p>
+
+        <h4>Example</h4>
+        <p>Position vector $\vec{r}$ of a particle varies with time t according to the law $\vec{r} = (\frac{1}{2}t^2)\hat{i} - (\frac{4}{3}t^{3/2})\hat{j} + (2t)\hat{k}$, where r is in meters and t is in seconds.</p>
+        <p>(a) Find suitable expression for its velocity and acceleration as function of time.</p>
+        <p>(b) Find magnitude of its displacement and distance traveled in the time interval t = 0 to 4 s.</p>
+        <p><strong>Solution</strong></p>
+        <p>(a) Velocity $\vec{v}$ is defined as the first derivative of position vector with respect to time.</p>
+        $$ \vec{v} = \frac{d\vec{r}}{dt} = t\hat{i} - 2\sqrt{t}\hat{j} + 2\hat{k} \text{ m/s} $$
+        <p>Acceleration $\vec{a}$ is defined as the first derivative of velocity vector with respect to time.</p>
+        $$ \vec{a} = \frac{d\vec{v}}{dt} = \hat{i} - \frac{1}{\sqrt{t}}\hat{j} \text{ m/s}^2 $$
+        <p>(b) Displacement $\Delta\vec{r}$ is defined as the change in place of position vector.</p>
+        $$ \Delta\vec{r} = \vec{r}(4) - \vec{r}(0) = (8\hat{i} - \frac{32}{3}\hat{j} + 8\hat{k}) - (0) = 8\hat{i} - \frac{32}{3}\hat{j} + 8\hat{k} \text{ m} $$
+        <p>Magnitude of displacement $|\Delta\vec{r}| = \sqrt{8^2 + (-\frac{32}{3})^2 + 8^2} \approx 15.55 \text{ m}$</p>
+        <p>Distance $\Delta s$ is defined as the path length and can be calculated by integrating speed over the concerned time interval.</p>
+        $$ \Delta s = \int_0^4 |\vec{v}| dt = \int_0^4 \sqrt{t^2 + (-2\sqrt{t})^2 + 2^2} dt = \int_0^4 \sqrt{t^2 + 4t + 4} dt = \int_0^4 (t+2) dt = [\frac{t^2}{2} + 2t]_0^4 = 16 \text{ m} $$
+    </section>
+
+    <hr>
+    
+    <section>
+        <h2>PROJECTILE MOTION</h2>
+        <p>An object projected by an external force when continues to move by its own inertia is known as projectile and its motion as projectile motion.</p>
+        <p>A football kicked by a player, an arrow shot by an archer, water sprinkling out a water-fountain, an athlete in long jump or high jump, a bullet or an artillery shell fired from a gun are some examples of projectile motion.</p>
+        <p>In simplest case when a projectile does not reach great heights above the ground as well as does not cover a very large distance on the ground, acceleration due to gravity can be assumed uniform throughout its motion. Moreover, such a projectile does not spend much time in air not permitting the wind and air resistance to gather appreciable effects. Therefore, while analyzing them, we can assume gravity to be uniform and neglect effects of wind as well as air resistance. Under these circumstances when an object is thrown in a direction other than the vertical, its trajectory assumes shape of a parabola. In the figure, a ball thrown to follow a parabolic trajectory is shown as an example of projectile motion.</p>
+        <center><img src="/images/Parabolic Trajectory Diagram.png" alt="Parabolic Trajectory Diagram"></center>
+        <p>At present, we study projectiles moving on parabolic trajectories and by the term projectile motion; we usually refer to this kind of motion.</p>
+        <p>For a projectile to move on parabolic trajectory, the following conditions must be fulfilled.</p>
+        <ul>
+            <li>Acceleration vector must be uniform.</li>
+            <li>Velocity vector never coincides with line of acceleration vector.</li>
+        </ul>
+        <h3>Analyzing Projectile Motion</h3>
+        <p>Since parabola is a plane curve, projectile motion on parabolic trajectory becomes an example of a two-dimensional motion. It can be conceived as superposition of two simultaneous rectilinear motions in two mutually perpendicular directions, which can be analyzed separately as two Cartesian components of the projectile motion.</p>
+        <h4>Projectile Motion Near The Horizontal Or Flat Ground Using Cartesian Components</h4>
+        <p>Consider motion of a ball thrown from ground as shown in the figure. The point from where it is projected is known as point of projection, the point where it falls on the ground is known as point of landing or target. The distance between these two points is known as horizontal range or range, the height from the ground of the highest point it reaches during flight is known as maximum height and the duration for which it remain in the air is known as air time or time of flight. The velocity with which it is thrown is known as velocity of projection and angle which velocity of projection makes with the horizontal is known as angle of projection.</p>
+
+        <center><img src="/images/Projectile motion parameters diagram (Range, Height, etc.).png" alt="Projectile motion parameters diagram (Range, Height, etc.)"></center>
+
+        <p>A careful observation of this motion reveals that when a ball is thrown its vertical component of velocity decreases in its upward motion, vanishes at the highest point and thereafter increases in its downward motion due to gravity similar to motion of a ball thrown vertically upwards. At the same time, the ball continues to move uniformly in horizontal direction due to inertia. The actual projectile motion on its parabolic trajectory is superposition of these two simultaneous rectilinear motions.</p>
+
+        <center><img src="/images/Projectile motion resolved into components diagram.png" alt="Projectile motion resolved into components diagram"></center>
+
+        <h4>Vertical or y-component of motion.</h4>
+        <p>Component of initial velocity in the vertical direction is $u_y$. Since forces other than gravitational pull of the earth are negligible, vertical component of acceleration $a_y$ of the ball is $g$ vertically downwards. This component of motion is described by the following three equations. Here $v_y$ denotes y-component of velocity, y denotes position coordinate y at any instant t.</p>
+        <p>(i) $v_y = u_y - gt$</p>
+        <p>(ii) $y = u_yt - \frac{1}{2}gt^2$</p>
+        <p>(iii) $v_y^2 = u_y^2 - 2gy$</p>
+        <h4>Horizontal or x-component of motion.</h4>
+        <p>Since effects of wind and air resistance are assumed negligible as compared to effect of gravity, the horizontal component of acceleration of the ball becomes zero and the ball moves with uniform horizontal component of velocity $u_x$. This component of motion is described by the following equation.</p>
+        <p>(iv) $x = u_xt$</p>
+        <h4>Equation of Trajectory</h4>
+        <p>Equation of the trajectory is relation between the x and the y coordinates of the ball without involvement of time t. To eliminate t, we substitute its expression from equation (iv) into equation (ii).</p>
+        $$ y = x \tan\theta - \frac{g}{2u^2 \cos^2\theta}x^2 $$
+        <h4>Time of Flight</h4>
+        <p>At the highest point of trajectory when $t = T/2$, the vertical component of velocity becomes zero. By substituting this condition in equation (i), we obtain the time of flight.</p>
+        $$ T = \frac{2u_y}{g} $$
+        <h4>Maximum Height</h4>
+        <p>At the highest point of trajectory where $y = H$, the vertical component of velocity becomes zero. By substituting this information in equation (iii), we obtain the maximum height.</p>
+        $$ H = \frac{u_y^2}{2g} $$
+        <h4>Horizontal Range</h4>
+        <p>The horizontal range or simply the range of the projectile motion of the ball is distance traveled on the ground in its whole time of flight.</p>
+        $$ R = u_x T = \frac{2u_x u_y}{g} = \frac{u^2 \sin(2\theta)}{g} $$
+        <h4>Maximum Range</h4>
+        <p>It is the maximum distance traveled by a projectile in the horizontal direction for a certain velocity of projection. The above expression of range makes obvious that to obtain maximum range the ball must be projected at angle $\theta = 45^\circ$.</p>
+        $$ R_m = \frac{u^2}{g} $$
+    </section>
+
+    <hr>
+    
+    <section>
+        <h2>RELATIVE MOTION</h2>
+        <p>Motion of a body can only be observed, when it changes its position with respect to some other body. In this sense, motion is a relative concept. To analyze motion of a body say A, therefore we have to fix our reference frame to some other body say B. The result obtained is motion of body A relative to body B.</p>
+        <h3>Relative position, Relative Velocity and Relative Acceleration</h3>
+        <p>Let two bodies represented by particles A and B at positions defined by position vectors $\vec{r}_A$ and $\vec{r}_B$, moving with velocities $\vec{v}_A$ and $\vec{v}_B$ and accelerations $\vec{a}_A$ and $\vec{a}_B$ with respect to a reference frame S. For analyzing motion of terrestrial bodies the reference frame S is fixed with the ground.</p>
+<center>
+    <img src="/images/Relative position vectors diagram.png" alt="Relative position vectors diagram">
+</center>        
+        <p>The vectors $\vec{r}_{B/A}$ denotes position vector of B relative to A. Following triangle law of vector addition, we have</p>
+        $$ \vec{r}_B = \vec{r}_A + \vec{r}_{B/A} $$
+        <p>First derivatives of $\vec{r}_A$ and $\vec{r}_B$ with respect to time equals to velocity of particle A and velocity of particle B relative to frame S and first derivative of $\vec{r}_{B/A}$ with respect to time defines velocity of B relative to A.</p>
+        $$ \vec{v}_B = \vec{v}_A + \vec{v}_{B/A} $$
+        <p>Second derivatives of $\vec{r}_A$ and $\vec{r}_B$ with respect to time equals to acceleration of particle A and acceleration of particle B relative to frame S and second derivative of $\vec{r}_{B/A}$ with respect to time defines acceleration of B relative to A.</p>
+        $$ \vec{a}_B = \vec{a}_A + \vec{a}_{B/A} $$
+        <p>In similar fashion motion of particle A relative to particle B can be analyzed with the help of adjoining figure. You can observe in the figure that position vector of A relative to B is directed from B to A and therefore</p>
+        $$ \vec{r}_{B/A} = -\vec{r}_{A/B}, \quad \vec{v}_{B/A} = -\vec{v}_{A/B} \quad \text{and} \quad \vec{a}_{B/A} = -\vec{a}_{A/B} $$
+        <p>The above equations elucidate that how a body A appears moving to another body B is opposite to how body B appears moving to body A.</p>
+    </section>
+
+    <hr>
+    
+    <section>
+        <h2>SOME WORKED OUT EXAMPLES</h2>
+        
+        <h4>Example#1</h4>
+        <p>On an open ground a motorist follows a track that turns to his left by an angle of 60° after every 500 m. Starting from a given turn, specify the displacement of the motorist at the third, sixth and eighth turn. Compare the magnitude of displacement with the total path length covered by the motorist in each case.</p>
+        <p><strong>Solution</strong></p>
+        <!-- Image placeholder: Hexagonal path of motorist -->
+        <p><strong>At III turn:</strong></p>
+        <p>Displacement = $\vec{OA} + \vec{AB} + \vec{BC} = \vec{OC} = 500 \cos 60^\circ + 500 + 500 \cos 60^\circ = 500 \times \frac{1}{2} + 500 + 500 \times \frac{1}{2} = 1000$ m from O to C</p>
+        <p>Distance = $500 + 500 + 500 = 1500$ m.</p>
+        <p>Ratio = $\frac{\text{Displacement}}{\text{Distance}} = \frac{1000}{1500} = \frac{2}{3}$</p>
+        
+        <p><strong>At VI turn:</strong></p>
+        <p>Initial and final positions are same so displacement = 0 and distance = $500 \times 6 = 3000$ m.</p>
+        <p>Ratio = $\frac{0}{3000} = 0$</p>
+        
+        <p><strong>At VIII turn:</strong></p>
+        <p>Displacement = $2(500)\cos(\frac{60^\circ}{2}) = 1000 \times \cos 30^\circ = 1000 \times \frac{\sqrt{3}}{2} = 500\sqrt{3}$ m</p>
+        <p>Distance = $500 \times 8 = 4000$ m.</p>
+        <p>Ratio = $\frac{500\sqrt{3}}{4000} = \frac{\sqrt{3}}{8}$</p>
+        
+        <h4>Example#2</h4>
+        <p>A drunkard walking in a narrow lane takes 5 steps forward and 3 steps backward, followed again by 5 steps forward and 3 steps backward, and so on. Each step is 1m long and requires 1s. Plot the x-t graph of his motion. Determine graphically or otherwise how long the drunkard takes to fall in a pit 9m away from the start.</p>
+        <p><strong>Solution</strong></p>
+        <p>From x-t graph time taken = 21 s</p>
+        <p>OR</p>
+        <p>(5m - 3m) + (5m - 3m) + 5m = 9m $\Rightarrow$ total steps = (5+3) + (5+3) + 5 = 21 steps $\Rightarrow$ time = 21 s</p>
+    </section>
+    
+
+    <hr>
+    
+    <section>
+        <ol>
+            <li>A particles starts from point A with constant speed v on a circle of radius R. Find magnitude of average velocity during its journey from :- <br>
+            (a) A to B (b) A to C (c) A to D
+            </li>
+            
+            <li>A particle is moving along x-axis. Initially it is located 5 m left of origin and it is moving away from the origin and slowing down. In this coordinate system, what are the signs of the initial velocity and acceleration. <br>
+            </li>
+
+            <li>A car accelerates with uniform rate from rest on a straight road. The distance travelled in the last second of a three second interval from the start is 15 m then find the distance travelled in first second in m.</li>
+<li>A ball is dropped from the top of a 80 m tall building. How long does it take to hit the ground? (Assume g = 10 m/s²)</li>
+<li>A car accelerates uniformly from rest to a speed of 30 m/s in 10 seconds. What is the acceleration of the car?</li>
+<li>An athlete runs exactly once around a circular track with a radius of 50 m. What is her displacement for the entire lap?</li>
+<li>A particle's position is described by the equation x = 5t + 3, where x is in meters and t is in seconds. Is the particle's velocity constant?</li>
+<li>Can an object have a northward velocity and a southward acceleration simultaneously? If so, give an example.</li>
+<li>A stone is thrown vertically upwards with a speed of 20 m/s. What is the maximum height it reaches? (Assume g = 10 m/s²)</li>
+<li>A train travels the first 100 km of its journey at a speed of 50 km/h. How long does this part of the journey take?</li>
+<li>If an object has a constant, non-zero acceleration, can its velocity ever be zero?</li>
+<li>A cyclist moves 3 km east and then 4 km north. What is the magnitude of their total displacement?</li>
+<li>What physical quantity is represented by the slope of a position-time graph?</li>
+<li>A car moving at 20 m/s comes to a complete stop in 4 seconds. What is its uniform deceleration?</li>
+<li>An object's velocity changes from 5 m/s east to 15 m/s east in 2 seconds. What is its average acceleration?</li>
+<li>A body is in free fall. What is its acceleration after 2 seconds of falling, and after 5 seconds of falling? (Neglect air resistance).</li>
+<li>What does the area under a velocity-time graph represent?</li>
+<li>Two balls are dropped from the same height, one second after the other. Does the separation distance between them increase, decrease, or stay the same as they fall?</li>
+
+<li>The position of a particle is given by x(t) = 4t³ - 12t² + 5, where x is in meters and t is in seconds. At what time is the particle's acceleration zero?</li>
+<li>An object is thrown vertically upwards. It passes a point at a height of 25 m twice, with a time interval of 4 seconds between the two instances. What was the initial velocity of projection? (Assume g = 10 m/s²)</li>
+<li>A train 150 m long is moving with a uniform velocity of 45 km/h. Find the time it takes to cross a bridge that is 850 m long.</li>
+<li>The acceleration of a particle is given by a(t) = 6t - 4. If the particle starts from rest at the origin, find its velocity at t = 3 seconds.</li>
+<li>A projectile is fired with an initial velocity of 50 m/s at an angle of 37 degrees with the horizontal. Find its time of flight and horizontal range. (Assume g = 10 m/s², sin(37°) = 0.6, cos(37°) = 0.8).</li>
+<li>A car travels one-third of a total distance with a speed of 20 km/h and the remaining two-thirds with a speed of 60 km/h. What is the average speed for the entire journey?</li>
+<li>A particle's velocity is given by v(x) = 2x² - 10. Find its acceleration at the position x = 2 m.</li>
+<li>A stone is dropped from a hot air balloon that is rising vertically at a constant speed of 5 m/s. If the stone takes 10 seconds to reach the ground, what was the height of the balloon when the stone was dropped? (g = 10 m/s²)</li>
+<li>Two cars, A and B, are moving in the same direction along a straight road. Car A is 100 m behind Car B. Car A moves with a constant speed of 25 m/s and Car B with a constant speed of 15 m/s. How long will it take for Car A to overtake Car B?</li>
+<li>The brakes of a car can produce a maximum deceleration of 5 m/s². If the driver's reaction time is 0.4 seconds, find the minimum stopping distance for the car when it is traveling at 72 km/h.</li>
+<li>A ball is projected horizontally from the top of a tower with a speed of 20 m/s. It hits the ground at a distance of 60 m from the base of the tower. Find the height of the tower. (g = 10 m/s²)</li>
+<li>A swimmer can swim at a speed of 4 km/h in still water. If he wants to cross a river 1 km wide flowing at 3 km/h, what is the minimum time he can take to cross it?</li>
+<li>The position of a particle is given by the coordinates x = 3cos(t) and y = 3sin(t). Describe the motion of the particle. Is its speed constant? Is its velocity constant?</li>
+<li>A particle moves in a straight line with an initial velocity of 10 m/s. Its acceleration is given by a = -2v, where v is its instantaneous velocity. Find the time taken for the particle's velocity to reduce to half its initial value.</li>
+<li>A projectile's range is found to be equal to its maximum height. What is the angle of projection with the horizontal?</li>
+<li>The displacement of a particle is proportional to the cube of time elapsed. How does its acceleration depend on time?</li>
+<li>A particle is projected such that its horizontal range is 4 times its maximum height. Find the angle of projection.</li>
+<li>A man of height 1.8 m is walking away from a lamppost 6 m high at a speed of 2 m/s. At what rate is the length of his shadow increasing?</li>
+<li>From the top of a tower, one ball is dropped and another is thrown horizontally with velocity 'u' at the same instant. Which ball will reach the ground first?</li>
+<li>The speed of a particle moving in a circle of radius r = 2m varies with time as v = 3t. Find the magnitude of its total acceleration at t = 1 second.</li>
+
+<li>The acceleration of a particle moving in a straight line is given by a = -ω²x, where ω is a constant and x is its position from the origin. If its speed is v₀ when x = 0, find its speed as a function of x.</li>
+<li>A swimmer wants to cross a river flowing at speed 'u' and reach a point directly opposite on the other bank. If his swimming speed in still water is 'v' (where v > u), at what angle to the river flow must he swim?</li>
+<li>Two particles are projected from the same point with the same speed 'u' at angles of projection α and β. If they have the same horizontal range, find the relationship between α and β.</li>
+<li>A particle is projected up an inclined plane of inclination 30° with an initial velocity of 30 m/s at an angle of 30° with the plane. Find the time of flight along the incline. (g = 10 m/s²)</li>
+<li>A particle moves in the x-y plane with a constant acceleration $\vec{a} = 2\hat{j}$ m/s². Its velocity at the origin is $\vec{u} = 4\hat{i}$ m/s. Find the equation of its trajectory.</li>
+<li>A ship A is moving Westwards with a speed of 10 km/h and a ship B 100 km South of A, is moving Northwards with a speed of 10 km/h. Find the time after which the distance between them is the shortest.</li>
+<li>A particle starting from rest has an acceleration that increases linearly with time, a = kt, where k = 2 m/s³. What is the distance traveled by the particle in the first 3 seconds?</li>
+<li>A particle is projected from the ground to hit a target at a horizontal distance R and height H. Show that if it is projected with the minimum possible speed to achieve this, the angle of projection α must satisfy tan(α) = 2H/R.</li>
+<li>A bead is free to slide down a smooth wire stretched between points A and B on a vertical circle. To travel from the highest point A to point B in the shortest possible time, where should point B be located?</li>
+<li>A particle moves in a circle of radius R. Its speed 'v' is changing with distance 's' as v = k√s, where k is a constant. Find the magnitude of the net force on the particle as a function of 's'.</li>
+<li>A police van moving on a highway with a speed of 30 km/h fires a bullet at a thief's car speeding away in the same direction with a speed of 192 km/h. If the muzzle speed of the bullet is 150 m/s, with what speed does the bullet hit the thief's car?</li>
+<li>A particle is sliding down a frictionless hemispherical bowl of radius R. It starts from rest at the top edge. Find its speed when its angular position with the vertical is θ.</li>
+<li>Two particles, 1 and 2, move with constant velocities $\vec{v}_1$ and $\vec{v}_2$. At the initial moment, their position vectors are $\vec{r}_1$ and $\vec{r}_2$. What is the condition for particles 1 and 2 to collide?</li>
+<li>A rocket is launched vertically upwards with a net acceleration of 5 m/s². After 20 seconds, the fuel is exhausted. Calculate the maximum height reached by the rocket. (g = 10 m/s²)</li>
+<li>A particle is projected with velocity 'u' at an angle θ with the horizontal. Find the radius of curvature of its trajectory at the highest point.</li>            
+        </ol>
+    </section>
+</article>
+    </main>
+
+    <div id="search-results-overlay">
+        <div id="search-results-box">
+            <div class="search-results-header"><span>Search Results</span><button id="close-search-btn">&times;</button></div>
+            <div id="search-results-list"></div>
+        </div>
+    </div>
+
+    <script>
+        let searchableData = [];
+        const searchInput = document.getElementById('search-input');
+        const searchResultsOverlay = document.getElementById('search-results-overlay');
+        const searchResultsList = document.getElementById('search-results-list');
+        const closeSearchBtn = document.getElementById('close-search-btn');
+
+        document.addEventListener('DOMContentLoaded', () => {
+            fetch('../contents.json')
+                .then(response => response.json())
+                .then(data => { searchableData = data; })
+                .catch(error => console.error('Error loading search data:', error));
+        });
+
+        let debounceTimer;
+        searchInput.addEventListener('keyup', () => {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => { performSearch(searchInput.value); }, 300);
+        });
+
+        document.getElementById('search-form').addEventListener('submit', e => e.preventDefault());
+
+        function closeOverlay() { searchResultsOverlay.style.display = 'none'; }
+        closeSearchBtn.addEventListener('click', closeOverlay);
+        searchResultsOverlay.addEventListener('click', (event) => {
+            if (event.target === searchResultsOverlay) { closeOverlay(); }
+        });
+
+        function performSearch(query) {
+            if (!query || query.trim() === '') { closeOverlay(); return; }
+            const scoredResults = searchableData.map(item => ({ item, score: calculateScore(item, query) }));
+            const finalResults = scoredResults.filter(result => result.score > 0).sort((a, b) => b.score - a.score).map(result => result.item);
+            displayResults(finalResults);
+        }
+
+        function calculateScore(item, query) {
+            let score = 0;
+            const lowerQuery = query.toLowerCase();
+            if (item.title.toLowerCase() === lowerQuery) score += 100;
+            else if (item.title.toLowerCase().startsWith(lowerQuery)) score += 50;
+            else if (item.title.toLowerCase().includes(lowerQuery)) score += 20;
+            if (item.description.toLowerCase().includes(lowerQuery)) score += 10;
+            if (item.author.toLowerCase().includes(lowerQuery)) score += 5;
+            if (item.category.toLowerCase().includes(lowerQuery)) score += 5;
+            return score;
+        }
+
+        function displayResults(results) {
+            searchResultsList.innerHTML = '';
+            if (results.length === 0) {
+                searchResultsList.innerHTML = `<p style="padding: 20px; text-align: center; color: #888;">No results found.</p>`;
+            } else {
+                results.forEach(item => {
+                    const resultElement = document.createElement('a');
+                    // FIX 2: Use absolute path directly for more robust linking.
+                    resultElement.href = item.src; 
+                    resultElement.classList.add('search-result-item');
+                    resultElement.innerHTML = `<h3>${item.title}</h3><p>Category: ${item.category}</p>`;
+                    searchResultsList.appendChild(resultElement);
+                });
+            }
+            searchResultsOverlay.style.display = 'flex';
+        }
+    </script>
+</body>
+</html>

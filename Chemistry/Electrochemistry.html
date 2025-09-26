@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Electrochemistry - NEURON-IQ</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+      // Configure MathJax
+      window.MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          displayMath: [['$$', '$$'], ['\\[', '\\]']]
+        }
+      };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; background: #eaf6f6; color: #333; }
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 25px 8%; background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .logo { display: flex; align-items: center; gap: 12px; font-size: 24px; font-weight: 700; color: #2c3e50; text-decoration: none; }
+        .logo-icon { width: 40px; height: 40px; }
+        .nav-links ul { list-style: none; display: flex; gap: 40px; }
+        .nav-links a { text-decoration: none; color: #555; font-weight: 500; transition: color 0.3s ease; }
+        .nav-links a:hover { color: #d81b60; }
+        .search-section { padding: 25px 8%; border-bottom: 1px solid #ddd; }
+        .search-container { width: 100%; max-width: 700px; margin: 0 auto; display: flex; background-color: #fff; border-radius: 50px; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.07); overflow: hidden; }
+        .search-input { flex-grow: 1; border: none; outline: none; padding: 15px 25px; font-size: 16px; font-family: 'Poppins', sans-serif; }
+        .search-button { border: none; background-color: #e94057; color: white; padding: 0 25px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .search-button svg { width: 22px; height: 22px; }
+        
+        /* --- Main Content Container (FIX 1: Improved Readability) --- */
+        .content-container {
+            max-width: 80%;
+            margin: 40px auto;
+            padding: 40px 50px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+            line-height: 1.7;
+        }
+        .content-container h1, .content-container h2, .content-container h3 { margin-bottom: 15px; }
+        .content-container h1 { font-size: 36px; color: #2c3e50; }
+        .content-container h2 { font-size: 24px; color: #333; margin-top: 40px; border-bottom: 2px solid #e94057; padding-bottom: 5px; }
+        .content-container p { margin-bottom: 20px; font-size: 16px; }
+        .content-container a { color: #e94057; text-decoration: none; }
+        .content-container a:hover { text-decoration: underline; }
+
+        /* --- Floating Search Results Overlay (No changes needed) --- */
+        #search-results-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); z-index: 1000; display: none; justify-content: center; align-items: flex-start; padding-top: 10vh; }
+        #search-results-box { background: #fff; width: 100%; max-width: 600px; border-radius: 8px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); position: relative; }
+        .search-results-header { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; border-bottom: 1px solid #eee; }
+        .search-results-header span { font-weight: 600; color: #555; }
+        #close-search-btn { background: none; border: none; font-size: 24px; cursor: pointer; color: #888; line-height: 1; }
+        #search-results-list { max-height: 60vh; overflow-y: auto; }
+        .search-result-item { display: block; text-decoration: none; padding: 15px 20px; border-bottom: 1px solid #f0f0f0; transition: background-color 0.2s ease; }
+        .search-result-item:last-child { border-bottom: none; }
+        .search-result-item:hover { background-color: #f9f9f9; }
+        .search-result-item h3 { font-size: 16px; color: #e94057; margin-bottom: 5px; }
+        .search-result-item p { font-size: 13px; color: #666; margin: 0; }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <a href="../index.html" class="logo">
+            <svg class="logo-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="48" fill="#2c3e50"/><path d="M42 30 Q50 20 58 30 Q65 35 60 45 Q70 50 60 55 Q65 65 58 70 Q50 80 42 70 Q35 65 40 55 Q30 50 40 45 Q35 35 42 30Z" fill="#e94057"/></svg>
+            <span>NEURON-IQ</span>
+        </a>
+        <nav class="nav-links">
+            <ul>
+                <li><a href="../physics/">Physics</a></li>
+                <li><a href="../chemistry/">Chemistry</a></li>
+                <li><a href="../maths/">Maths</a></li>
+                <li><a href="../biology/">Biology</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="search-section">
+        <form class="search-container" id="search-form">
+            <input type="text" id="search-input" class="search-input" placeholder="Search the entire site...">
+            <button type="submit" class="search-button">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" /></svg>
+            </button>
+        </form>
+    </section>
+
+    <main class="content-container">
+       
+<h3 id="electrochemistry_intro"><strong>Electrochemistry</strong></h3>
+        <p><strong>Electrochemistry</strong> is the branch of chemistry that deals with the relationship between <u>electrical energy</u> and <u>chemical changes</u>. It encompasses the study of:</p>
+        <ul>
+            <li>The production of electricity from the energy released during spontaneous chemical reactions.</li>
+            <li>The use of electrical energy to bring about non-spontaneous chemical transformations.</li>
+        </ul>
+        <p>These processes occur in devices called <strong>electrochemical cells</strong>.</p>
+        <hr>
+
+        <h3 id="electrochemical_cells">Electrochemical Cells</h3>
+        <p>An electrochemical cell is a device capable of either generating electrical energy from chemical reactions or using electrical energy to cause chemical reactions. They are broadly classified into two types.</p>
+        
+        <h4>1. Galvanic (or Voltaic) Cell</h4>
+        <p>A galvanic cell converts the <u>chemical energy of a spontaneous redox reaction into electrical energy</u>. A well-known example is the <strong>Daniell Cell</strong>.</p>
+        <p>In a Daniell cell, a zinc rod is dipped in a $\ce{ZnSO4}$ solution, and a copper rod is dipped in a $\ce{CuSO4}$ solution. The two solutions are connected by a salt bridge, and the rods are connected by an external wire.</p>
+    
+        <div class="svg-diagram">
+<div class="svg-diagram">
+    <svg viewBox="0 0 320 220" xmlns="http://www.w3.org/2000/svg">
+        <title>Daniell Cell Diagram</title>
+        <defs>
+            <marker id="arrowhead-daniell" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+                <polygon points="0,0 6,3 0,6" fill="var(--text-main)" />
+            </marker>
+            <linearGradient id="solution-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%"  style="stop-color: var(--accent-secondary); stop-opacity: 0.1;" />
+                <stop offset="50%" style="stop-color: var(--accent-secondary); stop-opacity: 0.3;" />
+                <stop offset="100%" style="stop-color: var(--accent-secondary); stop-opacity: 0.1;" />
+            </linearGradient>
+        </defs>
+
+        <style>
+            .beaker { fill: rgba(255,255,255,0.1); stroke: var(--border-color); stroke-width: 1.5; }
+            .solution { fill: url(#solution-gradient); }
+            .zn-electrode { fill: #B0C4DE; stroke: #555; stroke-width: 0.5; }
+            .cu-electrode { fill: #B87333; stroke: #555; stroke-width: 0.5; }
+            .salt-bridge { fill: lightcyan; stroke: lightcyan; stroke-width: 10; stroke-linecap: round; }
+            .salt-bridge-fill { stroke: #d8a341; stroke-width: 8; stroke-linecap: round; }
+            .porous-plug { fill: #ddd; opacity: 0.8; }
+
+            .label, .equation {
+                font-family: var(--font-sans), sans-serif;
+                font-size: 9px; /* <-- Reduced from 10px */
+                fill: rgb(0, 110, 255);
+                text-anchor: middle;
+            }
+            .equation {
+                font-size: 5px; /* <-- Reduced from 11px */
+            }
+            .sub { font-size: 75%; baseline-shift: sub; }
+            .sup { font-size: 75%; baseline-shift: super; }
+
+            .wire { fill: none; stroke: #a0a0a0; stroke-width: 2; }
+            .flow-arrow { stroke: rgb(51, 122, 180); stroke-width: 2; marker-end: url(#arrowhead-daniell); }
+            .ion-arrow { stroke: rgb(255, 238, 0); stroke-width: 1; marker-end: url(#arrowhead-daniell); stroke-dasharray: 2 2; }
+            
+            .electron { fill: #FFD700; /* Gold */ }
+        </style>
+
+        <!-- === Left Half-Cell (Anode) === -->
+        <g id="anode-half-cell">
+            <path class="beaker" d="M 20 200 L 20 90 Q 70 70, 120 90 L 120 200 Z" />
+            <path class="solution" d="M 22 200 L 22 120 Q 70 105, 118 120 L 118 200 Z" />
+            <rect class="zn-electrode" x="65" y="60" width="10" height="90" rx="1"/>
+            
+            <text class="label" x="70" y="50">Zinc Anode (-)</text>
+            <text class="label" x="70" y="190">ZnSO<tspan class="sub">4</tspan> Solution</text>
+            <text class="equation" x="70" y="165">Oxidation:</text>
+            <text class="equation" x="70" y="178">Zn → Zn<tspan class="sup">2+</tspan> + 2e<tspan class="sup">-</tspan></text>
+        </g>
+
+        <!-- === Right Half-Cell (Cathode) === -->
+        <g id="cathode-half-cell">
+            <path class="beaker" d="M 200 200 L 200 90 Q 250 70, 300 90 L 300 200 Z" />
+            <path class="solution" d="M 202 200 L 202 120 Q 250 105, 298 120 L 298 200 Z" />
+            <rect class="cu-electrode" x="245" y="60" width="10" height="90" rx="1"/>
+
+            <text class="label" x="250" y="50">Copper Cathode (+)</text>
+            <text class="label" x="250" y="190">CuSO<tspan class="sub">4</tspan> Solution</text>
+            <text class="equation" x="250" y="165">Reduction:</text>
+            <text class="equation" x="250" y="178">Cu<tspan class="sup">2+</tspan> + 2e<tspan class="sup">-</tspan> → Cu</text>
+        </g>
+        
+        <!-- === Salt Bridge and Ion Flow === -->
+        <g id="salt-bridge">
+            <path class="salt-bridge" d="M 110 120 C 120 80, 200 80, 210 120" />
+            <path class="salt-bridge-fill" d="M 110 120 C 120 80, 200 80, 210 120" />
+            <circle class="porous-plug" cx="110" cy="120" r="6" />
+            <circle class="porous-plug" cx="210" cy="120" r="6" />
+            <text class="label" x="160" y="78">Salt Bridge</text>
+            <!-- Ion Flow Arrows -->
+            <path class="ion-arrow" d="M 180 98 C 170 105, 150 105, 140 98" />
+            <text class="label" x="160" y="115">Anions (SO<tspan class="sub">4</tspan><tspan class="sup">2-</tspan>)</text>
+            <path class="ion-arrow" d="M 140 88 C 150 81, 170 81, 180 88" />
+            <text class="label" x="160" y="90">Cations (K<tspan class="sup">+</tspan>)</text>
+        </g>
+        
+        <!-- === External Circuit and Electron Flow === -->
+        <g id="external-circuit">
+            <path class="wire" id="wire-path" d="M 70 60 C 70 20, 250 20, 250 60" />
+            <!-- Voltmeter -->
+            <circle cx="160" cy="28" r="15" fill="var(--bg-main)" stroke="var(--border-color)" stroke-width="1"/>
+            <text class="label" x="160" y="32" style="font-weight: bold; font-size: 11px;">1.10 V</text> <!-- <-- Reduced from 12px -->
+            <line x1="160" y1="28" x2="150" y2="20" stroke="var(--text-main)" stroke-width="1.5" />
+            <!-- Animated Electron Flow -->
+            <text class="label" x="100" y="15">Electron Flow (e<tspan class="sup">-</tspan>)</text>
+            <path class="flow-arrow" d="M 90,28 L 120,28" />
+            <circle class="electron" r="2.5">
+                <animateMotion dur="4s" repeatCount="indefinite" path="M 70 60 C 70 20, 250 20, 250 60" />
+            </circle>
+        </g>
+    </svg>
+</div>
+</div>
+        <ul>
+            <li><strong>Anode (Oxidation):</strong> Zinc is more reactive and gets oxidized.
+                $$ \ce{Zn(s) -> Zn^{2+}(aq) + 2e^{-}} $$
+                The zinc electrode is negatively charged.
+            </li>
+            <li><strong>Cathode (Reduction):</strong> Copper ions get reduced.
+                $$ \ce{Cu^{2+}(aq) + 2e^{-} -> Cu(s)} $$
+                The copper electrode is positively charged.
+            </li>
+            <li><strong>Overall Reaction:</strong>
+                $$ \ce{Zn(s) + Cu^{2+}(aq) -> Zn^{2+}(aq) + Cu(s)} $$
+                This reaction is spontaneous, with a standard cell potential ($E^0_{cell}$) of 1.1 V.
+            </li>
+            <li><strong>Salt Bridge:</strong> It maintains electrical neutrality in the half-cells by allowing the migration of ions, completing the circuit.</li>
+        </ul>
+
+        <h4>2. Electrolytic Cell</h4>
+        <p>An electrolytic cell uses <u>external electrical energy to drive a non-spontaneous chemical reaction</u>. This process is called <strong>electrolysis</strong>.</p>
+        <p>In an electrolytic cell:</p>
+        <ul>
+            <li>An external power source (like a battery) is connected.</li>
+            <li>The anode is the positive electrode, where oxidation occurs.</li>
+            <li>The cathode is the negative electrode, where reduction occurs.</li>
+        </ul>
+        <p>For example, if we apply an external potential greater than 1.1 V to the Daniell cell, the reaction reverses, and it functions as an electrolytic cell. Copper gets oxidized at the anode and zinc ions get reduced at the cathode.</p>
+        $$ \ce{Zn^{2+}(aq) + Cu(s) ->[E_{ext} > 1.1V] Zn(s) + Cu^{2+}(aq)} $$
+        <hr>
+
+        <h3 id="electrode_potential">Electrode Potential</h3>
+        <p>When an electrode is in contact with a solution of its ions, a potential difference develops at the interface. This is called the <strong>electrode potential</strong>.</p>
+        <p><strong>Standard Electrode Potential ($E^0$):</strong> It is the electrode potential measured under standard conditions: 1 M concentration for all ionic species, 1 bar pressure for any gases, and a temperature of 298 K (25°C). By convention, standard electrode potentials are quoted as <strong>reduction potentials</strong>.</p>
+
+        <h4>Standard Hydrogen Electrode (SHE)</h4>
+        <p>The potential of an individual half-cell cannot be measured. We can only measure the potential difference between two half-cells. Therefore, a reference electrode is needed. The <strong>Standard Hydrogen Electrode (SHE)</strong> is the universal reference electrode, and its potential is arbitrarily assigned a value of <strong>zero volts</strong> at all temperatures.</p>
+        <p><strong>Reaction:</strong> $\ce{2H^{+}(aq, 1M) + 2e^{-} <=> H2(g, 1 bar)}$     $E^0 = 0.00 \text{ V}$</p>
+        <div class="svg-diagram">
+    <svg viewBox="0 0 200 220" xmlns="http://www.w3.org/2000/svg">
+        <title>Standard Hydrogen Electrode (SHE)</title>
+        <defs>
+            <!-- Reusable arrowhead marker -->
+            <marker id="arrowhead-she" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+                <polygon points="0,0 6,3 0,6" fill="var(--text-main)" />
+            </marker>
+            <!-- Gradient for the acid solution -->
+            <linearGradient id="acidGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%"  style="stop-color: var(--accent-primary); stop-opacity: 0.1;" />
+                <stop offset="50%" style="stop-color: var(--accent-primary); stop-opacity: 0.25;" />
+                <stop offset="100%" style="stop-color: var(--accent-primary); stop-opacity: 0.1;" />
+            </linearGradient>
+        </defs>
+
+        <style>
+            .beaker { fill: none; stroke: var(--border-color); stroke-width: 1.5; }
+            .solution-acid { fill: lightcyan; }
+            .gas-tube { fill: rgba(255,255,255,0.1); stroke: var(--border-color); stroke-width: 1; }
+            .pt-electrode { fill: #444; stroke: #ccc; stroke-width: 2; }
+            .pt-wire { stroke: #808080; stroke-width: 1.5; }
+            .label-line { stroke: #666; stroke-width: 0.5; }
+
+            .label, .equation {
+                font-family: var(--font-sans), sans-serif;
+                font-size: 10px;
+                fill: black;
+                text-anchor: middle;
+            }
+            .equation { font-size: 11px; }
+            .sub { font-size: 75%; baseline-shift: sub; }
+            .sup { font-size: 75%; baseline-shift: super; }
+
+            .gas-arrow {
+                stroke: black;
+                stroke-width: 1;
+                marker-end: url(#arrowhead-she);
+            }
+            .h2-bubble {
+                fill: lightblue;
+                stroke: black;
+                stroke-width: 0.5;
+                opacity: 0.8;
+            }
+        </style>
+
+        <!-- Beaker and Acid Solution -->
+        <g id="beaker-and-solution">
+            <path class="solution-acid" d="M 30 190 L 30 110 Q 100 95, 170 110 L 170 190 Z" />
+            <path class="beaker" d="M 25 200 L 25 80 Q 100 60, 175 80 L 175 200 Z" />
+            <path class="beaker" d="M 25 80 Q 100 100, 175 80" />
+            <text class="label" x="100" y="180">Acidic Solution</text>
+            <text class="label" x="100" y="192">[H<tspan class="sup">+</tspan>] = 1 M</text>
+        </g>
+
+        <!-- Electrode Assembly -->
+        <g id="electrode-assembly">
+            <!-- Glass Bell Jar for Gas -->
+            <path class="gas-tube" d="M 80 170 V 70 H 120 V 170" />
+            <path class="gas-tube" d="M 120 80 H 150"/>
+            <!-- Platinum Wire and Foil -->
+            <line class="pt-wire" x1="100" y1="20" x2="100" y2="160" />
+            <rect class="pt-electrode" x="92" y="160" width="16" height="16" rx="1" />
+            <line class="label-line" x1="88" y1="168" x2="60" y2="168" />
+            <text class="label" text-anchor="end" x="58" y="170">Platinized Pt</text>
+            <text class="label" text-anchor="end" x="58" y="180">Electrode</text>
+        </g>
+        
+        <!-- Hydrogen Gas Flow and Bubbles -->
+        <g id="gas-flow">
+            <text class="label" x="160" y="70">H<tspan class="sub">2</tspan> gas (1 bar)</text>
+            <path class="gas-arrow" d="M 150 75 L 125 75" />
+            
+            <!-- Animated H2 Bubbles -->
+            <g class="h2-bubble">
+                <circle cx="95" cy="160" r="1">
+                    <animate attributeName="cy" from="170" to="110" dur="3s" begin="0s" repeatCount="indefinite" />
+                    <animate attributeName="r" from="1" to="4" dur="3s" begin="0s" repeatCount="indefinite" />
+                    <animate attributeName="opacity" from="1" to="0" dur="3s" begin="0s" repeatCount="indefinite" />
+                </circle>
+                <circle cx="108" cy="165" r="1">
+                    <animate attributeName="cy" from="170" to="110" dur="2.5s" begin="0.8s" repeatCount="indefinite" />
+                    <animate attributeName="r" from="1" to="3" dur="2.5s" begin="0.8s" repeatCount="indefinite" />
+                    <animate attributeName="opacity" from="1" to="0" dur="2.5s" begin="0.8s" repeatCount="indefinite" />
+                </circle>
+                 <circle cx="100" cy="170" r="1">
+                    <animate attributeName="cy" from="170" to="110" dur="3.5s" begin="1.5s" repeatCount="indefinite" />
+                    <animate attributeName="r" from="1" to="3.5" dur="3.5s" begin="1.5s" repeatCount="indefinite" />
+                    <animate attributeName="opacity" from="1" to="0" dur="3.5s" begin="1.5s" repeatCount="indefinite" />
+                </circle>
+            </g>
+        </g>
+
+        <!-- Key Information and Reactions -->
+        <g id="key-info">
+            <line class="label-line" x1="100" y1="20" x2="100" y2="10" />
+            <text class="label" x="100" y="5">External Connection</text>
+            <text class="label" x="100" y="45" style="font-weight: bold;">E<tspan class="sup">°</tspan> = 0.00 V (by definition)</text>
+            
+            <text class="equation" x="100" y="130">2H<tspan class="sup">+</tspan>(aq) + 2e<tspan class="sup">-</tspan> ⇌ H<tspan class="sub">2</tspan>(g)</text>
+        </g>
+    </svg>
+</div>
+        <p>To measure the standard electrode potential of an element, a cell is constructed with the SHE as one electrode (anode) and the element's standard electrode as the other (cathode). The measured cell potential ($E^0_{cell}$) is then the standard reduction potential of that element.</p>
+        <p>$E^0_{cell} = E^0_{cathode} - E^0_{anode} = E^0_{element} - E^0_{SHE} = E^0_{element} - 0$</p>
+        <p>$\therefore E^0_{cell} = E^0_{element}$</p>
+        
+        <h4>Electrochemical Series</h4>
+        <p>The arrangement of electrodes in increasing order of their standard reduction potentials is called the electrochemical series. A small portion of the series is shown below.</p>
+        <table>
+            <thead>
+                <tr><th>Reduction Half-Reaction</th><th>Standard Potential, $E^0$ (V)</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>$\ce{F2(g) + 2e^{-} -> 2F^{-}(aq)}$</td><td>+2.87</td></tr>
+                <tr><td>$\ce{Au^{3+}(aq) + 3e^{-} -> Au(s)}$</td><td>+1.50</td></tr>
+                <tr><td>$\ce{Cl2(g) + 2e^{-} -> 2Cl^{-}(aq)}$</td><td>+1.36</td></tr>
+                <tr><td>$\ce{Ag^{+}(aq) + e^{-} -> Ag(s)}$</td><td>+0.80</td></tr>
+                <tr><td>$\ce{Cu^{2+}(aq) + 2e^{-} -> Cu(s)}$</td><td>+0.34</td></tr>
+                <tr><td>$\ce{2H^{+}(aq) + 2e^{-} -> H2(g)}$</td><td><strong>0.00</strong></td></tr>
+                <tr><td>$\ce{Fe^{2+}(aq) + 2e^{-} -> Fe(s)}$</td><td>-0.44</td></tr>
+                <tr><td>$\ce{Zn^{2+}(aq) + 2e^{-} -> Zn(s)}$</td><td>-0.76</td></tr>
+                <tr><td>$\ce{Al^{3+}(aq) + 3e^{-} -> Al(s)}$</td><td>-1.66</td></tr>
+                <tr><td>$\ce{Li^{+}(aq) + e^{-} -> Li(s)}$</td><td>-3.05</td></tr>
+            </tbody>
+        </table>
+        <ul>
+            <li>A <strong>large positive $E^0$</strong> value indicates a strong tendency for the species to be <strong>reduced</strong> (strong oxidizing agent). Ex: $\ce{F2}$.</li>
+            <li>A <strong>large negative $E^0$</strong> value indicates a strong tendency for the species to be <strong>oxidized</strong> (strong reducing agent). Ex: $\ce{Li}$.</li>
+        </ul>
+        <hr>
+
+        <h3 id="nernst_equation">Nernst Equation</h3>
+        <p>The Nernst equation relates the reduction potential of an electrochemical reaction to the standard electrode potential, temperature, and concentrations of the reacting species.</p>
+        <p>For a general electrode reaction: $\ce{M^{n+}(aq) + ne^{-} -> M(s)}$</p>
+        <p>The Nernst equation is:
+        $$ E_{cell} = E^0_{cell} - \frac{RT}{nF} \ln Q $$
+        Where:</p>
+        <ul>
+            <li>$E_{cell}$ is the cell potential under non-standard conditions.</li>
+            <li>$E^0_{cell}$ is the standard cell potential.</li>
+            <li>$R$ is the ideal gas constant (8.314 J K$^{-1}$ mol$^{-1}$).</li>
+            <li>$T$ is the temperature in Kelvin.</li>
+            <li>$n$ is the number of moles of electrons transferred in the reaction.</li>
+            <li>$F$ is the Faraday constant (96485 C mol$^{-1}$).</li>
+            <li>$Q$ is the reaction quotient. For the reaction above, $Q = \frac{1}{[\ce{M^{n+}}]}$.</li>
+        </ul>
+        <p>At 298 K (25°C), converting from natural log ($\ln$) to base-10 log ($\log$), the equation simplifies to:</p>
+        $$ E_{cell} = E^0_{cell} - \frac{0.0592}{n} \log Q $$
+        
+        <div class="question-block">
+            <h5>Example: Calculate the potential of a zinc electrode dipped in 0.1 M $\ce{ZnSO4}$ solution at 25°C. ($E^0_{\ce{Zn^{2+}/Zn}} = -0.76 \text{ V}$)</h5>
+        </div>
+        <div class="answer-block">
+            <p>The electrode reaction is: $\ce{Zn^{2+}(aq) + 2e^{-} -> Zn(s)}$</p>
+            <p>Here, $n=2$, $[\ce{Zn^{2+}}] = 0.1 \text{ M}$, $E^0 = -0.76 \text{ V}$.</p>
+            <p>Using the Nernst equation at 298 K:</p>
+            <p>$E = E^0 - \frac{0.0592}{n} \log\frac{1}{[\ce{Zn^{2+}}]}$</p>
+            <p>$E = -0.76 - \frac{0.0592}{2} \log\frac{1}{0.1}$</p>
+            <p>$E = -0.76 - 0.0296 \log(10)$</p>
+            <p>$E = -0.76 - 0.0296 \times 1 = -0.7896 \text{ V}$</p>
+        </div>
+
+        <h4>Nernst Equation, Equilibrium Constant, and Gibbs Energy</h4>
+        <p>The maximum useful work obtainable from a galvanic cell is equal to the decrease in Gibbs free energy ($\Delta G$).</p>
+        $$ \Delta G = -nFE_{cell} $$
+        Under standard conditions:
+        $$ \Delta G^0 = -nFE^0_{cell} $$
+        <p>At equilibrium, the cell potential $E_{cell} = 0$, and the reaction quotient $Q$ becomes the equilibrium constant $K_c$. The Nernst equation becomes:</p>
+        <p>$0 = E^0_{cell} - \frac{RT}{nF} \ln K_c$</p>
+        <p>Rearranging gives the relationship between standard cell potential and the equilibrium constant:</p>
+        $$ E^0_{cell} = \frac{RT}{nF} \ln K_c = \frac{2.303RT}{nF} \log K_c $$
+        We can also relate $\Delta G^0$ and $K_c$:
+        $$ \Delta G^0 = -RT \ln K_c $$
+
+        <div class="question-block">
+            <h5>Example: For the Daniell cell $\ce{Zn(s)|Zn^{2+}(1M)||Cu^{2+}(1M)|Cu(s)}$, $E^0_{cell} = 1.10 \text{ V}$. Calculate the equilibrium constant $K_c$ for the reaction at 298 K.</h5>
+        </div>
+        <div class="answer-block">
+            <p>The cell reaction is $\ce{Zn(s) + Cu^{2+}(aq) -> Zn^{2+}(aq) + Cu(s)}$.</p>
+            <p>Number of electrons transferred, $n=2$.</p>
+            <p>Using the formula at 298 K: $E^0_{cell} = \frac{0.0592}{n} \log K_c$</p>
+            <p>$1.10 = \frac{0.0592}{2} \log K_c$</p>
+            <p>$\log K_c = \frac{1.10 \times 2}{0.0592} \approx 37.16$</p>
+            <p>$K_c = 10^{37.16} \approx 1.45 \times 10^{37}$</p>
+            <p>The large value of $K_c$ indicates that the reaction goes almost to completion.</p>
+        </div>
+        <hr>
+
+        <h3 id="conductance">Conductance of Electrolytic Solutions</h3>
+        <p>The flow of electricity through electrolytic solutions is due to the movement of ions. Several terms are used to describe this phenomenon.</p>
+        <ul>
+            <li><strong>Resistance (R):</strong> The opposition to the flow of current. Unit: ohm ($\Omega$).</li>
+            <li><strong>Resistivity ($\rho$):</strong> The resistance of a conductor of 1m length and 1m² cross-sectional area. $R = \rho \frac{l}{A}$. Unit: ohm-meter ($\Omega$ m).</li>
+            <li><strong>Conductance (G):</strong> The ease with which current flows. It is the reciprocal of resistance. $G = \frac{1}{R}$. Unit: siemens (S) or $\Omega^{-1}$ (mho).</li>
+            <li><strong>Conductivity ($\kappa$, kappa):</strong> The reciprocal of resistivity. It is the conductance of a solution of 1m length and 1m² cross-sectional area. $\kappa = \frac{1}{\rho} = \frac{l}{A \cdot R} = G \cdot \frac{l}{A}$. Unit: S m$^{-1}$. The term $\frac{l}{A}$ is known as the <strong>cell constant ($G^*$)</strong>. So, $\kappa = G \cdot G^*$.</li>
+            <li><strong>Molar Conductivity ($\Lambda_m$):</strong> The conductivity of a volume of solution containing one mole of electrolyte placed between two electrodes with a unit area of cross-section and at a distance of unit length.
+            $$ \Lambda_m = \frac{\kappa}{C} $$
+            where C is the molar concentration (mol m⁻³). If C is in mol L⁻¹, the formula is often written as $\Lambda_m (\text{S cm}^2 \text{mol}^{-1}) = \frac{\kappa (\text{S cm}^{-1}) \times 1000}{C (\text{mol L}^{-1})}$.
+            </li>
+        </ul>
+        
+        <h4>Variation of Conductivity and Molar Conductivity with Concentration</h4>
+        <p><strong>Conductivity ($\kappa$):</strong> Decreases with a decrease in concentration (dilution) for both strong and weak electrolytes. This is because the number of ions per unit volume that carry the current decreases on dilution.</p>
+        <p><strong>Molar Conductivity ($\Lambda_m$):</strong> Increases with a decrease in concentration (dilution). This is because the total volume V of solution containing one mole of electrolyte increases on dilution. Although $\kappa$ decreases, the increase in V is much larger, leading to an overall increase in $\Lambda_m = \kappa \cdot V$.</p>
+        <div class="svg-diagram">
+            <svg viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg">
+                <title>Molar Conductivity vs. Concentration</title>
+                <style>
+                    .axis, .grid { stroke: var(--border-color); stroke-width: 0.5; }
+                    .text-label { font-family: var(--font-sans); font-size: 8px; fill: var(--text-main); text-anchor: middle; }
+                    .strong-electrolyte { stroke: var(--accent-secondary); stroke-width: 1.5; fill: none; }
+                    .weak-electrolyte { stroke: var(--accent-primary); stroke-width: 1.5; fill: none; }
+                    .extrapolation { stroke: var(--accent-secondary); stroke-width: 1; fill: none; stroke-dasharray: 3,2; }
+                </style>
+                <!-- Axes -->
+                <line class="axis" x1="30" y1="170" x2="280" y2="170"/>
+                <line class="axis" x1="30" y1="20" x2="30" y2="170"/>
+                <text class="text-label" x="155" y="185">$\sqrt{C}$ (mol/L)$^{1/2}$</text>
+                <text class="text-label" x="10" y="95" transform="rotate(-90 10,95)">$\Lambda_m$ (S cm² mol⁻¹)</text>
+
+                <!-- Curves -->
+                <path class="weak-electrolyte" d="M 270 120 Q 150 110, 80 60 Q 40 30, 35 25"/>
+                <text class="text-label" x="120" y="80" fill="var(--accent-primary)">Weak Electrolyte ($\ce{CH3COOH}$)</text>
+
+                <path class="strong-electrolyte" d="M 270 140 L 80 120"/>
+                <text class="text-label" x="180" y="150" fill="var(--accent-secondary)">Strong Electrolyte (KCl)</text>
+
+                <!-- Extrapolation -->
+                <line class="extrapolation" x1="80" y1="120" x2="30" y2="115"/>
+                <circle cx="30" cy="115" r="2" fill="var(--accent-secondary)"/>
+                <text class="text-label" x="50" y="105">$\Lambda_m^0$</text>
+            </svg>
+        </div>
+        <p><strong>Limiting Molar Conductivity ($\Lambda_m^0$):</strong> The molar conductivity when the concentration approaches zero (infinite dilution). For strong electrolytes, $\Lambda_m^0$ can be found by extrapolating the plot of $\Lambda_m$ vs. $\sqrt{C}$ to zero concentration (Debye-Hückel-Onsager equation: $\Lambda_m = \Lambda_m^0 - A\sqrt{C}$). For weak electrolytes, the increase is too steep for extrapolation, so $\Lambda_m^0$ is determined indirectly using Kohlrausch's law.</p>
+
+        <h4>Kohlrausch's Law of Independent Migration of Ions</h4>
+        <p>The law states that the limiting molar conductivity of an electrolyte ($\Lambda_m^0$) can be represented as the sum of the individual contributions of the anion and cation of the electrolyte.</p>
+        <p>For an electrolyte $\ce{A_x B_y}$:
+        $$ \Lambda_m^0(\ce{A_x B_y}) = x \cdot \lambda_+^0 + y \cdot \lambda_-^0 $$
+        where $\lambda_+^0$ and $\lambda_-^0$ are the limiting molar ionic conductivities of the cation and anion, respectively.</p>
+        <p><strong>Application:</strong> We can calculate $\Lambda_m^0$ for a weak electrolyte like acetic acid ($\ce{CH3COOH}$) using the $\Lambda_m^0$ values of strong electrolytes:</p>
+        <p>$\Lambda_m^0(\ce{CH3COOH}) = \lambda^0(\ce{H+}) + \lambda^0(\ce{CH3COO-})$</p>
+        <p>$\Lambda_m^0(\ce{CH3COOH}) = [\Lambda_m^0(\ce{HCl}) + \Lambda_m^0(\ce{CH3COONa})] - \Lambda_m^0(\ce{NaCl})$</p>
+        <hr>
+
+        <h3 id="electrolysis">Electrolysis</h3>
+        <p>Electrolysis is the process of using electricity to cause a non-spontaneous chemical reaction. It is carried out in an electrolytic cell.</p>
+        <h4>Faraday's Laws of Electrolysis</h4>
+        <p><strong>First Law:</strong> The amount of chemical substance deposited or liberated at any electrode is directly proportional to the quantity of electricity passed through the electrolyte.</p>
+        <p>$ w \propto Q \implies w = ZQ = ZIt $</p>
+        <p>where $w$ is the mass of substance, $Q$ is the charge in coulombs, $I$ is current in amperes, $t$ is time in seconds, and $Z$ is the electrochemical equivalent.</p>
+        
+        <p><strong>Second Law:</strong> When the same quantity of electricity is passed through different electrolytes, the masses of the substances liberated at the electrodes are proportional to their chemical equivalent weights.</p>
+        <p>The charge on one mole of electrons is one Faraday ($F \approx 96500$ C/mol). To deposit one mole of a substance $\ce{M^{n+}}$, we need $n$ moles of electrons, or $nF$ coulombs of charge.</p>
+        
+        <h4>Products of Electrolysis</h4>
+        <p>The product of electrolysis depends on the nature of the electrolyte and the electrodes (inert like Pt, or active).</p>
+        <p>Example: <strong>Electrolysis of aqueous $\ce{NaCl}$ solution</strong> using inert electrodes.</p>
+        <ul>
+            <li>Possible cathode reactions (Reduction):
+                <ol>
+                    <li>$\ce{Na^{+}(aq) + e^{-} -> Na(s)}$    $E^0 = -2.71$ V</li>
+                    <li>$\ce{2H2O(l) + 2e^{-} -> H2(g) + 2OH^{-}(aq)}$    $E = -0.83$ V (at pH 7)</li>
+                </ol>
+                Reduction of water is preferred as it has a less negative potential. <strong>Product: $\ce{H2}$ gas and $\ce{OH-}$ ions.</strong>
+            </li>
+            <li>Possible anode reactions (Oxidation):
+                <ol>
+                    <li>$\ce{2Cl^{-}(aq) -> Cl2(g) + 2e^{-}}$    $E^0 = -1.36$ V</li>
+                    <li>$\ce{2H2O(l) -> O2(g) + 4H^{+}(aq) + 4e^{-}}$    $E = -0.82$ V (at pH 7)</li>
+                </ol>
+                 Theoretically, water oxidation is preferred. However, due to <strong>overpotential</strong> (extra voltage required for the reaction to proceed at a reasonable rate), the oxidation of chloride ions is observed. <strong>Product: $\ce{Cl2}$ gas.</strong>
+            </li>
+        </ul>
+        <p><strong>Overall products:</strong> $\ce{H2}$ gas at cathode, $\ce{Cl2}$ gas at anode, and $\ce{NaOH}$ solution remains.</p>
+        <hr>
+
+        <h3 id="batteries">Batteries</h3>
+        <p>A battery is a galvanic cell, or a series of connected galvanic cells, that can be used as a source of direct electric current at a constant voltage.</p>
+        
+        <h4>1. Primary Batteries</h4>
+        <p>In primary batteries, the electrode reactions cannot be reversed. They become "dead" after the reactants are consumed.
+        <ul>
+            <li><strong>Dry Cell (Leclanché Cell):</strong> Common AA, AAA batteries.
+                <ul>
+                    <li>Anode: Zinc container ($\ce{Zn -> Zn^{2+} + 2e^{-}}$)</li>
+                    <li>Cathode: Graphite rod surrounded by $\ce{MnO2}$ and carbon powder. ($\ce{2MnO2 + 2NH4+ + 2e^{-} -> Mn2O3 + 2NH3 + H2O}$)</li>
+                    <li>Electrolyte: Moist paste of $\ce{NH4Cl}$ and $\ce{ZnCl2}$.</li>
+                    <li>Voltage: ~1.5 V</li>
+                </ul>
+            </li>
+            <li><strong>Mercury Cell:</strong> Used in watches, hearing aids.
+                <ul>
+                    <li>Anode: Zinc-mercury amalgam.</li>
+                    <li>Cathode: Paste of $\ce{HgO}$ and carbon.</li>
+                    <li>Electrolyte: Paste of $\ce{KOH}$ and $\ce{ZnO}$.</li>
+                    <li>Voltage: ~1.35 V, constant throughout its life.</li>
+                </ul>
+            </li>
+        </ul></p>
+
+        <h4>2. Secondary Batteries (Rechargeable)</h4>
+        <p>The electrode reactions can be reversed by passing an external current, thus recharging the battery.
+        <ul>
+            <li><strong>Lead-Acid Storage Battery:</strong> Used in automobiles.
+                <ul>
+                    <li>Anode: Spongy lead ($\ce{Pb}$) grids.</li>
+                    <li>Cathode: Lead grids packed with lead dioxide ($\ce{PbO2}$).</li>
+                    <li>Electrolyte: ~38% solution of $\ce{H2SO4}$.</li>
+                    <li><strong>Discharging Reaction:</strong> Both electrodes are converted to $\ce{PbSO4}$.
+                    $$ \ce{Pb(s) + PbO2(s) + 2H2SO4(aq) -> 2PbSO4(s) + 2H2O(l)} $$
+                    </li>
+                    <li><strong>Charging Reaction:</strong> The reverse of the discharging reaction.</li>
+                    <li>Voltage: A 12V car battery consists of six such cells connected in series, each producing ~2V.</li>
+                </ul>
+            </li>
+            <li><strong>Nickel-Cadmium (Ni-Cd) Cell:</strong> Longer life than lead storage but more expensive.
+            $$ \ce{Cd(s) + 2Ni(OH)3(s) -> CdO(s) + 2Ni(OH)2(s) + H2O(l)} $$
+            </li>
+        </ul></p>
+        <hr>
+        
+        <h3 id="fuel_cells">Fuel Cells</h3>
+        <p>Fuel cells are galvanic cells designed to convert the energy of combustion of fuels (like hydrogen, methane) directly into electrical energy. Reactants are continuously supplied to the electrodes.</p>
+        <h4>Hydrogen-Oxygen ($\ce{H2-O2}$) Fuel Cell</h4>
+        <p>Used in the Apollo space program.
+        <ul>
+            <li>Anode: $\ce{2H2(g) + 4OH^{-}(aq) -> 4H2O(l) + 4e^{-}}$</li>
+            <li>Cathode: $\ce{O2(g) + 2H2O(l) + 4e^{-} -> 4OH^{-}(aq)}$</li>
+            <li>Overall Reaction: $\ce{2H2(g) + O2(g) -> 2H2O(l)}$</li>
+            <li>Advantages: High efficiency (~70%), pollution-free (product is water).</li>
+        </ul></p>
+        <hr>
+
+        <h3 id="corrosion">Corrosion</h3>
+        <p>Corrosion is the gradual destruction of metals through chemical or electrochemical reactions with their environment. The rusting of iron is a common example.</p>
+        <h4>Electrochemical Mechanism of Rusting</h4>
+        <p>Rusting of iron can be considered as the formation of a miniature electrochemical cell on the surface of the iron object.</p>
+<div class="svg-diagram">
+    <svg viewBox="0 0 300 180" xmlns="http://www.w3.org/2000/svg">
+        <title>Improved Electrochemical Mechanism of Rusting</title>
+        <defs>
+            <!-- Reusable arrowhead marker -->
+            <marker id="arrowhead" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto-start-reverse">
+                <polygon points="0,0 6,3 0,6" fill="var(--text-main)" />
+            </marker>
+            <!-- Gradient for a metallic look on the iron bar -->
+            <linearGradient id="ironGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" style="stop-color:#D3D3D3;" />
+                <stop offset="50%" style="stop-color:#E8E8E8;" />
+                <stop offset="100%" style="stop-color:#B0C4DE;" />
+            </linearGradient>
+            <!-- Gradient for a 3D water droplet effect -->
+            <radialGradient id="waterGradient">
+                <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.6"/>
+                <stop offset="100%" stop-color="var(--accent-secondary)" stop-opacity="0.4"/>
+            </radialGradient>
+        </defs>
+
+        <style>
+            .iron-bar { fill: url(#ironGradient); stroke: #888; stroke-width: 0.5; }
+            .water-droplet { fill: lightcyan; }
+            .rust-spot { fill: #A0522D; opacity: 0.85; }
+
+            .label, .equation {
+                font-family: var(--font-sans), sans-serif;
+                font-size: 4px;
+                fill: black;
+                text-anchor: middle;
+            }
+            .equation { font-size: 5px; }
+            .sub { font-size: 75%; baseline-shift: sub; }
+            .sup { font-size: 75%; baseline-shift: super; }
+
+            .flow-arrow {
+                stroke: black;
+                stroke-width: 0.7;
+                marker-end: url(#arrowhead);
+                fill: none;
+            }
+            .ion-arrow {
+                stroke: rgb(5, 122, 122);
+                stroke-width: 1.5;
+                stroke-dasharray: 2 2;
+                marker-end: url(#arrowhead);
+                fill: none;
+            }
+            .label-line { stroke: #666; stroke-width: 0.5; }
+        </style>
+
+        <!-- === Main Elements === -->
+        
+        <!-- 1. Iron Base -->
+        <rect class="iron-bar" x="10" y="120" width="280" height="40" rx="3"/>
+        <text class="label" x="150" y="145">Iron (Fe)</text>
+        
+        <!-- 2. Water Droplet -->
+        <path class="water-droplet" d="M 40 120 C 40 60, 260 60, 260 120 Z"/>
+        <text class="label" x="150" y="80">Water Droplet (H<tspan class="sub">2</tspan>O)</text>
+        <text class="label" x="240" y="65">O<tspan class="sub">2</tspan> from air</text>
+        <path class="flow-arrow" d="M 235,70 L 220,100" />
+        
+        <!-- === Electrochemical Process === -->
+
+        <!-- 3. Anodic Site (where iron dissolves) -->
+        <g id="anode-site">
+            <text class="label" x="85" y="105">Anode (Oxidation)</text>
+            <text class="equation" x="85" y="118">
+                Fe → Fe<tspan class="sup">2+</tspan> + 2e<tspan class="sup">-</tspan>
+            </text>
+            <!-- Arrow showing Fe2+ ions moving into the water -->
+            <path class="ion-arrow" d="M 85,125 C 95,110 105,105 115,105" />
+            <text class="label" x="118" y="100">Fe<tspan class="sup">2+</tspan> ions</text>
+        </g>
+
+        <!-- 4. Cathodic Site (where oxygen is reduced) -->
+        <g id="cathode-site">
+            <text class="label" x="215" y="105">Cathode (Reduction)</text>
+            <text class="equation" x="215" y="118">
+                O<tspan class="sub">2</tspan> + 2H<tspan class="sub">2</tspan>O + 4e<tspan class="sup">-</tspan> → 4OH<tspan class="sup">-</tspan>
+            </text>
+        </g>
+        
+        <!-- 5. Electron Flow (through the metal) -->
+        <g id="electron-flow">
+            <path class="flow-arrow" d="M 100 130 C 130 145, 170 145, 200 130" />
+            <text class="label" x="150" y="158">Electron flow (e<tspan class="sup">-</tspan>) through metal</text>
+        </g>
+
+        <!-- 6. Rust Formation (where products meet) -->
+        <g id="rust-formation">
+            <!-- More organic rust shape -->
+            <path class="rust-spot" d="M 130 120 C 135 112, 165 112, 170 120 C 160 125, 140 125, 130 120 Z" />
+            <line class="label-line" x1="150" y1="115" x2="150" y2="48" />
+            <text class="label" x="150" y="25">Rust Formation</text>
+            <text class="equation" x="150" y="40">
+                4Fe<tspan class="sup">2+</tspan> + O<tspan class="sub">2</tspan> + H<tspan class="sub">2</tspan>O → Fe<tspan class="sub">2</tspan>O<tspan class="sub">3</tspan>·xH<tspan class="sub">2</tspan>O (Rust)
+            </text>
+        </g>
+    </svg>
+</div>
+        <ul>
+            <li><strong>Anodic region:</strong> A spot on the iron surface acts as the anode where iron is oxidized.
+            $$ \ce{Fe(s) -> Fe^{2+}(aq) + 2e^{-}} $$
+            </li>
+            <li><strong>Cathodic region:</strong> The electrons released travel through the metal to another spot which acts as the cathode. Here, in the presence of dissolved oxygen and $\ce{H^+}$ ions (from dissolved $\ce{CO2}$ forming carbonic acid), oxygen is reduced.
+            $$ \ce{O2(g) + 4H^{+}(aq) + 4e^{-} -> 2H2O(l)} $$
+            </li>
+            <li><strong>Rust Formation:</strong> The $\ce{Fe^{2+}}$ ions are further oxidized by atmospheric oxygen to $\ce{Fe^{3+}}$ ions, which then combine with water to form hydrated ferric oxide ($\ce{Fe2O3.xH2O}$), commonly known as rust.</li>
+        </ul>
+        <p><strong>Prevention of Corrosion:</strong>
+        Methods include painting, oiling, galvanizing (coating with zinc), and using a sacrificial anode (attaching a more reactive metal like Mg or Zn, which corrodes instead of the iron).</p>
+    </main>
+
+    <div id="search-results-overlay">
+        <div id="search-results-box">
+            <div class="search-results-header"><span>Search Results</span><button id="close-search-btn">&times;</button></div>
+            <div id="search-results-list"></div>
+        </div>
+    </div>
+
+    <script>
+        let searchableData = [];
+        const searchInput = document.getElementById('search-input');
+        const searchResultsOverlay = document.getElementById('search-results-overlay');
+        const searchResultsList = document.getElementById('search-results-list');
+        const closeSearchBtn = document.getElementById('close-search-btn');
+
+        document.addEventListener('DOMContentLoaded', () => {
+            fetch('../contents.json')
+                .then(response => response.json())
+                .then(data => { searchableData = data; })
+                .catch(error => console.error('Error loading search data:', error));
+        });
+
+        let debounceTimer;
+        searchInput.addEventListener('keyup', () => {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => { performSearch(searchInput.value); }, 300);
+        });
+
+        document.getElementById('search-form').addEventListener('submit', e => e.preventDefault());
+
+        function closeOverlay() { searchResultsOverlay.style.display = 'none'; }
+        closeSearchBtn.addEventListener('click', closeOverlay);
+        searchResultsOverlay.addEventListener('click', (event) => {
+            if (event.target === searchResultsOverlay) { closeOverlay(); }
+        });
+
+        function performSearch(query) {
+            if (!query || query.trim() === '') { closeOverlay(); return; }
+            const scoredResults = searchableData.map(item => ({ item, score: calculateScore(item, query) }));
+            const finalResults = scoredResults.filter(result => result.score > 0).sort((a, b) => b.score - a.score).map(result => result.item);
+            displayResults(finalResults);
+        }
+
+        function calculateScore(item, query) {
+            let score = 0;
+            const lowerQuery = query.toLowerCase();
+            if (item.title.toLowerCase() === lowerQuery) score += 100;
+            else if (item.title.toLowerCase().startsWith(lowerQuery)) score += 50;
+            else if (item.title.toLowerCase().includes(lowerQuery)) score += 20;
+            if (item.description.toLowerCase().includes(lowerQuery)) score += 10;
+            if (item.author.toLowerCase().includes(lowerQuery)) score += 5;
+            if (item.category.toLowerCase().includes(lowerQuery)) score += 5;
+            return score;
+        }
+
+        function displayResults(results) {
+            searchResultsList.innerHTML = '';
+            if (results.length === 0) {
+                searchResultsList.innerHTML = `<p style="padding: 20px; text-align: center; color: #888;">No results found.</p>`;
+            } else {
+                results.forEach(item => {
+                    const resultElement = document.createElement('a');
+                    // FIX 2: Use absolute path directly for more robust linking.
+                    resultElement.href = item.src; 
+                    resultElement.classList.add('search-result-item');
+                    resultElement.innerHTML = `<h3>${item.title}</h3><p>Category: ${item.category}</p>`;
+                    searchResultsList.appendChild(resultElement);
+                });
+            }
+            searchResultsOverlay.style.display = 'flex';
+        }
+    </script>
+</body>
+</html>
