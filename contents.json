@@ -124,5 +124,12 @@
     "src":"/chemistry/Organic-Chemistry/chemical-equilibria.html",
     "author": "Kavya Sahai",
     "category": "Chemistry"
+  },
+  {
+    "title": "How does one even know Methane is Tetrahedral? - Organic Chemistry",
+    "description": "how do we know that CH4 is tetrahedral? And secondly, how do  we reconcile this  electronic configuration (2s<sup>2</sup> 2p<sup>2</sup> ) with the fact that we have four equal C–H bonds?",
+    "src":"/chemistry/Organic-Chemistry/methane-tetrahedral.html",
+    "author": "Kavya Sahai",
+    "category": "Chemistry"
   }  
 ]
