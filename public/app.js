@@ -204,10 +204,11 @@ document.addEventListener("DOMContentLoaded", () => {
         const fuseOptions = {
             includeScore: true,
             threshold: 0.4, 
+            ignoreLocation: true,
             keys: [
                 { name: 'name', weight: 1.0 },         
                 { name: 'category', weight: 0.5 },      
-                { name: 'searchContent', weight: 0.3 }  
+                { name: 'searchContent', weight: 0.8 }  
             ]
         };
 
