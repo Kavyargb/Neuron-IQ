@@ -22,9 +22,63 @@ document.addEventListener("DOMContentLoaded", () => {
         return 'var(--color-science)';
     };
 
-    // --- MODULE 2: Landing Interface ---
+    // --- MODULE 2: Landing Interface & Typewriter ---
+    
+    // Typewriter Configuration
+    const queries = [
+        "Understand 'Quantum Superposition'",
+        "Explore 'General Relativity'",
+        "Learn about 'Neural Networks'",
+        "Discover 'Eigenvectors'",
+        "Dive into 'Thermodynamics'"
+    ];
+    
+    let queryIdx = 0;
+    let charIdx = 0;
+    let isDeleting = false;
+    let typingTimer;
+
+    function typeEffect() {
+        const currentQuery = queries[queryIdx];
+        
+        if (isDeleting) {
+            typewriter.textContent = currentQuery.substring(0, charIdx - 1);
+            charIdx--;
+        } else {
+            typewriter.textContent = currentQuery.substring(0, charIdx + 1);
+            charIdx++;
+        }
+
+        // Variable typing speeds to make it feel human
+        let typeSpeed = isDeleting ? 30 : 60 + Math.random() * 40;
+
+        if (!isDeleting && charIdx === currentQuery.length) {
+            typeSpeed = 2500; // Pause at the end of the phrase
+            isDeleting = true;
+        } else if (isDeleting && charIdx === 0) {
+            isDeleting = false;
+            queryIdx = (queryIdx + 1) % queries.length; // Move to next query
+            typeSpeed = 500; // Pause before starting new phrase
+        }
+
+        typingTimer = setTimeout(typeEffect, typeSpeed);
+    }
+
+    // Start the typewriter loop
+    typeEffect();
+
+    // Hide typewriter when user focuses or types
+    searchBar.addEventListener('focus', () => {
+        typewriter.style.opacity = '0';
+    });
+
+    searchBar.addEventListener('blur', () => {
+        if (searchBar.value.length === 0) {
+            typewriter.style.opacity = '1';
+        }
+    });
+
     searchBar.addEventListener('input', () => {
-        typewriter.style.opacity = searchBar.value.length > 0 ? '0' : '1';
         if (searchBar.value.length > 0) {
             enterHint.style.opacity = '1';
             dots.style.opacity = '0';
@@ -53,7 +107,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // --- MODULE 3: Contextual Search Algorithm ---
     // --- MODULE 3: Contextual Fuzzy Search Algorithm ---
     function triggerSearchAlgorithm(query) {
         if(!window.NeuronMap) return console.error("No Map Data!");

@@ -1,58 +1,181 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
 :root {
-    --bg-main: #101011;
-    --text-primary: #e2e8f0;
+    --bg-main: #050505;
+    --text-primary: #f8fafc;
     --text-muted: #94a3b8;
-    --accent: #facc15;
+    --accent: #fbbf24;
     --border-color: rgba(255,255,255,0.08);
+    --surface: rgba(255,255,255,0.03);
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+* { 
+    box-sizing: border-box; 
+    margin: 0; 
+    padding: 0; 
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; 
+}
 
-body { background-color: var(--bg-main); color: var(--text-primary); line-height: 1.7; }
+body { 
+    background-color: var(--bg-main); 
+    /* Subtle top glow effect */
+    background-image: radial-gradient(80% 50% at 50% -20%, rgba(50, 60, 100, 0.25) 0%, transparent 100%);
+    background-repeat: no-repeat;
+    color: var(--text-primary); 
+    line-height: 1.7; 
+    -webkit-font-smoothing: antialiased;
+}
 
-/* Top Nav */
-.top-nav { padding: 20px 40px; border-bottom: 1px solid var(--border-color); }
-.brand { color: rgba(255,255,255,0.4); text-decoration: none; font-size: 1.4rem; font-weight: 300; letter-spacing: 1px; }
+/* Frosted Glass Top Nav */
+.top-nav { 
+    padding: 15px 40px; 
+    border-bottom: 1px solid var(--border-color); 
+    background: rgba(5, 5, 5, 0.6);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    position: sticky; 
+    top: 0; 
+    z-index: 100;
+}
+
+.brand { 
+    color: var(--text-primary); 
+    text-decoration: none; 
+    font-size: 1.25rem; 
+    font-weight: 600; 
+    letter-spacing: -0.5px; 
+}
 
 /* Grid Layout */
-.layout-grid { display: flex; max-width: 1200px; margin: 0 auto; padding: 50px 20px; gap: 60px; }
-.main-content { flex: 1; max-width: 800px; }
-.sidebar { width: 300px; flex-shrink: 0; }
+.layout-grid { 
+    display: flex; 
+    max-width: 1100px; 
+    margin: 0 auto; 
+    padding: 60px 20px; 
+    gap: 80px; 
+}
+.main-content { flex: 1; min-width: 0; } /* min-width 0 prevents flex blowouts */
+.sidebar { width: 280px; flex-shrink: 0; }
 
 /* Breadcrumbs & Meta */
-.breadcrumbs { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 30px; letter-spacing: 0.5px; }
+.breadcrumbs { 
+    font-size: 0.85rem; 
+    color: var(--text-muted); 
+    margin-bottom: 25px; 
+    font-weight: 500;
+}
 .breadcrumbs a { color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
 .breadcrumbs a:hover { color: white; }
-.breadcrumbs .sep { margin: 0 8px; opacity: 0.5; }
-.breadcrumbs .current { color: white; font-weight: 500; }
+.breadcrumbs .sep { margin: 0 10px; opacity: 0.4; }
+.breadcrumbs .current { color: white; }
 
-.meta-row { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; }
-.category-badge { background: rgba(250, 204, 21, 0.1); color: var(--accent); border: 1px solid rgba(250, 204, 21, 0.3); padding: 4px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: 700; letter-spacing: 1px;}
-.read-time { color: var(--text-muted); font-size: 0.85rem; }
+.meta-row { display: flex; align-items: center; gap: 15px; margin-bottom: 25px; }
 
-/* Typography */
-.article-title { font-size: 3.5rem; font-weight: 800; line-height: 1.1; margin-bottom: 40px; letter-spacing: -1px; }
-
-.content-tier { margin-bottom: 40px; }
-.tier-header { font-size: 1.8rem; font-weight: 700; margin-bottom: 25px; color: white; }
-.content-tier p { font-size: 1.15rem; color: #cbd5e1; margin-bottom: 20px; font-weight: 300; }
-
-/* The Vamshool Yellow Drop Cap */
-.drop-cap-section p:first-of-type::first-letter {
-    font-size: 4.5rem; float: left; margin-top: 0.1em; margin-right: 0.15em; line-height: 0.7; color: var(--accent); font-weight: 800; font-family: Georgia, serif;
+.category-badge { 
+    background: rgba(251, 191, 36, 0.1); 
+    color: var(--accent); 
+    border: 1px solid rgba(251, 191, 36, 0.2); 
+    padding: 4px 12px; 
+    border-radius: 20px; 
+    font-size: 0.75rem; 
+    font-weight: 600; 
+    letter-spacing: 1px;
 }
 
-.divider { border: 0; height: 1px; background: var(--border-color); margin: 50px 0; }
+.read-time { color: var(--text-muted); font-size: 0.85rem; font-weight: 500;}
 
-/* Right Sidebar */
-.sidebar-card { background: transparent; border: 1px solid var(--border-color); border-radius: 12px; padding: 25px; position: sticky; top: 40px; }
-.sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1.5px; color: #64748b; margin-bottom: 15px; }
+/* Typography */
+.article-title { 
+    font-size: 3.5rem; 
+    font-weight: 800; 
+    line-height: 1.1; 
+    margin-bottom: 40px; 
+    letter-spacing: -1.5px; 
+    background: linear-gradient(to right, #ffffff, #94a3b8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.content-tier { margin-bottom: 50px; }
+.tier-header { 
+    font-size: 1.75rem; 
+    font-weight: 700; 
+    margin-bottom: 20px; 
+    color: white; 
+    letter-spacing: -0.5px;
+}
+.content-tier p { 
+    font-size: 1.1rem; 
+    color: #cbd5e1; 
+    margin-bottom: 24px; 
+    font-weight: 400; 
+}
+
+/* Modern Minimalist Drop Cap */
+.drop-cap-section p:first-of-type::first-letter {
+    font-size: 3.5rem; 
+    float: left; 
+    margin-top: 0.1em; 
+    margin-right: 0.15em; 
+    line-height: 0.8; 
+    color: white; 
+    font-weight: 800; 
+    background: var(--accent);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.divider { 
+    border: 0; 
+    height: 1px; 
+    background: linear-gradient(to right, transparent, var(--border-color), transparent); 
+    margin: 50px 0; 
+}
+
+/* Right Sidebar (Floating Panel Look) */
+.sidebar-card { 
+    background: var(--surface); 
+    border: 1px solid var(--border-color); 
+    border-radius: 16px; 
+    padding: 30px; 
+    position: sticky; 
+    top: 100px; /* Account for sticky nav */
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+.sidebar-title { 
+    font-size: 0.75rem; 
+    font-weight: 700;
+    text-transform: uppercase; 
+    letter-spacing: 1.5px; 
+    color: var(--text-muted); 
+    margin-bottom: 15px; 
+}
 .toc-list { list-style: none; }
-.toc-list li { margin-bottom: 12px; }
-.toc-list a { color: var(--text-muted); text-decoration: none; font-size: 0.95rem; transition: 0.2s; }
-.toc-list a:hover { color: var(--accent); }
+.toc-list li { margin-bottom: 14px; }
+.toc-list a { 
+    color: var(--text-muted); 
+    text-decoration: none; 
+    font-size: 0.95rem; 
+    font-weight: 500;
+    transition: 0.2s; 
+}
+.toc-list a:hover { color: white; }
 .sidebar-divider { border: 0; height: 1px; background: var(--border-color); margin: 25px 0; }
-.parent-link { color: var(--accent) !important; font-weight: 500; display: inline-block; margin-top: 5px;}
+.parent-link { 
+    color: var(--accent) !important; 
+    font-weight: 600; 
+    display: inline-block; 
+    margin-top: 8px;
+    background: rgba(251, 191, 36, 0.1);
+    padding: 6px 12px;
+    border-radius: 8px;
+    border: 1px solid rgba(251, 191, 36, 0.2);
+}
+
+.parent-link:hover {
+    background: rgba(251, 191, 36, 0.2);
+}
+
 /* --- Rich Markdown Support --- */
 .content-tier strong, .content-tier b {
     color: white;
@@ -60,14 +183,14 @@ body { background-color: var(--bg-main); color: var(--text-primary); line-height
 }
 
 .content-tier em, .content-tier i {
-    color: #cbd5e1;
+    color: #e2e8f0;
 }
 
 .content-tier a {
     color: var(--accent);
     text-decoration: none;
-    border-bottom: 1px dotted var(--accent);
-    transition: 0.2s;
+    border-bottom: 1px solid rgba(251, 191, 36, 0.4);
+    transition: 0.2s ease;
 }
 
 .content-tier a:hover {
@@ -79,43 +202,56 @@ body { background-color: var(--bg-main); color: var(--text-primary); line-height
     margin-bottom: 25px;
     padding-left: 20px;
     color: #cbd5e1;
-    font-weight: 300;
-    font-size: 1.15rem;
+    font-weight: 400;
+    font-size: 1.1rem;
 }
 
-.content-tier li {
-    margin-bottom: 10px;
-}
+.content-tier li { margin-bottom: 10px; }
 
+/* Beautiful Blockquotes */
 .content-tier blockquote {
-    border-left: 4px solid var(--accent);
-    background: rgba(255, 255, 255, 0.02);
-    padding: 15px 25px;
-    margin: 30px 0;
+    border-left: 3px solid var(--accent);
+    background: linear-gradient(to right, rgba(251, 191, 36, 0.05), transparent);
+    padding: 20px 25px;
+    margin: 35px 0;
+    border-radius: 0 12px 12px 0;
     font-style: italic;
     color: #94a3b8;
+    font-size: 1.1rem;
 }
 
+/* Developer-style inline code */
 .content-tier code {
-    background: rgba(255,255,255,0.05);
-    padding: 2px 6px;
-    border-radius: 4px;
-    font-family: monospace;
-    font-size: 0.9em;
+    background: rgba(255,255,255,0.06);
+    padding: 3px 8px;
+    border-radius: 6px;
+    border: 1px solid rgba(255,255,255,0.1);
+    font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+    font-size: 0.85em;
     color: #e2e8f0;
 }
 
+/* Math block containment */
 .katex-display {
     overflow-x: auto;
     overflow-y: hidden;
-    padding: 10px 0;
+    padding: 20px 0;
+    margin: 20px 0;
 }
 
 .content-tier img {
-    max-width: 100%;       /* Forces image to never be wider than the reading pane */
-    height: auto;          /* Maintains the image's original aspect ratio */
-    border-radius: 8px;    /* Gives the image smooth corners to match the UI */
-    margin: 30px auto;     /* Adds breathing room above and below the image */
-    display: block;        /* Ensures the image sits on its own line */
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Adds a subtle shadow to blend with the dark theme */
+    max-width: 100%;
+    height: auto;
+    border-radius: 12px;
+    margin: 40px auto;
+    display: block;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+/* Responsive adjustments */
+@media (max-width: 900px) {
+    .layout-grid { flex-direction: column; gap: 40px; padding: 30px 20px;}
+    .sidebar { width: 100%; }
+    .article-title { font-size: 2.5rem; }
 }
