@@ -5,7 +5,9 @@
   "main": "build.js",
   "scripts": {
     "dev": "node dev.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "deploy": "wrangler deploy",
+    "preview": "wrangler dev"
   },
   "repository": {
     "type": "git",
@@ -23,5 +25,8 @@
     "katex": "^0.17.0",
     "marked": "^18.0.4",
     "marked-katex-extension": "^5.1.10"
+  },
+  "devDependencies": {
+    "wrangler": "^4.98.0"
   }
 }
