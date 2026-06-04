@@ -1,5 +1,5 @@
 ---
-name: Computer Science
+name: Computer Science (CS)
 parent: Root
 category: Computer Science
 distance: 1

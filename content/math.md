@@ -1,7 +1,7 @@
 ---
 name: Mathematics
 parent: Root
-category: Math
+category: Mathematics
 distance: 1
 ---
 @Beginner

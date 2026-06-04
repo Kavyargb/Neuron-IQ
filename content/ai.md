@@ -1,5 +1,5 @@
 ---
-name: Artificial Intelligence
+name: Artificial Intelligence (AI)
 parent: Computer Science
 category: Computer Science
 distance: 2
