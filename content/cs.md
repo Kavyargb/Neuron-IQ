@@ -1,7 +1,7 @@
 ---
 name: Computer Science
 parent: Root
-category: CS
+category: Computer Science
 distance: 1
 ---
 @Beginner

@@ -3,7 +3,7 @@ window.NeuronMap = {
   "Artificial Intelligence": {
     "name": "Artificial Intelligence",
     "parent": "Computer Science",
-    "category": "CS",
+    "category": "Computer Science",
     "distance": 2,
     "slug": "artificial-intelligence",
     "searchContent": "Making computers think like humans. "
@@ -11,10 +11,18 @@ window.NeuronMap = {
   "Computer Science": {
     "name": "Computer Science",
     "parent": "Root",
-    "category": "CS",
+    "category": "Computer Science",
     "distance": 1,
     "slug": "computer-science",
     "searchContent": "The study of computers. "
+  },
+  "Displacement": {
+    "name": "Displacement",
+    "parent": "Kinematics",
+    "category": "Physics",
+    "distance": 4,
+    "slug": "displacement",
+    "searchContent": "Learning Objectives  Define position, displacement, distance, and distance traveled. Explain the relationship between position and displacement. Distinguish between displacement and distance traveled. Calculate displacement and distance given initial position, final position, and the path between the two.   Figure 1.1: These cyclists can be described by their position relative to buildings and a canal. Their motion is described by their change in position, or displacement, in the frame of reference. Position In order to describe the motion of an object, you must first be able to describe its position—where it is at any particular time. You need to specify its position relative to a convenient reference frame. Earth is often used as a reference frame. For example, a rocket launch is described in terms of the position of the rocket with respect to the Earth, while a professor’s position could be described in relation to a nearby whiteboard. Displacement If an object moves relative to a reference frame, then the object’s position changes. This change in position is known as displacement.  **Definition: ** Displacement is the change in position of an object: $$ \\Delta x = x_f - x_0 $$ where Δx\\Delta xΔx is displacement, xfx_fxf​ is the final position, and x0x_0x0​ is the initial position.  In physics, the uppercase Greek letter Δ\\DeltaΔ (delta) always means “change in” whatever quantity follows it; thus, Δx\\Delta xΔx means change in position. The SI unit for displacement is the meter (m).  Figure 1.2: A professor paces left and right. The +2.0 m displacement of the professor relative to Earth is represented by an arrow pointing to the right.  Figure 1.3: A passenger moves toward the rear of the plane. The -4.0 m displacement is represented by an arrow toward the rear. Direction and Magnitude In one-dimensional motion, direction is specified with a plus (+) or minus (-) sign.   Professor&#39;s calculation: x0=1.5 mx_0 = 1.5\\text{ m}x0​=1.5 m, xf=3.5 mx_f = 3.5\\text{ m}xf​=3.5 m Δx=xf−x0=3.5 m−1.5 m=+2.0 m\\Delta x = x_f - x_0 = 3.5\\text{ m} - 1.5\\text{ m} = +2.0\\text{ m}Δx=xf​−x0​=3.5 m−1.5 m=+2.0 m   Passenger&#39;s calculation: x0=6.0 mx_0 = 6.0\\text{ m}x0​=6.0 m, xf=2.0 mx_f = 2.0\\text{ m}xf​=2.0 m Δx=xf−x0=2.0 m−6.0 m=−4.0 m\\Delta x = x_f - x_0 = 2.0\\text{ m} - 6.0\\text{ m} = -4.0\\text{ m}Δx=xf​−x0​=2.0 m−6.0 m=−4.0 m"
   },
   "Experimental Physics": {
     "name": "Experimental Physics",
@@ -59,7 +67,7 @@ window.NeuronMap = {
   "Perceptrons": {
     "name": "Perceptrons",
     "parent": "Computer Science",
-    "category": "CS",
+    "category": "Computer Science",
     "distance": 3,
     "slug": "perceptrons",
     "searchContent": "A perceptron is like a tiny digital brain cell. It takes in information, thinks about it, and makes a simple yes or no decision. A perceptron is a linear machine learning algorithm for binary classification. It applies a set of weights to inputs and passes them through a step function to output a result."
@@ -67,7 +75,7 @@ window.NeuronMap = {
   "Physics": {
     "name": "Physics",
     "parent": "Root",
-    "category": "Science",
+    "category": "Physics",
     "distance": 1,
     "slug": "physics",
     "searchContent": "Physics is the study of how the universe works. It explains why things fall, why stars shine, and how energy moves. Physics is the natural science that studies matter, its fundamental constituents, its motion and behavior through space and time, and the related entities of energy and force."

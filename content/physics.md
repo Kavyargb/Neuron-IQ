@@ -1,7 +1,7 @@
 ---
 name: Physics
 parent: Root
-category: Science
+category: Physics
 distance: 1
 ---
 @Beginner

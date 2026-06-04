@@ -1,7 +1,7 @@
 ---
 name: Artificial Intelligence
 parent: Computer Science
-category: CS
+category: Computer Science
 distance: 2
 ---
 @Beginner

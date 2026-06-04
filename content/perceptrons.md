@@ -1,7 +1,7 @@
 ---
 name: Perceptrons
 parent: Computer Science
-category: CS
+category: Computer Science
 distance: 3
 ---
 @Beginner

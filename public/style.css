@@ -1,15 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 :root {
-    --bg-void: #050505;
-    --panel-bg: rgba(10, 10, 10, 0.75);
-    --card-bg: rgba(255, 255, 255, 0.03);
+    --bg-void: #030712; /* Deeper, richer black */
+    --panel-bg: rgba(10, 15, 25, 0.65);
+    --card-bg: rgba(255, 255, 255, 0.02);
     --text-main: #f8fafc;
-    --text-muted: #94a3b8;
+    --text-muted: #8b9bb4;
     
-    /* Neon Category Colors */
-    --color-cs: #fbbf24;
-    --color-math: #f43f5e;
+    /* Cyber/Neon Category Colors - Slightly brightened for glow */
+    --color-cs: #fcd34d;
+    --color-math: #fb7185;
     --color-physics: #60a5fa;
     --color-science: #34d399;
     --color-root: #ffffff;
@@ -28,49 +28,62 @@ body {
     overflow: hidden; 
     height: 100vh; 
     width: 100vw; 
+    -webkit-font-smoothing: antialiased;
 }
 
-/* The Void - Upgraded with a smoother, deeper radial gradient */
+/* --- The Void (Upgraded Canvas with Grid) --- */
 #void {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    background: radial-gradient(circle at 50% -20%, #1e1e2f 0%, var(--bg-void) 70%);
+    /* Layered background: Deep radial glow + subtle dot grid */
+    background: 
+        radial-gradient(circle at 50% -20%, rgba(30, 41, 59, 0.8) 0%, transparent 60%),
+        radial-gradient(circle at 50% 50%, var(--bg-void) 0%, #000000 100%),
+        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 100% 100%, 100% 100%, 30px 30px, 30px 30px;
     z-index: 0; 
     transition: filter 0.8s ease;
 }
 
 #brand {
     position: absolute; top: 35px; left: 45px; 
-    font-size: 1.5rem; font-weight: 600;
+    font-size: 1.25rem; font-weight: 700;
     color: #ffffff; z-index: 10; letter-spacing: -0.5px;
-    opacity: 0.8;
-}
-
-/* Landing Interface */
-#landing-container {
-    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-    z-index: 10; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%;
-}
-
-#landing-container h1 {
-    font-weight: 500;
-    letter-spacing: -1px;
-    font-size: 2.5rem;
-    margin-bottom: 10px;
-    background: linear-gradient(to right, #fff, #94a3b8);
+    text-transform: uppercase;
+    background: linear-gradient(to right, #fff, #64748b);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
-#search-wrapper { 
-    position: relative; display: flex; align-items: center; justify-content: center; margin-bottom: 25px; 
+#top-right-nav {
+    position: absolute; top: 35px; right: 45px; z-index: 10;
+}
+#top-right-nav a {
+    color: var(--text-muted); text-decoration: none; font-size: 0.9rem; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 1px; transition: color 0.3s;
+}
+#top-right-nav a:hover {
+    color: white;
 }
 
-/* Upgraded Glassmorphic Search Bar */
+/* --- Landing Interface --- */
+#landing-container {
+    position: absolute; top: 48%; left: 50%; transform: translate(-50%, -50%);
+    z-index: 10; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%;
+}
+
+#search-wrapper { 
+    position: relative; display: flex; align-items: center; justify-content: center; margin-bottom: 25px; 
+    transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Premium Glassmorphic Search Bar */
 #search-bar {
-    background: rgba(255, 255, 255, 0.04); 
-    backdrop-filter: blur(12px);
+    background: rgba(255, 255, 255, 0.03); 
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     border: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3); 
+    box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.05); 
     color: white; 
     font-size: 1.15rem;
     font-weight: 400;
@@ -84,121 +97,167 @@ body {
 }
 
 #search-bar:focus { 
-    border-color: rgba(255, 255, 255, 0.25); 
-    box-shadow: 0 0 40px rgba(255, 255, 255, 0.05), inset 0 0 10px rgba(255, 255, 255, 0.02); 
-    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.3); 
+    box-shadow: 0 0 50px rgba(255, 255, 255, 0.08), inset 0 0 15px rgba(255, 255, 255, 0.02); 
+    background: rgba(255, 255, 255, 0.05);
+    transform: translateY(-2px);
 }
 
 #typewriter { 
     position: absolute; 
     left: 45px; 
-    color: rgba(255,255,255,0.4); 
+    color: rgba(255,255,255,0.3); 
     font-size: 1.15rem; 
     pointer-events: none; 
     transition: opacity 0.2s ease;
     white-space: nowrap; 
-    z-index: 5; /* <--- This pulls it in front of the blur */
+    z-index: 5;
 }
 
-/* Simulated Blinking Cursor */
 #typewriter::after {
-    content: '';
-    display: inline-block;
-    width: 2px;
-    height: 1.2rem;
-    background-color: rgba(255, 255, 255, 0.6);
-    margin-left: 4px;
-    vertical-align: middle;
+    content: ''; display: inline-block; width: 2px; height: 1.2rem;
+    background-color: var(--color-cs); margin-left: 4px; vertical-align: middle;
     animation: blink 1s step-end infinite;
 }
-@keyframes blink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0; }
-}
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
 #enter-hint { 
-    color: rgba(255,255,255,0.4); font-size: 0.8rem; font-weight: 600; letter-spacing: 2px; 
+    color: rgba(255,255,255,0.3); font-size: 0.75rem; font-weight: 600; letter-spacing: 3px; 
     text-transform: uppercase; opacity: 0; transition: opacity 0.3s; margin-top: 15px;
 }
 
-/* Modern Loading Dots */
-#loading-dots { display: flex; gap: 8px; opacity: 1; transition: opacity 0.5s; margin-top: 10px;}
-.dot { width: 8px; height: 8px; border-radius: 50%; box-shadow: 0 0 10px currentColor;}
-.dot.blue { background: #60a5fa; color: #60a5fa;}
-.dot.green { background: #34d399; color: #34d399;}
-.dot.red { background: #f43f5e; color: #f43f5e;}
-.dot.yellow { background: #fbbf24; color: #fbbf24;}
+#loading-dots { display: flex; gap: 8px; opacity: 1; transition: opacity 0.5s; margin-top: 15px;}
+.dot { width: 6px; height: 6px; border-radius: 50%; box-shadow: 0 0 12px currentColor;}
+.dot.blue { background: var(--color-physics); color: var(--color-physics);}
+.dot.green { background: var(--color-science); color: var(--color-science);}
+.dot.red { background: var(--color-math); color: var(--color-math);}
+.dot.yellow { background: var(--color-cs); color: var(--color-cs);}
 
-/* The Morph Animation */
+/* Morph Animation into Root Node */
 #search-bar.node-zero {
-    width: 24px; height: 24px; padding: 0; border-radius: 50%; color: transparent;
-    background: white; border: none; box-shadow: 0 0 40px rgba(255,255,255,1);
-    transform: translateX(-35vw);
+    width: 14px; height: 14px; padding: 0; border-radius: 50%; color: transparent; font-size: 0;
+    background: var(--color-root); border: 2px solid var(--bg-void); 
+    box-shadow: 0 0 20px var(--color-root), 0 0 40px var(--color-root);
+    transform: scale(1); pointer-events: none;
 }
 
-/* Neural Tree Graph */
+/* --- Neural Tree Graph --- */
 #graph-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 5; pointer-events: none; }
-#svg-layer { width: 100%; height: 100%; position: absolute; top: 0; left: 0; }
+#svg-layer { width: 100%; height: 100%; position: absolute; top: 0; left: 0; filter: drop-shadow(0 0 4px rgba(255,255,255,0.2)); }
 .path-line { fill: none; stroke-width: 1.5px; opacity: 0; transition: opacity 1s, stroke-dashoffset 1s ease-in-out; }
 
 #nodes-layer { width: 100%; height: 100%; position: absolute; }
-.node {
-    position: absolute; width: 12px; height: 12px; border-radius: 50%;
-    transform: translate(-50%, -50%); opacity: 0; transition: opacity 0.5s, transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    pointer-events: auto; cursor: pointer; border: 2px solid var(--bg-void); 
-    box-shadow: 0 0 15px currentColor;
-}
 
-.node:hover { transform: translate(-50%, -50%) scale(1.6); z-index: 10;}
+/* Glowing Orb Nodes */
+.node {
+    position: absolute; width: 14px; height: 14px; border-radius: 50%;
+    transform: translate(-50%, -50%); opacity: 0; 
+    transition: opacity 0.5s, transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s;
+    pointer-events: auto; cursor: pointer; 
+    border: 2px solid rgba(0,0,0,0.8); 
+    box-shadow: inset 0 0 4px #fff, 0 0 15px currentColor;
+}
 
 .node-label {
-    position: absolute; top: -35px; left: 50%; transform: translateX(-50%);
-    font-size: 0.85rem; font-weight: 500; color: var(--text-muted); white-space: nowrap; 
-    pointer-events: auto; transition: color 0.2s, transform 0.2s;
-    background: rgba(5,5,5,0.6); padding: 4px 10px; border-radius: 20px;
-    backdrop-filter: blur(4px);
-    border: 1px solid rgba(255,255,255,0.05);
+    position: absolute; top: -40px; left: 50%; transform: translateX(-50%);
+    font-size: 0.8rem; font-weight: 500; color: var(--text-muted); white-space: nowrap; 
+    pointer-events: auto; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    background: rgba(15, 23, 42, 0.8); padding: 6px 14px; border-radius: 8px;
+    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 4px 15px rgba(0,0,0,0.3);
 }
 
-.node-label.bottom { top: auto; bottom: -35px; }
-.node:hover .node-label { color: white; border-color: rgba(255,255,255,0.2); }
+.node-label.bottom { top: auto; bottom: -40px; }
+.node:hover .node-label { color: white; border-color: rgba(255,255,255,0.2); transform: translate(-50%, -4px); }
 
-/* Upgraded Plausibility Panel */
+/* Cinematic Focus/Dimming effect on Graph */
+#graph-container:has(.node:hover) .path-line { opacity: 0.1 !important; }
+#graph-container:has(.node:hover) .node { opacity: 0.2 !important; }
+#graph-container .node:hover {
+    opacity: 1 !important; transform: translate(-50%, -50%) scale(1.6);
+    box-shadow: inset 0 0 6px #fff, 0 0 30px currentColor; z-index: 20;
+}
+
+/* --- Plausibility Panel --- */
 #plausibility-panel {
-    position: absolute; top: 0; right: -450px; width: 400px; height: 100%;
-    background: var(--panel-bg); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
-    border-left: 1px solid rgba(255,255,255,0.08); padding: 40px 30px;
-    z-index: 20; transition: right 0.7s cubic-bezier(0.25, 1, 0.5, 1);
+    position: absolute; top: 0; right: -450px; width: 420px; height: 100%;
+    background: var(--panel-bg); backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px);
+    border-left: 1px solid rgba(255,255,255,0.05); padding: 50px 35px;
+    z-index: 20; transition: right 0.7s cubic-bezier(0.16, 1, 0.3, 1);
     overflow-y: auto; pointer-events: auto;
-    box-shadow: -10px 0 40px rgba(0,0,0,0.5);
+    box-shadow: -20px 0 60px rgba(0,0,0,0.8);
 }
 
-.panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 35px; }
-.panel-header h3 { font-size: 1.1rem; font-weight: 600; color: white; letter-spacing: -0.5px;}
+.panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; }
+.panel-header h3 { font-size: 1.15rem; font-weight: 600; color: white; letter-spacing: -0.5px;}
 
 #median-badge {
     background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1);
-    color: var(--text-main); padding: 6px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600;
+    color: var(--text-main); padding: 6px 12px; border-radius: 8px; font-size: 0.75rem; font-weight: 600;
 }
 
+/* Beautiful Staggered Cards */
 .card {
-    background: var(--card-bg); border: 1px solid rgba(255,255,255,0.05);
-    padding: 22px; margin-bottom: 15px; border-radius: 16px; cursor: pointer;
-    transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    position: relative; overflow: hidden;
+    background: linear-gradient(145deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%);
+    border: 1px solid rgba(255,255,255,0.05);
+    padding: 24px; margin-bottom: 16px; border-radius: 16px; cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    position: relative; overflow: hidden; opacity: 0;
+    animation: slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .card:hover { 
-    transform: translateY(-4px); 
+    transform: translateY(-4px) scale(1.02); 
     border-color: rgba(255,255,255,0.15); 
-    background: rgba(255,255,255,0.06);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    background: linear-gradient(145deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1);
 }
 
-.card-dist { font-size: 0.7rem; font-weight: 700; letter-spacing: 1.5px; margin-bottom: 10px; text-transform: uppercase;}
-.card-title { font-size: 1.15rem; font-weight: 500; color: white; letter-spacing: -0.3px;}
+.card-dist { font-size: 0.7rem; font-weight: 700; letter-spacing: 1.5px; margin-bottom: 12px; text-transform: uppercase;}
+.card-title { font-size: 1.2rem; font-weight: 500; color: white; letter-spacing: -0.3px;}
 
-/* Custom Scrollbar for Panel */
-::-webkit-scrollbar { width: 6px; }
+@keyframes slideUpFade {
+    0% { opacity: 0; transform: translateY(30px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+/* Premium Scrollbar */
+::-webkit-scrollbar { width: 8px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; border: 2px solid var(--bg-void); }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.3); }
+
+#hero-text {
+    font-size: 3.2rem;
+    font-weight: 700;
+    letter-spacing: -1.5px;
+    margin-bottom: 40px;
+    text-align: center;
+    
+    /* Cinematic Starlight Gradient */
+    background: linear-gradient(135deg, #ffffff 20%, #94a3b8 60%, #60a5fa 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    
+    /* Subtle ethereal glow */
+    filter: drop-shadow(0px 4px 30px rgba(96, 165, 250, 0.2));
+    
+    /* Starting state for animation */
+    opacity: 0;
+    transform: translateY(20px);
+    animation: heroFadeIn 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+@keyframes heroFadeIn {
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+/* Adjust for smaller screens */
+@media (max-width: 768px) {
+    #hero-text {
+        font-size: 2.2rem;
+        padding: 0 20px;
+    }
+}

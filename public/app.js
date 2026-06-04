@@ -10,7 +10,39 @@ document.addEventListener("DOMContentLoaded", () => {
     const svgLayer = document.getElementById('svg-layer');
     const nodesLayer = document.getElementById('nodes-layer');
     
-    let renderedNodes = {}; 
+    // --- MODULE 1: Infinite Canvas (Pan & Zoom) ---
+    let isDragging = false;
+    let startX, startY;
+    let translateX = 0, translateY = 0;
+    const graphContainer = document.getElementById('graph-container');
+
+    graphContainer.style.cursor = 'grab';
+    graphContainer.style.pointerEvents = 'auto'; 
+
+    graphContainer.addEventListener('mousedown', (e) => {
+        if (e.target.classList.contains('node')) return; 
+        isDragging = true;
+        graphContainer.style.cursor = 'grabbing';
+        startX = e.pageX - translateX;
+        startY = e.pageY - translateY;
+    });
+
+    window.addEventListener('mouseup', () => {
+        isDragging = false;
+        graphContainer.style.cursor = 'grab';
+    });
+
+    window.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        e.preventDefault();
+        translateX = e.pageX - startX;
+        translateY = e.pageY - startY;
+
+        svgLayer.style.transform = `translate(${translateX}px, ${translateY}px)`;
+        nodesLayer.style.transform = `translate(${translateX}px, ${translateY}px)`;
+    });
+
+    let renderedNodes = {};
 
     // Category Colors
     const getCategoryColor = (cat) => {
@@ -23,8 +55,6 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     // --- MODULE 2: Landing Interface & Typewriter ---
-    
-    // Typewriter Configuration
     const queries = [
         "Understand 'Quantum Superposition'",
         "Explore 'General Relativity'",
@@ -32,7 +62,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "Discover 'Eigenvectors'",
         "Dive into 'Thermodynamics'"
     ];
-    
+
     let queryIdx = 0;
     let charIdx = 0;
     let isDeleting = false;
@@ -40,7 +70,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function typeEffect() {
         const currentQuery = queries[queryIdx];
-        
+
         if (isDeleting) {
             typewriter.textContent = currentQuery.substring(0, charIdx - 1);
             charIdx--;
@@ -49,25 +79,22 @@ document.addEventListener("DOMContentLoaded", () => {
             charIdx++;
         }
 
-        // Variable typing speeds to make it feel human
         let typeSpeed = isDeleting ? 30 : 60 + Math.random() * 40;
 
         if (!isDeleting && charIdx === currentQuery.length) {
-            typeSpeed = 2500; // Pause at the end of the phrase
+            typeSpeed = 2500; 
             isDeleting = true;
         } else if (isDeleting && charIdx === 0) {
             isDeleting = false;
-            queryIdx = (queryIdx + 1) % queries.length; // Move to next query
-            typeSpeed = 500; // Pause before starting new phrase
+            queryIdx = (queryIdx + 1) % queries.length; 
+            typeSpeed = 500; 
         }
 
         typingTimer = setTimeout(typeEffect, typeSpeed);
     }
 
-    // Start the typewriter loop
     typeEffect();
 
-    // Hide typewriter when user focuses or types
     searchBar.addEventListener('focus', () => {
         typewriter.style.opacity = '0';
     });
@@ -88,28 +115,46 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    searchBar.addEventListener('keydown', (e) => {
+searchBar.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' && searchBar.value.trim() !== "") {
             enterHint.style.opacity = '0';
             dots.style.display = 'none';
             typewriter.style.display = 'none';
-            
+
+            // FULLY REMOVE HERO TEXT
+            const heroText = document.getElementById('hero-text');
+            if (heroText) {
+                // Force the fade out, overriding the CSS animation
+                heroText.style.animation = 'none'; 
+                heroText.style.opacity = '0';
+                
+                // Completely remove it from the page flow after the fade (500ms)
+                setTimeout(() => {
+                    heroText.style.display = 'none';
+                }, 500);
+            }
+
             const query = searchBar.value.trim();
-            
-            // UI Morph Animation
+
             searchBar.value = "";
             searchBar.classList.add('node-zero');
-            
+
             setTimeout(() => {
-                searchWrapper.style.display = 'none';
+                searchWrapper.style.opacity = '0';
+                searchWrapper.style.pointerEvents = 'none';
                 triggerSearchAlgorithm(query);
-            }, 700);
+            }, 500);
         }
     });
 
     // --- MODULE 3: Contextual Fuzzy Search Algorithm ---
     function triggerSearchAlgorithm(query) {
-        if(!window.NeuronMap) return console.error("No Map Data!");
+        if (!window.NeuronMap) return console.error("No Map Data!");
+
+        // Reset Pan/Zoom transform for new search
+        translateX = 0; translateY = 0;
+        svgLayer.style.transform = `translate(0px, 0px)`;
+        nodesLayer.style.transform = `translate(0px, 0px)`;
 
         svgLayer.innerHTML = '';
         nodesLayer.innerHTML = '';
@@ -119,27 +164,29 @@ document.addEventListener("DOMContentLoaded", () => {
         const allNodesArray = Object.values(allNodes);
         const finalNodesToDraw = new Set();
 
-        // 1. Initialize Fuse.js for Fuzzy & Content Searching
         const fuseOptions = {
             includeScore: true,
-            threshold: 0.4, // 0.0 is perfect match, 1.0 matches anything
-            ignoreLocation: true, // Search entire text, not just the beginning
+            threshold: 0.4, 
+            ignoreLocation: true, 
             keys: [
-                { name: 'name', weight: 1.0 },          // Title match is most important
-                { name: 'category', weight: 0.5 },      // Category is secondary
-                { name: 'searchContent', weight: 0.3 }  // Body text match is tertiary
+                { name: 'name', weight: 1.0 },         
+                { name: 'category', weight: 0.5 },      
+                { name: 'searchContent', weight: 0.3 }  
             ]
         };
 
         const fuse = new Fuse(allNodesArray, fuseOptions);
         const searchResults = fuse.search(query);
+        
+        // NEW: Map to store the relevance score of each matched node
+        const scoreMap = {};
 
-        // Add the fuzzy matches to our draw list
         searchResults.forEach(result => {
             finalNodesToDraw.add(result.item.name);
+            const relevance = Math.max(0, Math.round((1 - result.score) * 100));
+            scoreMap[result.item.name] = relevance;
         });
 
-        // 2. Ensure structural integrity (Add Parents)
         const addParents = (nodeName) => {
             if (!nodeName || nodeName === 'Root') return;
             finalNodesToDraw.add(nodeName);
@@ -147,14 +194,12 @@ document.addEventListener("DOMContentLoaded", () => {
             if (parentName) addParents(parentName);
         };
 
-        // 3. Expand exploration (Add immediate Children)
         const addChildren = (nodeName) => {
             Object.values(allNodes).forEach(n => {
                 if (n.parent === nodeName) finalNodesToDraw.add(n.name);
             });
         };
 
-        // Apply Parent/Child logic to matches
         [...finalNodesToDraw].forEach(name => {
             addParents(name);
             addChildren(name);
@@ -165,12 +210,13 @@ document.addEventListener("DOMContentLoaded", () => {
             if (allNodes[name]) nodesData.push(allNodes[name]);
         });
 
-        // Fallback: If no matches at all, show everything.
         if (nodesData.length === 0) {
             nodesData = allNodesArray;
         }
 
         // --- TREE DRAWING LOGIC (Dendrogram) ---
+        
+        // FIXED: Correctly establish Parent/Child map for layout calculation
         const childrenMap = {};
         nodesData.forEach(n => {
             const parentName = n.parent || 'Root';
@@ -179,7 +225,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         let currentLeafY = 0;
-        const ySpacing = 100; 
+        const ySpacing = 100;
         const layoutMap = {};
 
         function calculateLayout(nodeName) {
@@ -204,6 +250,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         calculateLayout('Root');
 
+        // Catch orphans
         nodesData.forEach(n => {
             if (!layoutMap[n.name]) {
                 layoutMap[n.name] = { y: currentLeafY };
@@ -211,12 +258,13 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
 
-        const startX = window.innerWidth * 0.15; 
-        const xStep = 250; 
+        const startX = window.innerWidth * 0.15;
+        const xStep = 250;
         const totalHeight = currentLeafY > 0 ? currentLeafY - ySpacing : 0;
         const startYOffset = (window.innerHeight / 2) - (totalHeight / 2);
 
-        const rootY = layoutMap['Root'].y + startYOffset;
+        // Calculate Root safely
+        const rootY = (layoutMap['Root'] ? layoutMap['Root'].y : 0) + startYOffset;
         renderedNodes['Root'] = { x: startX, y: rootY, color: 'var(--color-root)' };
         drawNodeDot(startX, rootY, `Query: "${query}"`, 'var(--color-root)');
 
@@ -226,8 +274,8 @@ document.addEventListener("DOMContentLoaded", () => {
             distanceGroups[n.distance].push(n);
         });
 
-        const sortedDistances = Object.keys(distanceGroups).sort((a,b)=>a-b);
-        
+        const sortedDistances = Object.keys(distanceGroups).sort((a, b) => a - b);
+
         sortedDistances.forEach((dist, i) => {
             setTimeout(() => {
                 const nodes = distanceGroups[dist];
@@ -236,18 +284,18 @@ document.addEventListener("DOMContentLoaded", () => {
                     const nodeX = startX + (node.distance * xStep);
                     const nodeY = layoutMap[node.name].y + startYOffset;
                     const color = getCategoryColor(node.category);
-                    
+
                     renderedNodes[node.name] = { x: nodeX, y: nodeY, color: color };
                     const parentData = renderedNodes[node.parent] || renderedNodes['Root'];
-                    
+
                     drawSweepLine(parentData.x, parentData.y, nodeX, nodeY, color);
                     setTimeout(() => drawNodeDot(nodeX, nodeY, node.name, color, node, index), 200);
                 });
 
-            }, i * 600); 
+            }, i * 600);
         });
 
-        triggerPlausibilityEngine(nodesData);
+        triggerPlausibilityEngine(nodesData, scoreMap);
     }
 
     // --- Drawing Utilities ---
@@ -255,39 +303,37 @@ document.addEventListener("DOMContentLoaded", () => {
         const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
         path.setAttribute('class', 'path-line');
         path.style.stroke = color;
-        path.style.strokeWidth = "2px"; 
-        
+        path.style.strokeWidth = "2px";
+
         const offset = Math.abs(x2 - x1) * 0.5;
         const d = `M ${x1} ${y1} C ${x1 + offset} ${y1}, ${x2 - offset} ${y2}, ${x2} ${y2}`;
         path.setAttribute('d', d);
         svgLayer.appendChild(path);
-        
+
         setTimeout(() => {
-            const length = Math.ceil(path.getTotalLength()) + 20; 
+            const length = Math.ceil(path.getTotalLength()) + 20;
             path.style.strokeDasharray = length;
             path.style.strokeDashoffset = length;
-            path.getBoundingClientRect(); 
-            
+            path.getBoundingClientRect();
+
             path.style.opacity = '0.7';
             path.style.strokeDashoffset = '0';
         }, 10);
     }
 
-    // Added 'index = 0' to parameters
     function drawNodeDot(x, y, labelText, color, nodeObj = null, index = 0) {
         const dot = document.createElement(nodeObj ? 'a' : 'div');
-        if (nodeObj) dot.href = `${nodeObj.slug}.html`; 
+        if (nodeObj) dot.href = `${nodeObj.slug}.html`;
 
         dot.className = 'node';
         dot.style.left = `${x}px`;
         dot.style.top = `${y}px`;
-        dot.style.color = color; 
+        dot.style.color = color;
         dot.style.backgroundColor = color;
 
         const label = document.createElement('div');
         label.className = 'node-label';
-        
-        // FIX: Alternate label positioning (even index = top, odd index = bottom)
+
         if (index % 2 !== 0) {
             label.classList.add('bottom');
         }
@@ -299,28 +345,43 @@ document.addEventListener("DOMContentLoaded", () => {
         setTimeout(() => dot.style.opacity = '1', 50);
     }
 
-    // --- MODULE 4: Plausibility Engine (Now uses Filtered Data) ---
-    function triggerPlausibilityEngine(nodesData) {
-        if(nodesData.length === 0) return;
+    // --- MODULE 4: Plausibility Engine ---
+    function triggerPlausibilityEngine(nodesData, scoreMap) {
+        if (nodesData.length === 0) return;
 
-        const distances = nodesData.map(n => n.distance).sort((a,b)=>a-b);
-        const median = distances[Math.floor(distances.length / 2)];
-        medianVal.innerText = parseFloat(median).toFixed(1);
+        // 1. Sort by Relevance Score (Highest First)
+        nodesData.sort((a, b) => {
+            const scoreA = scoreMap[a.name] || 0;
+            const scoreB = scoreMap[b.name] || 0;
+            return scoreB - scoreA; // Descending order
+        });
 
-        nodesData.sort((a, b) => Math.abs(a.distance - median) - Math.abs(b.distance - median));
+        // 2. Update Top Badge with the highest score
+        const topScore = scoreMap[nodesData[0].name] || 0;
+        medianVal.innerText = `${topScore}%`;
 
         cardsContainer.innerHTML = '';
-        nodesData.forEach(node => {
+        
+        // 3. Generate Staggered Cards
+        nodesData.forEach((node, index) => {
             const cardColor = getCategoryColor(node.category);
+            const relevanceScore = scoreMap[node.name];
             
+            // If it has a score, show %, otherwise it's just a structural context node
+            const labelText = relevanceScore !== undefined 
+                ? `${relevanceScore}% MATCH` 
+                : `CONTEXT NODE`;
+
             const card = document.createElement('a');
-            card.href = `${node.slug}.html`; 
+            card.href = `${node.slug}.html`;
             card.className = 'card';
             card.style.display = 'block';
-            card.style.textDecoration = 'none'; 
+            card.style.textDecoration = 'none';
+            
+            card.style.animationDelay = `${index * 0.08}s`;
 
             card.innerHTML = `
-                <div class="card-dist" style="color: ${cardColor}">Distance: ${node.distance}</div>
+                <div class="card-dist" style="color: ${cardColor}">${labelText}</div>
                 <div class="card-title">${node.name}</div>
             `;
             cardsContainer.appendChild(card);
