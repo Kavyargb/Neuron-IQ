@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neuron-IQ</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0"></script>
+    <script src="graph.js"></script>
+</head>
+<body>
+    <div id="void"></div>
+    <div id="brand">Neuron-IQ</div>
+
+    <div id="landing-container">
+        <div id="search-wrapper">
+            <span id="typewriter">Understand 'Quantum Superposition'...</span>
+<input type="text" id="search-bar" aria-label="Search the knowledge database" autocomplete="off" spellcheck="false">
+        </div>
+        <div id="loading-dots">
+            <div class="dot blue"></div>
+            <div class="dot green"></div>
+            <div class="dot red"></div>
+            <div class="dot yellow"></div>
+        </div>
+        <div id="enter-hint">Press Enter</div>
+    </div>
+
+    <div id="graph-container">
+        <svg id="svg-layer"></svg>
+        <div id="nodes-layer"></div>
+    </div>
+
+    <div id="plausibility-panel">
+        <div class="panel-header">
+            <h3>Top Plausible Paths</h3>
+            <div id="median-badge">Median Dist: <span id="median-val">0.0</span></div>
+        </div>
+        <div id="cards-container"></div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

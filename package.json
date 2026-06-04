@@ -1,0 +1,26 @@
+{
+  "name": "neuron-iq",
+  "version": "1.0.0",
+  "description": "",
+  "main": "build.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kavyargb/Neuron-IQ.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Kavyargb/Neuron-IQ/issues"
+  },
+  "homepage": "https://github.com/Kavyargb/Neuron-IQ#readme",
+  "dependencies": {
+    "gray-matter": "^4.0.3",
+    "katex": "^0.17.0",
+    "marked": "^18.0.4",
+    "marked-katex-extension": "^5.1.10"
+  }
+}
