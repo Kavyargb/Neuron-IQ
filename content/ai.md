@@ -1,6 +1,6 @@
 ---
 name: Artificial Intelligence (AI)
-parent: Computer Science
+parent: Computer Science (CS)
 category: Computer Science
 distance: 2
 ---
