@@ -3,23 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Neuron-IQ</title>
+    <title>Neuron-IQ - Illuminating Knowledge</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0"></script>
-    <script src="graph.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+    <script src="graph.js" defer></script>
+    <script src="global.js" defer></script>
 </head>
 <body>
     <div id="void"></div>
     <div id="brand">Neuron-IQ</div>
+    
     <div id="top-right-nav">
+        <a href="#" id="global-search-trigger" style="margin-right: 25px;">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align: middle; margin-right: 4px;"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>Search
+        </a>
         <a href="sitemap.html">Sitemap</a>
     </div>
 
+    <!-- Main Landing / Search Panel -->
     <div id="landing-container">
         <h1 id="hero-text">What will you illuminate today?</h1>
         <div id="search-wrapper">
             <span id="typewriter"></span>
-<input type="text" id="search-bar" aria-label="Search the knowledge database" autocomplete="off" spellcheck="false">
+            <input type="text" id="search-bar" aria-label="Search the knowledge database" autocomplete="off" spellcheck="false">
         </div>
         <div id="loading-dots">
             <div class="dot blue"></div>
@@ -30,19 +37,33 @@
         <div id="enter-hint">Press Enter</div>
     </div>
 
+    <!-- Interactive Node Graph Container -->
     <div id="graph-container">
         <svg id="svg-layer"></svg>
         <div id="nodes-layer"></div>
     </div>
 
+    <!-- Graph Controls Panel (Zoom and Category Filters) -->
+    <div id="graph-controls" style="display: none;">
+        <button id="zoom-in" class="ctrl-btn" title="Zoom In">+</button>
+        <button id="zoom-out" class="ctrl-btn" title="Zoom Out">−</button>
+        <button id="zoom-reset" class="ctrl-btn" title="Reset Zoom">⊙</button>
+        <div class="control-divider"></div>
+        <button class="filter-btn active" data-category="all">All</button>
+        <button class="filter-btn" data-category="physics" style="color: var(--color-physics);">Physics</button>
+        <button class="filter-btn" data-category="math" style="color: var(--color-math);">Math</button>
+        <button class="filter-btn" data-category="cs" style="color: var(--color-cs);">CS</button>
+    </div>
+
+    <!-- Search Matches Drawer -->
     <div id="plausibility-panel">
         <div class="panel-header">
-            <h3>Top Relevant Matches</h3>
-            <div id="median-badge">Top Match: <span id="median-val">0.0</span></div>
+            <h3>Relevant Concept Matches</h3>
+            <div id="median-badge">Relevance: <span id="median-val">0%</span></div>
         </div>
         <div id="cards-container"></div>
     </div>
 
-    <script src="app.js"></script>
+    <script src="app.js" defer></script>
 </body>
 </html>

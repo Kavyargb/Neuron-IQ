@@ -9,11 +9,20 @@
 Scalars are quantities that only hav...">
     <link rel="stylesheet" href="page.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <!-- Load shared libraries and data -->
+    <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" defer></script>
+    <script src="graph.js" defer></script>
+    <script src="global.js" defer></script>
 </head>
 <body>
     <header class="top-nav">
         <a href="index.html" class="brand">Neuron-IQ</a>
         <nav class="nav-links">
+            <a href="#" class="nav-link header-search-btn" id="global-search-trigger">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align: middle; margin-right: 4px;"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>Search
+            </a>
             <a href="sitemap.html" class="nav-link">Sitemap</a>
         </nav>
     </header>
@@ -21,7 +30,7 @@ Scalars are quantities that only hav...">
     <main class="layout-grid">
         <article class="main-content">
             <nav class="breadcrumbs">
-                <a href="index.html">Home</a> <span class="sep">/</span> <span>Physics</span> <span class="sep">/</span> <span class="current">Vectors and Scalars</span>
+                <a href="index.html">Home</a> <span class="sep">/</span> <a href="physics.html">Physics</a> <span class="sep">/</span> <a href="mathematical-tools-basics.html">Mathematical Tools & Basics</a> <span class="sep">/</span> <span class="current">Vectors and Scalars</span>
             </nav>
 
             <div class="meta-row">
@@ -31,22 +40,34 @@ Scalars are quantities that only hav...">
 
             <h1 class="article-title">Vectors and Scalars</h1>
 
-            <section class="content-tier drop-cap-section">
-                <h2 class="tier-header">Vectors and Scalars — Overview</h2>
-                <p>In physics, some things can be described with just a single number, while others need a direction to make sense.</p>
+            <!-- Interactive Tier Tabs Selector -->
+            <div class="tier-tabs-container">
+                <div class="tier-tabs">
+                    <button class="tier-tab active" data-tier="beginner">Beginner Overview</button>
+                    <button class="tier-tab" data-tier="intermediate">Intermediate Deep Dive</button>
+                    <button class="tier-tab" data-tier="advanced">Advanced Technical</button>
+                </div>
+            </div>
+
+            <div class="tier-content-wrapper">
+                <div class="tier-content active" id="tier-beginner">
+                    <section class="content-tier drop-cap-section" id="overview">
+                        <h2 class="tier-header">Vectors and Scalars — Overview</h2>
+                        <p>In physics, some things can be described with just a single number, while others need a direction to make sense.</p>
 <ul>
 <li><strong>Scalars</strong> are quantities that only have a size (magnitude). For example, if you say the temperature is <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>25</mn><mo>∘</mo></msup><mtext>C</mtext></mrow><annotation encoding="application/x-tex">25^\circ\text{C}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord">2</span><span class="mord"><span class="mord">5</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6741em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mbin mtight">∘</span></span></span></span></span></span></span></span><span class="mord text"><span class="mord">C</span></span></span></span></span> or your mass is <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>60</mn><mtext> kg</mtext></mrow><annotation encoding="application/x-tex">60\text{ kg}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord">60</span><span class="mord text"><span class="mord"> kg</span></span></span></span></span>, you have given all the necessary information. Time, speed, and energy are also scalars.</li>
 <li><strong>Vectors</strong> are quantities that have both a size (magnitude) and a specific direction. If you tell someone to drive at <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>60</mn><mtext> km/h</mtext></mrow><annotation encoding="application/x-tex">60\text{ km/h}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">60</span><span class="mord text"><span class="mord"> km/h</span></span></span></span></span>, that is a scalar (speed). But if you tell them to drive <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>60</mn><mtext> km/h</mtext></mrow><annotation encoding="application/x-tex">60\text{ km/h}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">60</span><span class="mord text"><span class="mord"> km/h</span></span></span></span></span> <strong>North</strong>, that is a vector (velocity). Force, acceleration, and displacement are other common vectors.</li>
 </ul>
 <p>We usually draw vectors as arrows. The length of the arrow shows how big the quantity is, and the arrowhead points in its direction.</p>
 
-            </section>
+                    </section>
+                </div>
 
-            
-            <hr class="divider">
-            <section class="content-tier">
-                <h2 class="tier-header">Deeper Dive</h2>
-                <p>To work with vectors mathematically, we often break them down into simpler parts or combine them.</p>
+                
+                <div class="tier-content" id="tier-intermediate" style="display: none;">
+                    <section class="content-tier" id="deeper-dive">
+                        <h2 class="tier-header">Deeper Dive</h2>
+                        <p>To work with vectors mathematically, we often break them down into simpler parts or combine them.</p>
 <h4>Vector Resolution</h4>
 <p>Resolution is the process of splitting a single vector into two or more perpendicular components. If a vector <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover accent="true"><mi>A</mi><mo>⃗</mo></mover></mrow><annotation encoding="application/x-tex">\vec{A}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9663em;"></span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.9663em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathnormal">A</span></span><span style="top:-3.2523em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.0966em;"><span class="overlay" style="height:0.714em;width:0.471em;"><svg xmlns="http://www.w3.org/2000/svg" width="0.471em" height="0.714em" style="width:0.471em" viewBox="0 0 471 714" preserveAspectRatio="xMinYMin"><path d="M377 20c0-5.333 1.833-10 5.5-14S391 0 397 0c4.667 0 8.667 1.667 12 5
 3.333 2.667 6.667 9 10 19 6.667 24.667 20.333 43.667 41 57 7.333 4.667 11
@@ -105,13 +126,14 @@ c-16-25.333-24-45-24-59z"/></svg></span></span></span></span></span></span></spa
 H213l-171-1c-8.667-6-13-12.333-13-19 0-4.667 4.333-11.333 13-20h359
 c-16-25.333-24-45-24-59z"/></svg></span></span></span></span></span></span></span></span></span></span> is the vector drawn from the tail of the first to the head of the second.</p>
 
-            </section>
+                    </section>
+                </div>
 
-            
-            <hr class="divider">
-            <section class="content-tier">
-                <h2 class="tier-header">Technical Details</h2>
-                <p>When multiplying two vectors, the outcome depends on whether the desired result is a scalar or another vector.</p>
+                
+                <div class="tier-content" id="tier-advanced" style="display: none;">
+                    <section class="content-tier" id="technical-details">
+                        <h2 class="tier-header">Technical Details</h2>
+                        <p>When multiplying two vectors, the outcome depends on whether the desired result is a scalar or another vector.</p>
 <h4>1. The Dot Product (Scalar Product)</h4>
 <p>The dot product multiplies two vectors to yield a scalar. It measures how much one vector points in the direction of another.</p>
 <span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mover accent="true"><mi>A</mi><mo>⃗</mo></mover><mo>⋅</mo><mover accent="true"><mi>B</mi><mo>⃗</mo></mover><mo>=</mo><mi>A</mi><mi>B</mi><mi>cos</mi><mo>⁡</mo><mi>θ</mi></mrow><annotation encoding="application/x-tex">\vec{A} \cdot \vec{B} = AB \cos\theta</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9663em;"></span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.9663em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathnormal">A</span></span><span style="top:-3.2523em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.0966em;"><span class="overlay" style="height:0.714em;width:0.471em;"><svg xmlns="http://www.w3.org/2000/svg" width="0.471em" height="0.714em" style="width:0.471em" viewBox="0 0 471 714" preserveAspectRatio="xMinYMin"><path d="M377 20c0-5.333 1.833-10 5.5-14S391 0 397 0c4.667 0 8.667 1.667 12 5
@@ -215,24 +237,99 @@ H213l-171-1c-8.667-6-13-12.333-13-19 0-4.667 4.333-11.333 13-20h359
 c-16-25.333-24-45-24-59z"/></svg></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.0361em;vertical-align:-0.2861em;"></span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">A</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0359em;">y</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0502em;">B</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.0502em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.044em;">z</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1.2091em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal">A</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.044em;">z</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0502em;">B</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.0502em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0359em;">y</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.923em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathnormal">i</span></span><span style="top:-3.2285em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.25em;"><span class="mord">^</span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">A</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">x</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0502em;">B</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.0502em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.044em;">z</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1.173em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal">A</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.044em;">z</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0502em;">B</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.0502em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">x</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.923em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathnormal" style="margin-right:0.0572em;">j</span></span><span style="top:-3.2285em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.25em;"><span class="mord">^</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.1944em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1.0361em;vertical-align:-0.2861em;"></span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">A</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">x</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0502em;">B</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.0502em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0359em;">y</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1.244em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal">A</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0359em;">y</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0502em;">B</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.0502em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">x</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.9579em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathnormal" style="margin-right:0.0315em;">k</span></span><span style="top:-3.2634em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.25em;"><span class="mord">^</span></span></span></span></span></span></span></span></span></span></span>
 <p><em>Physical Example:</em> Torque (<span class="katex-error" title="ParseError: KaTeX parse error: Can&#x27;t use function &#x27;$&#x27; in math mode at position 11: \vec{\tau}$̲) is the cross …" style="color:#cc0000">\vec{\tau}$) is the cross product of the position vector ($\vec{r}$) and the applied force ($\vec{F}$): $\vec{\tau} = \vec{r} \times \vec{F}</span>.</p>
 
-            </section>
+                    </section>
+                </div>
+            </div>
         </article>
 
         <aside class="sidebar">
             <div class="sidebar-card">
                 <h3 class="sidebar-title">On This Page</h3>
                 <ul class="toc-list">
-                    <li><a href="#">Vectors and Scalars — Overview</a></li>
-                    <li><a href="#">Deeper Dive</a></li>
-                    <li><a href="#">Technical Details</a></li>
+                    <li><a href="#beginner" class="active">Overview</a></li>
+                    <li><a href="#intermediate">Deeper Dive</a></li>
+                    <li><a href="#advanced">Technical Details</a></li>
                 </ul>
+                
                 <hr class="sidebar-divider">
-                <h3 class="sidebar-title">Lineage</h3>
-                <ul class="toc-list">
-                    <li><strong>Parent Concept:</strong> <br> <a href="mathematical-tools-basics.html" class="parent-link">← Mathematical Tools & Basics</a></li>
-                </ul>
+                
+                <h3 class="sidebar-title">Concept Lineage</h3>
+                <div class="lineage-tree">
+                    <div class="lineage-item parent">
+                        <span class="lineage-role">Parent Concept</span>
+                        <a href="mathematical-tools-basics.html" class="lineage-link">← Mathematical Tools & Basics</a>
+                    </div>
+                    <div class="lineage-item current">
+                        <span class="lineage-role">Current Node</span>
+                        <span class="lineage-name">Vectors and Scalars</span>
+                    </div>
+                    <div class="lineage-item children" id="lineage-children">
+                        <span class="lineage-role">Sub-concepts</span>
+                        <ul class="children-list" id="sidebar-children-list">
+                            <!-- Populated dynamically via global.js -->
+                        </ul>
+                    </div>
+                </div>
             </div>
         </aside>
     </main>
+
+    <!-- Client-side Tab Switcher Script -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const tabs = document.querySelectorAll(".tier-tab");
+            const contents = document.querySelectorAll(".tier-content");
+            const tocLinks = document.querySelectorAll(".toc-list a");
+
+            function switchTier(tierId) {
+                tabs.forEach(tab => {
+                    tab.classList.toggle("active", tab.dataset.tier === tierId);
+                });
+                contents.forEach(content => {
+                    if (content.id === `tier-${tierId}`) {
+                        content.style.display = "block";
+                        content.classList.add("active");
+                    } else {
+                        content.style.display = "none";
+                        content.classList.remove("active");
+                    }
+                });
+                
+                // Highlight active link in TOC
+                tocLinks.forEach(link => {
+                    const href = link.getAttribute("href");
+                    if (href === `#${tierId}`) {
+                        link.classList.add("active");
+                    } else {
+                        link.classList.remove("active");
+                    }
+                });
+            }
+
+            tabs.forEach(tab => {
+                tab.addEventListener("click", () => {
+                    switchTier(tab.dataset.tier);
+                });
+            });
+
+            tocLinks.forEach(link => {
+                link.addEventListener("click", (e) => {
+                    const href = link.getAttribute("href");
+                    if (href.startsWith("#")) {
+                        e.preventDefault();
+                        const tierId = href.substring(1);
+                        switchTier(tierId);
+                        
+                        // Smooth scroll to tier header
+                        const targetId = tierId === 'beginner' ? 'overview' : (tierId === 'intermediate' ? 'deeper-dive' : 'technical-details');
+                        const target = document.getElementById(targetId);
+                        if (target) {
+                            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>

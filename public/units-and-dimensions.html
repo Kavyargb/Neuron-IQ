@@ -7,11 +7,20 @@
     <meta name="description" content="Imagine trying to follow a recipe that asks for &quot;some&quot; flour and &quot;a bit&quot; of sugar. Without precise measurements, your cake might n...">
     <link rel="stylesheet" href="page.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <!-- Load shared libraries and data -->
+    <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" defer></script>
+    <script src="graph.js" defer></script>
+    <script src="global.js" defer></script>
 </head>
 <body>
     <header class="top-nav">
         <a href="index.html" class="brand">Neuron-IQ</a>
         <nav class="nav-links">
+            <a href="#" class="nav-link header-search-btn" id="global-search-trigger">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align: middle; margin-right: 4px;"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>Search
+            </a>
             <a href="sitemap.html" class="nav-link">Sitemap</a>
         </nav>
     </header>
@@ -19,7 +28,7 @@
     <main class="layout-grid">
         <article class="main-content">
             <nav class="breadcrumbs">
-                <a href="index.html">Home</a> <span class="sep">/</span> <span>Physics</span> <span class="sep">/</span> <span class="current">Units and Dimensions</span>
+                <a href="index.html">Home</a> <span class="sep">/</span> <a href="physics.html">Physics</a> <span class="sep">/</span> <a href="mathematical-tools-basics.html">Mathematical Tools & Basics</a> <span class="sep">/</span> <span class="current">Units and Dimensions</span>
             </nav>
 
             <div class="meta-row">
@@ -29,19 +38,31 @@
 
             <h1 class="article-title">Units and Dimensions</h1>
 
-            <section class="content-tier drop-cap-section">
-                <h2 class="tier-header">Units and Dimensions — Overview</h2>
-                <p>Imagine trying to follow a recipe that asks for &quot;some&quot; flour and &quot;a bit&quot; of sugar. Without precise measurements, your cake might not turn out very well. </p>
+            <!-- Interactive Tier Tabs Selector -->
+            <div class="tier-tabs-container">
+                <div class="tier-tabs">
+                    <button class="tier-tab active" data-tier="beginner">Beginner Overview</button>
+                    <button class="tier-tab" data-tier="intermediate">Intermediate Deep Dive</button>
+                    <button class="tier-tab" data-tier="advanced">Advanced Technical</button>
+                </div>
+            </div>
+
+            <div class="tier-content-wrapper">
+                <div class="tier-content active" id="tier-beginner">
+                    <section class="content-tier drop-cap-section" id="overview">
+                        <h2 class="tier-header">Units and Dimensions — Overview</h2>
+                        <p>Imagine trying to follow a recipe that asks for &quot;some&quot; flour and &quot;a bit&quot; of sugar. Without precise measurements, your cake might not turn out very well. </p>
 <p>In physics, we face the same challenge. To understand the universe, we must measure it. A <strong>unit</strong> is a standard quantity used to express a measurement. For example, if you walk 5 meters, &quot;meter&quot; is the unit of length, and &quot;5&quot; is the numerical value. </p>
 <p>A <strong>dimension</strong> is the physical nature of a quantity. Whether you measure a distance in meters, miles, or inches, the underlying dimension is always the same: <strong>Length</strong>.</p>
 
-            </section>
+                    </section>
+                </div>
 
-            
-            <hr class="divider">
-            <section class="content-tier">
-                <h2 class="tier-header">Deeper Dive</h2>
-                <p>To keep science consistent worldwide, physicists use the <strong>SI System</strong> (Système International), which relies on seven fundamental base units:</p>
+                
+                <div class="tier-content" id="tier-intermediate" style="display: none;">
+                    <section class="content-tier" id="deeper-dive">
+                        <h2 class="tier-header">Deeper Dive</h2>
+                        <p>To keep science consistent worldwide, physicists use the <strong>SI System</strong> (Système International), which relies on seven fundamental base units:</p>
 <ol>
 <li><strong>Length</strong> - Meter ($m$)</li>
 <li><strong>Mass</strong> - Kilogram ($kg$)</li>
@@ -60,13 +81,14 @@
 </ul>
 <p>The <strong>Principle of Homogeneity</strong> states that you can only add or subtract physical quantities if they have the same dimensions. You cannot add 5 kilograms to 3 meters; it simply does not make physical sense.</p>
 
-            </section>
+                    </section>
+                </div>
 
-            
-            <hr class="divider">
-            <section class="content-tier">
-                <h2 class="tier-header">Technical Details</h2>
-                <p>Mathematically, any derived physical quantity <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Q</mi></mrow><annotation encoding="application/x-tex">Q</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8778em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">Q</span></span></span></span> can be expressed in terms of the fundamental dimensions as:</p>
+                
+                <div class="tier-content" id="tier-advanced" style="display: none;">
+                    <section class="content-tier" id="technical-details">
+                        <h2 class="tier-header">Technical Details</h2>
+                        <p>Mathematically, any derived physical quantity <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Q</mi></mrow><annotation encoding="application/x-tex">Q</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8778em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">Q</span></span></span></span> can be expressed in terms of the fundamental dimensions as:</p>
 <span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mo stretchy="false">[</mo><mi>Q</mi><mo stretchy="false">]</mo><mo>=</mo><mo stretchy="false">[</mo><mi>M</mi><msup><mo stretchy="false">]</mo><mi>a</mi></msup><mo stretchy="false">[</mo><mi>L</mi><msup><mo stretchy="false">]</mo><mi>b</mi></msup><mo stretchy="false">[</mo><mi>T</mi><msup><mo stretchy="false">]</mo><mi>c</mi></msup><mo stretchy="false">[</mo><mi>I</mi><msup><mo stretchy="false">]</mo><mi>d</mi></msup><mo stretchy="false">[</mo><mi mathvariant="normal">Θ</mi><msup><mo stretchy="false">]</mo><mi>e</mi></msup><mo stretchy="false">[</mo><mi>N</mi><msup><mo stretchy="false">]</mo><mi>f</mi></msup><mo stretchy="false">[</mo><mi>J</mi><msup><mo stretchy="false">]</mo><mi>g</mi></msup></mrow><annotation encoding="application/x-tex">[Q] = [M]^a [L]^b [T]^c [I]^d [\Theta]^e [N]^f [J]^g</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord mathnormal">Q</span><span class="mclose">]</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.1491em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord mathnormal" style="margin-right:0.109em;">M</span><span class="mclose"><span class="mclose">]</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7144em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">a</span></span></span></span></span></span></span></span><span class="mopen">[</span><span class="mord mathnormal">L</span><span class="mclose"><span class="mclose">]</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8991em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">b</span></span></span></span></span></span></span></span><span class="mopen">[</span><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="mclose"><span class="mclose">]</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7144em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">c</span></span></span></span></span></span></span></span><span class="mopen">[</span><span class="mord mathnormal" style="margin-right:0.0785em;">I</span><span class="mclose"><span class="mclose">]</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8991em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">d</span></span></span></span></span></span></span></span><span class="mopen">[</span><span class="mord">Θ</span><span class="mclose"><span class="mclose">]</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7144em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">e</span></span></span></span></span></span></span></span><span class="mopen">[</span><span class="mord mathnormal" style="margin-right:0.109em;">N</span><span class="mclose"><span class="mclose">]</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8991em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.1076em;">f</span></span></span></span></span></span></span></span><span class="mopen">[</span><span class="mord mathnormal" style="margin-right:0.0962em;">J</span><span class="mclose"><span class="mclose">]</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7144em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0359em;">g</span></span></span></span></span></span></span></span></span></span></span></span>
 <p>Where <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mo separator="true">,</mo><mi>b</mi><mo separator="true">,</mo><mi>c</mi><mo separator="true">,</mo><mi>d</mi><mo separator="true">,</mo><mi>e</mi><mo separator="true">,</mo><mi>f</mi><mo separator="true">,</mo><mi>g</mi></mrow><annotation encoding="application/x-tex">a, b, c, d, e, f, g</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">a</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">b</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">c</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">d</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">e</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.1076em;">f</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">g</span></span></span></span> are integers or fractions called the <strong>dimensions</strong> of the quantity.</p>
 <p>For example, the dimension of Force ($F = ma$) is derived from mass times acceleration:</p>
@@ -95,24 +117,99 @@ s76,-153,76,-153s77,-151,77,-151c0.7,0.7,35.7,202,105,604c67.3,400.7,102,602.7,1
 606zM1001 80h400000v40H1017.7z"/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.1606em;"><span></span></span></span></span></span></span></span></span></span>
 <p><em>Note: Dimensional analysis cannot determine the value of the constant <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal" style="margin-right:0.0315em;">k</span></span></span></span> (which experiments show is $2\pi$). This represents one of the primary limitations of the method.</em></p>
 
-            </section>
+                    </section>
+                </div>
+            </div>
         </article>
 
         <aside class="sidebar">
             <div class="sidebar-card">
                 <h3 class="sidebar-title">On This Page</h3>
                 <ul class="toc-list">
-                    <li><a href="#">Units and Dimensions — Overview</a></li>
-                    <li><a href="#">Deeper Dive</a></li>
-                    <li><a href="#">Technical Details</a></li>
+                    <li><a href="#beginner" class="active">Overview</a></li>
+                    <li><a href="#intermediate">Deeper Dive</a></li>
+                    <li><a href="#advanced">Technical Details</a></li>
                 </ul>
+                
                 <hr class="sidebar-divider">
-                <h3 class="sidebar-title">Lineage</h3>
-                <ul class="toc-list">
-                    <li><strong>Parent Concept:</strong> <br> <a href="mathematical-tools-basics.html" class="parent-link">← Mathematical Tools & Basics</a></li>
-                </ul>
+                
+                <h3 class="sidebar-title">Concept Lineage</h3>
+                <div class="lineage-tree">
+                    <div class="lineage-item parent">
+                        <span class="lineage-role">Parent Concept</span>
+                        <a href="mathematical-tools-basics.html" class="lineage-link">← Mathematical Tools & Basics</a>
+                    </div>
+                    <div class="lineage-item current">
+                        <span class="lineage-role">Current Node</span>
+                        <span class="lineage-name">Units and Dimensions</span>
+                    </div>
+                    <div class="lineage-item children" id="lineage-children">
+                        <span class="lineage-role">Sub-concepts</span>
+                        <ul class="children-list" id="sidebar-children-list">
+                            <!-- Populated dynamically via global.js -->
+                        </ul>
+                    </div>
+                </div>
             </div>
         </aside>
     </main>
+
+    <!-- Client-side Tab Switcher Script -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const tabs = document.querySelectorAll(".tier-tab");
+            const contents = document.querySelectorAll(".tier-content");
+            const tocLinks = document.querySelectorAll(".toc-list a");
+
+            function switchTier(tierId) {
+                tabs.forEach(tab => {
+                    tab.classList.toggle("active", tab.dataset.tier === tierId);
+                });
+                contents.forEach(content => {
+                    if (content.id === `tier-${tierId}`) {
+                        content.style.display = "block";
+                        content.classList.add("active");
+                    } else {
+                        content.style.display = "none";
+                        content.classList.remove("active");
+                    }
+                });
+                
+                // Highlight active link in TOC
+                tocLinks.forEach(link => {
+                    const href = link.getAttribute("href");
+                    if (href === `#${tierId}`) {
+                        link.classList.add("active");
+                    } else {
+                        link.classList.remove("active");
+                    }
+                });
+            }
+
+            tabs.forEach(tab => {
+                tab.addEventListener("click", () => {
+                    switchTier(tab.dataset.tier);
+                });
+            });
+
+            tocLinks.forEach(link => {
+                link.addEventListener("click", (e) => {
+                    const href = link.getAttribute("href");
+                    if (href.startsWith("#")) {
+                        e.preventDefault();
+                        const tierId = href.substring(1);
+                        switchTier(tierId);
+                        
+                        // Smooth scroll to tier header
+                        const targetId = tierId === 'beginner' ? 'overview' : (tierId === 'intermediate' ? 'deeper-dive' : 'technical-details');
+                        const target = document.getElementById(targetId);
+                        if (target) {
+                            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>

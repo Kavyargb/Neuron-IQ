@@ -9,42 +9,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const medianVal = document.getElementById('median-val');
     const svgLayer = document.getElementById('svg-layer');
     const nodesLayer = document.getElementById('nodes-layer');
-    
-    // --- MODULE 1: Infinite Canvas (Pan & Zoom) ---
-    let isDragging = false;
-    let startX, startY;
-    let translateX = 0, translateY = 0;
     const graphContainer = document.getElementById('graph-container');
 
-    graphContainer.style.cursor = 'grab';
-    graphContainer.style.pointerEvents = 'auto'; 
-
-    graphContainer.addEventListener('mousedown', (e) => {
-        if (e.target.classList.contains('node')) return; 
-        isDragging = true;
-        graphContainer.style.cursor = 'grabbing';
-        startX = e.pageX - translateX;
-        startY = e.pageY - translateY;
-    });
-
-    window.addEventListener('mouseup', () => {
-        isDragging = false;
-        graphContainer.style.cursor = 'grab';
-    });
-
-    window.addEventListener('mousemove', (e) => {
-        if (!isDragging) return;
-        e.preventDefault();
-        translateX = e.pageX - startX;
-        translateY = e.pageY - startY;
-
-        svgLayer.style.transform = `translate(${translateX}px, ${translateY}px)`;
-        nodesLayer.style.transform = `translate(${translateX}px, ${translateY}px)`;
-    });
-
-    let renderedNodes = {};
-
-    // Category Colors
+    // --- MODULE 1: Category Color Utilities ---
     const getCategoryColor = (cat) => {
         if (!cat) return 'var(--color-root)';
         const c = cat.toLowerCase();
@@ -115,50 +82,120 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-searchBar.addEventListener('keydown', (e) => {
+    searchBar.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' && searchBar.value.trim() !== "") {
             enterHint.style.opacity = '0';
             dots.style.display = 'none';
             typewriter.style.display = 'none';
 
-            // FULLY REMOVE HERO TEXT
+            // Fully remove Hero text and landing layout
             const heroText = document.getElementById('hero-text');
             if (heroText) {
-                // Force the fade out, overriding the CSS animation
                 heroText.style.animation = 'none'; 
                 heroText.style.opacity = '0';
-                
-                // Completely remove it from the page flow after the fade (500ms)
                 setTimeout(() => {
                     heroText.style.display = 'none';
                 }, 500);
             }
 
             const query = searchBar.value.trim();
-
             searchBar.value = "";
             searchBar.classList.add('node-zero');
 
+            const landingContainer = document.getElementById('landing-container');
+            
             setTimeout(() => {
                 searchWrapper.style.opacity = '0';
                 searchWrapper.style.pointerEvents = 'none';
+                
+                // CRITICAL FIX: Disable pointer-events on landing-container so it does not block node clicks
+                if (landingContainer) {
+                    landingContainer.style.pointerEvents = 'none';
+                    landingContainer.style.opacity = '0';
+                    setTimeout(() => {
+                        landingContainer.style.display = 'none';
+                    }, 500);
+                }
+
+                // Show graph controls
+                const controls = document.getElementById('graph-controls');
+                if (controls) {
+                    controls.style.display = 'flex';
+                }
+
                 triggerSearchAlgorithm(query);
             }, 500);
         }
     });
 
-    // --- MODULE 3: Contextual Fuzzy Search Algorithm ---
+    // --- MODULE 3: Rich Hover Card Initialization ---
+    const hoverCard = document.createElement("div");
+    hoverCard.id = "rich-hover-card";
+    hoverCard.className = "wiki-popover"; // Shared styling class
+    hoverCard.style.display = "none";
+    document.body.appendChild(hoverCard);
+
+    let hoverTimeout;
+
+    function showRichHoverCard(event, d) {
+        clearTimeout(hoverTimeout);
+        const color = getCategoryColor(d.group);
+        
+        hoverCard.innerHTML = `
+            <div class="popover-header">
+                <span class="popover-badge" style="border-color: ${color}; color: ${color};">${d.group.toUpperCase()}</span>
+                <span class="popover-dist">Distance: ${d.distance}</span>
+            </div>
+            <div class="popover-title">${d.name}</div>
+            <p class="popover-desc">${d.searchContent ? d.searchContent.substring(0, 140) + '...' : 'Explore this neural concept.'}</p>
+            <div class="popover-footer" style="color: ${color}">Click to explore article →</div>
+        `;
+
+        hoverCard.style.display = "block";
+        const rect = event.target.getBoundingClientRect();
+        const cardHeight = hoverCard.offsetHeight;
+        const cardWidth = hoverCard.offsetWidth;
+
+        let left = rect.left + window.scrollX + (rect.width / 2) - (cardWidth / 2);
+        let top = rect.top + window.scrollY - cardHeight - 12;
+
+        if (left < 10) left = 10;
+        if (left + cardWidth > window.innerWidth - 10) left = window.innerWidth - cardWidth - 10;
+
+        hoverCard.style.left = `${left}px`;
+        hoverCard.style.top = `${top}px`;
+        
+        setTimeout(() => hoverCard.classList.add("show"), 10);
+    }
+
+    function hideRichHoverCard() {
+        hoverTimeout = setTimeout(() => {
+            hoverCard.classList.remove("show");
+            setTimeout(() => {
+                if (!hoverCard.classList.contains("show")) {
+                    hoverCard.style.display = "none";
+                }
+            }, 200);
+        }, 150);
+    }
+
+    // Keep card open if hovering over the card itself
+    hoverCard.addEventListener('mouseenter', () => clearTimeout(hoverTimeout));
+    hoverCard.addEventListener('mouseleave', hideRichHoverCard);
+
+    // --- MODULE 4: D3 Force Directed Graph Engine ---
+    let simulation = null;
+    let nodeElements = null;
+    let linkElements = null;
+
     function triggerSearchAlgorithm(query) {
         if (!window.NeuronMap) return console.error("No Map Data!");
 
-        // Reset Pan/Zoom transform for new search
-        translateX = 0; translateY = 0;
-        svgLayer.style.transform = `translate(0px, 0px)`;
-        nodesLayer.style.transform = `translate(0px, 0px)`;
-
+        // Reset layers
         svgLayer.innerHTML = '';
         nodesLayer.innerHTML = '';
-        renderedNodes = {};
+        svgLayer.style.transform = 'none';
+        nodesLayer.style.transform = 'none';
 
         const allNodes = window.NeuronMap;
         const allNodesArray = Object.values(allNodes);
@@ -167,7 +204,6 @@ searchBar.addEventListener('keydown', (e) => {
         const fuseOptions = {
             includeScore: true,
             threshold: 0.4, 
-            ignoreLocation: true, 
             keys: [
                 { name: 'name', weight: 1.0 },         
                 { name: 'category', weight: 0.5 },      
@@ -177,8 +213,6 @@ searchBar.addEventListener('keydown', (e) => {
 
         const fuse = new Fuse(allNodesArray, fuseOptions);
         const searchResults = fuse.search(query);
-        
-        // NEW: Map to store the relevance score of each matched node
         const scoreMap = {};
 
         searchResults.forEach(result => {
@@ -187,6 +221,7 @@ searchBar.addEventListener('keydown', (e) => {
             scoreMap[result.item.name] = relevance;
         });
 
+        // Add parent lineage recursively
         const addParents = (nodeName) => {
             if (!nodeName || nodeName === 'Root') return;
             finalNodesToDraw.add(nodeName);
@@ -194,6 +229,7 @@ searchBar.addEventListener('keydown', (e) => {
             if (parentName) addParents(parentName);
         };
 
+        // Add immediate child concepts
         const addChildren = (nodeName) => {
             Object.values(allNodes).forEach(n => {
                 if (n.parent === nodeName) finalNodesToDraw.add(n.name);
@@ -205,169 +241,234 @@ searchBar.addEventListener('keydown', (e) => {
             addChildren(name);
         });
 
+        // Fallback to all nodes if search yields nothing
         let nodesData = [];
         finalNodesToDraw.forEach(name => {
             if (allNodes[name]) nodesData.push(allNodes[name]);
         });
-
         if (nodesData.length === 0) {
             nodesData = allNodesArray;
         }
 
-        // --- TREE DRAWING LOGIC (Dendrogram) ---
-        
-        // FIXED: Correctly establish Parent/Child map for layout calculation
-        const childrenMap = {};
-        nodesData.forEach(n => {
-            const parentName = n.parent || 'Root';
-            if (!childrenMap[parentName]) childrenMap[parentName] = [];
-            childrenMap[parentName].push(n);
+        // Build D3 Nodes
+        const nodes = nodesData.map(n => ({
+            id: n.name,
+            name: n.name,
+            group: n.category,
+            distance: n.distance,
+            slug: n.slug,
+            searchContent: n.searchContent
+        }));
+
+        // Add Query Center Hub
+        nodes.push({
+            id: 'Root',
+            name: `Query: "${query}"`,
+            group: 'root',
+            distance: 0
         });
 
-        let currentLeafY = 0;
-        const ySpacing = 100;
-        const layoutMap = {};
+        // Build D3 Links
+        const links = [];
+        nodesData.forEach(n => {
+            const hasParentInSet = nodes.some(node => node.id === n.parent);
+            const sourceId = (n.parent && hasParentInSet) ? n.parent : 'Root';
+            links.push({
+                source: sourceId,
+                target: n.name
+            });
+        });
 
-        function calculateLayout(nodeName) {
-            const children = childrenMap[nodeName] || [];
-            if (children.length === 0) {
-                layoutMap[nodeName] = { y: currentLeafY };
-                currentLeafY += ySpacing;
-                return layoutMap[nodeName].y;
-            } else {
-                let minChildY = Infinity;
-                let maxChildY = -Infinity;
-                children.forEach(child => {
-                    const childY = calculateLayout(child.name);
-                    minChildY = Math.min(minChildY, childY);
-                    maxChildY = Math.max(maxChildY, childY);
-                });
-                const parentY = (minChildY + maxChildY) / 2;
-                layoutMap[nodeName] = { y: parentY };
-                return parentY;
+        // D3 Physics Simulation
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+
+        simulation = d3.forceSimulation(nodes)
+            .force("link", d3.forceLink(links).id(d => d.id).distance(140))
+            .force("charge", d3.forceManyBody().strength(-400))
+            .force("center", d3.forceCenter(width / 2, height / 2))
+            .force("collision", d3.forceCollide().radius(50))
+            // Hierarchical X Positioning constraint based on depth distance
+            .force("x", d3.forceX(d => {
+                if (d.id === 'Root') return width * 0.15;
+                return (width * 0.15) + (d.distance * 220);
+            }).strength(1.2))
+            .force("y", d3.forceY(height / 2).strength(0.15));
+
+        // Render Links
+        linkElements = d3.select(svgLayer).selectAll("path")
+            .data(links)
+            .join("path")
+            .attr("class", "path-line pulsing")
+            .style("stroke", d => getCategoryColor(d.target.group))
+            .style("stroke-width", "2px")
+            .style("stroke-dasharray", "8 12");
+
+        // Render Nodes
+        nodeElements = d3.select(nodesLayer).selectAll(".node")
+            .data(nodes)
+            .join("a")
+            .attr("href", d => d.id === 'Root' ? null : `${d.slug}.html`)
+            .attr("class", d => `node ${d.id === 'Root' ? 'root-node' : ''}`)
+            .style("background-color", d => getCategoryColor(d.group))
+            .style("color", d => getCategoryColor(d.group))
+            .call(drag(simulation));
+
+        // Render node labels inside nodes
+        nodeElements.each(function(d) {
+            const label = document.createElement('div');
+            label.className = 'node-label';
+            // Alternating labels bottom / top
+            const idx = nodes.indexOf(d);
+            if (idx % 2 !== 0) {
+                label.classList.add('bottom');
             }
+            label.innerText = d.name;
+            this.appendChild(label);
+        });
+
+        // Node Event Binding
+        nodeElements
+            .on("mouseenter", (event, d) => {
+                if (d.id === 'Root') return;
+                showRichHoverCard(event, d);
+            })
+            .on("mouseleave", hideRichHoverCard)
+            .on("click", (event, d) => {
+                if (d.id === 'Root') return;
+                window.location.href = `${d.slug}.html`;
+            });
+
+        // Simulation Update on Physics Tick
+        simulation.on("tick", () => {
+            linkElements.attr("d", d => {
+                const x1 = d.source.x;
+                const y1 = d.source.y;
+                const x2 = d.target.x;
+                const y2 = d.target.y;
+                const offset = Math.abs(x2 - x1) * 0.5;
+                return `M ${x1} ${y1} C ${x1 + offset} ${y1}, ${x2 - offset} ${y2}, ${x2} ${y2}`;
+            });
+
+            nodeElements
+                .style("left", d => `${d.x}px`)
+                .style("top", d => `${d.y}px`);
+        });
+
+        // --- Zoom & Pan Setup ---
+        const zoomBehavior = d3.zoom()
+            .scaleExtent([0.3, 3])
+            .on("zoom", (event) => {
+                svgLayer.style.transform = `translate(${event.transform.x}px, ${event.transform.y}px) scale(${event.transform.k})`;
+                nodesLayer.style.transform = `translate(${event.transform.x}px, ${event.transform.y}px) scale(${event.transform.k})`;
+            });
+
+        d3.select(graphContainer).call(zoomBehavior);
+
+        // Control Panel Bindings
+        const zoomInBtn = document.getElementById("zoom-in");
+        if (zoomInBtn) {
+            zoomInBtn.onclick = () => {
+                d3.select(graphContainer).transition().duration(250).call(zoomBehavior.scaleBy, 1.25);
+            };
+        }
+        const zoomOutBtn = document.getElementById("zoom-out");
+        if (zoomOutBtn) {
+            zoomOutBtn.onclick = () => {
+                d3.select(graphContainer).transition().duration(250).call(zoomBehavior.scaleBy, 0.8);
+            };
+        }
+        const zoomResetBtn = document.getElementById("zoom-reset");
+        if (zoomResetBtn) {
+            zoomResetBtn.onclick = () => {
+                d3.select(graphContainer).transition().duration(400).call(zoomBehavior.transform, d3.zoomIdentity);
+            };
         }
 
-        calculateLayout('Root');
+        // Category Filter Buttons Setup
+        setupFilters();
 
-        // Catch orphans
-        nodesData.forEach(n => {
-            if (!layoutMap[n.name]) {
-                layoutMap[n.name] = { y: currentLeafY };
-                currentLeafY += ySpacing;
-            }
-        });
-
-        const startX = window.innerWidth * 0.15;
-        const xStep = 250;
-        const totalHeight = currentLeafY > 0 ? currentLeafY - ySpacing : 0;
-        const startYOffset = (window.innerHeight / 2) - (totalHeight / 2);
-
-        // Calculate Root safely
-        const rootY = (layoutMap['Root'] ? layoutMap['Root'].y : 0) + startYOffset;
-        renderedNodes['Root'] = { x: startX, y: rootY, color: 'var(--color-root)' };
-        drawNodeDot(startX, rootY, `Query: "${query}"`, 'var(--color-root)');
-
-        const distanceGroups = {};
-        nodesData.forEach(n => {
-            if (!distanceGroups[n.distance]) distanceGroups[n.distance] = [];
-            distanceGroups[n.distance].push(n);
-        });
-
-        const sortedDistances = Object.keys(distanceGroups).sort((a, b) => a - b);
-
-        sortedDistances.forEach((dist, i) => {
-            setTimeout(() => {
-                const nodes = distanceGroups[dist];
-
-                nodes.forEach((node, index) => {
-                    const nodeX = startX + (node.distance * xStep);
-                    const nodeY = layoutMap[node.name].y + startYOffset;
-                    const color = getCategoryColor(node.category);
-
-                    renderedNodes[node.name] = { x: nodeX, y: nodeY, color: color };
-                    const parentData = renderedNodes[node.parent] || renderedNodes['Root'];
-
-                    drawSweepLine(parentData.x, parentData.y, nodeX, nodeY, color);
-                    setTimeout(() => drawNodeDot(nodeX, nodeY, node.name, color, node, index), 200);
-                });
-
-            }, i * 600);
-        });
-
+        // Populate Plausibility Sidebar Panel
         triggerPlausibilityEngine(nodesData, scoreMap);
     }
 
-    // --- Drawing Utilities ---
-    function drawSweepLine(x1, y1, x2, y2, color) {
-        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-        path.setAttribute('class', 'path-line');
-        path.style.stroke = color;
-        path.style.strokeWidth = "2px";
-
-        const offset = Math.abs(x2 - x1) * 0.5;
-        const d = `M ${x1} ${y1} C ${x1 + offset} ${y1}, ${x2 - offset} ${y2}, ${x2} ${y2}`;
-        path.setAttribute('d', d);
-        svgLayer.appendChild(path);
-
-        setTimeout(() => {
-            const length = Math.ceil(path.getTotalLength()) + 20;
-            path.style.strokeDasharray = length;
-            path.style.strokeDashoffset = length;
-            path.getBoundingClientRect();
-
-            path.style.opacity = '0.7';
-            path.style.strokeDashoffset = '0';
-        }, 10);
-    }
-
-    function drawNodeDot(x, y, labelText, color, nodeObj = null, index = 0) {
-        const dot = document.createElement(nodeObj ? 'a' : 'div');
-        if (nodeObj) dot.href = `${nodeObj.slug}.html`;
-
-        dot.className = 'node';
-        dot.style.left = `${x}px`;
-        dot.style.top = `${y}px`;
-        dot.style.color = color;
-        dot.style.backgroundColor = color;
-
-        const label = document.createElement('div');
-        label.className = 'node-label';
-
-        if (index % 2 !== 0) {
-            label.classList.add('bottom');
+    // --- Node Drag Handler ---
+    function drag(simulation) {
+        function dragstarted(event, d) {
+            if (!event.active) simulation.alphaTarget(0.3).restart();
+            d.fx = d.x;
+            d.fy = d.y;
         }
 
-        label.innerText = labelText;
-        dot.appendChild(label);
+        function dragged(event, d) {
+            d.fx = event.x;
+            d.fy = event.y;
+        }
 
-        nodesLayer.appendChild(dot);
-        setTimeout(() => dot.style.opacity = '1', 50);
+        function dragended(event, d) {
+            if (!event.active) simulation.alphaTarget(0);
+            d.fx = null;
+            d.fy = null;
+        }
+
+        return d3.drag()
+            .on("start", dragstarted)
+            .on("drag", dragged)
+            .on("end", dragended);
     }
 
-    // --- MODULE 4: Plausibility Engine ---
+    // --- Category Filter Panel logic ---
+    function setupFilters() {
+        const filterButtons = document.querySelectorAll(".filter-btn");
+        filterButtons.forEach(btn => {
+            btn.onclick = () => {
+                filterButtons.forEach(b => b.classList.remove("active"));
+                btn.classList.add("active");
+
+                const category = btn.dataset.category;
+
+                // Stagger fade nodes
+                nodeElements.transition().duration(200)
+                    .style("opacity", d => {
+                        if (category === 'all' || d.id === 'Root') return 1;
+                        return d.group.toLowerCase().includes(category) ? 1 : 0.15;
+                    })
+                    .style("pointer-events", d => {
+                        if (category === 'all' || d.id === 'Root') return "auto";
+                        return d.group.toLowerCase().includes(category) ? "auto" : "none";
+                    });
+
+                // Stagger fade links
+                linkElements.transition().duration(200)
+                    .style("opacity", d => {
+                        if (category === 'all') return 0.6;
+                        return d.target.group.toLowerCase().includes(category) ? 0.6 : 0.05;
+                    });
+            };
+        });
+    }
+
+    // --- Plausibility Side Panel Drawer ---
     function triggerPlausibilityEngine(nodesData, scoreMap) {
         if (nodesData.length === 0) return;
 
-        // 1. Sort by Relevance Score (Highest First)
+        // Sort by relevance score desc
         nodesData.sort((a, b) => {
             const scoreA = scoreMap[a.name] || 0;
             const scoreB = scoreMap[b.name] || 0;
-            return scoreB - scoreA; // Descending order
+            return scoreB - scoreA;
         });
 
-        // 2. Update Top Badge with the highest score
+        // Set Top Relevance Score Badge
         const topScore = scoreMap[nodesData[0].name] || 0;
         medianVal.innerText = `${topScore}%`;
 
         cardsContainer.innerHTML = '';
         
-        // 3. Generate Staggered Cards
         nodesData.forEach((node, index) => {
             const cardColor = getCategoryColor(node.category);
             const relevanceScore = scoreMap[node.name];
             
-            // If it has a score, show %, otherwise it's just a structural context node
             const labelText = relevanceScore !== undefined 
                 ? `${relevanceScore}% MATCH` 
                 : `CONTEXT NODE`;
@@ -377,8 +478,7 @@ searchBar.addEventListener('keydown', (e) => {
             card.className = 'card';
             card.style.display = 'block';
             card.style.textDecoration = 'none';
-            
-            card.style.animationDelay = `${index * 0.08}s`;
+            card.style.animationDelay = `${index * 0.06}s`;
 
             card.innerHTML = `
                 <div class="card-dist" style="color: ${cardColor}">${labelText}</div>

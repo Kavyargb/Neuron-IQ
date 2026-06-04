@@ -7,11 +7,20 @@
     <meta name="description" content="Physics is not just about solving equations on a blackboard; it is an experimental science. To prove a theory, we must perform experiments and take me...">
     <link rel="stylesheet" href="page.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <!-- Load shared libraries and data -->
+    <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" defer></script>
+    <script src="graph.js" defer></script>
+    <script src="global.js" defer></script>
 </head>
 <body>
     <header class="top-nav">
         <a href="index.html" class="brand">Neuron-IQ</a>
         <nav class="nav-links">
+            <a href="#" class="nav-link header-search-btn" id="global-search-trigger">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align: middle; margin-right: 4px;"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>Search
+            </a>
             <a href="sitemap.html" class="nav-link">Sitemap</a>
         </nav>
     </header>
@@ -19,7 +28,7 @@
     <main class="layout-grid">
         <article class="main-content">
             <nav class="breadcrumbs">
-                <a href="index.html">Home</a> <span class="sep">/</span> <span>Physics</span> <span class="sep">/</span> <span class="current">Experimental Physics</span>
+                <a href="index.html">Home</a> <span class="sep">/</span> <a href="physics.html">Physics</a> <span class="sep">/</span> <a href="mathematical-tools-basics.html">Mathematical Tools & Basics</a> <span class="sep">/</span> <span class="current">Experimental Physics</span>
             </nav>
 
             <div class="meta-row">
@@ -29,9 +38,20 @@
 
             <h1 class="article-title">Experimental Physics</h1>
 
-            <section class="content-tier drop-cap-section">
-                <h2 class="tier-header">Experimental Physics — Overview</h2>
-                <p>Physics is not just about solving equations on a blackboard; it is an experimental science. To prove a theory, we must perform experiments and take measurements. However, no measurement in the real world is ever completely perfect. </p>
+            <!-- Interactive Tier Tabs Selector -->
+            <div class="tier-tabs-container">
+                <div class="tier-tabs">
+                    <button class="tier-tab active" data-tier="beginner">Beginner Overview</button>
+                    <button class="tier-tab" data-tier="intermediate">Intermediate Deep Dive</button>
+                    <button class="tier-tab" data-tier="advanced">Advanced Technical</button>
+                </div>
+            </div>
+
+            <div class="tier-content-wrapper">
+                <div class="tier-content active" id="tier-beginner">
+                    <section class="content-tier drop-cap-section" id="overview">
+                        <h2 class="tier-header">Experimental Physics — Overview</h2>
+                        <p>Physics is not just about solving equations on a blackboard; it is an experimental science. To prove a theory, we must perform experiments and take measurements. However, no measurement in the real world is ever completely perfect. </p>
 <h4>Accuracy vs. Precision</h4>
 <p>When we take measurements, we must understand two important concepts:</p>
 <ul>
@@ -51,13 +71,14 @@
 </ol>
 <p>To understand how these values are cataloged under standard systems of measurement, see the guide on <a href="./units-and-dimensions.html">Units and Dimensions</a>.</p>
 
-            </section>
+                    </section>
+                </div>
 
-            
-            <hr class="divider">
-            <section class="content-tier">
-                <h2 class="tier-header">Deeper Dive</h2>
-                <p>When standard rulers are too coarse to measure tiny objects, we use specialized laboratory instruments like the <strong>Vernier Caliper</strong>.</p>
+                
+                <div class="tier-content" id="tier-intermediate" style="display: none;">
+                    <section class="content-tier" id="deeper-dive">
+                        <h2 class="tier-header">Deeper Dive</h2>
+                        <p>When standard rulers are too coarse to measure tiny objects, we use specialized laboratory instruments like the <strong>Vernier Caliper</strong>.</p>
 <h4>Vernier Calipers</h4>
 <p>A Vernier caliper consists of a main scale and a sliding auxiliary scale (the Vernier scale) that allows us to read fractions of the smallest division on the main scale.</p>
 <p><img src="images/vernier-caliper-reading.png" alt="Anatomy and Reading of a Vernier Caliper"></p>
@@ -87,13 +108,14 @@ Sometimes, when the jaws of the caliper are closed, the zero mark of the Vernier
 </li>
 </ul>
 
-            </section>
+                    </section>
+                </div>
 
-            
-            <hr class="divider">
-            <section class="content-tier">
-                <h2 class="tier-header">Technical Details</h2>
-                <p>Every experimental measurement is represented as <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mo>±</mo><mi mathvariant="normal">Δ</mi><mi>x</mi></mrow><annotation encoding="application/x-tex">x \pm \Delta x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">±</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord">Δ</span><span class="mord mathnormal">x</span></span></span></span>, where <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">x</span></span></span></span> is the measured value and <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><mi>x</mi></mrow><annotation encoding="application/x-tex">\Delta x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord">Δ</span><span class="mord mathnormal">x</span></span></span></span> is the uncertainty or error.</p>
+                
+                <div class="tier-content" id="tier-advanced" style="display: none;">
+                    <section class="content-tier" id="technical-details">
+                        <h2 class="tier-header">Technical Details</h2>
+                        <p>Every experimental measurement is represented as <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mo>±</mo><mi mathvariant="normal">Δ</mi><mi>x</mi></mrow><annotation encoding="application/x-tex">x \pm \Delta x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">±</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord">Δ</span><span class="mord mathnormal">x</span></span></span></span>, where <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">x</span></span></span></span> is the measured value and <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><mi>x</mi></mrow><annotation encoding="application/x-tex">\Delta x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord">Δ</span><span class="mord mathnormal">x</span></span></span></span> is the uncertainty or error.</p>
 <h4>Classification of Errors</h4>
 <ul>
 <li><strong>Systematic Errors:</strong> Constant errors that skew measurements in one direction (e.g., poorly calibrated instruments or zero errors). These can be eliminated by correction.</li>
@@ -141,24 +163,99 @@ s76,-153,76,-153s77,-151,77,-151c0.7,0.7,35.7,202,105,604c67.3,400.7,102,602.7,1
 606zM1001 80h400000v40H1017.7z"/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.0541em;"><span></span></span></span></span></span></span></span></span></span>
 <p>This relation ensures that independent uncertainties are combined geometrically, providing a more statistically robust estimate of experimental precision.</p>
 
-            </section>
+                    </section>
+                </div>
+            </div>
         </article>
 
         <aside class="sidebar">
             <div class="sidebar-card">
                 <h3 class="sidebar-title">On This Page</h3>
                 <ul class="toc-list">
-                    <li><a href="#">Experimental Physics — Overview</a></li>
-                    <li><a href="#">Deeper Dive</a></li>
-                    <li><a href="#">Technical Details</a></li>
+                    <li><a href="#beginner" class="active">Overview</a></li>
+                    <li><a href="#intermediate">Deeper Dive</a></li>
+                    <li><a href="#advanced">Technical Details</a></li>
                 </ul>
+                
                 <hr class="sidebar-divider">
-                <h3 class="sidebar-title">Lineage</h3>
-                <ul class="toc-list">
-                    <li><strong>Parent Concept:</strong> <br> <a href="mathematical-tools-basics.html" class="parent-link">← Mathematical Tools & Basics</a></li>
-                </ul>
+                
+                <h3 class="sidebar-title">Concept Lineage</h3>
+                <div class="lineage-tree">
+                    <div class="lineage-item parent">
+                        <span class="lineage-role">Parent Concept</span>
+                        <a href="mathematical-tools-basics.html" class="lineage-link">← Mathematical Tools & Basics</a>
+                    </div>
+                    <div class="lineage-item current">
+                        <span class="lineage-role">Current Node</span>
+                        <span class="lineage-name">Experimental Physics</span>
+                    </div>
+                    <div class="lineage-item children" id="lineage-children">
+                        <span class="lineage-role">Sub-concepts</span>
+                        <ul class="children-list" id="sidebar-children-list">
+                            <!-- Populated dynamically via global.js -->
+                        </ul>
+                    </div>
+                </div>
             </div>
         </aside>
     </main>
+
+    <!-- Client-side Tab Switcher Script -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const tabs = document.querySelectorAll(".tier-tab");
+            const contents = document.querySelectorAll(".tier-content");
+            const tocLinks = document.querySelectorAll(".toc-list a");
+
+            function switchTier(tierId) {
+                tabs.forEach(tab => {
+                    tab.classList.toggle("active", tab.dataset.tier === tierId);
+                });
+                contents.forEach(content => {
+                    if (content.id === `tier-${tierId}`) {
+                        content.style.display = "block";
+                        content.classList.add("active");
+                    } else {
+                        content.style.display = "none";
+                        content.classList.remove("active");
+                    }
+                });
+                
+                // Highlight active link in TOC
+                tocLinks.forEach(link => {
+                    const href = link.getAttribute("href");
+                    if (href === `#${tierId}`) {
+                        link.classList.add("active");
+                    } else {
+                        link.classList.remove("active");
+                    }
+                });
+            }
+
+            tabs.forEach(tab => {
+                tab.addEventListener("click", () => {
+                    switchTier(tab.dataset.tier);
+                });
+            });
+
+            tocLinks.forEach(link => {
+                link.addEventListener("click", (e) => {
+                    const href = link.getAttribute("href");
+                    if (href.startsWith("#")) {
+                        e.preventDefault();
+                        const tierId = href.substring(1);
+                        switchTier(tierId);
+                        
+                        // Smooth scroll to tier header
+                        const targetId = tierId === 'beginner' ? 'overview' : (tierId === 'intermediate' ? 'deeper-dive' : 'technical-details');
+                        const target = document.getElementById(targetId);
+                        if (target) {
+                            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>
