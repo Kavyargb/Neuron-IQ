@@ -1,13 +1,6 @@
 const fs = require('fs');
 const path = require('path');
 const matter = require('gray-matter');
-const { marked } = require('marked');
-const markedKatex = require('marked-katex-extension'); // ADDED KATEX
-
-// 1. Configure Marked to intercept LaTeX before parsing Markdown
-marked.use(markedKatex({
-    throwOnError: false // If you make a math typo, it won't crash your build
-}));
 
 const contentDir = path.join(__dirname, 'content');
 const outputDir = path.join(__dirname, 'public');
@@ -18,7 +11,11 @@ const slugify = (text) => text.toString().toLowerCase().trim()
     .replace(/[^\w\-]+/g, '')
     .replace(/\-\-+/g, '-');
 
-function buildGraph() {
+async function buildGraph() {
+    const { marked } = await import('marked');
+    const { default: markedKatex } = await import('marked-katex-extension');
+
+    marked.use(markedKatex({ throwOnError: false }));
     if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir);
 
     const files = fs.readdirSync(contentDir).filter(f => f.endsWith('.md'));
@@ -135,4 +132,4 @@ function buildGraph() {
     console.log(`[Neuron-IQ] SEO Build complete! Processed ${files.length} pages with KaTeX support.`);
 }
 
-buildGraph();
+buildGraph().catch(err => { console.error(err); process.exit(1); });
