@@ -38,20 +38,11 @@
 
             <h1 class="article-title">Perceptrons</h1>
 
-            <!-- Interactive Tier Tabs Selector -->
-            <div class="tier-tabs-container">
-                <div class="tier-tabs">
-                    <button class="tier-tab active" data-tier="beginner">Beginner Overview</button>
-                    <button class="tier-tab" data-tier="intermediate">Intermediate Deep Dive</button>
-                    <button class="tier-tab" data-tier="advanced">Advanced Technical</button>
-                </div>
-            </div>
-
-            <div class="tier-content-wrapper">
-                <div class="tier-content active" id="tier-beginner">
-                    <section class="content-tier drop-cap-section" id="overview">
-                        <h2 class="tier-header">Perceptrons — Overview</h2>
-                        <p>A <strong>Perceptron</strong> is the simplest form of an artificial neural network. Think of it as a tiny digital brain cell. It takes in multiple pieces of information, weighs their importance, and makes a simple &quot;yes or no&quot; decision.</p>
+            <div class="article-content">
+                
+                <section class="content-section content-tier" id="beginner">
+                    <h2 class="section-header">Beginner</h2>
+                    <p>A <strong>Perceptron</strong> is the simplest form of an artificial neural network. Think of it as a tiny digital brain cell. It takes in multiple pieces of information, weighs their importance, and makes a simple &quot;yes or no&quot; decision.</p>
 <p>Imagine you are deciding whether to go outside. You take in inputs:</p>
 <ol>
 <li>Is it raining?</li>
@@ -60,14 +51,12 @@
 </ol>
 <p>You assign a &quot;weight&quot; (importance) to each of these factors. The perceptron calculates a total score based on these inputs and weights. If the score crosses a certain threshold, the perceptron outputs a &quot;Yes&quot; (go outside). Otherwise, it outputs a &quot;No&quot;.</p>
 
-                    </section>
-                </div>
-
+                </section>
                 
-                <div class="tier-content" id="tier-intermediate" style="display: none;">
-                    <section class="content-tier" id="deeper-dive">
-                        <h2 class="tier-header">Deeper Dive</h2>
-                        <p>In machine learning, the perceptron is a linear algorithm for binary classification. Invented in 1958 by Frank Rosenblatt, it represents a mathematical model of a biological neuron.</p>
+
+                <section class="content-section content-tier" id="intermediate">
+                    <h2 class="section-header">Intermediate</h2>
+                    <p>In machine learning, the perceptron is a linear algorithm for binary classification. Invented in 1958 by Frank Rosenblatt, it represents a mathematical model of a biological neuron.</p>
 <p>A perceptron consists of:</p>
 <ul>
 <li><strong>Inputs ($x_1, x_2, \dots, x_n$):</strong> The features of the data.</li>
@@ -79,14 +68,12 @@
 <span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>y</mi><mo>=</mo><mi>f</mi><mrow><mo fence="true">(</mo><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>n</mi></munderover><msub><mi>w</mi><mi>i</mi></msub><msub><mi>x</mi><mi>i</mi></msub><mo>+</mo><mi>b</mi><mo fence="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">y = f\left(\sum_{i=1}^{n} w_i x_i + b\right)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">y</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:3.0277em;vertical-align:-1.2777em;"></span><span class="mord mathnormal" style="margin-right:0.1076em;">f</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size4">(</span></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.6514em;"><span style="top:-1.8723em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.05em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span><span style="top:-4.3em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.2777em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0269em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0269em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal">b</span><span class="mclose delimcenter" style="top:0em;"><span class="delimsizing size4">)</span></span></span></span></span></span></span>
 <p>If the sum is greater than 0, <span class="katex-error" title="ParseError: KaTeX parse error: Can&#x27;t use function &#x27;$&#x27; in math mode at position 4: y=1$̲; otherwise $y=…" style="color:#cc0000">y=1$; otherwise $y=0</span>.</p>
 
-                    </section>
-                </div>
-
+                </section>
                 
-                <div class="tier-content" id="tier-advanced" style="display: none;">
-                    <section class="content-tier" id="technical-details">
-                        <h2 class="tier-header">Technical Details</h2>
-                        <p>The perceptron is a <strong>linear classifier</strong>. Geometrically, it draws a straight line (or a hyperplane in higher dimensions) to separate two classes of data. </p>
+
+                <section class="content-section content-tier" id="advanced">
+                    <h2 class="section-header">Advanced</h2>
+                    <p>The perceptron is a <strong>linear classifier</strong>. Geometrically, it draws a straight line (or a hyperplane in higher dimensions) to separate two classes of data. </p>
 <h4>The Perceptron Learning Rule</h4>
 <p>The perceptron updates its weight vector <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold">w</mi></mrow><annotation encoding="application/x-tex">\mathbf{w}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4444em;"></span><span class="mord mathbf" style="margin-right:0.016em;">w</span></span></span></span> via gradient descent. For a given training example <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><msub><mi mathvariant="bold">x</mi><mi>i</mi></msub><mo separator="true">,</mo><msub><mi>y</mi><mi>i</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(\mathbf{x}_i, y_i)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord"><span class="mord mathbf">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0359em;">y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span>, where <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>y</mi><mi>i</mi></msub><mo>∈</mo><mo stretchy="false">{</mo><mn>0</mn><mo separator="true">,</mo><mn>1</mn><mo stretchy="false">}</mo></mrow><annotation encoding="application/x-tex">y_i \in \{0, 1\}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7335em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0359em;">y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">{</span><span class="mord">0</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">1</span><span class="mclose">}</span></span></span></span> is the true label and <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover accent="true"><mi>y</mi><mo>^</mo></mover><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">\hat{y}_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.6944em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">y</span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.1944em;"><span class="mord">^</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.1944em;"><span></span></span></span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> is the predicted label, the weights are updated as follows:</p>
 <span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi mathvariant="bold">w</mi><mo>←</mo><mi mathvariant="bold">w</mi><mo>+</mo><mi>α</mi><mo stretchy="false">(</mo><msub><mi>y</mi><mi>i</mi></msub><mo>−</mo><msub><mover accent="true"><mi>y</mi><mo>^</mo></mover><mi>i</mi></msub><mo stretchy="false">)</mo><msub><mi mathvariant="bold">x</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">\mathbf{w} \leftarrow \mathbf{w} + \alpha (y_i - \hat{y}_i) \mathbf{x}_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4444em;"></span><span class="mord mathbf" style="margin-right:0.016em;">w</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">←</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6667em;vertical-align:-0.0833em;"></span><span class="mord mathbf" style="margin-right:0.016em;">w</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.0037em;">α</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0359em;">y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.6944em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">y</span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.1944em;"><span class="mord">^</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.1944em;"><span></span></span></span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mord"><span class="mord mathbf">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span>
@@ -95,8 +82,8 @@
 <p>The perceptron is guaranteed to converge <em>only if</em> the dataset is <strong>linearly separable</strong>. If you cannot draw a single straight line to separate the classes, the perceptron learning algorithm will never stop oscillating.</p>
 <p>This limitation was famously highlighted by Minsky and Papert in 1969 when they proved a single perceptron could not learn the logical XOR (Exclusive OR) function, leading to the &quot;AI Winter&quot;. This limitation is overcome by stacking multiple perceptrons into a <strong>Multi-Layer Perceptron (MLP)</strong>, which can approximate any continuous mathematical function using non-linear activation functions and backpropagation.</p>
 
-                    </section>
-                </div>
+                </section>
+                
             </div>
         </article>
 
@@ -104,9 +91,15 @@
             <div class="sidebar-card">
                 <h3 class="sidebar-title">On This Page</h3>
                 <ul class="toc-list">
-                    <li><a href="#beginner" class="active">Overview</a></li>
-                    <li><a href="#intermediate">Deeper Dive</a></li>
-                    <li><a href="#advanced">Technical Details</a></li>
+                    
+                    <li><a href="#beginner" class="active">Beginner</a></li>
+                    
+
+                    <li><a href="#intermediate" class="">Intermediate</a></li>
+                    
+
+                    <li><a href="#advanced" class="">Advanced</a></li>
+                    
                 </ul>
                 
                 <hr class="sidebar-divider">
@@ -130,56 +123,21 @@
                 </div>
             </div>
         </aside>
-    </main>
-
-    <!-- Client-side Tab Switcher Script -->
+    </main>    <!-- Client-side TOC Scroll Script -->
     <script>
         document.addEventListener("DOMContentLoaded", () => {
-            const tabs = document.querySelectorAll(".tier-tab");
-            const contents = document.querySelectorAll(".tier-content");
             const tocLinks = document.querySelectorAll(".toc-list a");
-
-            function switchTier(tierId) {
-                tabs.forEach(tab => {
-                    tab.classList.toggle("active", tab.dataset.tier === tierId);
-                });
-                contents.forEach(content => {
-                    if (content.id === `tier-${tierId}`) {
-                        content.style.display = "block";
-                        content.classList.add("active");
-                    } else {
-                        content.style.display = "none";
-                        content.classList.remove("active");
-                    }
-                });
-                
-                // Highlight active link in TOC
-                tocLinks.forEach(link => {
-                    const href = link.getAttribute("href");
-                    if (href === `#${tierId}`) {
-                        link.classList.add("active");
-                    } else {
-                        link.classList.remove("active");
-                    }
-                });
-            }
-
-            tabs.forEach(tab => {
-                tab.addEventListener("click", () => {
-                    switchTier(tab.dataset.tier);
-                });
-            });
-
+            
             tocLinks.forEach(link => {
                 link.addEventListener("click", (e) => {
                     const href = link.getAttribute("href");
                     if (href.startsWith("#")) {
                         e.preventDefault();
-                        const tierId = href.substring(1);
-                        switchTier(tierId);
                         
-                        // Smooth scroll to tier header
-                        const targetId = tierId === 'beginner' ? 'overview' : (tierId === 'intermediate' ? 'deeper-dive' : 'technical-details');
+                        tocLinks.forEach(l => l.classList.remove("active"));
+                        link.classList.add("active");
+                        
+                        const targetId = href.substring(1);
                         const target = document.getElementById(targetId);
                         if (target) {
                             target.scrollIntoView({ behavior: 'smooth', block: 'start' });

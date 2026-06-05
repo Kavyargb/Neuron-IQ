@@ -40,12 +40,12 @@ distance: 2
     *   Distance 2 = Sub-fields (Calculus, Quantum Mechanics)
     *   Distance 3 = Specific Concepts (Derivatives, Superposition)
 
-### Part 2: The Tiered Content
-Directly below the frontmatter, you will write your content. It must be divided using exactly three headers: `@Beginner`, `@Intermediate`, and `@Advanced`.
+### Part 2: The Content Sections
+Directly below the frontmatter, you will write your content. You can divide your content into any custom sections you like using `@Section Title` (e.g., `@Introduction`, `@Deep Dive`, `@Mathematical Proof`). 
 
-**Tier Rules:**
+**Section Rules:**
 *   The `@` tags must be at the very start of a line.
-*   You must include at least `@Beginner`. (Intermediate and Advanced are optional; if left out, those sections will simply not appear on the web page).
+*   The text following the `@` will automatically become both a section header and a link in the Table of Contents.
 
 ---
 
@@ -103,15 +103,15 @@ parent: Quantum Mechanics
 category: Physics
 distance: 3
 ---
-@Beginner
+@Introduction
 Quantum entanglement is like a pair of magic dice. If you roll them, no matter how far apart they are—even on opposite sides of the universe—they will always land on the exact same number at the exact same time. It shows that particles can be invisibly connected.
 
-@Intermediate
+@Deeper Understanding
 Quantum entanglement is a physical phenomenon that occurs when a group of particles is generated, interact, or share spatial proximity in a way such that the quantum state of each particle cannot be described independently of the state of the others. 
 
 Einstein famously referred to this as *"spooky action at a distance"*, because it appears to violate the speed of light limit for information transfer.
 
-@Advanced
+@Mathematical Proof
 Mathematically, an entangled state is one that cannot be factored as a tensor product of the states of its local constituents. For a bipartite system consisting of subsystems $A$ and $B$, a state $|\psi\rangle$ is entangled if it cannot be written as:
 
 $$

@@ -32,26 +32,17 @@
             </nav>
 
             <div class="meta-row">
-                <span class="badge category-badge">MATH</span>
+                <span class="badge category-badge">MATHEMATICS</span>
                 <span class="read-time">Distance from core: 2</span>
             </div>
 
             <h1 class="article-title">Linear Algebra</h1>
 
-            <!-- Interactive Tier Tabs Selector -->
-            <div class="tier-tabs-container">
-                <div class="tier-tabs">
-                    <button class="tier-tab active" data-tier="beginner">Beginner Overview</button>
-                    <button class="tier-tab" data-tier="intermediate">Intermediate Deep Dive</button>
-                    <button class="tier-tab" data-tier="advanced">Advanced Technical</button>
-                </div>
-            </div>
-
-            <div class="tier-content-wrapper">
-                <div class="tier-content active" id="tier-beginner">
-                    <section class="content-tier drop-cap-section" id="overview">
-                        <h2 class="tier-header">Linear Algebra — Overview</h2>
-                        <p><strong>Linear Algebra</strong> is the branch of mathematics concerning linear equations, linear maps, and their representations in vector spaces and through matrices. </p>
+            <div class="article-content">
+                
+                <section class="content-section content-tier" id="beginner">
+                    <h2 class="section-header">Beginner</h2>
+                    <p><strong>Linear Algebra</strong> is the branch of mathematics concerning linear equations, linear maps, and their representations in vector spaces and through matrices. </p>
 <p>If you&#39;ve ever solved a system of equations with two variables (like <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mo>+</mo><mi>y</mi><mo>=</mo><mn>5</mn></mrow><annotation encoding="application/x-tex">x + y = 5</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">y</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">5</span></span></span></span> and $x - y = 1$), you were using the foundational concepts of linear algebra. In modern computing, Linear Algebra is the math that powers computer graphics (moving 3D shapes on a screen) and allows data to be structured efficiently.</p>
 <p>At its core, it deals with two main mathematical objects:</p>
 <ul>
@@ -59,14 +50,12 @@
 <li><strong>Matrices:</strong> Grids of numbers that can transform vectors (e.g., rotating or stretching them).</li>
 </ul>
 
-                    </section>
-                </div>
-
+                </section>
                 
-                <div class="tier-content" id="tier-intermediate" style="display: none;">
-                    <section class="content-tier" id="deeper-dive">
-                        <h2 class="tier-header">Deeper Dive</h2>
-                        <p>In applied fields like Computer Science and Physics, Linear Algebra is indispensable. </p>
+
+                <section class="content-section content-tier" id="intermediate">
+                    <h2 class="section-header">Intermediate</h2>
+                    <p>In applied fields like Computer Science and Physics, Linear Algebra is indispensable. </p>
 <h4>Vectors and Matrices</h4>
 <p>A vector <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold">v</mi></mrow><annotation encoding="application/x-tex">\mathbf{v}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4444em;"></span><span class="mord mathbf" style="margin-right:0.016em;">v</span></span></span></span> in a 3-dimensional space can be represented as a column matrix:</p>
 <span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi mathvariant="bold">v</mi><mo>=</mo><mrow><mo fence="true">[</mo><mtable rowspacing="0.16em" columnalign="center" columnspacing="1em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mi>x</mi></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mi>y</mi></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mi>z</mi></mstyle></mtd></mtr></mtable><mo fence="true">]</mo></mrow></mrow><annotation encoding="application/x-tex">\mathbf{v} = \begin{bmatrix} x \\ y \\ z \end{bmatrix}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4444em;"></span><span class="mord mathbf" style="margin-right:0.016em;">v</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:3.6em;vertical-align:-1.55em;"></span><span class="minner"><span class="mopen"><span class="delimsizing mult"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:2.05em;"><span style="top:-4.05em;"><span class="pstrut" style="height:5.6em;"></span><span style="width:0.667em;height:3.6em;"><svg xmlns="http://www.w3.org/2000/svg" width="0.667em" height="3.6em" viewBox="0 0 667 3600"><path d="M403 1759 V84 H666 V0 H319 V1759 v0 v1759 v84 h347 v-84
@@ -75,29 +64,22 @@ M347 1759 V0 H263 V1759 v0 v1759 h84z"/></svg></span></span></span><span class="
 <p>A matrix <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold">A</mi></mrow><annotation encoding="application/x-tex">\mathbf{A}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6861em;"></span><span class="mord mathbf">A</span></span></span></span> is a rectangular array of numbers. When a matrix multiplies a vector, it applies a <em>linear transformation</em> to it. For example, a matrix can rotate a 2D vector by an angle <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>θ</mi></mrow><annotation encoding="application/x-tex">\theta</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal" style="margin-right:0.0278em;">θ</span></span></span></span>:</p>
 <span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mrow><mo fence="true">[</mo><mtable rowspacing="0.16em" columnalign="center center" columnspacing="1em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mi>cos</mi><mo>⁡</mo><mi>θ</mi></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mo>−</mo><mi>sin</mi><mo>⁡</mo><mi>θ</mi></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mi>sin</mi><mo>⁡</mo><mi>θ</mi></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mi>cos</mi><mo>⁡</mo><mi>θ</mi></mrow></mstyle></mtd></mtr></mtable><mo fence="true">]</mo></mrow><mrow><mo fence="true">[</mo><mtable rowspacing="0.16em" columnalign="center" columnspacing="1em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mi>x</mi></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mi>y</mi></mstyle></mtd></mtr></mtable><mo fence="true">]</mo></mrow><mo>=</mo><mrow><mo fence="true">[</mo><mtable rowspacing="0.16em" columnalign="center" columnspacing="1em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mi>x</mi><mi>cos</mi><mo>⁡</mo><mi>θ</mi><mo>−</mo><mi>y</mi><mi>sin</mi><mo>⁡</mo><mi>θ</mi></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mi>x</mi><mi>sin</mi><mo>⁡</mo><mi>θ</mi><mo>+</mo><mi>y</mi><mi>cos</mi><mo>⁡</mo><mi>θ</mi></mrow></mstyle></mtd></mtr></mtable><mo fence="true">]</mo></mrow></mrow><annotation encoding="application/x-tex">\begin{bmatrix} \cos\theta &amp; -\sin\theta \\ \sin\theta &amp; \cos\theta \end{bmatrix} \begin{bmatrix} x \\ y \end{bmatrix} = \begin{bmatrix} x\cos\theta - y\sin\theta \\ x\sin\theta + y\cos\theta \end{bmatrix}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:2.4em;vertical-align:-0.95em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size3">[</span></span><span class="mord"><span class="mtable"><span class="col-align-c"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.45em;"><span style="top:-3.61em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mop">cos</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.0278em;">θ</span></span></span><span style="top:-2.41em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mop">sin</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.0278em;">θ</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.95em;"><span></span></span></span></span></span><span class="arraycolsep" style="width:0.5em;"></span><span class="arraycolsep" style="width:0.5em;"></span><span class="col-align-c"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.45em;"><span style="top:-3.61em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">−</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mop">sin</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.0278em;">θ</span></span></span><span style="top:-2.41em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mop">cos</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.0278em;">θ</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.95em;"><span></span></span></span></span></span></span></span><span class="mclose delimcenter" style="top:0em;"><span class="delimsizing size3">]</span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size3">[</span></span><span class="mord"><span class="mtable"><span class="col-align-c"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.45em;"><span style="top:-3.61em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal">x</span></span></span><span style="top:-2.41em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0359em;">y</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.95em;"><span></span></span></span></span></span></span></span><span class="mclose delimcenter" style="top:0em;"><span class="delimsizing size3">]</span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.4em;vertical-align:-0.95em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size3">[</span></span><span class="mord"><span class="mtable"><span class="col-align-c"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.45em;"><span style="top:-3.61em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mop">cos</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.0278em;">θ</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">y</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mop">sin</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.0278em;">θ</span></span></span><span style="top:-2.41em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mop">sin</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.0278em;">θ</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">y</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mop">cos</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.0278em;">θ</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.95em;"><span></span></span></span></span></span></span></span><span class="mclose delimcenter" style="top:0em;"><span class="delimsizing size3">]</span></span></span></span></span></span></span>
 <h4>Systems of Linear Equations</h4>
-<p>Any system of linear equations can be elegantly written in the matrix form:
-$$ \mathbf{A}\mathbf{x} = \mathbf{b} $$
-Where <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold">A</mi></mrow><annotation encoding="application/x-tex">\mathbf{A}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6861em;"></span><span class="mord mathbf">A</span></span></span></span> is the matrix of coefficients, <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold">x</mi></mrow><annotation encoding="application/x-tex">\mathbf{x}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4444em;"></span><span class="mord mathbf">x</span></span></span></span> is the vector of unknowns, and <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold">b</mi></mrow><annotation encoding="application/x-tex">\mathbf{b}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathbf">b</span></span></span></span> is the constant vector.</p>
+<p>Any system of linear equations can be elegantly written in the matrix form:<br><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi mathvariant="bold">A</mi><mi mathvariant="bold">x</mi><mo>=</mo><mi mathvariant="bold">b</mi></mrow><annotation encoding="application/x-tex">\mathbf{A}\mathbf{x} = \mathbf{b}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6861em;"></span><span class="mord mathbf">Ax</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathbf">b</span></span></span></span></span><br>Where <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold">A</mi></mrow><annotation encoding="application/x-tex">\mathbf{A}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6861em;"></span><span class="mord mathbf">A</span></span></span></span> is the matrix of coefficients, <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold">x</mi></mrow><annotation encoding="application/x-tex">\mathbf{x}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4444em;"></span><span class="mord mathbf">x</span></span></span></span> is the vector of unknowns, and <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold">b</mi></mrow><annotation encoding="application/x-tex">\mathbf{b}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathbf">b</span></span></span></span> is the constant vector.</p>
 
-                    </section>
-                </div>
-
+                </section>
                 
-                <div class="tier-content" id="tier-advanced" style="display: none;">
-                    <section class="content-tier" id="technical-details">
-                        <h2 class="tier-header">Technical Details</h2>
-                        <p>Advanced linear algebra focuses on the properties of vector spaces, eigenvalues, eigenvectors, and spectral theorems.</p>
+
+                <section class="content-section content-tier" id="advanced">
+                    <h2 class="section-header">Advanced</h2>
+                    <p>Advanced linear algebra focuses on the properties of vector spaces, eigenvalues, eigenvectors, and spectral theorems.</p>
 <h4>Eigenvalues and Eigenvectors</h4>
 <p>When a linear transformation (represented by a matrix $\mathbf{A}$) is applied to a vector space, most vectors change their direction. However, certain special vectors only change their scale (they are stretched or squished) but maintain their original span. These are called <strong>Eigenvectors</strong> ($\mathbf{v}$), and the factor by which they are scaled is the <strong>Eigenvalue</strong> ($\lambda$).</p>
-<p>The fundamental equation is:
-$$ \mathbf{A}\mathbf{v} = \lambda\mathbf{v} $$</p>
-<p>To find the eigenvalues of a matrix <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold">A</mi></mrow><annotation encoding="application/x-tex">\mathbf{A}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6861em;"></span><span class="mord mathbf">A</span></span></span></span>, one solves the characteristic equation:
-$$ \det(\mathbf{A} - \lambda\mathbf{I}) = 0 $$
-where <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold">I</mi></mrow><annotation encoding="application/x-tex">\mathbf{I}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6861em;"></span><span class="mord mathbf">I</span></span></span></span> is the identity matrix and <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>det</mi><mo>⁡</mo></mrow><annotation encoding="application/x-tex">\det</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mop">det</span></span></span></span> denotes the determinant. </p>
+<p>The fundamental equation is:<br><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi mathvariant="bold">A</mi><mi mathvariant="bold">v</mi><mo>=</mo><mi>λ</mi><mi mathvariant="bold">v</mi></mrow><annotation encoding="application/x-tex">\mathbf{A}\mathbf{v} = \lambda\mathbf{v}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6861em;"></span><span class="mord mathbf" style="margin-right:0.016em;">Av</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal">λ</span><span class="mord mathbf" style="margin-right:0.016em;">v</span></span></span></span></span></p>
+<p>To find the eigenvalues of a matrix <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold">A</mi></mrow><annotation encoding="application/x-tex">\mathbf{A}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6861em;"></span><span class="mord mathbf">A</span></span></span></span>, one solves the characteristic equation:<br><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>det</mi><mo>⁡</mo><mo stretchy="false">(</mo><mi mathvariant="bold">A</mi><mo>−</mo><mi>λ</mi><mi mathvariant="bold">I</mi><mo stretchy="false">)</mo><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\det(\mathbf{A} - \lambda\mathbf{I}) = 0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mop">det</span><span class="mopen">(</span><span class="mord mathbf">A</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">λ</span><span class="mord mathbf">I</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0</span></span></span></span></span><br>where <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold">I</mi></mrow><annotation encoding="application/x-tex">\mathbf{I}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6861em;"></span><span class="mord mathbf">I</span></span></span></span> is the identity matrix and <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>det</mi><mo>⁡</mo></mrow><annotation encoding="application/x-tex">\det</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mop">det</span></span></span></span> denotes the determinant. </p>
 <p>Eigenvalues and eigenvectors have immense applications, from Google&#39;s original PageRank algorithm (which modeled the internet as a giant matrix) to finding the principal axes of stress in mechanical engineering, and solving systems of differential equations in quantum mechanics.</p>
 
-                    </section>
-                </div>
+                </section>
+                
             </div>
         </article>
 
@@ -105,9 +87,15 @@ where <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.
             <div class="sidebar-card">
                 <h3 class="sidebar-title">On This Page</h3>
                 <ul class="toc-list">
-                    <li><a href="#beginner" class="active">Overview</a></li>
-                    <li><a href="#intermediate">Deeper Dive</a></li>
-                    <li><a href="#advanced">Technical Details</a></li>
+                    
+                    <li><a href="#beginner" class="active">Beginner</a></li>
+                    
+
+                    <li><a href="#intermediate" class="">Intermediate</a></li>
+                    
+
+                    <li><a href="#advanced" class="">Advanced</a></li>
+                    
                 </ul>
                 
                 <hr class="sidebar-divider">
@@ -131,56 +119,21 @@ where <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.
                 </div>
             </div>
         </aside>
-    </main>
-
-    <!-- Client-side Tab Switcher Script -->
+    </main>    <!-- Client-side TOC Scroll Script -->
     <script>
         document.addEventListener("DOMContentLoaded", () => {
-            const tabs = document.querySelectorAll(".tier-tab");
-            const contents = document.querySelectorAll(".tier-content");
             const tocLinks = document.querySelectorAll(".toc-list a");
-
-            function switchTier(tierId) {
-                tabs.forEach(tab => {
-                    tab.classList.toggle("active", tab.dataset.tier === tierId);
-                });
-                contents.forEach(content => {
-                    if (content.id === `tier-${tierId}`) {
-                        content.style.display = "block";
-                        content.classList.add("active");
-                    } else {
-                        content.style.display = "none";
-                        content.classList.remove("active");
-                    }
-                });
-                
-                // Highlight active link in TOC
-                tocLinks.forEach(link => {
-                    const href = link.getAttribute("href");
-                    if (href === `#${tierId}`) {
-                        link.classList.add("active");
-                    } else {
-                        link.classList.remove("active");
-                    }
-                });
-            }
-
-            tabs.forEach(tab => {
-                tab.addEventListener("click", () => {
-                    switchTier(tab.dataset.tier);
-                });
-            });
-
+            
             tocLinks.forEach(link => {
                 link.addEventListener("click", (e) => {
                     const href = link.getAttribute("href");
                     if (href.startsWith("#")) {
                         e.preventDefault();
-                        const tierId = href.substring(1);
-                        switchTier(tierId);
                         
-                        // Smooth scroll to tier header
-                        const targetId = tierId === 'beginner' ? 'overview' : (tierId === 'intermediate' ? 'deeper-dive' : 'technical-details');
+                        tocLinks.forEach(l => l.classList.remove("active"));
+                        link.classList.add("active");
+                        
+                        const targetId = href.substring(1);
                         const target = document.getElementById(targetId);
                         if (target) {
                             target.scrollIntoView({ behavior: 'smooth', block: 'start' });

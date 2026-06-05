@@ -4,7 +4,6 @@ parent: Computer Science (CS)
 category: Computer Science
 distance: 2
 ---
-@Beginner
 **Artificial Intelligence (AI)** is the simulation of human intelligence processes by machines, especially computer systems. These processes include learning (the acquisition of information and rules for using the information), reasoning (using rules to reach approximate or definite conclusions), and self-correction.
 
 At its core, AI seeks to answer the fundamental question: *Can a machine think?* 
@@ -13,7 +12,6 @@ There are generally two broad categories of AI:
 * **Narrow AI (Weak AI):** AI systems designed and trained for a specific task. Virtual assistants like Apple's Siri and Amazon's Alexa, as well as image recognition systems, fall into this category. They are exceptional at their single task but possess no general intelligence.
 * **General AI (Strong AI):** Systems with generalized human cognitive abilities. When presented with an unfamiliar task, a strong AI system can find a solution without human intervention. This remains largely theoretical today.
 
-@Intermediate
 To achieve artificial intelligence, researchers use various sub-disciplines, the most prominent being **Machine Learning (ML)** and **Deep Learning**.
 
 #### Machine Learning
@@ -28,7 +26,6 @@ Inspired by the human brain, Artificial Neural Networks (ANNs) are the backbone 
 
 The simplest form of an artificial neuron is the [Perceptrons](./perceptrons.html), which forms the basis for understanding these complex networks.
 
-@Advanced
 The mathematical foundation of deep neural networks relies heavily on **Linear Algebra** and **Calculus** (specifically, the chain rule).
 
 #### The Mathematics of Learning

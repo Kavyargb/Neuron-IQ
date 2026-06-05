@@ -38,26 +38,19 @@
 
             <h1 class="article-title">Mathematical Tools & Basics</h1>
 
-            <!-- Interactive Tier Tabs Selector -->
-            <div class="tier-tabs-container">
-                <div class="tier-tabs">
-                    <button class="tier-tab active" data-tier="beginner">Beginner Overview</button>
-                    
-                    
-                </div>
-            </div>
-
-            <div class="tier-content-wrapper">
-                <div class="tier-content active" id="tier-beginner">
-                    <section class="content-tier drop-cap-section" id="overview">
-                        <h2 class="tier-header">Mathematical Tools & Basics — Overview</h2>
-                        <p>Physicist Eugene Wigner famously spoke of the <em>&quot;unreasonable effectiveness of mathematics in the natural sciences.&quot;</em> It is a profound mystery that abstract mathematical structures perfectly map onto the physical universe. By mastering foundational calculus, vector spaces, and dimensional analysis, physicists can not just describe reality, but uncover hidden symmetries—allowing mathematical proofs to predict the existence of undiscovered particles and forces before they are ever observed in a lab.</p>
-
-                    </section>
-                </div>
-
+            <div class="article-content">
                 
+                <section class="content-section content-tier" id="overview">
+                    
+                    <p>Physicist Eugene Wigner famously spoke of the <em>&quot;unreasonable effectiveness of mathematics in the natural sciences.&quot;</em> It is a profound mystery that abstract mathematical structures perfectly map onto the physical universe. By mastering foundational calculus, vector spaces, and dimensional analysis, physicists can not just describe reality, but uncover hidden symmetries—allowing mathematical proofs to predict the existence of undiscovered particles and forces before they are ever observed in a lab.</p>
+<p>In Mathematical Tools &amp; Basics, we shall have the following parts:</p>
+<ul>
+<li>Units and Dimensions</li>
+<li>Vectors and Scalars</li>
+<li>Experimental Physics</li>
+</ul>
 
+                </section>
                 
             </div>
         </article>
@@ -66,8 +59,8 @@
             <div class="sidebar-card">
                 <h3 class="sidebar-title">On This Page</h3>
                 <ul class="toc-list">
-                    <li><a href="#beginner" class="active">Overview</a></li>
                     
+                    <li><a href="#overview" class="active">Overview</a></li>
                     
                 </ul>
                 
@@ -92,56 +85,21 @@
                 </div>
             </div>
         </aside>
-    </main>
-
-    <!-- Client-side Tab Switcher Script -->
+    </main>    <!-- Client-side TOC Scroll Script -->
     <script>
         document.addEventListener("DOMContentLoaded", () => {
-            const tabs = document.querySelectorAll(".tier-tab");
-            const contents = document.querySelectorAll(".tier-content");
             const tocLinks = document.querySelectorAll(".toc-list a");
-
-            function switchTier(tierId) {
-                tabs.forEach(tab => {
-                    tab.classList.toggle("active", tab.dataset.tier === tierId);
-                });
-                contents.forEach(content => {
-                    if (content.id === `tier-${tierId}`) {
-                        content.style.display = "block";
-                        content.classList.add("active");
-                    } else {
-                        content.style.display = "none";
-                        content.classList.remove("active");
-                    }
-                });
-                
-                // Highlight active link in TOC
-                tocLinks.forEach(link => {
-                    const href = link.getAttribute("href");
-                    if (href === `#${tierId}`) {
-                        link.classList.add("active");
-                    } else {
-                        link.classList.remove("active");
-                    }
-                });
-            }
-
-            tabs.forEach(tab => {
-                tab.addEventListener("click", () => {
-                    switchTier(tab.dataset.tier);
-                });
-            });
-
+            
             tocLinks.forEach(link => {
                 link.addEventListener("click", (e) => {
                     const href = link.getAttribute("href");
                     if (href.startsWith("#")) {
                         e.preventDefault();
-                        const tierId = href.substring(1);
-                        switchTier(tierId);
                         
-                        // Smooth scroll to tier header
-                        const targetId = tierId === 'beginner' ? 'overview' : (tierId === 'intermediate' ? 'deeper-dive' : 'technical-details');
+                        tocLinks.forEach(l => l.classList.remove("active"));
+                        link.classList.add("active");
+                        
+                        const targetId = href.substring(1);
                         const target = document.getElementById(targetId);
                         if (target) {
                             target.scrollIntoView({ behavior: 'smooth', block: 'start' });

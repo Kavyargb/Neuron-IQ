@@ -33,28 +33,47 @@ async function buildGraph() {
 
         if (!metadata.name || !metadata.parent || !metadata.category) return;
 
-        const extractSection = (label) => {
-            const regex = new RegExp(`(?:^|\\n)@${label}\\s*\\n([\\s\\S]*?)(?=(?:\\n@Beginner|\\n@Intermediate|\\n@Advanced|$))`);
-            const match = body.match(regex);
-            return match ? marked.parse(match[1].trim()) : '';
+        const extractSections = () => {
+            const sections = [];
+            const parts = body.split(/(?:^|\n)@([^\n]+)\n/);
+            
+            const preamble = parts[0].trim();
+            if (preamble) {
+                sections.push({
+                    title: 'Overview',
+                    id: 'overview',
+                    contentHTML: marked.parse(preamble, { breaks: true }),
+                    rawContent: preamble,
+                    isPreamble: true
+                });
+            }
+            
+            for (let i = 1; i < parts.length; i += 2) {
+                const title = parts[i].trim();
+                const contentText = (parts[i+1] || '').trim();
+                sections.push({
+                    title: title,
+                    id: slugify(title),
+                    contentHTML: marked.parse(contentText, { breaks: true }),
+                    rawContent: contentText,
+                    isPreamble: false
+                });
+            }
+            return sections;
         };
 
+        const sections = extractSections();
         const slug = slugify(metadata.name);
-        const content = {
-            Beginner: extractSection('Beginner'),
-            Intermediate: extractSection('Intermediate'),
-            Advanced: extractSection('Advanced')
-        };
         
         const cleanHTML = (html) => html ? html.replace(/<[^>]+>/g, '').replace(/\n/g, ' ').trim() : '';
-        const searchContent = cleanHTML(content.Beginner) + " " + cleanHTML(content.Intermediate);
+        const searchContent = sections.map(sec => cleanHTML(sec.contentHTML)).join(" ");
 
         const nodeData = {
             ...metadata,
             distance: parseInt(metadata.distance, 10),
             slug: slug,
             searchContent: searchContent,
-            content: content
+            sections: sections
         };
 
         graphData[metadata.name] = nodeData;
@@ -68,7 +87,8 @@ async function buildGraph() {
     // --- PHASE 2: Generate HTML Pages with Lineage Trace ---
     nodesList.forEach(node => {
         const parentLink = node.parent === 'Root' ? 'index.html' : `${slugify(node.parent)}.html`;
-        const plainTextDesc = node.content.Beginner.replace(/<[^>]+>/g, '').substring(0, 150).trim();
+        const firstSectionHTML = node.sections.length > 0 ? node.sections[0].contentHTML : '';
+        const plainTextDesc = firstSectionHTML.replace(/<[^>]+>/g, '').substring(0, 150).trim();
         
         // Tracing full lineage path dynamically
         const pathArray = [];
@@ -133,38 +153,13 @@ async function buildGraph() {
 
             <h1 class="article-title">${node.name}</h1>
 
-            <!-- Interactive Tier Tabs Selector -->
-            <div class="tier-tabs-container">
-                <div class="tier-tabs">
-                    <button class="tier-tab active" data-tier="beginner">Beginner Overview</button>
-                    ${node.content.Intermediate ? `<button class="tier-tab" data-tier="intermediate">Intermediate Deep Dive</button>` : ''}
-                    ${node.content.Advanced ? `<button class="tier-tab" data-tier="advanced">Advanced Technical</button>` : ''}
-                </div>
-            </div>
-
-            <div class="tier-content-wrapper">
-                <div class="tier-content active" id="tier-beginner">
-                    <section class="content-tier drop-cap-section" id="overview">
-                        <h2 class="tier-header">${node.name} — Overview</h2>
-                        ${node.content.Beginner}
-                    </section>
-                </div>
-
-                ${node.content.Intermediate ? `
-                <div class="tier-content" id="tier-intermediate" style="display: none;">
-                    <section class="content-tier" id="deeper-dive">
-                        <h2 class="tier-header">Deeper Dive</h2>
-                        ${node.content.Intermediate}
-                    </section>
-                </div>` : ''}
-
-                ${node.content.Advanced ? `
-                <div class="tier-content" id="tier-advanced" style="display: none;">
-                    <section class="content-tier" id="technical-details">
-                        <h2 class="tier-header">Technical Details</h2>
-                        ${node.content.Advanced}
-                    </section>
-                </div>` : ''}
+            <div class="article-content">
+                ${node.sections.map((sec, index) => `
+                <section class="content-section content-tier" id="${sec.id}">
+                    ${sec.isPreamble ? '' : `<h2 class="section-header">${sec.title}</h2>`}
+                    ${sec.contentHTML}
+                </section>
+                `).join('\n')}
             </div>
         </article>
 
@@ -172,9 +167,9 @@ async function buildGraph() {
             <div class="sidebar-card">
                 <h3 class="sidebar-title">On This Page</h3>
                 <ul class="toc-list">
-                    <li><a href="#beginner" class="active">Overview</a></li>
-                    ${node.content.Intermediate ? `<li><a href="#intermediate">Deeper Dive</a></li>` : ''}
-                    ${node.content.Advanced ? `<li><a href="#advanced">Technical Details</a></li>` : ''}
+                    ${node.sections.map((sec, index) => `
+                    <li><a href="#${sec.id}" class="${index === 0 ? 'active' : ''}">${sec.title}</a></li>
+                    `).join('\n')}
                 </ul>
                 
                 <hr class="sidebar-divider">
@@ -198,56 +193,21 @@ async function buildGraph() {
                 </div>
             </div>
         </aside>
-    </main>
-
-    <!-- Client-side Tab Switcher Script -->
+    </main>    <!-- Client-side TOC Scroll Script -->
     <script>
         document.addEventListener("DOMContentLoaded", () => {
-            const tabs = document.querySelectorAll(".tier-tab");
-            const contents = document.querySelectorAll(".tier-content");
             const tocLinks = document.querySelectorAll(".toc-list a");
-
-            function switchTier(tierId) {
-                tabs.forEach(tab => {
-                    tab.classList.toggle("active", tab.dataset.tier === tierId);
-                });
-                contents.forEach(content => {
-                    if (content.id === \`tier-\${tierId}\`) {
-                        content.style.display = "block";
-                        content.classList.add("active");
-                    } else {
-                        content.style.display = "none";
-                        content.classList.remove("active");
-                    }
-                });
-                
-                // Highlight active link in TOC
-                tocLinks.forEach(link => {
-                    const href = link.getAttribute("href");
-                    if (href === \`#\${tierId}\`) {
-                        link.classList.add("active");
-                    } else {
-                        link.classList.remove("active");
-                    }
-                });
-            }
-
-            tabs.forEach(tab => {
-                tab.addEventListener("click", () => {
-                    switchTier(tab.dataset.tier);
-                });
-            });
-
+            
             tocLinks.forEach(link => {
                 link.addEventListener("click", (e) => {
                     const href = link.getAttribute("href");
                     if (href.startsWith("#")) {
                         e.preventDefault();
-                        const tierId = href.substring(1);
-                        switchTier(tierId);
                         
-                        // Smooth scroll to tier header
-                        const targetId = tierId === 'beginner' ? 'overview' : (tierId === 'intermediate' ? 'deeper-dive' : 'technical-details');
+                        tocLinks.forEach(l => l.classList.remove("active"));
+                        link.classList.add("active");
+                        
+                        const targetId = href.substring(1);
                         const target = document.getElementById(targetId);
                         if (target) {
                             target.scrollIntoView({ behavior: 'smooth', block: 'start' });

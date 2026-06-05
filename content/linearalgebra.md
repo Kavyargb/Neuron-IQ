@@ -1,7 +1,7 @@
 ---
 name: Linear Algebra
 parent: Mathematics
-category: Math
+category: Mathematics
 distance: 2
 ---
 @Beginner
