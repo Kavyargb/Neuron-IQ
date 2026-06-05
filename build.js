@@ -1,3 +1,10 @@
+/**
+ * Neuron-IQ Custom Static Site Generator (SSG)
+ * Converts markdown files inside the content/ directory into:
+ * 1. Individual static article HTML pages with server-rendered math and dynamic breadcrumbs.
+ * 2. An XML/HTML sitemap page mapping the database structure.
+ * 3. A compiled, lightweight JSON data graph (graph.js) to power client-side search and D3 animations.
+ */
 const fs = require('fs');
 const path = require('path');
 const matter = require('gray-matter');
@@ -6,16 +13,29 @@ const contentDir = path.join(__dirname, 'content');
 const outputDir = path.join(__dirname, 'public');
 const outputFile = path.join(outputDir, 'graph.js');
 
+/**
+ * Converts titles and strings into URL-safe slug formats.
+ * Example: "Real Numbers and their Operations" -> "real-numbers-and-their-operations"
+ * 
+ * @param {string} text Source text title.
+ * @returns {string} URL-safe slug text.
+ */
 const slugify = (text) => text.toString().toLowerCase().trim()
-    .replace(/[\s_]+/g, '-')
-    .replace(/[^\w\-]+/g, '')
-    .replace(/\-\-+/g, '-');
+    .replace(/[\s_]+/g, '-')     // Replace spaces and underscores with hyphens
+    .replace(/[^\w\-]+/g, '')    // Remove all non-word characters except hyphens
+    .replace(/\-\-+/g, '-');     // Replace multiple consecutive hyphens with a single one
 
+/**
+ * Main build pipeline orchestrator.
+ * Loads all files, compiles mathematics symbols, resolves links, and builds public assets.
+ */
 async function buildGraph() {
+    // Dynamic imports for ESM marked libraries
     const { marked } = await import('marked');
     const { default: markedKatex } = await import('marked-katex-extension');
 
-    // Keep build-time Katex extension for standard expressions (for SEO/Fast-Load)
+    // Attach Katex extension to pre-render math elements at build-time
+    // This provides fast index loading and SEO searchability for equations
     marked.use(markedKatex({ throwOnError: false }));
     if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir);
 
@@ -31,8 +51,15 @@ async function buildGraph() {
         const metadata = parsed.data;
         const body = parsed.content;
 
+        // Skip folders or files that are missing required frontmatter parameters
         if (!metadata.name || !metadata.parent || !metadata.category) return;
 
+        /**
+         * Splits markdown files into structured sections based on the "@SectionTitle" delimiter.
+         * The text preceding the first "@" is treated as the default "Overview" preamble.
+         * 
+         * @returns {Array} Structured sections list.
+         */
         const extractSections = () => {
             const sections = [];
             const parts = body.split(/(?:^|\n)@([^\n]+)\n/);
@@ -65,17 +92,24 @@ async function buildGraph() {
         const sections = extractSections();
         const slug = slugify(metadata.name);
         
+        /**
+         * Strips markdown tokens, links, headers, HTML tags, and math notation
+         * to generate a clean plain text blob for fuzzy searching.
+         * 
+         * @param {string} text Raw markdown block content.
+         * @returns {string} Plain text search index.
+         */
         const cleanMarkdown = (text) => {
             if (!text) return '';
             return text
-                .replace(/<[^>]+>/g, '')
-                .replace(/\$\$/g, '')
-                .replace(/\$/g, '')
-                .replace(/\*\*|__/g, '')
-                .replace(/\*|_/g, '')
-                .replace(/\[([^\]]+)\]\([^\)]+\)/g, '$1')
-                .replace(/\n/g, ' ')
-                .replace(/\s\s+/g, ' ')
+                .replace(/<[^>]+>/g, '')                  // Strip HTML tags
+                .replace(/\$\$/g, '')                     // Strip display math symbols
+                .replace(/\$/g, '')                      // Strip inline math symbols
+                .replace(/\*\*|__/g, '')                 // Strip bold symbols
+                .replace(/\*|_/g, '')                    // Strip italics symbols
+                .replace(/\[([^\]]+)\]\([^\)]+\)/g, '$1') // Extract text labels from markdown links
+                .replace(/\n/g, ' ')                      // Replace newlines with spaces
+                .replace(/\s\s+/g, ' ')                  // Collapse consecutive spaces
                 .trim();
         };
         const searchContent = sections.map(sec => cleanMarkdown(sec.rawContent)).join(" ");
@@ -92,18 +126,20 @@ async function buildGraph() {
         graphData[metadata.name] = nodeData;
         nodesList.push(nodeData);
 
-        // Group by category for sitemap
+        // Group nodes by category to render structured cards in the sitemap page
         if (!categoriesMap[metadata.category]) categoriesMap[metadata.category] = [];
         categoriesMap[metadata.category].push(nodeData);
     });
 
     // --- PHASE 1.5: Compile Internal Links (Cross-node page connections) ---
+    // Scans all documents to detect mentions of other node names.
+    // Creates a list of cross-references similar to Obsidian links to show relational pathways in the D3 graph.
     nodesList.forEach(sourceNode => {
         sourceNode.internalLinks = [];
         nodesList.forEach(targetNode => {
             if (sourceNode.name === targetNode.name) return;
             const termEscaped = targetNode.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-            // Use (?:\b|\W|^) and (?=\b|\W|$) to properly match boundaries even for names with punctuation
+            // Regex checks that the concept name appears as a distinct word in searchContent
             const regex = new RegExp(`(?:^|\\W)${termEscaped}(?=\\W|$)`, 'i');
             if (regex.test(sourceNode.searchContent)) {
                 sourceNode.internalLinks.push(targetNode.name);
@@ -115,9 +151,12 @@ async function buildGraph() {
     nodesList.forEach(node => {
         const parentLink = node.parent === 'Root' ? 'index.html' : `${slugify(node.parent)}.html`;
         const firstSectionHTML = node.sections.length > 0 ? node.sections[0].contentHTML : '';
+        // Extract meta description from the first paragraph
         const plainTextDesc = firstSectionHTML.replace(/<[^>]+>/g, '').substring(0, 150).trim();
         
         // Tracing full lineage path dynamically
+        // Recursively traces node -> parent -> grandparent up to virtual Root.
+        // Reverses results to print path: Home / Parent / Concept.
         const pathArray = [];
         let curr = node;
         while (curr && curr.name !== 'Root') {
@@ -138,7 +177,7 @@ async function buildGraph() {
             }
         });
 
-        // 1. ARTICLE PAGE TEMPLATE (Rebuilt for Tabbed Tiers, dynamic lineage, and global search)
+        // HTML Layout Template for individual article nodes
         const htmlContent = `
 <!DOCTYPE html>
 <html lang="en">
@@ -250,10 +289,10 @@ async function buildGraph() {
         fs.writeFileSync(path.join(outputDir, `${node.slug}.html`), htmlContent.trim());
     });
 
-    // 2. GENERATE SITEMAP PAGE FOR SEO
+    // --- PHASE 3: Generate Sitemap Page ---
+    // Renders categories cards with alphabetical lists of concepts to support SEO crawlers.
     let sitemapCategoriesHTML = '';
     for (const [category, nodes] of Object.entries(categoriesMap)) {
-        // Sort alphabetically inside category
         nodes.sort((a, b) => a.name.localeCompare(b.name));
         
         let linksHTML = nodes.map(n => 
@@ -307,7 +346,24 @@ async function buildGraph() {
 
     fs.writeFileSync(path.join(outputDir, 'sitemap.html'), sitemapHTML.trim());
 
-    const outputContent = `// AUTO-GENERATED BY BUILD.JS\nwindow.NeuronMap = ${JSON.stringify(graphData, null, 2)};`;
+    // --- PHASE 4: Compile graph.js ---
+    // Creates a lightweight graph database. Strips out HTML body sections
+    // to save browser bandwidth while retaining search tags and lineage metrics.
+    const clientGraphData = {};
+    for (const [key, node] of Object.entries(graphData)) {
+        clientGraphData[key] = {
+            name: node.name,
+            parent: node.parent,
+            category: node.category,
+            distance: node.distance,
+            slug: node.slug,
+            sectionTitles: node.sectionTitles,
+            searchContent: node.searchContent,
+            internalLinks: node.internalLinks
+        };
+    }
+
+    const outputContent = `// AUTO-GENERATED BY BUILD.JS\nwindow.NeuronMap = ${JSON.stringify(clientGraphData, null, 2)};`;
     fs.writeFileSync(outputFile, outputContent);
     console.log(`[Neuron-IQ] SEO Build complete! Processed ${files.length} pages + generated Sitemap.`);
 }

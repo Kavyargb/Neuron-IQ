@@ -1,3 +1,9 @@
+/**
+ * Neuron-IQ Global Module
+ * Runs on every page load (Home and Article pages) to initialize shared logic.
+ * Modules include: Dynamic Lineage sidebar, Inline Wikipedia-style link replacement,
+ * Command Palette search modal, KaTeX auto-rendering, and TOC Scroll Intersection Observer.
+ */
 document.addEventListener("DOMContentLoaded", () => {
     // --- MODULE 1: Setup Shared Data and Dynamic Content ---
     const map = window.NeuronMap;
@@ -20,12 +26,21 @@ document.addEventListener("DOMContentLoaded", () => {
     setupTOCScrollObserver();
 });
 
-// --- Dynamic Lineage Children Sidebar ---
+/**
+ * Dynamically builds the concept lineage children sidebar.
+ * Queries window.NeuronMap to find all children whose parent matches currentName,
+ * sorts them alphabetically, and injects clickable list items with distance badges.
+ * If no children are found, hides the sub-concepts container.
+ * 
+ * @param {Object} map The global NeuronMap dictionary.
+ * @param {string} currentName The title of the current concept/article page.
+ */
 function setupDynamicLineage(map, currentName) {
     const childrenList = document.getElementById("sidebar-children-list");
     const childrenContainer = document.getElementById("lineage-children");
     if (!childrenList || !childrenContainer) return;
 
+    // Filter nodes that declare the current node as their parent
     const children = Object.values(map).filter(n => n.parent === currentName);
     
     if (children.length > 0) {
@@ -39,16 +54,30 @@ function setupDynamicLineage(map, currentName) {
             </li>
         `).join('');
     } else {
+        // Hide sidebar section entirely if there are no sub-concepts
         childrenContainer.style.display = 'none';
     }
 }
 
-// --- Wikipedia-style Inline Definitions ---
+/**
+ * Scan the article text nodes and insert Wikipedia-style inline links
+ * for mentions of other nodes in the knowledge graph.
+ * 
+ * Performance design:
+ * 1. Uses document.createTreeWalker to target text nodes directly.
+ * 2. Filters out active tags (pre, code, a, headers, TOC, nav).
+ * 3. Sorts keywords by length descending to match multi-word phrases first ("Linear Algebra" before "Algebra").
+ * 4. Compiles a single combined RegExp to search nodes in O(N) instead of nested loops.
+ * 5. Uses a DocumentFragment to perform DOM replacements efficiently in a single operation.
+ * 
+ * @param {Object} map The global NeuronMap database.
+ * @param {string} currentName The current page's article name (prevent linking to self).
+ */
 function setupInlineDefinitions(map, currentName) {
     const contentArea = document.querySelector(".main-content");
     if (!contentArea) return;
 
-    // Skip technical tags and existing links to avoid breaking HTML
+    // Traverses the content subtree skipping elements where inline definitions would break layout/semantics
     const textNodes = [];
     const walk = document.createTreeWalker(contentArea, NodeFilter.SHOW_TEXT, {
         acceptNode: (node) => {
@@ -67,58 +96,78 @@ function setupInlineDefinitions(map, currentName) {
         textNodes.push(node);
     }
 
-    // Sort terms by length descending to match longer multi-word phrases first
+    // Sort matching terms by string length descending to avoid matching parts of longer compound phrases
     const terms = Object.keys(map)
         .filter(name => name.toLowerCase() !== currentName.toLowerCase())
         .sort((a, b) => b.length - a.length);
 
+    if (terms.length === 0) return;
+
+    // Combine all terms into a single regex alternation with word boundaries
+    const combinedRegex = new RegExp(`\\b(${terms.map(escapeRegExp).join('|')})\\b`, 'ig');
+
+    // Fast mapping to preserve original capitalization of terms during match
+    const lowerCaseTerms = {};
+    terms.forEach(term => {
+        lowerCaseTerms[term.toLowerCase()] = term;
+    });
+
     textNodes.forEach(textNode => {
-        let text = textNode.nodeValue;
-        let parent = textNode.parentNode;
+        const text = textNode.nodeValue;
+        const parent = textNode.parentNode;
         if (!parent) return;
 
-        for (let i = 0; i < terms.length; i++) {
-            const term = terms[i];
-            // Match word boundaries, case-insensitive
-            const regex = new RegExp(`\\b(${escapeRegExp(term)})\\b`, 'i');
-            const match = text.match(regex);
-            
-            if (match) {
-                const matchedText = match[0];
-                const index = match.index;
+        combinedRegex.lastIndex = 0;
+        let match;
+        let lastIndex = 0;
+        let hasReplacements = false;
+        
+        const fragment = document.createDocumentFragment();
 
-                const beforeText = text.substring(0, index);
-                const afterText = text.substring(index + matchedText.length);
+        while ((match = combinedRegex.exec(text)) !== null) {
+            hasReplacements = true;
+            const matchedText = match[0];
+            const index = match.index;
 
-                const beforeNode = document.createTextNode(beforeText);
-                const afterNode = document.createTextNode(afterText);
-
-                const anchor = document.createElement('a');
-                anchor.href = `${map[term].slug}.html`;
-                anchor.className = 'inline-wiki-link';
-                anchor.dataset.term = term;
-                anchor.innerText = matchedText;
-
-                parent.insertBefore(beforeNode, textNode);
-                parent.insertBefore(anchor, textNode);
-                parent.insertBefore(afterNode, textNode);
-                parent.removeChild(textNode);
-
-                // Update references to scan remaining portion
-                textNode = afterNode;
-                text = afterText;
-                break; // Break loop to avoid nested/overlapping replacements inside the same text fragment in one run
+            // Add text preceding the matched word
+            if (index > lastIndex) {
+                fragment.appendChild(document.createTextNode(text.substring(lastIndex, index)));
             }
+
+            // Map match to its original casing
+            const originalTerm = lowerCaseTerms[matchedText.toLowerCase()];
+            if (originalTerm && map[originalTerm]) {
+                const anchor = document.createElement('a');
+                anchor.href = `${map[originalTerm].slug}.html`;
+                anchor.className = 'inline-wiki-link';
+                anchor.dataset.term = originalTerm;
+                anchor.innerText = matchedText;
+                fragment.appendChild(anchor);
+            } else {
+                fragment.appendChild(document.createTextNode(matchedText));
+            }
+
+            lastIndex = combinedRegex.lastIndex;
+        }
+
+        if (hasReplacements) {
+            // Append any remaining text after the last match
+            if (lastIndex < text.length) {
+                fragment.appendChild(document.createTextNode(text.substring(lastIndex)));
+            }
+            parent.insertBefore(fragment, textNode);
+            parent.removeChild(textNode);
         }
     });
 
-    // Create popover element
+    // Create a single hovering popover element to show concept details on hover
     const popover = document.createElement('div');
     popover.className = 'wiki-popover';
     document.body.appendChild(popover);
 
     let popoverTimeout;
     
+    // Bind event listeners to show popover card on link hover
     document.querySelectorAll('.inline-wiki-link').forEach(link => {
         link.addEventListener('mouseenter', (e) => {
             clearTimeout(popoverTimeout);
@@ -143,11 +192,11 @@ function setupInlineDefinitions(map, currentName) {
             const popoverHeight = popover.offsetHeight;
             const popoverWidth = popover.offsetWidth;
 
-            // Compute center-aligned positioning
+            // Center-align popover horizontally above link
             let left = rect.left + window.scrollX + (rect.width / 2) - (popoverWidth / 2);
             let top = rect.top + window.scrollY - popoverHeight - 12;
 
-            // Prevent clipping left or right edges of screen
+            // Prevent popover from clipping screen edges
             if (left < 10) left = 10;
             if (left + popoverWidth > window.innerWidth - 10) left = window.innerWidth - popoverWidth - 10;
 
@@ -172,11 +221,19 @@ function setupInlineDefinitions(map, currentName) {
     });
 }
 
+/**
+ * Escapes characters in a string for safe use in standard RegExp declarations.
+ * 
+ * @param {string} string Regular expression target.
+ * @returns {string} Escaped string.
+ */
 function escapeRegExp(string) {
     return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
-// --- Global Search Command Palette injection ---
+/**
+ * Injects the Command Palette Search Modal container and elements into the document.
+ */
 function injectSearchModal() {
     if (document.getElementById("search-modal")) return;
 
@@ -201,6 +258,10 @@ function injectSearchModal() {
     document.body.appendChild(div.firstChild);
 }
 
+/**
+ * Implements keyboard events, open/close operations, search ranking logic, and history trackers
+ * for the Command Palette Search Modal.
+ */
 function setupSearchModalLogic() {
     const modal = document.getElementById("search-modal");
     const input = document.getElementById("modal-search-input");
@@ -215,7 +276,7 @@ function setupSearchModalLogic() {
         input.value = '';
         showModalHistory();
         setTimeout(() => input.focus(), 50);
-        document.body.style.overflow = 'hidden'; // Lock background scroll
+        document.body.style.overflow = 'hidden'; // Lock background scrolling
     }
 
     function closeModal() {
@@ -238,9 +299,8 @@ function setupSearchModalLogic() {
         if (e.target === modal) closeModal();
     });
 
-    // Keyboard Shortcuts
+    // Toggle on '/' key or 'Ctrl+K' keyboard shortcuts
     window.addEventListener("keydown", (e) => {
-        // Toggle on '/' key or 'Ctrl+K'
         if ((e.key === "/" && document.activeElement !== input && document.activeElement.tagName !== "INPUT" && document.activeElement.tagName !== "TEXTAREA") ||
             (e.ctrlKey && e.key.toLowerCase() === "k")) {
             e.preventDefault();
@@ -252,10 +312,10 @@ function setupSearchModalLogic() {
         }
     });
 
-    // Search Logic with Fuse.js
     let fuse = null;
     let selectedIndex = -1;
 
+    // Renders the recently viewed concepts saved in localStorage
     function showModalHistory() {
         const viewed = JSON.parse(localStorage.getItem('neuron_iq_viewed_history') || '[]');
         
@@ -286,7 +346,6 @@ function setupSearchModalLogic() {
         
         resultsContainer.innerHTML = html;
         
-        // Wire hover
         resultsContainer.querySelectorAll(".search-result-item").forEach(item => {
             item.addEventListener("mouseenter", () => {
                 selectedIndex = parseInt(item.dataset.index, 10);
@@ -311,6 +370,7 @@ function setupSearchModalLogic() {
             return;
         }
 
+        // Initialize Fuse.js once
         if (!fuse) {
             const allNodesArray = Object.values(window.NeuronMap);
             const fuseOptions = {
@@ -324,7 +384,6 @@ function setupSearchModalLogic() {
                     { name: 'searchContent', weight: 0.1 }
                 ]
             };
-            // Fallback if Fuse is not loaded yet
             if (typeof Fuse !== 'undefined') {
                 fuse = new Fuse(allNodesArray, fuseOptions);
             } else {
@@ -334,9 +393,12 @@ function setupSearchModalLogic() {
         }
 
         let results = fuse.search(query);
+        // Short-query optimization (prevent keyword matches on minor letters)
         if (query.trim().length <= 3) {
             results = results.filter(r => getCustomSearchScore(r.item, query) > 0);
         }
+
+        // Custom ranking using specific word matching, acronyms, and categories
         results.sort((a, b) => {
             const scoreA = getCustomSearchScore(a.item, query);
             const scoreB = getCustomSearchScore(b.item, query);
@@ -345,6 +407,7 @@ function setupSearchModalLogic() {
             }
             return a.score - b.score;
         });
+
         results = results.slice(0, 8); // Top 8 matches
         renderModalResults(results, query);
         selectedIndex = -1;
@@ -375,7 +438,6 @@ function setupSearchModalLogic() {
             `;
         }).join('');
 
-        // Wire hover to index
         resultsContainer.querySelectorAll(".search-result-item").forEach(item => {
             item.addEventListener("mouseenter", () => {
                 selectedIndex = parseInt(item.dataset.index, 10);
@@ -384,7 +446,6 @@ function setupSearchModalLogic() {
         });
     }
 
-    // Click event delegation to save history
     resultsContainer.addEventListener("click", (e) => {
         const itemEl = e.target.closest(".search-result-item");
         if (itemEl && window.NeuronMap) {
@@ -403,7 +464,7 @@ function setupSearchModalLogic() {
         }
     });
 
-    // Keyboard navigation in search results
+    // Keyboard support inside command palette search
     input.addEventListener("keydown", (e) => {
         const items = resultsContainer.querySelectorAll(".search-result-item");
         if (items.length === 0) return;
@@ -460,7 +521,10 @@ function setupSearchModalLogic() {
     }
 }
 
-// --- Client-Side KaTeX Auto-Renderer ---
+/**
+ * Initializes and triggers KaTeX math auto-rendering for page nodes.
+ * Matches dollar notation tags and replaces with formatted equation layers.
+ */
 function setupKatexAutoRender() {
     if (typeof renderMathInElement === 'function') {
         renderMathInElement(document.body, {
@@ -478,7 +542,10 @@ function setupKatexAutoRender() {
     }
 }
 
-// --- Table of Contents intersection observer ---
+/**
+ * Triggers intersection observer context matching for Table of Contents sidebar.
+ * Sets the active list item class representing which section header is currently inside the focus band.
+ */
 function setupTOCScrollObserver() {
     const tocLinks = document.querySelectorAll(".toc-list a");
     const sections = Array.from(tocLinks)
@@ -498,14 +565,14 @@ function setupTOCScrollObserver() {
 
     const observerOptions = {
         root: null,
-        rootMargin: "-20% 0px -60% 0px", // High focus band in the middle-top of the screen
+        rootMargin: "-20% 0px -60% 0px", // Focus band in upper portion of viewport
         threshold: 0
     };
 
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                // Find matching section in list
+                // Find matching section in list and toggle active class
                 sections.forEach(s => {
                     const isTarget = s.section === entry.target;
                     s.link.classList.toggle("active", isTarget);
@@ -517,7 +584,13 @@ function setupTOCScrollObserver() {
     sections.forEach(s => observer.observe(s.section));
 }
 
-// Helper: category HSL colors matching CSS styling variables
+/**
+ * Maps category fields to their exact hex coloring.
+ * Exposed on window.getCategoryColor to provide central color management.
+ * 
+ * @param {string} cat Category text string.
+ * @returns {string} Hexadecimal color code representing the category.
+ */
 function getCategoryColor(cat) {
     if (!cat) return '#ffffff';
     const c = cat.toLowerCase();
@@ -527,6 +600,14 @@ function getCategoryColor(cat) {
     return '#34d399'; // Science (Green)
 }
 
+/**
+ * Calculates a relevance tier score (0 to 1000) for a query string.
+ * Matches exact, starts-with, contains, category names, acronyms, and section titles.
+ * 
+ * @param {Object} item Concept data node.
+ * @param {string} query Search input string.
+ * @returns {number} Custom score where higher numbers denote stronger similarity.
+ */
 function getCustomSearchScore(item, query) {
     if (!item || !item.name) return 0;
     const name = item.name.toLowerCase();
@@ -575,6 +656,14 @@ function getCustomSearchScore(item, query) {
     return 0;
 }
 
+/**
+ * Combines standard Fuse.js scores and the Custom search score tiers into a relevance percentage (0-100).
+ * 
+ * @param {Object} item Concept data node.
+ * @param {string} query Search input string.
+ * @param {number} fuseScore Standard Fuse.js match rating (0 = perfect, 1 = none).
+ * @returns {number} Percentage match rating.
+ */
 function getRelevanceScore(item, query, fuseScore) {
     const customScore = getCustomSearchScore(item, query);
     let basePercent = 0;
@@ -593,6 +682,13 @@ function getRelevanceScore(item, query, fuseScore) {
     return basePercent;
 }
 
+/**
+ * Wraps matching query strings in highlights (<mark> tags).
+ * 
+ * @param {string} text Target title text.
+ * @param {string} query Search query string.
+ * @returns {string} Text string with highlighting HTML injection.
+ */
 function highlightMatch(text, query) {
     if (!query) return text;
     const q = escapeRegExp(query);
@@ -600,6 +696,11 @@ function highlightMatch(text, query) {
     return text.replace(regex, '<mark class="search-highlight">$1</mark>');
 }
 
+/**
+ * Saves the search query history in localStorage (maximum 5 items).
+ * 
+ * @param {string} query Search query input.
+ */
 function saveSearchQuery(query) {
     if (!query) return;
     let history = JSON.parse(localStorage.getItem('neuron_iq_search_history') || '[]');
@@ -609,6 +710,11 @@ function saveSearchQuery(query) {
     localStorage.setItem('neuron_iq_search_history', JSON.stringify(history));
 }
 
+/**
+ * Saves details of clicked nodes inside localStorage to populate recently viewed lists.
+ * 
+ * @param {Object} node Concept data node.
+ */
 function saveClickedNode(node) {
     if (!node || !node.name) return;
     let viewed = JSON.parse(localStorage.getItem('neuron_iq_viewed_history') || '[]');
@@ -622,10 +728,10 @@ function saveClickedNode(node) {
     localStorage.setItem('neuron_iq_viewed_history', JSON.stringify(viewed));
 }
 
+// Global Exports - Exposes variables and functions to other JavaScript files (e.g. app.js)
+window.getCategoryColor = getCategoryColor;
 window.getCustomSearchScore = getCustomSearchScore;
 window.getRelevanceScore = getRelevanceScore;
 window.highlightMatch = highlightMatch;
 window.saveSearchQuery = saveSearchQuery;
 window.saveClickedNode = saveClickedNode;
-
-

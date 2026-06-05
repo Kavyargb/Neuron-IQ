@@ -1,4 +1,9 @@
+/**
+ * Neuron-IQ Homepage & Graph Engine
+ * Initializes the landing page interactive elements and builds the D3 force-directed knowledge graph.
+ */
 document.addEventListener("DOMContentLoaded", () => {
+    // --- DOM Elements ---
     const searchBar = document.getElementById('search-bar');
     const searchWrapper = document.getElementById('search-wrapper');
     const typewriter = document.getElementById('typewriter');
@@ -12,15 +17,25 @@ document.addEventListener("DOMContentLoaded", () => {
     const graphContainer = document.getElementById('graph-container');
 
     // --- MODULE 1: Category Color Utilities ---
+    /**
+     * Resolves node category strings to color specifications.
+     * Uses window.getCategoryColor with a fallback override for the virtual Root hub.
+     * 
+     * @param {string} cat Category text string.
+     * @returns {string} Hex or CSS variable representing the category color.
+     */
     const getCategoryColor = (cat) => {
-        if (!cat) return 'var(--color-root)';
-        const c = cat.toLowerCase();
-        if (c.includes('computer') || c === 'cs') return 'var(--color-cs)';
-        if (c.includes('math')) return 'var(--color-math)';
-        if (c.includes('physics')) return 'var(--color-physics)';
-        return 'var(--color-science)';
+        if (!cat || cat.toLowerCase() === 'root') return 'var(--color-root)';
+        return window.getCategoryColor(cat);
     };
 
+    /**
+     * Helper to verify if a node's group matches the active category filter selection.
+     * 
+     * @param {string} group The node's category/group.
+     * @param {string} filterCategory The currently selected filter string.
+     * @returns {boolean} True if the node belongs to the filter category.
+     */
     const isCategoryMatch = (group, filterCategory) => {
         if (!group) return false;
         const g = group.toLowerCase();
@@ -35,6 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let resizeHandler = null;
 
     // --- MODULE 2: Landing Interface & Typewriter ---
+    // Queries cycled in the landing hero typewriter container
     const queries = [
         "Understand 'Quantum Superposition'",
         "Explore 'General Relativity'",
@@ -48,6 +64,10 @@ document.addEventListener("DOMContentLoaded", () => {
     let isDeleting = false;
     let typingTimer;
 
+    /**
+     * Recursive typewriter animation loop that types and deletes query hints
+     * inside the landing search input wrapper.
+     */
     function typeEffect() {
         const currentQuery = queries[queryIdx];
 
@@ -59,10 +79,11 @@ document.addEventListener("DOMContentLoaded", () => {
             charIdx++;
         }
 
+        // Variable speed: faster deletes, randomized organic typing speeds
         let typeSpeed = isDeleting ? 30 : 60 + Math.random() * 40;
 
         if (!isDeleting && charIdx === currentQuery.length) {
-            typeSpeed = 2500; 
+            typeSpeed = 2500; // Pause at full string
             isDeleting = true;
         } else if (isDeleting && charIdx === 0) {
             isDeleting = false;
@@ -79,6 +100,9 @@ document.addEventListener("DOMContentLoaded", () => {
     let autocompleteSelectedIndex = -1;
     let landingFuse = null;
 
+    /**
+     * Renders search history items inside the autocomplete container on input focus.
+     */
     function showLandingHistory() {
         if (!autocompleteDropdown) return;
         const viewed = JSON.parse(localStorage.getItem('neuron_iq_viewed_history') || '[]');
@@ -111,7 +135,6 @@ document.addEventListener("DOMContentLoaded", () => {
         autocompleteDropdown.innerHTML = html;
         autocompleteDropdown.style.display = 'flex';
         
-        // Wire hover
         autocompleteDropdown.querySelectorAll(".autocomplete-item").forEach(item => {
             item.addEventListener("mouseenter", () => {
                 autocompleteSelectedIndex = parseInt(item.dataset.index, 10);
@@ -120,6 +143,9 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    /**
+     * Toggles CSS focus highlights on currently selected autocomplete links.
+     */
     function highlightActiveAutocompleteItem() {
         if (!autocompleteDropdown) return;
         const items = autocompleteDropdown.querySelectorAll(".autocomplete-item");
@@ -139,7 +165,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (searchBar.value.length === 0) {
             typewriter.style.opacity = '1';
         }
-        // Delay hide to allow clicks to register
+        // Delayed hides allow click event delegations to fire first
         setTimeout(() => {
             if (autocompleteDropdown) {
                 autocompleteDropdown.style.display = 'none';
@@ -162,6 +188,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (!window.NeuronMap) return;
 
+        // Initialize homepage Fuse instance
         if (!landingFuse) {
             const allNodesArray = Object.values(window.NeuronMap);
             const fuseOptions = {
@@ -182,9 +209,10 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
 
-        const getCustomSearchScore = window.getCustomSearchScore || ((item, q) => 0);
-        const getRelevanceScore = window.getRelevanceScore || ((item, q, score) => 0);
-        const highlightMatch = window.highlightMatch || ((text, q) => text);
+        // Retrieve search helpers exported on window scope
+        const getCustomSearchScore = window.getCustomSearchScore;
+        const getRelevanceScore = window.getRelevanceScore;
+        const highlightMatch = window.highlightMatch;
 
         let results = landingFuse.search(query);
         if (query.trim().length <= 3) {
@@ -199,7 +227,7 @@ document.addEventListener("DOMContentLoaded", () => {
             return a.score - b.score;
         });
         
-        results = results.slice(0, 5); // top 5 matches
+        results = results.slice(0, 5); // Display top 5 matches
         
         if (results.length === 0) {
             autocompleteDropdown.innerHTML = `<div style="color: var(--text-muted); text-align: center; padding: 15px; font-size: 0.9rem;">No matches found</div>`;
@@ -228,7 +256,6 @@ document.addEventListener("DOMContentLoaded", () => {
         autocompleteDropdown.style.display = 'flex';
         autocompleteSelectedIndex = -1;
 
-        // Wire hover
         autocompleteDropdown.querySelectorAll(".autocomplete-item").forEach(item => {
             item.addEventListener("mouseenter", () => {
                 autocompleteSelectedIndex = parseInt(item.dataset.index, 10);
@@ -245,9 +272,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (titleEl) {
                     const nodeName = titleEl.textContent;
                     const node = window.NeuronMap[nodeName];
-                    const saveClickedNode = window.saveClickedNode || (() => {});
-                    if (node) {
-                        saveClickedNode(node);
+                    if (node && window.saveClickedNode) {
+                        window.saveClickedNode(node);
                     }
                 }
             }
@@ -271,20 +297,20 @@ document.addEventListener("DOMContentLoaded", () => {
             const query = searchBar.value.trim();
             if (query === "") return;
 
-            // If an autocomplete item is highlighted/selected, navigate to it!
+            // Direct autocomplete navigation if selected
             if (autocompleteSelectedIndex >= 0 && autocompleteSelectedIndex < items.length) {
                 const item = items[autocompleteSelectedIndex];
                 const titleEl = item.querySelector(".autocomplete-title");
                 if (titleEl && window.NeuronMap) {
                     const nodeName = titleEl.textContent;
                     const node = window.NeuronMap[nodeName];
-                    const saveClickedNode = window.saveClickedNode || (() => {});
-                    if (node) {
-                        saveClickedNode(node);
+                    if (node && window.saveClickedNode) {
+                        window.saveClickedNode(node);
                     }
                 }
-                const saveSearchQuery = window.saveSearchQuery || (() => {});
-                saveSearchQuery(query);
+                if (window.saveSearchQuery) {
+                    window.saveSearchQuery(query);
+                }
                 item.click();
                 return;
             }
@@ -293,7 +319,7 @@ document.addEventListener("DOMContentLoaded", () => {
             dots.style.display = 'none';
             typewriter.style.display = 'none';
 
-            // Fully remove Hero text and landing layout
+            // Dismiss landing layout
             const heroText = document.getElementById('hero-text');
             if (heroText) {
                 heroText.style.animation = 'none'; 
@@ -307,14 +333,15 @@ document.addEventListener("DOMContentLoaded", () => {
             searchBar.classList.add('node-zero');
 
             const landingContainer = document.getElementById('landing-container');
-            const saveSearchQuery = window.saveSearchQuery || (() => {});
-            saveSearchQuery(query);
+            if (window.saveSearchQuery) {
+                window.saveSearchQuery(query);
+            }
 
             setTimeout(() => {
                 searchWrapper.style.opacity = '0';
                 searchWrapper.style.pointerEvents = 'none';
                 
-                // CRITICAL FIX: Disable pointer-events on landing-container so it does not block node clicks
+                // Allow node clicks on container fadeout
                 if (landingContainer) {
                     landingContainer.style.pointerEvents = 'none';
                     landingContainer.style.opacity = '0';
@@ -323,7 +350,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     }, 500);
                 }
 
-                // Show graph controls
+                // Show D3 controls
                 const controls = document.getElementById('graph-controls');
                 if (controls) {
                     controls.style.display = 'flex';
@@ -337,12 +364,18 @@ document.addEventListener("DOMContentLoaded", () => {
     // --- MODULE 3: Rich Hover Card Initialization ---
     const hoverCard = document.createElement("div");
     hoverCard.id = "rich-hover-card";
-    hoverCard.className = "wiki-popover"; // Shared styling class
+    hoverCard.className = "wiki-popover";
     hoverCard.style.display = "none";
     document.body.appendChild(hoverCard);
 
     let hoverTimeout;
 
+    /**
+     * Renders detailed concept popover above active graph node.
+     * 
+     * @param {Object} event Node hover trigger event.
+     * @param {Object} d Matched D3 data node properties.
+     */
     function showRichHoverCard(event, d) {
         clearTimeout(hoverTimeout);
         const color = getCategoryColor(d.group);
@@ -385,7 +418,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }, 150);
     }
 
-    // Keep card open if hovering over the card itself
     hoverCard.addEventListener('mouseenter', () => clearTimeout(hoverTimeout));
     hoverCard.addEventListener('mouseleave', hideRichHoverCard);
 
@@ -394,10 +426,23 @@ document.addEventListener("DOMContentLoaded", () => {
     let nodeElements = null;
     let linkElements = null;
 
+    /**
+     * Core D3 Graph layout engine. Performs Fuse.js searching, maps lineage paths,
+     * and initializes force fields (collision, radial, centers, charges) on SVG elements.
+     * 
+     * Forces breakdown:
+     * 1. link: Holds connected parent-child nodes at controlled spring distances (120-160px).
+     * 2. charge: Electrostatic repulsion (-10 strength) keeps nodes from collapsing.
+     * 3. center: Anchors graph coordinates around viewport center.
+     * 4. collision: Prevents overlapping orbs by creating boundary radius buffer space.
+     * 5. radial: Sets targeted layout distance levels from center based on concept distance.
+     * 
+     * @param {string} query User search term.
+     */
     function triggerSearchAlgorithm(query) {
         if (!window.NeuronMap) return console.error("No Map Data!");
 
-        // Reset layers
+        // Flush canvas layers
         svgLayer.innerHTML = '';
         nodesLayer.innerHTML = '';
         svgLayer.style.transform = 'none';
@@ -422,56 +467,12 @@ document.addEventListener("DOMContentLoaded", () => {
         const fuse = new Fuse(allNodesArray, fuseOptions);
         let searchResults = fuse.search(query);
         
-        const getCustomSearchScore = window.getCustomSearchScore || ((item, q) => {
-            if (!item || !item.name) return 0;
-            const name = item.name.toLowerCase();
-            const queryLower = q.toLowerCase();
-            if (name === queryLower) return 1000;
-            if (name.includes(`(${queryLower})`)) return 900;
-            if (name.startsWith(queryLower)) return 800;
-            const wordRegex = new RegExp(`\\b${queryLower}\\b`, 'i');
-            if (wordRegex.test(name)) return 700;
-            const cat = item.category ? item.category.toLowerCase() : '';
-            if (cat === queryLower) return 600;
-            if (cat.startsWith(queryLower)) return 500;
-            if (queryLower.length > 3 && name.includes(queryLower)) return 400;
-            return 0;
-        });
+        const getCustomSearchScore = window.getCustomSearchScore;
+        const getRelevanceScore = window.getRelevanceScore;
 
-        // Filter out false positive category/content matches for short acronyms/queries
         if (query.trim().length <= 3) {
-            searchResults = searchResults.filter(r => {
-                const customScore = getCustomSearchScore(r.item, query);
-                return customScore > 0;
-            });
+            searchResults = searchResults.filter(r => getCustomSearchScore(r.item, query) > 0);
         }
-        
-        const getRelevanceScore = window.getRelevanceScore || ((item, q, fuseScore) => {
-            const customScore = getCustomSearchScore(item, q);
-            let basePercent = 0;
-            if (customScore === 1000) basePercent = 100;
-            else if (customScore === 900) basePercent = 98;
-            else if (customScore === 800) basePercent = 95;
-            else if (customScore === 700) basePercent = 90;
-            else if (customScore === 600) basePercent = 85;
-            else if (customScore === 500) basePercent = 80;
-            else if (customScore === 400) basePercent = 70;
-            else basePercent = Math.max(0, Math.round((1 - fuseScore) * 100));
-            
-            if (customScore > 0) {
-                basePercent = Math.min(100, basePercent + Math.round((1 - fuseScore) * 5));
-            }
-            return basePercent;
-        });
-
-        searchResults.sort((a, b) => {
-            const scoreA = getCustomSearchScore(a.item, query);
-            const scoreB = getCustomSearchScore(b.item, query);
-            if (scoreB !== scoreA) {
-                return scoreB - scoreA;
-            }
-            return a.score - b.score;
-        });
 
         const scoreMap = {};
 
@@ -481,7 +482,7 @@ document.addEventListener("DOMContentLoaded", () => {
             scoreMap[result.item.name] = relevance;
         });
 
-        // Add parent lineage recursively
+        // Dynamic lineage addition helper (Recursively walks up to virtual Root)
         const addParents = (nodeName) => {
             if (!nodeName || nodeName === 'Root') return;
             finalNodesToDraw.add(nodeName);
@@ -489,7 +490,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (parentName) addParents(parentName);
         };
 
-        // Add immediate child concepts
+        // Concept children query helper (Finds immediate sub-concepts)
         const addChildren = (nodeName) => {
             Object.values(allNodes).forEach(n => {
                 if (n.parent === nodeName) finalNodesToDraw.add(n.name);
@@ -501,7 +502,7 @@ document.addEventListener("DOMContentLoaded", () => {
             addChildren(name);
         });
 
-        // Fallback to all nodes if search yields nothing
+        // Fallback display if query matches nothing
         let nodesData = [];
         finalNodesToDraw.forEach(name => {
             if (allNodes[name]) nodesData.push(allNodes[name]);
@@ -510,7 +511,7 @@ document.addEventListener("DOMContentLoaded", () => {
             nodesData = allNodesArray;
         }
 
-        // Build D3 Nodes
+        // Map layout nodes parameters
         const nodes = nodesData.map(n => ({
             id: n.name,
             name: n.name,
@@ -521,7 +522,7 @@ document.addEventListener("DOMContentLoaded", () => {
             internalLinks: n.internalLinks
         }));
 
-        // Add Query Center Hub
+        // Insert Central Query node
         nodes.push({
             id: 'Root',
             name: `Query: "${query}"`,
@@ -529,10 +530,9 @@ document.addEventListener("DOMContentLoaded", () => {
             distance: 0
         });
 
-        // Build D3 Links
         const links = [];
         
-        // 1. Parent-child links
+        // Setup direct parent-child connections
         nodesData.forEach(n => {
             const hasParentInSet = nodes.some(node => node.id === n.parent);
             const sourceId = (n.parent && hasParentInSet) ? n.parent : 'Root';
@@ -543,7 +543,7 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         });
 
-        // 2. Internal page-to-page links (Obsidian style)
+        // Setup Obsidian-style cross-concept references
         nodesData.forEach(n => {
             if (n.internalLinks) {
                 n.internalLinks.forEach(targetName => {
@@ -565,41 +565,40 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
 
-        // Calculate connection count, dynamic radius, and inertia mass for each node
+        // Calculate node size and mass dynamics
         nodes.forEach(node => {
             const connectedLinks = links.filter(l => l.source === node.id || l.target === node.id);
             node.linkCount = connectedLinks.length;
             if (node.id === 'Root') {
                 node.radius = 20;
-                node.mass = 20; // Massive hub
+                node.mass = 20; // Heavy inertia centers
             } else {
-                // Formula: more links -> bigger; more distance -> smaller
                 node.radius = Math.max(6, Math.min(30, 10 + 2 * node.linkCount - 1.5 * node.distance));
-                node.mass = node.radius; // Mass represents physical inertia
+                node.mass = node.radius; // Mass controls velocity scale
             }
         });
 
-        // D3 Physics Simulation
         const width = window.innerWidth;
         const height = window.innerHeight;
 
-        // Position Query / Root Node statically at the center
+        // Pin center node position
         const rootNode = nodes.find(d => d.id === 'Root');
         if (rootNode) {
             rootNode.fx = width / 2;
             rootNode.fy = height / 2;
         }
 
-        // Position pillars (distance 1) statically on symmetric circle using roots of unity
+        // Distribute distance-1 concepts (Pillars) symmetrically in circular fashion
         const pillars = nodes.filter(d => d.distance === 1);
         const nPillars = pillars.length;
-        const R1 = 180; // Radius for pillars
+        const R1 = 180; // Distance radius limit for core pillars
         pillars.forEach((d, index) => {
             const angle = (2 * Math.PI * index) / nPillars;
             d.fx = (width / 2) + R1 * Math.cos(angle);
             d.fy = (height / 2) + R1 * Math.sin(angle);
         });
 
+        // Initialize D3 Physics Simulator
         simulation = d3.forceSimulation(nodes)
             .force("link", d3.forceLink(links).id(d => d.id).distance(d => d.isInternal ? 160 : 120).strength(1))
             .force("charge", d3.forceManyBody().strength(-10))
@@ -611,6 +610,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 return R1 + (d.distance - 1) * 150;
             }, width / 2, height / 2).strength(0.8));
 
+        // Coordinate resize bindings
         if (resizeHandler) {
             window.removeEventListener('resize', resizeHandler);
         }
@@ -644,7 +644,7 @@ document.addEventListener("DOMContentLoaded", () => {
         };
         window.addEventListener('resize', resizeHandler);
 
-        // Render Links
+        // Bind SVG lines
         linkElements = d3.select(svgLayer).selectAll("path")
             .data(links)
             .join("path")
@@ -653,7 +653,7 @@ document.addEventListener("DOMContentLoaded", () => {
             .style("stroke-width", d => d.isInternal ? "1px" : "2px")
             .style("stroke-dasharray", d => d.isInternal ? "3 4" : "8 12");
 
-        // Render Nodes with Dynamic Sizing
+        // Bind HTML elements as D3 Nodes
         nodeElements = d3.select(nodesLayer).selectAll(".node")
             .data(nodes)
             .join("a")
@@ -665,12 +665,12 @@ document.addEventListener("DOMContentLoaded", () => {
             .style("height", d => `${d.radius * 2}px`)
             .call(drag(simulation));
 
-        // Render node labels inside nodes
+        // Inject node text labels
         nodeElements.each(function(d) {
             const label = document.createElement('div');
             label.className = 'node-label';
-            // Alternating labels bottom / top
             const idx = nodes.indexOf(d);
+            // Alternate label positions to reduce overlap
             if (idx % 2 !== 0) {
                 label.classList.add('bottom');
             }
@@ -678,7 +678,6 @@ document.addEventListener("DOMContentLoaded", () => {
             this.appendChild(label);
         });
 
-        // Node Event Binding
         nodeElements
             .on("mouseenter", (event, d) => {
                 if (d.id === 'Root') return;
@@ -687,14 +686,15 @@ document.addEventListener("DOMContentLoaded", () => {
             .on("mouseleave", hideRichHoverCard)
             .on("click", (event, d) => {
                 if (d.id === 'Root') return;
-                const saveClickedNode = window.saveClickedNode || (() => {});
-                saveClickedNode(d);
+                if (window.saveClickedNode) {
+                    window.saveClickedNode(d);
+                }
                 window.location.href = `${d.slug}.html`;
             });
 
-        // Simulation Update on Physics Tick with Inertia
+        // Physics updates per simulation tick
         simulation.on("tick", () => {
-            // Apply Newtonian Inertia: scale down velocity updates for heavy nodes
+            // Apply Newtonian Inertia (scales velocities based on mass metric)
             nodes.forEach(d => {
                 if (d.fx === null) {
                     d.x += d.vx * (1 / d.mass - 1);
@@ -704,6 +704,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             });
 
+            // Draw links using curved cubic Bezier configurations
             linkElements.attr("d", d => {
                 const x1 = d.source.x;
                 const y1 = d.source.y;
@@ -718,7 +719,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 .style("top", d => `${d.y}px`);
         });
 
-        // --- Zoom & Pan Setup ---
+        // Initialize Zoom & Pan logic
         const zoomBehavior = d3.zoom()
             .scaleExtent([0.3, 3])
             .on("zoom", (event) => {
@@ -728,7 +729,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         d3.select(graphContainer).call(zoomBehavior);
 
-        // Control Panel Bindings
+        // Bind control buttons
         const zoomInBtn = document.getElementById("zoom-in");
         if (zoomInBtn) {
             zoomInBtn.onclick = () => {
@@ -748,14 +749,17 @@ document.addEventListener("DOMContentLoaded", () => {
             };
         }
 
-        // Category Filter Buttons Setup
         setupFilters();
-
-        // Populate Plausibility Sidebar Panel
         triggerPlausibilityEngine(nodesData, scoreMap);
     }
 
-    // --- Node Drag Handler ---
+    /**
+     * Sets up active drag event handlers for node layout elements.
+     * Keeps root/pillars anchored at fixed offsets during simulations.
+     * 
+     * @param {Object} simulation The D3 simulation context.
+     * @returns {Object} D3 drag behavior registry.
+     */
     function drag(simulation) {
         function dragstarted(event, d) {
             if (!event.active) simulation.alphaTarget(0.3).restart();
@@ -770,7 +774,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         function dragended(event, d) {
             if (!event.active) simulation.alphaTarget(0);
-            // Protect static centers (Root and pillars) from being released
+            // Protect center and pillar positions from releasing
             if (d.id !== 'Root' && d.distance !== 1) {
                 d.fx = null;
                 d.fy = null;
@@ -783,7 +787,10 @@ document.addEventListener("DOMContentLoaded", () => {
             .on("end", dragended);
     }
 
-    // --- Category Filter Panel logic ---
+    /**
+     * Initializes the category filter buttons in the control panel.
+     * Selecting a category dims other nodes and links while restricting interaction.
+     */
     function setupFilters() {
         const filterButtons = document.querySelectorAll(".filter-btn");
         filterButtons.forEach(btn => {
@@ -793,7 +800,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 const category = btn.dataset.category;
 
-                // Stagger fade nodes
+                // Dim non-matching nodes
                 nodeElements.transition().duration(200)
                     .style("opacity", d => {
                         if (category === 'all' || d.id === 'Root') return 1;
@@ -804,7 +811,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         return isCategoryMatch(d.group, category) ? "auto" : "none";
                     });
 
-                // Stagger fade links
+                // Dim links matching non-active groups
                 linkElements.transition().duration(200)
                     .style("opacity", d => {
                         if (category === 'all') return 0.6;
@@ -814,18 +821,23 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // --- Plausibility Side Panel Drawer ---
+    /**
+     * Populates the right-hand Plausibility Sidebar Panel with ranked concept match cards.
+     * 
+     * @param {Array} nodesData Current nodes loaded inside the graph canvas.
+     * @param {Object} scoreMap Match rating records mapped by node title.
+     */
     function triggerPlausibilityEngine(nodesData, scoreMap) {
         if (nodesData.length === 0) return;
 
-        // Sort by relevance score desc
+        // Sort results by similarity rating
         nodesData.sort((a, b) => {
             const scoreA = scoreMap[a.name] || 0;
             const scoreB = scoreMap[b.name] || 0;
             return scoreB - scoreA;
         });
 
-        // Set Top Relevance Score Badge
+        // Set top score badge
         const topScore = scoreMap[nodesData[0].name] || 0;
         medianVal.innerText = `${topScore}%`;
 

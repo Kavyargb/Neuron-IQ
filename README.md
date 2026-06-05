@@ -104,10 +104,11 @@ Neuron-IQ/
 │   ├── index.html            #    Landing page + graph container
 │   ├── sitemap.html          #    Auto-generated knowledge sitemap
 │   ├── graph.js              #    ⚡ AUTO-GENERATED: The NeuronMap JSON blob
-│   ├── app.js                #    Homepage logic: typewriter, graph, search
-│   ├── global.js             #    Shared logic: wiki-links, search modal, KaTeX
-│   ├── style.css             #    Homepage styles (dark void aesthetic)
-│   └── page.css              #    Article page styles (reader-friendly layout)
+│   ├── app.js                #    Homepage logic: D3 graph visualization, typing
+│   ├── global.js             #    Shared logic: search modal, inline links, math, observers
+│   ├── shared.css            #    🎨 CENTRAL DESIGN SYSTEM: common variables, modals, popovers
+│   ├── style.css             #    Homepage specific styles (dark void aesthetic)
+│   └── page.css              #    Article page specific styles (reader layout)
 │
 ├── build.js                  # 🔧 Static site generator (the heart of the build)
 ├── dev.js                    # 🖥️  Dev server orchestrator
@@ -125,7 +126,7 @@ Neuron-IQ/
 | `content/*.md` | `public/graph.js` |
 | `public/index.html` | `public/{slug}.html` (article pages) |
 | `public/app.js`, `global.js` | `public/sitemap.html` (overwritten) |
-| `public/style.css`, `page.css` | |
+| `public/shared.css`, `style.css`, `page.css` | |
 | `build.js`, `dev.js`, `watch.js` | |
 
 The `.gitignore` is configured to track specific hand-authored files in `public/` (the JS, CSS, and HTML listed above) while ignoring all generated outputs (the slug-based HTML pages and `graph.js`).
@@ -644,41 +645,47 @@ The `rootMargin` of `-20% top / -60% bottom` creates a narrow detection band in 
 
 ## 🎨 The Styling System
 
+To maximize maintainability and eliminate layout redundancy, Neuron-IQ separates structural page requirements from its global design system:
+
+### `shared.css` — The Design System Foundation
+Contains the core styling tokens and layout blueprints shared across the entire site. It is imported at the top of both `style.css` and `page.css` using standard CSS `@import 'shared.css';` rules:
+- **Typography & Resets**: Imports Google Fonts (Inter and JetBrains Mono) and sets baseline resets on all elements.
+- **Color Variables**: Consolidates design parameters (`--bg-void`, `--text-main`, `--accent`) and standardizes CSS properties for biological group colors (`--color-cs`, `--color-math`, `--color-physics`, etc.).
+- **Common Elements**: Styles custom webkit scrollbars, inline search term highlights (`.search-highlight`), and hover cards (`.wiki-popover`).
+- **Command Palette Layout**: Contains all CSS properties, animations, scaling targets, and responsive metrics for the `.search-modal-overlay` structure.
+
 ### `style.css` — Homepage (The Void)
-
-The homepage uses a **deep space aesthetic** with:
-
-- **Layered backgrounds**: A radial glow + subtle dot grid pattern (`30px × 30px`) creating depth.
-- **Glassmorphism**: The search bar uses `backdrop-filter: blur(20px)` with semi-transparent backgrounds.
-- **Neon glow nodes**: Nodes use `box-shadow: inset 0 0 4px #fff, 0 0 15px currentColor` for a bioluminescent effect.
-- **Neural pulse animation**: SVG links use `stroke-dasharray: 8 12` with a looping `stroke-dashoffset` animation to simulate electrical signal flow.
-- **Cinematic hover focus**: When hovering any node, all other nodes and links dim to ~15% opacity via the `:has()` CSS selector, creating a spotlight effect.
+Builds homepage specific features on top of `shared.css`:
+- **Canvas Backgrounds**: Layered radial space glows + a custom dot grid grid pattern (`30px × 30px`) creating depth.
+- **Glassmorphism**: Renders visual aesthetics for the glass search box and landing typewriter components.
+- **Neon glow nodes**: Styled using radial box shadows and glowing borders matching parent category attributes.
+- **Neural pulse animation**: Emits signal flashes on links using dash offset loop transitions (`stroke-dasharray`).
+- **Spotlight focus**: Hovering a node applies cinematic `:has()` filters to dim surrounding nodes and pathways.
 
 ### `page.css` — Article Pages
+Configures editorial stylesheets for compiled documents:
+- **Header Panels**: Frost glass sticky headers (`backdrop-filter`) with search launchers.
+- **Layout Grids**: 1200px max-width flex structures containing sidebar elements and TOC lists.
+- **Document Styles**: Formats headers, margins, lists, blockquotes (left-bordered gradients), and code blocks (JetBrains Mono syntax boxes).
+- **lineage-tree Layouts**: Interactive lists mapping parents, current focus, and child links.
 
-Article pages use a **premium editorial layout** with:
-
-- **Typography**: Inter for body, JetBrains Mono for code blocks. Article titles are `4rem / 800 weight` with a silver-to-slate gradient fill.
-- **Frosted glass nav**: Sticky header with `backdrop-filter: blur(24px)`.
-- **Grid layout**: Flexbox with `1200px` max-width, `100px` gap between content and sidebar.
-- **Blockquotes**: Left-bordered with a blue-to-transparent gradient background.
-- **Inline wiki links**: Dashed underline in accent blue, solid on hover.
-
-### Color System (CSS Custom Properties)
+### Color System (CSS Custom Properties inside `shared.css`)
 
 ```css
-/* Shared across both stylesheets */
---bg-void: #030712;         /* Deep black background */
---text-main: #f8fafc;       /* Near-white text */
---text-muted: #8b9bb4;      /* Subdued text */
---accent: #60a5fa;          /* Primary blue accent */
+:root {
+    /* Central color theme */
+    --bg-void: #030712;         /* Deep black void background */
+    --text-main: #f8fafc;       /* Near-white content text */
+    --text-muted: #8b9bb4;      /* Gray muted labels */
+    --accent: #60a5fa;          /* Sleek blue link highlights */
 
-/* Category colors */
---color-cs: #fcd34d;        /* Yellow — Computer Science */
---color-math: #fb7185;      /* Rose — Mathematics */
---color-physics: #60a5fa;   /* Blue — Physics */
---color-science: #34d399;   /* Green — Science (default) */
---color-root: #ffffff;      /* White — Root node */
+    /* Cyber/Neon Category Colors */
+    --color-cs: #fcd34d;        /* Yellow — Computer Science */
+    --color-math: #fb7185;      /* Rose — Mathematics */
+    --color-physics: #60a5fa;   /* Blue — Physics */
+    --color-science: #34d399;   /* Green — Science (default) */
+    --color-root: #ffffff;      /* White — Query Hub node */
+}
 ```
 
 ---
