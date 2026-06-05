@@ -103,7 +103,8 @@ async function buildGraph() {
         nodesList.forEach(targetNode => {
             if (sourceNode.name === targetNode.name) return;
             const termEscaped = targetNode.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-            const regex = new RegExp(`\\b${termEscaped}\\b`, 'i');
+            // Use (?:\b|\W|^) and (?=\b|\W|$) to properly match boundaries even for names with punctuation
+            const regex = new RegExp(`(?:^|\\W)${termEscaped}(?=\\W|$)`, 'i');
             if (regex.test(sourceNode.searchContent)) {
                 sourceNode.internalLinks.push(targetNode.name);
             }
