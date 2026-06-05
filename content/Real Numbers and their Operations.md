@@ -1,7 +1,7 @@
 ---
 name: Real Numbers and their Operations
 parent: Elementary Algebra
-category: Algebra
+category: Mathematics
 distance: 4
 ---
 @REAL NUMBERS AND THE NUMBER LINE

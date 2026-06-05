@@ -608,3 +608,13 @@ body::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.3); }
     font-size: 0.7rem; font-weight: 700; color: var(--text-muted); 
     margin-right: 12px; border: 1px solid rgba(255,255,255,0.1);
 }
+
+/* Matched search highlight */
+.search-highlight {
+    background: rgba(96, 165, 250, 0.25);
+    color: #ffffff;
+    font-weight: 600;
+    border-radius: 2px;
+    padding: 0 2px;
+    box-shadow: 0 0 8px rgba(96, 165, 250, 0.4);
+}

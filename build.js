@@ -73,6 +73,7 @@ async function buildGraph() {
             distance: parseInt(metadata.distance, 10),
             slug: slug,
             searchContent: searchContent,
+            sectionTitles: sections.map(sec => sec.title),
             sections: sections
         };
 

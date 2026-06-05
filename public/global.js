@@ -212,8 +212,8 @@ function setupSearchModalLogic() {
 
     function openModal() {
         modal.classList.add("active");
-        resultsContainer.innerHTML = '';
         input.value = '';
+        showModalHistory();
         setTimeout(() => input.focus(), 50);
         document.body.style.overflow = 'hidden'; // Lock background scroll
     }
@@ -256,12 +256,57 @@ function setupSearchModalLogic() {
     let fuse = null;
     let selectedIndex = -1;
 
+    function showModalHistory() {
+        const viewed = JSON.parse(localStorage.getItem('neuron_iq_viewed_history') || '[]');
+        
+        if (viewed.length === 0) {
+            resultsContainer.innerHTML = `<div class="search-no-results">Type to search the neural network...</div>`;
+            return;
+        }
+        
+        let html = '';
+        html += `<div class="history-section-title">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="history-icon" style="vertical-align: middle; margin-right: 4px;"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            Recently Viewed
+        </div>`;
+        viewed.forEach((v, index) => {
+            const color = getCategoryColor(v.category);
+            html += `
+                <a href="${v.slug}.html" class="search-result-item" data-index="${index}">
+                    <div class="result-left">
+                        <span class="result-title">${v.name}</span>
+                        <span class="result-category" style="color: ${color}; border-color: ${color};">${v.category.toUpperCase()}</span>
+                    </div>
+                    <div class="result-right">
+                        <span class="result-relevance" style="background: rgba(255, 255, 255, 0.05); color: var(--text-muted);">Viewed</span>
+                    </div>
+                </a>
+            `;
+        });
+        
+        resultsContainer.innerHTML = html;
+        
+        // Wire hover
+        resultsContainer.querySelectorAll(".search-result-item").forEach(item => {
+            item.addEventListener("mouseenter", () => {
+                selectedIndex = parseInt(item.dataset.index, 10);
+                highlightActiveItem();
+            });
+        });
+    }
+
+    input.addEventListener("focus", () => {
+        if (input.value.trim().length === 0) {
+            showModalHistory();
+        }
+    });
+
     input.addEventListener("input", () => {
         const query = input.value.trim();
         if (!window.NeuronMap) return;
 
         if (query.length === 0) {
-            resultsContainer.innerHTML = '';
+            showModalHistory();
             selectedIndex = -1;
             return;
         }
@@ -275,7 +320,8 @@ function setupSearchModalLogic() {
                 keys: [
                     { name: 'name', weight: 1.0 },
                     { name: 'category', weight: 0.5 },
-                    { name: 'searchContent', weight: 0.8 }
+                    { name: 'sectionTitles', weight: 0.4 },
+                    { name: 'searchContent', weight: 0.1 }
                 ]
             };
             // Fallback if Fuse is not loaded yet
@@ -287,12 +333,21 @@ function setupSearchModalLogic() {
             }
         }
 
-        const results = fuse.search(query).slice(0, 8); // Top 8 matches
-        renderModalResults(results);
+        let results = fuse.search(query);
+        results.sort((a, b) => {
+            const scoreA = getCustomSearchScore(a.item, query);
+            const scoreB = getCustomSearchScore(b.item, query);
+            if (scoreB !== scoreA) {
+                return scoreB - scoreA;
+            }
+            return a.score - b.score;
+        });
+        results = results.slice(0, 8); // Top 8 matches
+        renderModalResults(results, query);
         selectedIndex = -1;
     });
 
-    function renderModalResults(results) {
+    function renderModalResults(results, query) {
         if (results.length === 0) {
             resultsContainer.innerHTML = `<div class="search-no-results">No concepts match your query. Try something else!</div>`;
             return;
@@ -301,12 +356,12 @@ function setupSearchModalLogic() {
         resultsContainer.innerHTML = results.map((r, index) => {
             const item = r.item;
             const color = getCategoryColor(item.category);
-            const relevance = Math.max(0, Math.round((1 - r.score) * 100));
+            const relevance = getRelevanceScore(item, query, r.score);
 
             return `
                 <a href="${item.slug}.html" class="search-result-item" data-index="${index}">
                     <div class="result-left">
-                        <span class="result-title">${item.name}</span>
+                        <span class="result-title">${highlightMatch(item.name, query)}</span>
                         <span class="result-category" style="color: ${color}; border-color: ${color};">${item.category.toUpperCase()}</span>
                     </div>
                     <div class="result-right">
@@ -318,7 +373,7 @@ function setupSearchModalLogic() {
         }).join('');
 
         // Wire hover to index
-        document.querySelectorAll(".search-result-item").forEach(item => {
+        resultsContainer.querySelectorAll(".search-result-item").forEach(item => {
             item.addEventListener("mouseenter", () => {
                 selectedIndex = parseInt(item.dataset.index, 10);
                 highlightActiveItem();
@@ -326,9 +381,28 @@ function setupSearchModalLogic() {
         });
     }
 
+    // Click event delegation to save history
+    resultsContainer.addEventListener("click", (e) => {
+        const itemEl = e.target.closest(".search-result-item");
+        if (itemEl && window.NeuronMap) {
+            const titleEl = itemEl.querySelector(".result-title");
+            if (titleEl) {
+                const nodeName = titleEl.textContent;
+                const node = window.NeuronMap[nodeName];
+                if (node) {
+                    saveClickedNode(node);
+                }
+            }
+            const query = input.value.trim();
+            if (query.length > 0) {
+                saveSearchQuery(query);
+            }
+        }
+    });
+
     // Keyboard navigation in search results
     input.addEventListener("keydown", (e) => {
-        const items = document.querySelectorAll(".search-result-item");
+        const items = resultsContainer.querySelectorAll(".search-result-item");
         if (items.length === 0) return;
 
         if (e.key === "ArrowDown") {
@@ -342,15 +416,41 @@ function setupSearchModalLogic() {
         } else if (e.key === "Enter") {
             e.preventDefault();
             if (selectedIndex >= 0 && selectedIndex < items.length) {
-                items[selectedIndex].click();
+                const item = items[selectedIndex];
+                const titleEl = item.querySelector(".result-title");
+                if (titleEl && window.NeuronMap) {
+                    const nodeName = titleEl.textContent;
+                    const node = window.NeuronMap[nodeName];
+                    if (node) {
+                        saveClickedNode(node);
+                    }
+                }
+                const query = input.value.trim();
+                if (query.length > 0) {
+                    saveSearchQuery(query);
+                }
+                item.click();
             } else if (items.length > 0) {
-                items[0].click();
+                const item = items[0];
+                const titleEl = item.querySelector(".result-title");
+                if (titleEl && window.NeuronMap) {
+                    const nodeName = titleEl.textContent;
+                    const node = window.NeuronMap[nodeName];
+                    if (node) {
+                        saveClickedNode(node);
+                    }
+                }
+                const query = input.value.trim();
+                if (query.length > 0) {
+                    saveSearchQuery(query);
+                }
+                item.click();
             }
         }
     });
 
     function highlightActiveItem() {
-        const items = document.querySelectorAll(".search-result-item");
+        const items = resultsContainer.querySelectorAll(".search-result-item");
         items.forEach((item, index) => {
             item.classList.toggle("focused", index === selectedIndex);
         });
@@ -418,8 +518,111 @@ function setupTOCScrollObserver() {
 function getCategoryColor(cat) {
     if (!cat) return '#ffffff';
     const c = cat.toLowerCase();
-    if (c.includes('cs') || c.includes('computer')) return '#fcd34d'; // CS (Yellow)
+    if (c.includes('computer') || c === 'cs') return '#fcd34d'; // CS (Yellow)
     if (c.includes('math')) return '#fb7185'; // Math (Rose/Red)
     if (c.includes('physics')) return '#60a5fa'; // Physics (Blue)
     return '#34d399'; // Science (Green)
 }
+
+function getCustomSearchScore(item, query) {
+    if (!item || !item.name) return 0;
+    const name = item.name.toLowerCase();
+    const q = query.toLowerCase();
+    
+    // Tier 1: Exact match on name
+    if (name === q) return 1000;
+    
+    // Tier 2: Exact acronym in parentheses, e.g., "Computer Science (CS)" matching "cs"
+    if (name.includes(`(${q})`)) return 950;
+    
+    // Tier 3: Dynamic acronym matching, e.g., CS matching Computer Science
+    const nameAcronym = name.split(/[\s\-]/).map(word => word[0]).join('').replace(/[^\w]/g, '');
+    if (nameAcronym === q) return 900;
+    
+    // Tier 4: Starts with query
+    if (name.startsWith(q)) return 850;
+    
+    // Tier 5: Name contains the query as a distinct word
+    const wordRegex = new RegExp(`\\b${escapeRegExp(q)}\\b`, 'i');
+    if (wordRegex.test(name)) return 800;
+    
+    // Tier 6: Category matches exactly
+    const cat = item.category ? item.category.toLowerCase() : '';
+    if (cat === q) return 700;
+    
+    // Tier 7: Match inside section titles (headers)
+    if (item.sectionTitles && item.sectionTitles.some(title => {
+        const t = title.toLowerCase();
+        return t === q || t.startsWith(q) || new RegExp(`\\b${escapeRegExp(q)}\\b`, 'i').test(t);
+    })) {
+        return 600;
+    }
+    
+    // Tier 8: Category starts with query
+    if (cat.startsWith(q)) return 500;
+    
+    // Tier 9: Substring match in name
+    if (name.includes(q)) return 400;
+    
+    // Tier 10: Substring match in section titles
+    if (item.sectionTitles && item.sectionTitles.some(title => title.toLowerCase().includes(q))) {
+        return 300;
+    }
+    
+    return 0;
+}
+
+function getRelevanceScore(item, query, fuseScore) {
+    const customScore = getCustomSearchScore(item, query);
+    let basePercent = 0;
+    if (customScore === 1000) basePercent = 100;
+    else if (customScore === 900) basePercent = 98;
+    else if (customScore === 800) basePercent = 95;
+    else if (customScore === 700) basePercent = 90;
+    else if (customScore === 600) basePercent = 85;
+    else if (customScore === 500) basePercent = 80;
+    else if (customScore === 400) basePercent = 70;
+    else basePercent = Math.max(0, Math.round((1 - fuseScore) * 100));
+    
+    if (customScore > 0) {
+        basePercent = Math.min(100, basePercent + Math.round((1 - fuseScore) * 5));
+    }
+    return basePercent;
+}
+
+function highlightMatch(text, query) {
+    if (!query) return text;
+    const q = escapeRegExp(query);
+    const regex = new RegExp(`(${q})`, 'gi');
+    return text.replace(regex, '<mark class="search-highlight">$1</mark>');
+}
+
+function saveSearchQuery(query) {
+    if (!query) return;
+    let history = JSON.parse(localStorage.getItem('neuron_iq_search_history') || '[]');
+    history = history.filter(q => q.toLowerCase() !== query.toLowerCase());
+    history.unshift(query);
+    history = history.slice(0, 5); // Keep top 5
+    localStorage.setItem('neuron_iq_search_history', JSON.stringify(history));
+}
+
+function saveClickedNode(node) {
+    if (!node || !node.name) return;
+    let viewed = JSON.parse(localStorage.getItem('neuron_iq_viewed_history') || '[]');
+    viewed = viewed.filter(item => item.name.toLowerCase() !== node.name.toLowerCase());
+    viewed.unshift({
+        name: node.name,
+        slug: node.slug,
+        category: node.category || node.group
+    });
+    viewed = viewed.slice(0, 5); // Keep top 5
+    localStorage.setItem('neuron_iq_viewed_history', JSON.stringify(viewed));
+}
+
+window.getCustomSearchScore = getCustomSearchScore;
+window.getRelevanceScore = getRelevanceScore;
+window.highlightMatch = highlightMatch;
+window.saveSearchQuery = saveSearchQuery;
+window.saveClickedNode = saveClickedNode;
+
+

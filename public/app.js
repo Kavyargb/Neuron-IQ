@@ -15,11 +15,24 @@ document.addEventListener("DOMContentLoaded", () => {
     const getCategoryColor = (cat) => {
         if (!cat) return 'var(--color-root)';
         const c = cat.toLowerCase();
-        if (c.includes('cs') || c.includes('computer')) return 'var(--color-cs)';
+        if (c.includes('computer') || c === 'cs') return 'var(--color-cs)';
         if (c.includes('math')) return 'var(--color-math)';
         if (c.includes('physics')) return 'var(--color-physics)';
         return 'var(--color-science)';
     };
+
+    const isCategoryMatch = (group, filterCategory) => {
+        if (!group) return false;
+        const g = group.toLowerCase();
+        const f = filterCategory.toLowerCase();
+        if (f === 'all') return true;
+        if (f === 'cs') return g.includes('computer') || g === 'cs';
+        if (f === 'math') return g.includes('math');
+        if (f === 'physics') return g.includes('physics');
+        return g.includes(f);
+    };
+
+    let resizeHandler = null;
 
     // --- MODULE 2: Landing Interface & Typewriter ---
     const queries = [
@@ -62,28 +75,217 @@ document.addEventListener("DOMContentLoaded", () => {
 
     typeEffect();
 
+    const autocompleteDropdown = document.getElementById('landing-autocomplete');
+    let autocompleteSelectedIndex = -1;
+    let landingFuse = null;
+
+    function showLandingHistory() {
+        if (!autocompleteDropdown) return;
+        const viewed = JSON.parse(localStorage.getItem('neuron_iq_viewed_history') || '[]');
+        
+        if (viewed.length === 0) {
+            autocompleteDropdown.style.display = 'none';
+            return;
+        }
+        
+        let html = '';
+        html += `<div class="history-section-title">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="history-icon" style="vertical-align: middle; margin-right: 4px;"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            Recently Viewed
+        </div>`;
+        viewed.forEach((v, index) => {
+            const color = getCategoryColor(v.category);
+            html += `
+                <a href="${v.slug}.html" class="autocomplete-item history-item" data-index="${index}">
+                    <div class="autocomplete-left">
+                        <span class="autocomplete-title">${v.name}</span>
+                        <span class="autocomplete-category" style="color: ${color}; border-color: ${color};">${v.category.toUpperCase()}</span>
+                    </div>
+                    <div class="autocomplete-right">
+                        <span class="autocomplete-relevance" style="background: rgba(255, 255, 255, 0.05); color: var(--text-muted);">Viewed</span>
+                    </div>
+                </a>
+            `;
+        });
+        
+        autocompleteDropdown.innerHTML = html;
+        autocompleteDropdown.style.display = 'flex';
+        
+        // Wire hover
+        autocompleteDropdown.querySelectorAll(".autocomplete-item").forEach(item => {
+            item.addEventListener("mouseenter", () => {
+                autocompleteSelectedIndex = parseInt(item.dataset.index, 10);
+                highlightActiveAutocompleteItem();
+            });
+        });
+    }
+
+    function highlightActiveAutocompleteItem() {
+        if (!autocompleteDropdown) return;
+        const items = autocompleteDropdown.querySelectorAll(".autocomplete-item");
+        items.forEach((item, index) => {
+            item.classList.toggle("focused", index === autocompleteSelectedIndex);
+        });
+    }
+
     searchBar.addEventListener('focus', () => {
         typewriter.style.opacity = '0';
+        if (searchBar.value.trim().length === 0) {
+            showLandingHistory();
+        }
     });
 
     searchBar.addEventListener('blur', () => {
         if (searchBar.value.length === 0) {
             typewriter.style.opacity = '1';
         }
+        // Delay hide to allow clicks to register
+        setTimeout(() => {
+            if (autocompleteDropdown) {
+                autocompleteDropdown.style.display = 'none';
+            }
+        }, 200);
     });
 
     searchBar.addEventListener('input', () => {
-        if (searchBar.value.length > 0) {
+        const query = searchBar.value.trim();
+        if (query.length > 0) {
             enterHint.style.opacity = '1';
             dots.style.opacity = '0';
         } else {
             enterHint.style.opacity = '0';
             dots.style.opacity = '1';
+            showLandingHistory();
+            autocompleteSelectedIndex = -1;
+            return;
         }
+
+        if (!window.NeuronMap) return;
+
+        if (!landingFuse) {
+            const allNodesArray = Object.values(window.NeuronMap);
+            const fuseOptions = {
+                includeScore: true,
+                threshold: 0.4,
+                ignoreLocation: true,
+                keys: [
+                    { name: 'name', weight: 1.0 },
+                    { name: 'category', weight: 0.5 },
+                    { name: 'sectionTitles', weight: 0.4 },
+                    { name: 'searchContent', weight: 0.1 }
+                ]
+            };
+            if (typeof Fuse !== 'undefined') {
+                landingFuse = new Fuse(allNodesArray, fuseOptions);
+            } else {
+                return;
+            }
+        }
+
+        const getCustomSearchScore = window.getCustomSearchScore || ((item, q) => 0);
+        const getRelevanceScore = window.getRelevanceScore || ((item, q, score) => 0);
+        const highlightMatch = window.highlightMatch || ((text, q) => text);
+
+        let results = landingFuse.search(query);
+        results.sort((a, b) => {
+            const scoreA = getCustomSearchScore(a.item, query);
+            const scoreB = getCustomSearchScore(b.item, query);
+            if (scoreB !== scoreA) {
+                return scoreB - scoreA;
+            }
+            return a.score - b.score;
+        });
+        
+        results = results.slice(0, 5); // top 5 matches
+        
+        if (results.length === 0) {
+            autocompleteDropdown.innerHTML = `<div style="color: var(--text-muted); text-align: center; padding: 15px; font-size: 0.9rem;">No matches found</div>`;
+            autocompleteDropdown.style.display = 'flex';
+            autocompleteSelectedIndex = -1;
+            return;
+        }
+
+        autocompleteDropdown.innerHTML = results.map((r, index) => {
+            const item = r.item;
+            const color = getCategoryColor(item.category);
+            const relevance = getRelevanceScore(item, query, r.score);
+            return `
+                <a href="${item.slug}.html" class="autocomplete-item" data-index="${index}">
+                    <div class="autocomplete-left">
+                        <span class="autocomplete-title">${highlightMatch(item.name, query)}</span>
+                        <span class="autocomplete-category" style="color: ${color}; border-color: ${color};">${item.category.toUpperCase()}</span>
+                    </div>
+                    <div class="autocomplete-right">
+                        <span class="autocomplete-badge">d:${item.distance}</span>
+                        <span class="autocomplete-relevance" style="background: rgba(96, 165, 250, 0.1); color: var(--accent);">${relevance}% Match</span>
+                    </div>
+                </a>
+            `;
+        }).join('');
+        autocompleteDropdown.style.display = 'flex';
+        autocompleteSelectedIndex = -1;
+
+        // Wire hover
+        autocompleteDropdown.querySelectorAll(".autocomplete-item").forEach(item => {
+            item.addEventListener("mouseenter", () => {
+                autocompleteSelectedIndex = parseInt(item.dataset.index, 10);
+                highlightActiveAutocompleteItem();
+            });
+        });
     });
 
+    if (autocompleteDropdown) {
+        autocompleteDropdown.addEventListener("click", (e) => {
+            const itemEl = e.target.closest(".autocomplete-item");
+            if (itemEl && window.NeuronMap) {
+                const titleEl = itemEl.querySelector(".autocomplete-title");
+                if (titleEl) {
+                    const nodeName = titleEl.textContent;
+                    const node = window.NeuronMap[nodeName];
+                    const saveClickedNode = window.saveClickedNode || (() => {});
+                    if (node) {
+                        saveClickedNode(node);
+                    }
+                }
+            }
+        });
+    }
+
     searchBar.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' && searchBar.value.trim() !== "") {
+        if (!autocompleteDropdown) return;
+        const items = autocompleteDropdown.querySelectorAll(".autocomplete-item");
+
+        if (e.key === "ArrowDown" && items.length > 0) {
+            e.preventDefault();
+            autocompleteSelectedIndex = (autocompleteSelectedIndex + 1) % items.length;
+            highlightActiveAutocompleteItem();
+        } else if (e.key === "ArrowUp" && items.length > 0) {
+            e.preventDefault();
+            autocompleteSelectedIndex = (autocompleteSelectedIndex - 1 + items.length) % items.length;
+            highlightActiveAutocompleteItem();
+        } else if (e.key === 'Enter') {
+            e.preventDefault();
+            const query = searchBar.value.trim();
+            if (query === "") return;
+
+            // If an autocomplete item is highlighted/selected, navigate to it!
+            if (autocompleteSelectedIndex >= 0 && autocompleteSelectedIndex < items.length) {
+                const item = items[autocompleteSelectedIndex];
+                const titleEl = item.querySelector(".autocomplete-title");
+                if (titleEl && window.NeuronMap) {
+                    const nodeName = titleEl.textContent;
+                    const node = window.NeuronMap[nodeName];
+                    const saveClickedNode = window.saveClickedNode || (() => {});
+                    if (node) {
+                        saveClickedNode(node);
+                    }
+                }
+                const saveSearchQuery = window.saveSearchQuery || (() => {});
+                saveSearchQuery(query);
+                item.click();
+                return;
+            }
+
             enterHint.style.opacity = '0';
             dots.style.display = 'none';
             typewriter.style.display = 'none';
@@ -98,12 +300,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 }, 500);
             }
 
-            const query = searchBar.value.trim();
             searchBar.value = "";
             searchBar.classList.add('node-zero');
 
             const landingContainer = document.getElementById('landing-container');
-            
+            const saveSearchQuery = window.saveSearchQuery || (() => {});
+            saveSearchQuery(query);
+
             setTimeout(() => {
                 searchWrapper.style.opacity = '0';
                 searchWrapper.style.pointerEvents = 'none';
@@ -207,18 +410,63 @@ document.addEventListener("DOMContentLoaded", () => {
             ignoreLocation: true,
             keys: [
                 { name: 'name', weight: 1.0 },         
-                { name: 'category', weight: 0.5 },      
-                { name: 'searchContent', weight: 0.8 }  
+                { name: 'category', weight: 0.5 },
+                { name: 'sectionTitles', weight: 0.4 },
+                { name: 'searchContent', weight: 0.1 }  
             ]
         };
 
         const fuse = new Fuse(allNodesArray, fuseOptions);
         const searchResults = fuse.search(query);
+        
+        const getCustomSearchScore = window.getCustomSearchScore || ((item, q) => {
+            if (!item || !item.name) return 0;
+            const name = item.name.toLowerCase();
+            const queryLower = q.toLowerCase();
+            if (name === queryLower) return 1000;
+            if (name.includes(`(${queryLower})`)) return 900;
+            if (name.startsWith(queryLower)) return 800;
+            const wordRegex = new RegExp(`\\b${queryLower}\\b`, 'i');
+            if (wordRegex.test(name)) return 700;
+            const cat = item.category ? item.category.toLowerCase() : '';
+            if (cat === queryLower) return 600;
+            if (cat.startsWith(queryLower)) return 500;
+            if (name.includes(queryLower)) return 400;
+            return 0;
+        });
+        
+        const getRelevanceScore = window.getRelevanceScore || ((item, q, fuseScore) => {
+            const customScore = getCustomSearchScore(item, q);
+            let basePercent = 0;
+            if (customScore === 1000) basePercent = 100;
+            else if (customScore === 900) basePercent = 98;
+            else if (customScore === 800) basePercent = 95;
+            else if (customScore === 700) basePercent = 90;
+            else if (customScore === 600) basePercent = 85;
+            else if (customScore === 500) basePercent = 80;
+            else if (customScore === 400) basePercent = 70;
+            else basePercent = Math.max(0, Math.round((1 - fuseScore) * 100));
+            
+            if (customScore > 0) {
+                basePercent = Math.min(100, basePercent + Math.round((1 - fuseScore) * 5));
+            }
+            return basePercent;
+        });
+
+        searchResults.sort((a, b) => {
+            const scoreA = getCustomSearchScore(a.item, query);
+            const scoreB = getCustomSearchScore(b.item, query);
+            if (scoreB !== scoreA) {
+                return scoreB - scoreA;
+            }
+            return a.score - b.score;
+        });
+
         const scoreMap = {};
 
         searchResults.forEach(result => {
             finalNodesToDraw.add(result.item.name);
-            const relevance = Math.max(0, Math.round((1 - result.score) * 100));
+            const relevance = getRelevanceScore(result.item, query, result.score);
             scoreMap[result.item.name] = relevance;
         });
 
@@ -296,6 +544,24 @@ document.addEventListener("DOMContentLoaded", () => {
             }).strength(1.2))
             .force("y", d3.forceY(height / 2).strength(0.15));
 
+        if (resizeHandler) {
+            window.removeEventListener('resize', resizeHandler);
+        }
+        resizeHandler = () => {
+            const w = window.innerWidth;
+            const h = window.innerHeight;
+            if (simulation) {
+                simulation.force("center", d3.forceCenter(w / 2, h / 2));
+                simulation.force("x", d3.forceX(d => {
+                    if (d.id === 'Root') return w * 0.15;
+                    return (w * 0.15) + (d.distance * 220);
+                }).strength(1.2));
+                simulation.force("y", d3.forceY(h / 2).strength(0.15));
+                simulation.alpha(0.3).restart();
+            }
+        };
+        window.addEventListener('resize', resizeHandler);
+
         // Render Links
         linkElements = d3.select(svgLayer).selectAll("path")
             .data(links)
@@ -337,6 +603,8 @@ document.addEventListener("DOMContentLoaded", () => {
             .on("mouseleave", hideRichHoverCard)
             .on("click", (event, d) => {
                 if (d.id === 'Root') return;
+                const saveClickedNode = window.saveClickedNode || (() => {});
+                saveClickedNode(d);
                 window.location.href = `${d.slug}.html`;
             });
 
@@ -432,18 +700,18 @@ document.addEventListener("DOMContentLoaded", () => {
                 nodeElements.transition().duration(200)
                     .style("opacity", d => {
                         if (category === 'all' || d.id === 'Root') return 1;
-                        return d.group.toLowerCase().includes(category) ? 1 : 0.15;
+                        return isCategoryMatch(d.group, category) ? 1 : 0.15;
                     })
                     .style("pointer-events", d => {
                         if (category === 'all' || d.id === 'Root') return "auto";
-                        return d.group.toLowerCase().includes(category) ? "auto" : "none";
+                        return isCategoryMatch(d.group, category) ? "auto" : "none";
                     });
 
                 // Stagger fade links
                 linkElements.transition().duration(200)
                     .style("opacity", d => {
                         if (category === 'all') return 0.6;
-                        return d.target.group.toLowerCase().includes(category) ? 0.6 : 0.05;
+                        return isCategoryMatch(d.target.group, category) ? 0.6 : 0.05;
                     });
             };
         });
