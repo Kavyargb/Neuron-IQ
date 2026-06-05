@@ -12,7 +12,7 @@
 </head>
 <body>
     <div id="void"></div>
-    <div id="brand">Neuron-IQ</div>
+    <div id="brand" class="text-gradient">Neuron-IQ</div>
     
     <div id="top-right-nav">
         <a href="#" id="global-search-trigger" style="margin-right: 25px;">
@@ -23,11 +23,11 @@
 
     <!-- Main Landing / Search Panel -->
     <div id="landing-container">
-        <h1 id="hero-text">What will you illuminate today?</h1>
+        <h1 id="hero-text" class="text-gradient">What will you illuminate today?</h1>
         <div id="search-wrapper">
             <span id="typewriter"></span>
-            <input type="text" id="search-bar" aria-label="Search the knowledge database" autocomplete="off" spellcheck="false">
-            <div id="landing-autocomplete" class="landing-autocomplete-dropdown" style="display: none;"></div>
+            <input type="text" id="search-bar" aria-label="Search the knowledge database" autocomplete="off" spellcheck="false" class="glass-panel">
+            <div id="landing-autocomplete" class="landing-autocomplete-dropdown glass-panel" style="display: none;"></div>
         </div>
         <div id="loading-dots">
             <div class="dot blue"></div>
@@ -39,13 +39,13 @@
     </div>
 
     <!-- Interactive Node Graph Container -->
-    <div id="graph-container">
+    <div id="graph-container" >
         <svg id="svg-layer"></svg>
         <div id="nodes-layer"></div>
     </div>
 
     <!-- Graph Controls Panel (Zoom and Category Filters) -->
-    <div id="graph-controls" style="display: none;">
+    <div id="graph-controls" style="display: none;" class="glass-panel">
         <button id="zoom-in" class="ctrl-btn" title="Zoom In">+</button>
         <button id="zoom-out" class="ctrl-btn" title="Zoom Out">−</button>
         <button id="zoom-reset" class="ctrl-btn" title="Reset Zoom">⊙</button>
@@ -57,7 +57,7 @@
     </div>
 
     <!-- Search Matches Drawer -->
-    <div id="plausibility-panel">
+    <div id="plausibility-panel" class="glass-panel">
         <div class="panel-header">
             <h3>Relevant Concept Matches</h3>
             <div id="median-badge">Relevance: <span id="median-val">0%</span></div>

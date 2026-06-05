@@ -1,478 +1,150 @@
 @import 'shared.css';
 
-body { 
-    background-color: var(--bg-void); 
-    color: var(--text-main); 
-    overflow: hidden; 
-    height: 100vh; 
-    width: 100vw; 
-    -webkit-font-smoothing: antialiased;
-}
+body { overflow: hidden; height: 100vh; width: 100vw; }
 
-/* --- The Void (Upgraded Canvas with Grid) --- */
+/* --- Background Void --- */
 #void {
-    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    /* Layered background: Deep radial glow + subtle dot grid */
+    position: absolute; inset: 0;
     background: 
         radial-gradient(circle at 50% -20%, rgba(30, 41, 59, 0.8) 0%, transparent 60%),
         radial-gradient(circle at 50% 50%, var(--bg-void) 0%, #000000 100%),
         linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
         linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
     background-size: 100% 100%, 100% 100%, 30px 30px, 30px 30px;
-    z-index: 0; 
-    transition: filter 0.8s ease;
+    z-index: 0; transition: filter 0.8s ease;
 }
 
 #brand {
-    position: absolute; top: 35px; left: 45px; 
-    font-size: 1.25rem; font-weight: 700;
-    color: #ffffff; z-index: 10; letter-spacing: -0.5px;
-    text-transform: uppercase;
-    background: linear-gradient(to right, #fff, #64748b);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    position: absolute; top: 35px; left: 45px; font-size: 1.25rem; font-weight: 700;
+    z-index: 10; letter-spacing: -0.5px; text-transform: uppercase;
 }
 
-#top-right-nav {
-    position: absolute; top: 35px; right: 45px; z-index: 10;
-}
-#top-right-nav a {
-    color: var(--text-muted); text-decoration: none; font-size: 0.9rem; font-weight: 600;
-    text-transform: uppercase; letter-spacing: 1px; transition: color 0.3s;
-    display: inline-flex;
-    align-items: center;
-}
-#top-right-nav a:hover {
-    color: white;
-}
+#top-right-nav { position: absolute; top: 35px; right: 45px; z-index: 10; display: flex; gap: 25px; }
+#top-right-nav a { color: var(--text-muted); text-decoration: none; font-size: 0.9rem; font-weight: 600; text-transform: uppercase; transition: 0.3s; }
+#top-right-nav a:hover { color: white; }
 
 /* --- Landing Interface --- */
 #landing-container {
     position: absolute; top: 48%; left: 50%; transform: translate(-50%, -50%);
-    z-index: 10; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%;
+    z-index: 10; width: 100%; display: flex; flex-direction: column; align-items: center;
     transition: opacity 0.5s ease, transform 0.5s ease;
-}
-
-#search-wrapper { 
-    position: relative; display: flex; align-items: center; justify-content: center; margin-bottom: 25px; 
-    transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-/* Premium Glassmorphic Search Bar */
-#search-bar {
-    background: rgba(255, 255, 255, 0.03); 
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.05); 
-    color: white; 
-    font-size: 1.15rem;
-    font-weight: 400;
-    padding: 20px 45px; 
-    border-radius: 60px; 
-    width: 550px; 
-    max-width: 90vw; 
-    text-align: left;
-    outline: none; 
-    transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
-}
-
-#search-bar:focus { 
-    border-color: rgba(255, 255, 255, 0.3); 
-    box-shadow: 0 0 50px rgba(255, 255, 255, 0.08), inset 0 0 15px rgba(255, 255, 255, 0.02); 
-    background: rgba(255, 255, 255, 0.05);
-    transform: translateY(-2px);
-}
-
-#typewriter { 
-    position: absolute; 
-    left: 45px; 
-    color: rgba(255,255,255,0.3); 
-    font-size: 1.15rem; 
-    pointer-events: none; 
-    transition: opacity 0.2s ease;
-    white-space: nowrap; 
-    z-index: 5;
-}
-
-#typewriter::after {
-    content: ''; display: inline-block; width: 2px; height: 1.2rem;
-    background-color: var(--color-cs); margin-left: 4px; vertical-align: middle;
-    animation: blink 1s step-end infinite;
-}
-@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
-
-#enter-hint { 
-    color: rgba(255,255,255,0.3); font-size: 0.75rem; font-weight: 600; letter-spacing: 3px; 
-    text-transform: uppercase; opacity: 0; transition: opacity 0.3s; margin-top: 15px;
-}
-
-#loading-dots { display: flex; gap: 8px; opacity: 1; transition: opacity 0.5s; margin-top: 15px;}
-.dot { width: 6px; height: 6px; border-radius: 50%; box-shadow: 0 0 12px currentColor;}
-.dot.blue { background: var(--color-physics); color: var(--color-physics);}
-.dot.green { background: var(--color-science); color: var(--color-science);}
-.dot.red { background: var(--color-math); color: var(--color-math);}
-.dot.yellow { background: var(--color-cs); color: var(--color-cs);}
-
-/* Morph Animation into Root Node */
-#search-bar.node-zero {
-    width: 14px; height: 14px; padding: 0; border-radius: 50%; color: transparent; font-size: 0;
-    background: var(--color-root); border: 2px solid var(--bg-void); 
-    box-shadow: 0 0 20px var(--color-root), 0 0 40px var(--color-root);
-    transform: scale(1); pointer-events: none;
-}
-
-/* --- Neural Tree Graph --- */
-#graph-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 5; pointer-events: auto; }
-#svg-layer { width: 100%; height: 100%; position: absolute; top: 0; left: 0; filter: drop-shadow(0 0 6px rgba(255,255,255,0.15)); }
-
-/* Glowing Neural Signal Pulse lines */
-@keyframes neural-pulse {
-    from {
-        stroke-dashoffset: 20;
-    }
-    to {
-        stroke-dashoffset: 0;
-    }
-}
-.path-line { 
-    fill: none; 
-    stroke-width: 2px; 
-    opacity: 0.6; 
-    transition: opacity 0.3s, stroke 0.3s;
-}
-.path-line.pulsing {
-    animation: neural-pulse 1.5s linear infinite;
-}
-.path-line.internal-link {
-    opacity: 0.25;
-    transition: opacity 0.3s, stroke 0.3s;
-}
-
-#nodes-layer { width: 100%; height: 100%; position: absolute; }
-
-/* Glowing Force-Directed Orb Nodes */
-.node {
-    position: absolute; 
-    width: 14px; 
-    height: 14px; 
-    border-radius: 50%;
-    transform: translate(-50%, -50%); 
-    transition: opacity 0.3s, transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s;
-    pointer-events: auto; 
-    cursor: pointer; 
-    border: 2px solid rgba(0,0,0,0.8); 
-    box-shadow: inset 0 0 4px #fff, 0 0 15px currentColor;
-    z-index: 10;
-}
-
-.node.root-node {
-    width: 22px;
-    height: 22px;
-    box-shadow: 0 0 35px var(--color-root), 0 0 15px #ffffff, inset 0 0 6px #fff;
-    border-color: #000000;
-}
-
-.node-label {
-    position: absolute; top: -38px; left: 50%; transform: translateX(-50%);
-    font-size: 0.8rem; font-weight: 600; color: var(--text-muted); white-space: nowrap; 
-    pointer-events: none; 
-    opacity: 0; /* Hide by default */
-    transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s;
-    background: rgba(15, 23, 42, 0.85); padding: 5px 12px; border-radius: 6px;
-    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-}
-
-/* Ensure query node label is always visible for context */
-.node.root-node .node-label {
-    opacity: 1;
-}
-
-.node-label.bottom { top: auto; bottom: -38px; }
-.node:hover .node-label { 
-    opacity: 1; /* Fade in on hover */
-    color: white; 
-    border-color: rgba(255,255,255,0.25); 
-    transform: translate(-50%, -3px); 
-}
-
-/* Cinematic Focus/Dimming effect on Graph hover */
-#graph-container:has(.node:hover) .path-line { opacity: 0.08 !important; }
-#graph-container:has(.node:hover) .node { opacity: 0.15 !important; }
-#graph-container .node:hover {
-    opacity: 1 !important; 
-    transform: translate(-50%, -50%) scale(1.6);
-    box-shadow: inset 0 0 6px #fff, 0 0 30px currentColor; 
-    z-index: 25;
-}
-
-/* --- Floating Graph Control Panel --- */
-#graph-controls {
-    position: absolute;
-    bottom: 45px;
-    left: 45px;
-    background: var(--panel-bg);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 40px;
-    padding: 8px 24px;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    z-index: 15;
-    box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.05);
-    animation: slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-.ctrl-btn {
-    background: transparent;
-    border: none;
-    color: var(--text-main);
-    font-size: 1.25rem;
-    font-weight: 500;
-    cursor: pointer;
-    width: 32px;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    transition: background 0.2s, transform 0.1s, color 0.2s;
-}
-.ctrl-btn:hover {
-    background: rgba(255, 255, 255, 0.08);
-    color: white;
-    transform: scale(1.1);
-}
-.ctrl-btn:active {
-    transform: scale(0.95);
-}
-
-.control-divider {
-    width: 1px;
-    height: 20px;
-    background: rgba(255, 255, 255, 0.12);
-}
-
-.filter-btn {
-    background: transparent;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    color: var(--text-muted);
-    padding: 6px 16px;
-    border-radius: 20px;
-    font-size: 0.75rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-.filter-btn:hover {
-    border-color: rgba(255, 255, 255, 0.2);
-    color: white;
-}
-.filter-btn.active {
-    background: rgba(255, 255, 255, 0.08);
-    color: white;
-    border-color: rgba(255, 255, 255, 0.25);
-    box-shadow: 0 0 15px rgba(255, 255, 255, 0.05);
-}
-
-/* --- Plausibility Panel --- */
-#plausibility-panel {
-    position: absolute; top: 0; right: -450px; width: 420px; height: 100%;
-    background: var(--panel-bg); backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px);
-    border-left: 1px solid rgba(255,255,255,0.05); padding: 50px 35px;
-    z-index: 20; transition: right 0.7s cubic-bezier(0.16, 1, 0.3, 1);
-    overflow-y: auto; pointer-events: auto;
-    box-shadow: -20px 0 60px rgba(0,0,0,0.8);
-}
-
-.panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; }
-.panel-header h3 { font-size: 1.15rem; font-weight: 600; color: white; letter-spacing: -0.5px;}
-
-#median-badge {
-    background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1);
-    color: var(--text-main); padding: 6px 12px; border-radius: 8px; font-size: 0.75rem; font-weight: 600;
-}
-
-/* Beautiful Staggered Cards */
-.card {
-    background: linear-gradient(145deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%);
-    border: 1px solid rgba(255,255,255,0.05);
-    padding: 24px; margin-bottom: 16px; border-radius: 16px; cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-    position: relative; overflow: hidden; opacity: 0;
-    animation: slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-.card:hover { 
-    transform: translateY(-4px) scale(1.02); 
-    border-color: rgba(255,255,255,0.15); 
-    background: linear-gradient(145deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%);
-    box-shadow: 0 15px 35px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-}
-
-.card-dist { font-size: 0.7rem; font-weight: 700; letter-spacing: 1.5px; margin-bottom: 12px; text-transform: uppercase;}
-.card-title { font-size: 1.2rem; font-weight: 500; color: white; letter-spacing: -0.3px;}
-
-@keyframes slideUpFade {
-    0% { opacity: 0; transform: translateY(30px); }
-    100% { opacity: 1; transform: translateY(0); }
 }
 
 #hero-text {
-    font-size: 3.2rem;
-    font-weight: 700;
-    letter-spacing: -1.5px;
-    margin-bottom: 40px;
-    text-align: center;
-    background: linear-gradient(135deg, #ffffff 20%, #94a3b8 60%, #60a5fa 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    font-size: 3.2rem; font-weight: 700; letter-spacing: -1.5px; margin-bottom: 40px; text-align: center;
     filter: drop-shadow(0px 4px 30px rgba(96, 165, 250, 0.25));
-    opacity: 0;
-    transform: translateY(20px);
-    animation: heroFadeIn 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    transition: opacity 0.5s ease, transform 0.5s ease;
+    opacity: 0; transform: translateY(20px); animation: slideUpFade 1.2s forwards; transition: 0.5s ease;
+}
+@media (max-width: 768px) { #hero-text { font-size: 2.2rem; padding: 0 20px; } }
+
+#search-wrapper { position: relative; margin-bottom: 25px; transition: all 0.5s ease; display: flex; justify-content: center; align-items: center;}
+
+#search-bar {
+    width: 550px; max-width: 90vw; padding: 20px 45px; border-radius: 60px;
+    font-size: 1.15rem; color: white; outline: none; transition: 0.4s ease;
+} /* Assumes .glass-panel applied via JS or HTML */
+
+#search-bar:focus {
+    border-color: rgba(255,255,255,0.3); background: rgba(255,255,255,0.05);
+    box-shadow: 0 0 50px rgba(255,255,255,0.08), inset 0 0 15px rgba(255,255,255,0.02);
+    transform: translateY(-2px);
 }
 
-@keyframes heroFadeIn {
-    0% { opacity: 0; transform: translateY(20px); }
-    100% { opacity: 1; transform: translateY(0); }
+#search-bar.node-zero {
+    width: 14px; height: 14px; padding: 0; border-radius: 50%; font-size: 0;
+    background: var(--color-root); border: 2px solid var(--bg-void); 
+    box-shadow: 0 0 20px var(--color-root), 0 0 40px var(--color-root); pointer-events: none;
 }
 
-@media (max-width: 768px) {
-    #hero-text {
-        font-size: 2.2rem;
-        padding: 0 20px;
-    }
-}
+#typewriter { position: absolute; left: 45px; color: rgba(255,255,255,0.3); font-size: 1.15rem; pointer-events: none; white-space: nowrap; z-index: 5;}
+#typewriter::after { content: ''; display: inline-block; width: 2px; height: 1.2rem; background: var(--color-cs); margin-left: 4px; animation: blink 1s step-end infinite; }
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
-/* Glassmorphic Autocomplete Dropdown */
+#enter-hint { color: rgba(255,255,255,0.3); font-size: 0.75rem; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; opacity: 0; transition: 0.3s; margin-top: 15px; }
+
+#loading-dots { display: flex; gap: 8px; transition: 0.5s; margin-top: 15px; }
+.dot { width: 6px; height: 6px; border-radius: 50%; box-shadow: 0 0 12px currentColor; }
+.dot.blue { background: var(--color-physics); color: var(--color-physics); }
+.dot.green { background: var(--color-science); color: var(--color-science); }
+.dot.red { background: var(--color-math); color: var(--color-math); }
+.dot.yellow { background: var(--color-cs); color: var(--color-cs); }
+
+/* Landing Autocomplete Dropdown */
 .landing-autocomplete-dropdown {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    width: 100%;
-    margin-top: 12px;
-    background: rgba(15, 23, 42, 0.85);
-    backdrop-filter: blur(30px);
-    -webkit-backdrop-filter: blur(30px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 20px;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.05);
-    z-index: 1000;
-    overflow: hidden;
-    padding: 10px;
-    max-height: 350px;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    transition: opacity 0.2s, transform 0.2s;
-    text-align: left;
-}
+    position: absolute; top: 100%; left: 0; width: 100%; margin-top: 12px;
+    border-radius: 20px; z-index: 1000; padding: 10px;
+    max-height: 350px; overflow-y: auto; display: flex; flex-direction: column; gap: 4px;
+} /* Uses .glass-panel */
 
-.autocomplete-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px 18px;
-    border-radius: 12px;
-    text-decoration: none;
-    color: var(--text-main);
-    transition: all 0.2s ease;
-    cursor: pointer;
-    border: 1px solid transparent;
-}
+.history-section-title { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-muted); padding: 8px 12px; border-bottom: 1px solid var(--glass-border); display: flex; align-items: center; gap: 6px; }
 
-.autocomplete-item:hover, .autocomplete-item.focused {
-    background: rgba(255, 255, 255, 0.04);
-    border-color: rgba(255, 255, 255, 0.08);
-    transform: translateX(4px);
-}
+/* --- Neural Tree Graph Elements --- */
+#graph-container { position: absolute; inset: 0; z-index: 5; pointer-events: auto; }
+#svg-layer, #nodes-layer { position: absolute; inset: 0; width: 100%; height: 100%; }
+#svg-layer { filter: drop-shadow(0 0 6px rgba(255,255,255,0.15)); }
 
-.autocomplete-left {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
+@keyframes neural-pulse { from { stroke-dashoffset: 20; } to { stroke-dashoffset: 0; } }
+.path-line { fill: none; stroke-width: 2px; opacity: 0.6; transition: opacity 0.3s, stroke 0.3s; }
+.path-line.pulsing { animation: neural-pulse 1.5s linear infinite; }
+.path-line.internal-link { opacity: 0.25; }
 
-.autocomplete-title {
-    color: white;
-    font-size: 0.95rem;
-    font-weight: 500;
+.node {
+    position: absolute; transform: translate(-50%, -50%); border-radius: 50%;
+    border: 2px solid rgba(0,0,0,0.8); box-shadow: inset 0 0 4px #fff, 0 0 15px currentColor;
+    cursor: pointer; z-index: 10; transition: opacity 0.3s, transform 0.25s ease, box-shadow 0.3s;
 }
+.node.root-node { box-shadow: 0 0 35px var(--color-root), 0 0 15px #fff, inset 0 0 6px #fff; border-color: #000; }
 
-.autocomplete-category {
-    font-size: 0.65rem;
-    font-weight: 700;
-    border: 1px solid currentColor;
-    padding: 2px 8px;
-    border-radius: 20px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+.node-label {
+    position: absolute; top: -38px; left: 50%; transform: translateX(-50%);
+    font-size: 0.8rem; font-weight: 600; color: var(--text-muted); white-space: nowrap;
+    opacity: 0; pointer-events: none; transition: 0.25s ease;
+    background: rgba(15,23,42,0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    padding: 5px 12px; border-radius: 6px; border: 1px solid var(--glass-border);
 }
+.node.root-node .node-label { opacity: 1; }
+.node-label.bottom { top: auto; bottom: -38px; }
+.node:hover .node-label { opacity: 1; color: white; border-color: rgba(255,255,255,0.25); transform: translate(-50%, -3px); }
 
-.autocomplete-right {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
+/* Cinematic Focus/Dimming */
+#graph-container:has(.node:hover) .path-line { opacity: 0.08 !important; }
+#graph-container:has(.node:hover) .node { opacity: 0.15 !important; }
+#graph-container .node:hover { opacity: 1 !important; transform: translate(-50%, -50%) scale(1.6); box-shadow: inset 0 0 6px #fff, 0 0 30px currentColor; z-index: 25; }
 
-.autocomplete-badge {
-    font-size: 0.7rem;
-    color: var(--text-muted);
-    font-weight: 600;
-}
+/* --- Controls Panel --- */
+#graph-controls {
+    position: absolute; bottom: 45px; left: 45px; z-index: 15;
+    padding: 8px 24px; border-radius: 40px; display: flex; align-items: center; gap: 16px;
+    animation: slideUpFade 0.6s forwards;
+} /* Uses .glass-panel */
 
-.autocomplete-relevance {
-    font-size: 0.7rem;
-    font-weight: 700;
-    padding: 2px 8px;
-    border-radius: 6px;
-    background: rgba(96, 165, 250, 0.1);
-    color: var(--accent);
-}
+.ctrl-btn { background: transparent; border: none; color: white; font-size: 1.25rem; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; transition: 0.2s; }
+.ctrl-btn:hover { background: var(--glass-border); transform: scale(1.1); }
+.control-divider { width: 1px; height: 20px; background: rgba(255,255,255,0.12); }
 
-/* History List Styling */
-.history-section-title {
-    font-size: 0.7rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    color: var(--text-muted);
-    padding: 8px 12px 4px 12px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    margin-bottom: 6px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-}
+.filter-btn { background: transparent; border: 1px solid var(--glass-border); color: var(--text-muted); padding: 6px 16px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; cursor: pointer; transition: 0.2s; }
+.filter-btn:hover { border-color: rgba(255,255,255,0.2); color: white; }
+.filter-btn.active { background: var(--glass-border); color: white; box-shadow: 0 0 15px rgba(255,255,255,0.05); }
 
-.history-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 10px 18px;
-    border-radius: 12px;
-    color: var(--text-muted);
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: all 0.2s;
-    text-decoration: none;
-}
+/* --- Plausibility Sidebar --- */
+#plausibility-panel {
+    position: absolute; top: 0; right: -450px; width: 420px; height: 100%;
+    padding: 50px 35px; z-index: 20; overflow-y: auto; pointer-events: auto;
+    transition: right 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+} /* Uses .glass-panel */
 
-.history-item:hover, .history-item.focused {
-    background: rgba(255, 255, 255, 0.03);
-    color: white;
-    transform: translateX(4px);
-}
+.panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; }
+.panel-header h3 { font-size: 1.15rem; font-weight: 600; color: white; }
+#median-badge { background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); padding: 6px 12px; border-radius: 8px; font-size: 0.75rem; font-weight: 600; }
 
-.history-icon {
-    opacity: 0.5;
-    flex-shrink: 0;
+.card {
+    display: block; text-decoration: none; padding: 24px; margin-bottom: 16px; border-radius: 16px;
+    background: linear-gradient(145deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%);
+    border: 1px solid var(--glass-border); box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    opacity: 0; animation: slideUpFade 0.6s forwards; transition: 0.3s ease;
 }
+.card:hover { transform: translateY(-4px) scale(1.02); background: linear-gradient(145deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%); box-shadow: 0 15px 35px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1); }
+.card-dist { font-size: 0.7rem; font-weight: 700; letter-spacing: 1.5px; margin-bottom: 12px; text-transform: uppercase; }
+.card-title { font-size: 1.2rem; font-weight: 500; color: white; }
+
+@keyframes slideUpFade { 0% { opacity: 0; transform: translateY(30px); } 100% { opacity: 1; transform: translateY(0); } }
