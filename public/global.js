@@ -334,6 +334,9 @@ function setupSearchModalLogic() {
         }
 
         let results = fuse.search(query);
+        if (query.trim().length <= 3) {
+            results = results.filter(r => getCustomSearchScore(r.item, query) > 0);
+        }
         results.sort((a, b) => {
             const scoreA = getCustomSearchScore(a.item, query);
             const scoreB = getCustomSearchScore(b.item, query);
@@ -562,10 +565,10 @@ function getCustomSearchScore(item, query) {
     if (cat.startsWith(q)) return 500;
     
     // Tier 9: Substring match in name
-    if (name.includes(q)) return 400;
+    if (q.length > 3 && name.includes(q)) return 400;
     
     // Tier 10: Substring match in section titles
-    if (item.sectionTitles && item.sectionTitles.some(title => title.toLowerCase().includes(q))) {
+    if (q.length > 3 && item.sectionTitles && item.sectionTitles.some(title => title.toLowerCase().includes(q))) {
         return 300;
     }
     

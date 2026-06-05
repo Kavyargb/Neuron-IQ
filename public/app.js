@@ -187,6 +187,9 @@ document.addEventListener("DOMContentLoaded", () => {
         const highlightMatch = window.highlightMatch || ((text, q) => text);
 
         let results = landingFuse.search(query);
+        if (query.trim().length <= 3) {
+            results = results.filter(r => getCustomSearchScore(r.item, query) > 0);
+        }
         results.sort((a, b) => {
             const scoreA = getCustomSearchScore(a.item, query);
             const scoreB = getCustomSearchScore(b.item, query);
@@ -417,7 +420,7 @@ document.addEventListener("DOMContentLoaded", () => {
         };
 
         const fuse = new Fuse(allNodesArray, fuseOptions);
-        const searchResults = fuse.search(query);
+        let searchResults = fuse.search(query);
         
         const getCustomSearchScore = window.getCustomSearchScore || ((item, q) => {
             if (!item || !item.name) return 0;
@@ -431,9 +434,17 @@ document.addEventListener("DOMContentLoaded", () => {
             const cat = item.category ? item.category.toLowerCase() : '';
             if (cat === queryLower) return 600;
             if (cat.startsWith(queryLower)) return 500;
-            if (name.includes(queryLower)) return 400;
+            if (queryLower.length > 3 && name.includes(queryLower)) return 400;
             return 0;
         });
+
+        // Filter out false positive category/content matches for short acronyms/queries
+        if (query.trim().length <= 3) {
+            searchResults = searchResults.filter(r => {
+                const customScore = getCustomSearchScore(r.item, query);
+                return customScore > 0;
+            });
+        }
         
         const getRelevanceScore = window.getRelevanceScore || ((item, q, fuseScore) => {
             const customScore = getCustomSearchScore(item, q);
@@ -506,7 +517,8 @@ document.addEventListener("DOMContentLoaded", () => {
             group: n.category,
             distance: n.distance,
             slug: n.slug,
-            searchContent: n.searchContent
+            searchContent: n.searchContent,
+            internalLinks: n.internalLinks
         }));
 
         // Add Query Center Hub
@@ -519,30 +531,85 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Build D3 Links
         const links = [];
+        
+        // 1. Parent-child links
         nodesData.forEach(n => {
             const hasParentInSet = nodes.some(node => node.id === n.parent);
             const sourceId = (n.parent && hasParentInSet) ? n.parent : 'Root';
             links.push({
                 source: sourceId,
-                target: n.name
+                target: n.name,
+                isInternal: false
             });
+        });
+
+        // 2. Internal page-to-page links (Obsidian style)
+        nodesData.forEach(n => {
+            if (n.internalLinks) {
+                n.internalLinks.forEach(targetName => {
+                    const targetExists = nodes.some(node => node.id === targetName);
+                    if (targetExists) {
+                        const linkExists = links.some(l => 
+                            (l.source === n.name && l.target === targetName) || 
+                            (l.source === targetName && l.target === n.name)
+                        );
+                        if (!linkExists) {
+                            links.push({
+                                source: n.name,
+                                target: targetName,
+                                isInternal: true
+                            });
+                        }
+                    }
+                });
+            }
+        });
+
+        // Calculate connection count, dynamic radius, and inertia mass for each node
+        nodes.forEach(node => {
+            const connectedLinks = links.filter(l => l.source === node.id || l.target === node.id);
+            node.linkCount = connectedLinks.length;
+            if (node.id === 'Root') {
+                node.radius = 20;
+                node.mass = 20; // Massive hub
+            } else {
+                // Formula: more links -> bigger; more distance -> smaller
+                node.radius = Math.max(6, Math.min(30, 10 + 2 * node.linkCount - 1.5 * node.distance));
+                node.mass = node.radius; // Mass represents physical inertia
+            }
         });
 
         // D3 Physics Simulation
         const width = window.innerWidth;
         const height = window.innerHeight;
 
+        // Position Query / Root Node statically at the center
+        const rootNode = nodes.find(d => d.id === 'Root');
+        if (rootNode) {
+            rootNode.fx = width / 2;
+            rootNode.fy = height / 2;
+        }
+
+        // Position pillars (distance 1) statically on symmetric circle using roots of unity
+        const pillars = nodes.filter(d => d.distance === 1);
+        const nPillars = pillars.length;
+        const R1 = 180; // Radius for pillars
+        pillars.forEach((d, index) => {
+            const angle = (2 * Math.PI * index) / nPillars;
+            d.fx = (width / 2) + R1 * Math.cos(angle);
+            d.fy = (height / 2) + R1 * Math.sin(angle);
+        });
+
         simulation = d3.forceSimulation(nodes)
-            .force("link", d3.forceLink(links).id(d => d.id).distance(140))
-            .force("charge", d3.forceManyBody().strength(-400))
+            .force("link", d3.forceLink(links).id(d => d.id).distance(d => d.isInternal ? 160 : 120).strength(1))
+            .force("charge", d3.forceManyBody().strength(-10))
             .force("center", d3.forceCenter(width / 2, height / 2))
-            .force("collision", d3.forceCollide().radius(50))
-            // Hierarchical X Positioning constraint based on depth distance
-            .force("x", d3.forceX(d => {
-                if (d.id === 'Root') return width * 0.15;
-                return (width * 0.15) + (d.distance * 220);
-            }).strength(1.2))
-            .force("y", d3.forceY(height / 2).strength(0.15));
+            .force("collision", d3.forceCollide().radius(d => d.radius + 15))
+            .force("radial", d3.forceRadial(d => {
+                if (d.id === 'Root') return 0;
+                if (d.distance === 1) return R1;
+                return R1 + (d.distance - 1) * 150;
+            }, width / 2, height / 2).strength(0.8));
 
         if (resizeHandler) {
             window.removeEventListener('resize', resizeHandler);
@@ -552,11 +619,26 @@ document.addEventListener("DOMContentLoaded", () => {
             const h = window.innerHeight;
             if (simulation) {
                 simulation.force("center", d3.forceCenter(w / 2, h / 2));
-                simulation.force("x", d3.forceX(d => {
-                    if (d.id === 'Root') return w * 0.15;
-                    return (w * 0.15) + (d.distance * 220);
-                }).strength(1.2));
-                simulation.force("y", d3.forceY(h / 2).strength(0.15));
+                simulation.force("radial", d3.forceRadial(d => {
+                    if (d.id === 'Root') return 0;
+                    if (d.distance === 1) return R1;
+                    return R1 + (d.distance - 1) * 150;
+                }, w / 2, h / 2).strength(0.8));
+
+                const rNode = nodes.find(node => node.id === 'Root');
+                if (rNode) {
+                    rNode.fx = w / 2;
+                    rNode.fy = h / 2;
+                }
+
+                const pNodes = nodes.filter(node => node.distance === 1);
+                const nPils = pNodes.length;
+                pNodes.forEach((node, index) => {
+                    const angle = (2 * Math.PI * index) / nPils;
+                    node.fx = (w / 2) + R1 * Math.cos(angle);
+                    node.fy = (h / 2) + R1 * Math.sin(angle);
+                });
+
                 simulation.alpha(0.3).restart();
             }
         };
@@ -566,12 +648,12 @@ document.addEventListener("DOMContentLoaded", () => {
         linkElements = d3.select(svgLayer).selectAll("path")
             .data(links)
             .join("path")
-            .attr("class", "path-line pulsing")
-            .style("stroke", d => getCategoryColor(d.target.group))
-            .style("stroke-width", "2px")
-            .style("stroke-dasharray", "8 12");
+            .attr("class", d => d.isInternal ? "path-line internal-link" : "path-line pulsing")
+            .style("stroke", d => d.isInternal ? "rgba(255, 255, 255, 0.12)" : getCategoryColor(d.target.group))
+            .style("stroke-width", d => d.isInternal ? "1px" : "2px")
+            .style("stroke-dasharray", d => d.isInternal ? "3 4" : "8 12");
 
-        // Render Nodes
+        // Render Nodes with Dynamic Sizing
         nodeElements = d3.select(nodesLayer).selectAll(".node")
             .data(nodes)
             .join("a")
@@ -579,6 +661,8 @@ document.addEventListener("DOMContentLoaded", () => {
             .attr("class", d => `node ${d.id === 'Root' ? 'root-node' : ''}`)
             .style("background-color", d => getCategoryColor(d.group))
             .style("color", d => getCategoryColor(d.group))
+            .style("width", d => `${d.radius * 2}px`)
+            .style("height", d => `${d.radius * 2}px`)
             .call(drag(simulation));
 
         // Render node labels inside nodes
@@ -608,8 +692,18 @@ document.addEventListener("DOMContentLoaded", () => {
                 window.location.href = `${d.slug}.html`;
             });
 
-        // Simulation Update on Physics Tick
+        // Simulation Update on Physics Tick with Inertia
         simulation.on("tick", () => {
+            // Apply Newtonian Inertia: scale down velocity updates for heavy nodes
+            nodes.forEach(d => {
+                if (d.fx === null) {
+                    d.x += d.vx * (1 / d.mass - 1);
+                    d.y += d.vy * (1 / d.mass - 1);
+                    d.vx /= d.mass;
+                    d.vy /= d.mass;
+                }
+            });
+
             linkElements.attr("d", d => {
                 const x1 = d.source.x;
                 const y1 = d.source.y;
@@ -676,8 +770,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
         function dragended(event, d) {
             if (!event.active) simulation.alphaTarget(0);
-            d.fx = null;
-            d.fy = null;
+            // Protect static centers (Root and pillars) from being released
+            if (d.id !== 'Root' && d.distance !== 1) {
+                d.fx = null;
+                d.fy = null;
+            }
         }
 
         return d3.drag()

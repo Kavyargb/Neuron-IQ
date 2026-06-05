@@ -167,6 +167,10 @@ body {
 .path-line.pulsing {
     animation: neural-pulse 1.5s linear infinite;
 }
+.path-line.internal-link {
+    opacity: 0.25;
+    transition: opacity 0.3s, stroke 0.3s;
+}
 
 #nodes-layer { width: 100%; height: 100%; position: absolute; }
 
@@ -195,14 +199,26 @@ body {
 .node-label {
     position: absolute; top: -38px; left: 50%; transform: translateX(-50%);
     font-size: 0.8rem; font-weight: 600; color: var(--text-muted); white-space: nowrap; 
-    pointer-events: none; transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    pointer-events: none; 
+    opacity: 0; /* Hide by default */
+    transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s;
     background: rgba(15, 23, 42, 0.85); padding: 5px 12px; border-radius: 6px;
     backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
     border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 4px 15px rgba(0,0,0,0.4);
 }
 
+/* Ensure query node label is always visible for context */
+.node.root-node .node-label {
+    opacity: 1;
+}
+
 .node-label.bottom { top: auto; bottom: -38px; }
-.node:hover .node-label { color: white; border-color: rgba(255,255,255,0.25); transform: translate(-50%, -3px); }
+.node:hover .node-label { 
+    opacity: 1; /* Fade in on hover */
+    color: white; 
+    border-color: rgba(255,255,255,0.25); 
+    transform: translate(-50%, -3px); 
+}
 
 /* Cinematic Focus/Dimming effect on Graph hover */
 #graph-container:has(.node:hover) .path-line { opacity: 0.08 !important; }

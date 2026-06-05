@@ -65,8 +65,20 @@ async function buildGraph() {
         const sections = extractSections();
         const slug = slugify(metadata.name);
         
-        const cleanHTML = (html) => html ? html.replace(/<[^>]+>/g, '').replace(/\n/g, ' ').trim() : '';
-        const searchContent = sections.map(sec => cleanHTML(sec.contentHTML)).join(" ");
+        const cleanMarkdown = (text) => {
+            if (!text) return '';
+            return text
+                .replace(/<[^>]+>/g, '')
+                .replace(/\$\$/g, '')
+                .replace(/\$/g, '')
+                .replace(/\*\*|__/g, '')
+                .replace(/\*|_/g, '')
+                .replace(/\[([^\]]+)\]\([^\)]+\)/g, '$1')
+                .replace(/\n/g, ' ')
+                .replace(/\s\s+/g, ' ')
+                .trim();
+        };
+        const searchContent = sections.map(sec => cleanMarkdown(sec.rawContent)).join(" ");
 
         const nodeData = {
             ...metadata,
@@ -83,6 +95,19 @@ async function buildGraph() {
         // Group by category for sitemap
         if (!categoriesMap[metadata.category]) categoriesMap[metadata.category] = [];
         categoriesMap[metadata.category].push(nodeData);
+    });
+
+    // --- PHASE 1.5: Compile Internal Links (Cross-node page connections) ---
+    nodesList.forEach(sourceNode => {
+        sourceNode.internalLinks = [];
+        nodesList.forEach(targetNode => {
+            if (sourceNode.name === targetNode.name) return;
+            const termEscaped = targetNode.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            const regex = new RegExp(`\\b${termEscaped}\\b`, 'i');
+            if (regex.test(sourceNode.searchContent)) {
+                sourceNode.internalLinks.push(targetNode.name);
+            }
+        });
     });
 
     // --- PHASE 2: Generate HTML Pages with Lineage Trace ---
