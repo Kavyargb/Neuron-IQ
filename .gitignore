@@ -1,2 +1,11 @@
 node_modules/
-content/
+content/.obsidian
+content/_templates
+public/*
+!public/app.js
+!public/global.js
+!public/page.css
+!public/style.css
+!public/sitemap.html
+!public/index.html
+!public/images
