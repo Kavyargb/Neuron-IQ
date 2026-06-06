@@ -1,7 +1,27 @@
 /**
  * Neuron-IQ Homepage & Graph Engine
  */
-document.addEventListener("DOMContentLoaded", () => {
+
+window.cleanupHomePage = function() {
+    if (window.typewriterTimeout) {
+        clearTimeout(window.typewriterTimeout);
+        window.typewriterTimeout = null;
+    }
+    if (window.graphSimulation) {
+        window.graphSimulation.stop();
+        window.graphSimulation = null;
+    }
+    const hoverCard = document.querySelector(".wiki-popover");
+    if (hoverCard) {
+        hoverCard.classList.remove("show");
+        hoverCard.style.display = "none";
+    }
+};
+
+window.initHomePage = function() {
+    // Prevent multiple parallel simulations or timers
+    window.cleanupHomePage();
+
     const utils = window.NeuronUtils;
 
     // --- DOM Elements ---
@@ -17,6 +37,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const panel = document.getElementById('plausibility-panel');
     const cardsContainer = document.getElementById('cards-container');
     
+    if (!searchBar) return; // Guard clause if DOM not loaded or wrong page
+
     // --- Typewriter Animation ---
     const queries = ["Understand 'Quantum Superposition'", "Explore 'General Relativity'", "Learn about 'Neural Networks'", "Discover 'Eigenvectors'", "Dive into 'Thermodynamics'"];
     let queryIdx = 0, charIdx = 0, isDeleting = false;
@@ -29,7 +51,7 @@ document.addEventListener("DOMContentLoaded", () => {
         let typeSpeed = isDeleting ? 30 : 60 + Math.random() * 40;
         if (!isDeleting && charIdx === currentQuery.length) { typeSpeed = 2500; isDeleting = true; } 
         else if (isDeleting && charIdx === 0) { isDeleting = false; queryIdx = (queryIdx + 1) % queries.length; typeSpeed = 500; }
-        setTimeout(typeEffect, typeSpeed);
+        window.typewriterTimeout = setTimeout(typeEffect, typeSpeed);
     }
     typeEffect();
 
@@ -126,7 +148,7 @@ document.addEventListener("DOMContentLoaded", () => {
     hoverCard.addEventListener('mouseleave', hideRichHoverCard);
 
     // --- D3 Force Directed Graph Engine ---
-    let simulation = null, nodeElements = null, linkElements = null, resizeHandler = null;
+    let nodeElements = null, linkElements = null, resizeHandler = null;
 
     function triggerSearchAlgorithm(query) {
         if (!window.NeuronMap) return;
@@ -193,7 +215,7 @@ document.addEventListener("DOMContentLoaded", () => {
             d.fy = (height / 2) + R1 * Math.sin(angle);
         });
 
-        simulation = d3.forceSimulation(nodes)
+        window.graphSimulation = d3.forceSimulation(nodes)
             .force("link", d3.forceLink(links).id(d => d.id).distance(d => d.isInternal ? 160 : 120).strength(1))
             .force("charge", d3.forceManyBody().strength(-10))
             .force("center", d3.forceCenter(width / 2, height / 2))
@@ -213,9 +235,9 @@ document.addEventListener("DOMContentLoaded", () => {
             .style("color", d => utils.getCategoryColor(d.group))
             .style("width", d => `${d.radius * 2}px`)
             .style("height", d => `${d.radius * 2}px`)
-            .call(d3.drag().on("start", (e, d) => { if (!e.active) simulation.alphaTarget(0.3).restart(); d.fx = d.x; d.fy = d.y; })
+            .call(d3.drag().on("start", (e, d) => { if (!e.active && window.graphSimulation) window.graphSimulation.alphaTarget(0.3).restart(); d.fx = d.x; d.fy = d.y; })
                            .on("drag", (e, d) => { d.fx = e.x; d.fy = e.y; })
-                           .on("end", (e, d) => { if (!e.active) simulation.alphaTarget(0); if (d.id !== 'Root' && d.distance !== 1) { d.fx = null; d.fy = null; }}));
+                           .on("end", (e, d) => { if (!e.active && window.graphSimulation) window.graphSimulation.alphaTarget(0); if (d.id !== 'Root' && d.distance !== 1) { d.fx = null; d.fy = null; }}));
 
         nodeElements.each(function(d, idx) {
             const label = document.createElement('div');
@@ -226,9 +248,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
         nodeElements.on("mouseenter", (event, d) => { if (d.id !== 'Root') showRichHoverCard(event, d); })
                     .on("mouseleave", hideRichHoverCard)
-                    .on("click", (event, d) => { if (d.id !== 'Root') { utils.saveClickedNode(d); window.location.href = `${d.slug}.html`; }});
+                    .on("click", (event, d) => {
+                        if (d.id !== 'Root') {
+                            event.preventDefault();
+                            utils.saveClickedNode(d);
+                            if (window.navigateTo) {
+                                window.navigateTo(`${d.slug}.html`);
+                            } else {
+                                window.location.href = `${d.slug}.html`;
+                            }
+                        }
+                    });
 
-        simulation.on("tick", () => {
+        window.graphSimulation.on("tick", () => {
             nodes.forEach(d => { if (d.fx === null) { d.x += d.vx * (1 / d.mass - 1); d.y += d.vy * (1 / d.mass - 1); d.vx /= d.mass; d.vy /= d.mass; } });
             linkElements.attr("d", d => `M ${d.source.x} ${d.source.y} C ${d.source.x + Math.abs(d.target.x - d.source.x) * 0.5} ${d.source.y}, ${d.target.x - Math.abs(d.target.x - d.source.x) * 0.5} ${d.target.y}, ${d.target.x} ${d.target.y}`);
             nodeElements.style("left", d => `${d.x}px`).style("top", d => `${d.y}px`);
@@ -270,4 +302,16 @@ document.addEventListener("DOMContentLoaded", () => {
             panel.style.right = '0';
         }
     }
-});
+};
+
+if (document.readyState === 'loading') {
+    document.addEventListener("DOMContentLoaded", () => {
+        if (document.getElementById('landing-container')) {
+            window.initHomePage();
+        }
+    });
+} else {
+    if (document.getElementById('landing-container')) {
+        window.initHomePage();
+    }
+}

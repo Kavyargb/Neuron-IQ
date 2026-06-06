@@ -233,7 +233,7 @@ window.NeuronUtils = NeuronUtils;
 // GLOBAL PAGE INITIALIZATION LOGIC
 // ==============================================
 
-document.addEventListener("DOMContentLoaded", () => {
+window.initGlobalPage = function() {
     const map = window.NeuronMap;
     const currentNameElement = document.querySelector(".article-title");
     const currentName = currentNameElement ? currentNameElement.innerText : null;
@@ -247,7 +247,27 @@ document.addEventListener("DOMContentLoaded", () => {
     setupSearchModalLogic();
     setupKatexAutoRender();
     setupTOCScrollObserver();
-});
+
+    // Re-bind article smooth scrolling for TOC links centrally
+    const tocLinks = document.querySelectorAll(".toc-list a");
+    tocLinks.forEach(link => {
+        link.addEventListener("click", (e) => {
+            const href = link.getAttribute("href");
+            if (href.startsWith("#")) {
+                e.preventDefault();
+                tocLinks.forEach(l => l.classList.remove("active"));
+                link.classList.add("active");
+                document.getElementById(href.substring(1))?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
+    });
+};
+
+if (document.readyState === 'loading') {
+    document.addEventListener("DOMContentLoaded", window.initGlobalPage);
+} else {
+    window.initGlobalPage();
+}
 
 function setupDynamicLineage(map, currentName) {
     const childrenList = document.getElementById("sidebar-children-list");
@@ -437,13 +457,30 @@ function setupSearchModalLogic() {
     document.getElementById("close-search-modal")?.addEventListener("click", closeModal);
     modal.addEventListener("click", (e) => { if (e.target === modal) closeModal(); });
 
-    window.addEventListener("keydown", (e) => {
-        if ((e.key === "/" && document.activeElement.tagName !== "INPUT" && document.activeElement.tagName !== "TEXTAREA") || (e.ctrlKey && e.key.toLowerCase() === "k")) {
-            e.preventDefault();
-            openModal();
-        }
-        if (e.key === "Escape" && modal.classList.contains("active")) closeModal();
-    });
+    if (!window.searchModalWindowListenerAdded) {
+        window.searchModalWindowListenerAdded = true;
+        window.addEventListener("keydown", (e) => {
+            const activeModal = document.getElementById("search-modal");
+            const activeInput = document.getElementById("modal-search-input");
+            if (!activeModal || !activeInput) return;
+
+            if ((e.key === "/" && document.activeElement.tagName !== "INPUT" && document.activeElement.tagName !== "TEXTAREA") || (e.ctrlKey && e.key.toLowerCase() === "k")) {
+                e.preventDefault();
+                activeModal.classList.add("active");
+                activeInput.value = '';
+                const activeResultsContainer = document.getElementById("modal-search-results");
+                if (activeResultsContainer) {
+                    NeuronUtils.renderHistoryList(activeResultsContainer);
+                }
+                setTimeout(() => activeInput.focus(), 50);
+                document.body.style.overflow = 'hidden';
+            }
+            if (e.key === "Escape" && activeModal.classList.contains("active")) {
+                activeModal.classList.remove("active");
+                document.body.style.overflow = '';
+            }
+        });
+    }
 
     const resetModalNav = NeuronUtils.setupListKeyboardNav(input, resultsContainer);
     NeuronUtils.bindClickHistory(resultsContainer, input);

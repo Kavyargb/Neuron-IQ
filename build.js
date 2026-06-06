@@ -27,6 +27,7 @@ const getArticleTemplate = (node, parentLink, plainTextDesc, breadcrumbsHTML) =>
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" defer></script>
     <script src="graph.js" defer></script>
     <script src="global.js" defer></script>
+    <script src="router.js" defer></script>
 </head>
 <body>
     <header class="top-nav">
@@ -110,6 +111,7 @@ const getSitemapTemplate = (sitemapCategoriesHTML) => `
     <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0"></script>
     <script src="graph.js" defer></script>
     <script src="global.js" defer></script>
+    <script src="router.js" defer></script>
 </head>
 <body>
     <header class="top-nav">
