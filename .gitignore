@@ -11,3 +11,6 @@ public/*
 !public/images
 !public/shared.css
 !public/router.js
+!public/manifest.json
+!public/icon.svg
+!public/sw.js

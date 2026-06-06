@@ -536,3 +536,12 @@ function setupTOCScrollObserver() {
 
     sections.forEach(s => observer.observe(s.section));
 }
+
+// Register PWA Service Worker
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js')
+            .then(reg => console.log('[ServiceWorker] Registered:', reg.scope))
+            .catch(err => console.error('[ServiceWorker] Registration failed:', err));
+    });
+}
