@@ -51,7 +51,7 @@ That's it! Now open your browser to **`http://localhost:8080`** and you'll see t
 
 ### What `npm run dev` does behind the scenes
 
-When you run that command, two things start at the same time:
+When you run that command, two things start at the same time:   
 
 1. **A web server** — serves the `public/` folder on port 8080 so your browser can see it.
 2. **A file watcher** — watches the `content/` folder for any changes to `.md` files, and automatically rebuilds the site whenever you save a file.
@@ -861,15 +861,17 @@ Neuron-IQ is a **Progressive Web App (PWA)**, meaning it can be installed on pho
 
 ### Service Worker Strategy
 
-The auto-generated `sw.js` uses three strategies:
+The service worker `sw.js` is generated automatically at build time using `workbox-build`. It creates a precache manifest where each local asset is registered with an individual content hash (e.g., `{ url: "index.html", revision: "f66e4757f801..." }`).
+
+When you rebuild the site, the service worker compares the new content hashes against the existing cache, ensuring the browser only re-downloads files that have actually changed (avoiding full-asset re-downloads for minor edits like fixing a typo).
+
+It uses three caching strategies:
 
 | Asset Type | Strategy | Behavior |
 |---|---|---|
-| **Local files** (HTML, JS, CSS) | Cache-first, pre-cached | All local assets cached on install; served from cache instantly |
-| **CDN resources** (jsDelivr, Google Fonts) | Dynamic cache | Fetched from network on first request, cached for future use |
+| **Local files** (HTML, JS, CSS) | Cache-first, pre-cached with revision hashes | Pre-cached on install; served from cache instantly; only modified files re-cached on update |
+| **CDN resources** (jsDelivr, Google Fonts) | Dynamic Cache-First | Fetched from network on first request, cached for future use |
 | **Failed navigations** (offline) | Fallback | Returns cached `index.html` as a fallback |
-
-The cache name includes a timestamp (`neuron-iq-cache-{timestamp}`) so each build creates a fresh cache and the `activate` handler cleans up old ones.
 
 ---
 
@@ -971,6 +973,7 @@ flowchart LR
 | `marked-katex-extension` | `^5.1.10` | KaTeX math rendering plugin for `marked` |
 | `katex` | `^0.17.0` | The underlying LaTeX math rendering engine |
 | `striptags` | `^3.2.0` | HTML tag stripper utility |
+| `workbox-build` | `^7.4.1` | Generates service worker with content-hash precaching |
 
 ### CDN Dependencies (loaded at runtime in the browser)
 
