@@ -3,6 +3,7 @@ name: Physics
 parent: Root
 category: Physics
 distance: 1
+alias: [Physical Science]
 ---
 
 **Physics** is the scientific study of how the universe works. It is the most fundamental of the natural sciences, seeking to explain everything from why things fall to the ground, to why stars shine, and how energy moves through space.

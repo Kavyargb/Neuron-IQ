@@ -3,6 +3,7 @@ name: Elementary Algebra
 parent: Algebra
 category: Mathematics
 distance: 3
+alias: [Basic Algebra, Introduction to Algebra]
 ---
 **Elementary Algebra** is the first formal stage in the study of algebra and serves as the bridge between arithmetic and higher mathematics. While arithmetic focuses on working with specific numbers, elementary algebra introduces variables, expressions, and equations, allowing mathematical relationships to be described in a general and systematic way.
 

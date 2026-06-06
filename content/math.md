@@ -3,6 +3,7 @@ name: Mathematics
 parent: Root
 category: Mathematics
 distance: 1
+aliases: [Math]
 ---
 @Beginner
 **Mathematics** is the abstract science of number, quantity, and space. It is the fundamental language used to describe the patterns and structures of the universe. 

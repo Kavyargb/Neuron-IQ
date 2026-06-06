@@ -1,8 +1,9 @@
 ---
-name: Computer Science (CS)
+name: Computer Science
 parent: Root
 category: Computer Science
 distance: 1
+alias: [cs]
 ---
 **Computer Science** aka CS is the study of computers and computational systems. Unlike electrical and computer engineers, computer scientists deal mostly with software and software systems; this includes their theory, design, development, and application.
 

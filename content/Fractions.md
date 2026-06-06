@@ -3,6 +3,7 @@ name: Fractions
 parent: Real Numbers and their Operations
 category: Mathematics
 distance: 5
+alias: [Ratio, proportion, fraction]
 ---
 @REDUCING
 

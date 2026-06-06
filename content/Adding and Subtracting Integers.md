@@ -3,6 +3,7 @@ name: Adding and Subtracting Integers
 parent: Real Numbers and their Operations
 category: Mathematics
 distance: 5
+alias: [Adding and Subtracting Integers, Addition, Subtraction, add, Subtract, Plus, Minus]
 ---
 @ADDITION AND SUBTRACTION $(+, -)$
 

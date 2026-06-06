@@ -3,6 +3,7 @@ name: Gravity
 parent: Physics
 category: Physics
 distance: 2
+alias: [gravitational force, gravitation]
 ---
 **Gravity** is an invisible pull that attracts objects with mass toward one another. 
 It is the force that keeps your feet firmly on the ground, makes apples fall from trees, and holds the Earth in orbit around the Sun. The more massive an object is, the stronger its gravitational pull. For example, because Jupiter is much larger and more massive than Earth, you would weigh significantly more if you were standing on Jupiter. Conversely, because the Moon is smaller than Earth, astronauts can bound in the air easily.

@@ -3,6 +3,7 @@ name: Quantum Mechanics
 parent: Physics
 category: Physics
 distance: 2
+alias: [QM, Quantum Physics, Quantum Theory]
 ---
 Quantum Mechanics is the branch of mechanics that deals with the mathematical description of the motion and interaction of subatomic particles, incorporating the concepts of quantization of energy, wave–particle duality, the uncertainty principle, and the correspondence principle.
 

@@ -3,6 +3,7 @@ name: Perceptrons
 parent: Computer Science (CS)
 category: Computer Science
 distance: 3
+aliases: [perceptron]
 ---
 @Beginner
 A **Perceptron** is the simplest form of an artificial neural network. Think of it as a tiny digital brain cell. It takes in multiple pieces of information, weighs their importance, and makes a simple "yes or no" decision.

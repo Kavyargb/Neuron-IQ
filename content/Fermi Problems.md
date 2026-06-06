@@ -3,6 +3,7 @@ name: Fermi Problems
 parent: Problem Solving and Estimations
 category: Physics
 distance: 4
+alias: [estimation problems, estimation, fermi estimations]
 ---
 Counting is the first mathematical skill we learn. We came to use this skill by distinguishing elements into groups of similar objects, but counting becomes problematic when our desired objects are not easily identified, or there are too many to count. Rather than spending a huge amount of effort to attempt an exact count, we can try to estimate the number of objects. For example, we can try to estimate the total number of grains of sand contained in a bucket of sand. Because we can see individual grains of sand, we expect the number to be very large but finite. Sometimes we can try to estimate a number, which we are fairly sure but not certain is finite, such as the number of particles in the universe.
 

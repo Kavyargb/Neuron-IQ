@@ -3,6 +3,7 @@ name: Dimensions
 parent: Problem Solving and Estimations
 category: Physics
 distance: 4
+alias: [dimensions, dimensionality, dimensional analysis, dimensional formulas]
 ---
 Many physical quantities are derived from the base quantities by a set of algebraic relations defining the physical relation between these quantities. The dimension of the derived quantity is written as a power of the dimensions of the base quantities. For example velocity is a derived quantity and the dimension is given by the relationship
 

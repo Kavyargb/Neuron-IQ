@@ -3,6 +3,7 @@ name: Units and Dimensions
 parent: Mathematical Tools & Basics
 category: Physics
 distance: 3
+alias: [Units, Dimensions, Dimensional Analysis]
 ---
 @Beginner
 Imagine trying to follow a recipe that asks for "some" flour and "a bit" of sugar. Without precise measurements, your cake might not turn out very well. 

@@ -3,6 +3,7 @@ name: Multiplying and Dividing Integers
 parent: Real Numbers and their Operations
 category: Mathematics
 distance: 5
+alias: [multiplying integers, dividing integers, multiplication, division, times, over,]
 ---
 @MULTIPLICATION AND DIVISION
 

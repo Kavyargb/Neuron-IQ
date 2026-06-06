@@ -3,6 +3,7 @@ name: Exponents and Square Roots
 parent: Real Numbers and their Operations
 category: Mathematics
 distance: 5
+aliases: [exponents, square root]
 ---
 @EXPONENTIAL NOTATION AND POSITIVE INTEGER EXPONENTS
 

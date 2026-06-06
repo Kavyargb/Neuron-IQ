@@ -3,6 +3,7 @@ name: Experimental Physics
 parent: Mathematical Tools & Basics
 category: Physics
 distance: 3
+alias: [Experimental Physics, Experimental Physics, EP]
 ---
 @Beginner
 Physics is not just about solving equations on a blackboard; it is an experimental science. To prove a theory, we must perform experiments and take measurements. However, no measurement in the real world is ever completely perfect. 

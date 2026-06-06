@@ -3,6 +3,7 @@ name: Vectors and Scalars
 parent: Mathematical Tools & Basics
 category: Physics
 distance: 3
+alias: [Vectors, Scalars, Vector, Scalar, Vector Product, Scalar Product, Cross Product, Dot Product, Right-Hand Rule, Parallelogram Law, Triangle Law, Unit Vectors, i, j, k]
 ---
 @Beginner
 In physics, some things can be described with just a single number, while others need a direction to make sense.

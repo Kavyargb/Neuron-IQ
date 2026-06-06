@@ -3,6 +3,7 @@ name: Linear Algebra
 parent: Mathematics
 category: Mathematics
 distance: 2
+alias: [matrix algebra, LA]
 ---
 @Beginner
 **Linear Algebra** is the branch of mathematics concerning linear equations, linear maps, and their representations in vector spaces and through matrices. 

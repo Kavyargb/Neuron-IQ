@@ -3,6 +3,7 @@ name: International System of Units
 parent: Problem Solving and Estimations
 category: Physics
 distance: 4
+alias: [SI, Système International, metric system, MKS]
 ---
 The system of units most commonly used throughout science and technology today is the Système International (SI). It consists of seven base quantities and their corresponding base units, shown in Table
 

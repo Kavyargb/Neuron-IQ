@@ -1,8 +1,9 @@
 ---
-name: Artificial Intelligence (AI)
+name: Artificial Intelligence
 parent: Computer Science (CS)
 category: Computer Science
 distance: 2
+aliases: [AI, Machine Intelligence, Artificial Intelligence (AI)]
 ---
 **Artificial Intelligence (AI)** is the simulation of human intelligence processes by machines, especially computer systems. These processes include learning (the acquisition of information and rules for using the information), reasoning (using rules to reach approximate or definite conclusions), and self-correction.
 

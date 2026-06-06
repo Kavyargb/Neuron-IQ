@@ -1,8 +1,9 @@
 ---
-name: Order of Operations (PEMDAS / BODMAS)
+name: Order of Operations
 parent: Real Numbers and their Operations
 category: Mathematics
 distance: 5
+alias: [PEMDAS, BODMAS]
 ---
 ### LEARNING OBJECTIVES
 

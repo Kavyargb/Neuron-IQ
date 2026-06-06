@@ -3,6 +3,7 @@ name: The Speed of light
 parent: Problem Solving and Estimations
 category: Physics
 distance: 4
+alias: [Speed of light]
 ---
 When we observe and measure phenomena in the world, we try to assign numbers to the physical quantities with as much accuracy as we can possibly obtain from our measuring equipment. For example, we may want to determine the speed of light, which we can calculate by dividing the distance a known ray of light propagates over its travel time,
 $${\text { speed of light }} =\frac{\text { distance }}{\text { time. }} $$

@@ -3,6 +3,7 @@ name: Real Numbers and their Operations
 parent: Elementary Algebra
 category: Mathematics
 distance: 4
+alias: [Real Numbers]
 ---
 @REAL NUMBERS
 

@@ -3,6 +3,7 @@ name: Algebra
 parent: Mathematics
 category: Mathematics
 distance: 2
+aliases: [Algebra, equation, variables, polynomial, expression, linear algebra, abstract algebra]
 ---
 **Algebra** is the branch of mathematics that studies patterns, relationships, and structures using symbols. Unlike arithmetic, which works with specific numbers, algebra introduces variables—usually letters such as _x_, _y_, or _n_—to represent unknown quantities or values that can change.
 

@@ -124,6 +124,11 @@ const NeuronUtils = {
         const acronym = name.split(/[\s\-]/).map(w => w[0]).join('').replace(/[^\w]/g, '');
         if (acronym === q) return 900;
         if (name.startsWith(q)) return 850;
+        if (item.aliases && item.aliases.some(alias => alias.toLowerCase() === q)) return 925;
+        if (item.aliases && item.aliases.some(alias => {
+            const al = alias.toLowerCase();
+            return al.startsWith(q) || new RegExp(`\\b${NeuronUtils.escapeRegExp(q)}\\b`, 'i').test(al);
+        })) return 825;
         if (new RegExp(`\\b${NeuronUtils.escapeRegExp(q)}\\b`, 'i').test(name)) return 800;
         
         const cat = item.category ? item.category.toLowerCase() : '';
@@ -156,7 +161,7 @@ const NeuronUtils = {
         if (!NeuronUtils._fuseInstance && window.NeuronMap && typeof Fuse !== 'undefined') {
             NeuronUtils._fuseInstance = new Fuse(Object.values(window.NeuronMap), {
                 includeScore: true, threshold: 0.4, ignoreLocation: true,
-                keys: [{ name: 'name', weight: 1.0 }, { name: 'category', weight: 0.5 }, { name: 'sectionTitles', weight: 0.4 }, { name: 'searchContent', weight: 0.1 }]
+                keys: [{ name: 'name', weight: 1.0 }, { name: 'aliases', weight: 0.9 }, { name: 'category', weight: 0.5 }, { name: 'sectionTitles', weight: 0.4 }, { name: 'searchContent', weight: 0.1 }]
             });
         }
         if (!NeuronUtils._fuseInstance) return [];
@@ -284,11 +289,43 @@ function setupInlineDefinitions(map, currentName) {
     let node;
     while (node = walk.nextNode()) textNodes.push(node);
 
-    const terms = Object.keys(map).filter(name => name.toLowerCase() !== currentName.toLowerCase()).sort((a, b) => b.length - a.length);
+    // Get current node and its aliases to exclude
+    const currentNode = map[currentName];
+    const currentAliases = currentNode && currentNode.aliases ? currentNode.aliases.map(a => a.toLowerCase()) : [];
+    const currentNameLower = currentName ? currentName.toLowerCase() : '';
+
+    const termToConceptName = {};
+    const terms = [];
+
+    Object.values(map).forEach(n => {
+        const nodeNameLower = n.name.toLowerCase();
+        const isCurrentNode = nodeNameLower === currentNameLower || currentAliases.includes(nodeNameLower);
+        if (isCurrentNode) return;
+
+        // Add main name
+        terms.push(n.name);
+        termToConceptName[nodeNameLower] = n.name;
+
+        // Add aliases
+        if (n.aliases && Array.isArray(n.aliases)) {
+            n.aliases.forEach(alias => {
+                const aliasLower = alias.toLowerCase();
+                if (aliasLower !== currentNameLower && !currentAliases.includes(aliasLower)) {
+                    terms.push(alias);
+                    if (!termToConceptName[aliasLower]) {
+                        termToConceptName[aliasLower] = n.name;
+                    }
+                }
+            });
+        }
+    });
+
     if (terms.length === 0) return;
 
+    // Sort terms by length descending to match longer terms first
+    terms.sort((a, b) => b.length - a.length);
+
     const combinedRegex = new RegExp(`\\b(${terms.map(NeuronUtils.escapeRegExp).join('|')})\\b`, 'ig');
-    const lowerCaseTerms = Object.fromEntries(terms.map(t => [t.toLowerCase(), t]));
 
     textNodes.forEach(textNode => {
         const text = textNode.nodeValue;
@@ -303,7 +340,7 @@ function setupInlineDefinitions(map, currentName) {
             hasReplacements = true;
             if (match.index > lastIndex) fragment.appendChild(document.createTextNode(text.substring(lastIndex, match.index)));
 
-            const originalTerm = lowerCaseTerms[match[0].toLowerCase()];
+            const originalTerm = termToConceptName[match[0].toLowerCase()];
             if (originalTerm && map[originalTerm]) {
                 const anchor = document.createElement('a');
                 anchor.href = `${map[originalTerm].slug}.html`;

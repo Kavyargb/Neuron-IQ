@@ -3,6 +3,7 @@ name: Classical Mechanics
 parent: Physics
 category: Physics
 distance: 2
+alias: [classical mechanics, mechanics]
 ---
 **Classical Mechanics** is the branch of physics that describes the motion of macroscopic objects and the forces that act upon them. It provides a mathematical framework for understanding everything from a falling apple and a swinging pendulum to the motion of planets, spacecraft, and galaxies.
 
