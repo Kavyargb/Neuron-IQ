@@ -3,44 +3,61 @@ name: Physics
 parent: Root
 category: Physics
 distance: 1
-alias: [Physical Science]
 ---
 
-**Physics** is the scientific study of how the universe works. It is the most fundamental of the natural sciences, seeking to explain everything from why things fall to the ground, to why stars shine, and how energy moves through space.
+**Physics** is the fundamental science that studies matter, energy, and the fundamental forces of nature. Physics bridges the gap between abstract computational logic and the physical reality of the hardware it runs on. 
 
-At its core, physics tries to answer simple but profound questions:
-* What is matter made of?
-* How does matter move through space and time?
-* What are the fundamental forces that govern the universe?
+It is the foundational pillar for understanding modern electronics, semiconductor devices, and the emerging field of quantum computing. The coursework transitions students from classical paradigms into the realms of modern physics and computational science.
 
-When you throw a ball, ride a bicycle, or look at a rainbow, you are observing physics in action. 
+The core areas of physics explored in this curriculum include:
+*   **Analytical Mechanics**
+*   **Special Theory of Relativity**
+*   **Quantum Mechanics & Statistical Physics**
+*   **Computational Physics**
 
-Physics is broadly divided into two main eras: **Classical Physics** and **Modern Physics**.
+@Analytical Mechanics
+While basic physics relies on Newtonian mechanics, advanced systems are often too complex to model using force vectors alone. The curriculum introduces students to **Lagrangian and Hamiltonian formulations**, which analyze physical systems using energy rather than forces.
 
-@Classical Physics
+In Lagrangian mechanics, the state of a system is described by the Lagrangian $L$ (the difference between kinetic and potential energy). The motion of the system is determined by the Euler-Lagrange equation:
 
-This encompasses the laws and theories developed before the 20th century.
-* **Classical Mechanics:** Formulated by Sir Isaac Newton, this branch studies the motion of macroscopic objects. It introduces concepts like inertia, momentum, and the famous equation $\mathbf{F} = m\mathbf{a}$ (Force equals mass times acceleration).
-* **Electromagnetism:** Unified by James Clerk Maxwell, this branch explains how electric fields and magnetic fields interact to produce light and radio waves.
-* **Thermodynamics:** The study of heat, work, temperature, and the statistical behavior of systems.
+$$
+\frac{d}{dt} \left( \frac{\partial L}{\partial \dot{q}_i} \right) - \frac{\partial L}{\partial q_i} = 0
+$$
 
-@Modern Physics
+This energy-based approach is deeply connected to optimization algorithms and is fundamentally used in modern robotics, control systems, and molecular dynamics simulations.
 
-At the turn of the 20th century, scientists realized classical physics failed to explain the behavior of things that were extremely fast or extremely small.
-* **Relativity:** Albert Einstein's theories describing the behavior of objects moving near the speed of light, and redefining gravity as the curvature of spacetime.
-* **Quantum Mechanics:** The study of the atomic and subatomic world, where energy is quantized and particles exhibit wave-like behavior.
+@Special Theory of Relativity
+Students study Einstein's Special Theory of Relativity, exploring how the concepts of space and time are fundamentally intertwined. The curriculum covers the postulates of relativity, space-time graphs, length contraction, time dilation, and the Doppler effect.
 
-The ultimate goal of modern theoretical physics is to find a **Theory of Everything (ToE)**—a single, all-encompassing, coherent theoretical framework of physics that fully explains and links together all physical aspects of the universe.
+A central mathematical element in relativity is the Lorentz factor, which dictates how time and space scale as an object approaches the speed of light $c$:
 
-@The Standard Model
-Currently, our best understanding of the universe at the fundamental level is encapsulated in the **Standard Model of Particle Physics**. It describes three of the four known fundamental forces:
-1. **The Electromagnetic Force** (carried by photons)
-2. **The Strong Nuclear Force** (carried by gluons, binding protons and neutrons)
-3. **The Weak Nuclear Force** (carried by W and Z bosons, responsible for radioactive decay)
+$$
+\gamma = \frac{1}{\sqrt{1 - \frac{v^2}{c^2}}}
+$$
 
-It also classifies all known elementary particles, such as quarks (which make up protons and neutrons) and leptons (such as electrons). 
+This shows that as velocity $v$ approaches $c$, time slows down and mass effectively increases, culminating in the famous mass-energy equivalence principle.
 
-@The Problem of Gravity
-The glaring omission from the Standard Model is the fourth fundamental force: **Gravity**. While gravity is brilliantly described on a macroscopic scale by Einstein's General Relativity, attempting to combine General Relativity with Quantum Mechanics mathematically leads to nonsensical infinities. 
+@Quantum & Statistical Mechanics
+To understand the hardware of a computer—specifically transistors, lasers, and semiconductors—one must understand the quantum nature of the universe. 
 
-Current advanced theories, such as **String Theory** and **Loop Quantum Gravity**, are attempts to reconcile these two pillars of modern physics into a unified framework of Quantum Gravity.
+The curriculum dives into the Schrödinger equation, atomic structures, and molecular orbital hybridization. It couples this with **Statistical Mechanics**, which applies probability theory to massive systems of particles. A key concept here is the **Fermi-Dirac distribution**, which describes the probability that a given available electron energy state will be occupied at a given temperature $T$:
+
+$$
+f(E) = \frac{1}{e^{(E-\mu)/kT} + 1}
+$$
+
+This equation is the absolute foundation for understanding band-gaps in semiconductors, which dictate how all modern computer chips process binary information. Furthermore, this quantum foundation paves the way for advanced electives like Quantum Information and Computation, where bits are replaced by quantum superpositions (qubits).
+
+@Computational Physics
+Because physical equations often cannot be solved perfectly by hand, physics and computer science intersect through **Computational Physics**. 
+
+The curriculum trains students to use algorithms to find numerical solutions to scientific problems. Key techniques include:
+*   **Monte Carlo Methods:** Using algorithmic randomness to solve complex, high-dimensional integrals found in statistical and quantum mechanics.
+*   **Matrix Algebra in Physics:** Using Singular-Value Decomposition (SVD) and Hessian matrices for normal mode analysis.
+*   **Partial Differential Equations (PDEs):** Simulating real-world continuous systems like the Heat equation, which models the diffusion of heat over time:
+
+$$
+\frac{\partial u}{\partial t} = \alpha \nabla^2 u
+$$
+
+By combining the laws of physics with the algorithmic processing power of computer science, students are equipped to simulate entire universes, design microscopic nano-electronics, and explore deterministic chaos.

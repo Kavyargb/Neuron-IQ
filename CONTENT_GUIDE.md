@@ -106,7 +106,6 @@ distance: 3
 @Introduction
 Quantum entanglement is like a pair of magic dice. If you roll them, no matter how far apart they are—even on opposite sides of the universe—they will always land on the exact same number at the exact same time. It shows that particles can be invisibly connected.
 
-@Deeper Understanding
 Quantum entanglement is a physical phenomenon that occurs when a group of particles is generated, interact, or share spatial proximity in a way such that the quantum state of each particle cannot be described independently of the state of the others. 
 
 Einstein famously referred to this as *"spooky action at a distance"*, because it appears to violate the speed of light limit for information transfer.

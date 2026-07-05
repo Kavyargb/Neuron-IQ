@@ -1,28 +1,58 @@
 ---
 name: Computer Science
 parent: Root
-category: Computer Science
+category: CS
 distance: 1
 alias: [cs]
 ---
-**Computer Science** aka CS is the study of computers and computational systems. Unlike electrical and computer engineers, computer scientists deal mostly with software and software systems; this includes their theory, design, development, and application.
 
-Principal areas of study within Computer Science include artificial intelligence, computer systems and networks, security, database systems, human computer interaction, vision and graphics, numerical analysis, programming languages, software engineering, bioinformatics, and theory of computing.
+**Computer Science** is the systematic study of algorithmic processes, computational machines, and information processing. It is a vast discipline that spans from the abstract mathematical limits of what can be computed, to the practical engineering of massive, distributed software systems.
 
-A central concept in computer science is the **Algorithm**, which is a finite sequence of rigorous instructions, typically used to solve a class of specific problems or to perform a computation. Algorithms are unambiguous specifications for performing calculation, data processing, automated reasoning, and other tasks. 
+The foundation aims to transform students from basic programmers into system architects and thought-leaders. The curriculum is built upon several core pillars:
+*   **Algorithms & Data Structures**
+*   **Computer Systems & Architecture**
+*   **Theory of Computation**
+*   **Artificial Intelligence & Data Science**
 
-**Data Structures** provide a means to manage large amounts of data efficiently for uses such as large databases and internet indexing services. Examples include arrays, linked lists, hash tables, and graphs. The choice of data structure often dictates the algorithms that can be used and directly impacts the efficiency of the software.
+@Algorithms and Data Structures
+At the heart of computer science is the algorithm—a finite sequence of rigorous instructions used to solve a specific problem. Before a computer can execute a program, a computer scientist must design a data structure to organize the information efficiently.
 
-The theoretical foundations of Computer Science include **Computability Theory** and **Computational Complexity Theory**.
+Students study both linear (arrays, linked lists, stacks) and non-linear (trees, graphs, hash tables) data structures. A crucial aspect of this field is **Asymptotic Complexity**, which measures how the runtime or memory requirements of an algorithm scale with input size ($n$). 
 
-@Computability Theory
-Computability theory deals with the fundamental question of what can and cannot be computed. The Turing machine, a mathematical model of computation described by Alan Turing, provides a formal definition of an algorithm. Any problem that can be computed by a Turing machine is considered computable. However, problems like the **Halting Problem** are proven to be undecidable, meaning no general algorithm can solve them for all possible inputs.
+For example, the classical *Merge Sort* algorithm divides a list into halves, sorts them, and merges them back together. Its time complexity is governed by the following recurrence relation, which solves to $O(n \log n)$:
 
-@Computational Complexity Theory
-This theory classifies computational problems according to their inherent difficulty. Time complexity and space complexity measure the resources required to solve a problem as a function of the input size $n$. 
+$$
+T(n) = 2T\left(\frac{n}{2}\right) + O(n)
+$$
 
-The most famous unresolved question in theoretical computer science is the **P vs NP** problem. 
-* **P** represents the set of problems that can be solved in polynomial time $O(n^k)$.
-* **NP** represents the set of problems whose solutions can be *verified* in polynomial time.
+@Computer Systems and Architecture
+Software cannot exist without the hardware that executes it. This domain explores the transition from high-level code down to microscopic electrical signals, covering the Von Neumann architecture, instruction set architectures (ISAs), and pipelining.
 
-Whether $P = NP$ remains the most significant open problem in computer science today.
+It also encompasses **Operating Systems and Networks**, where students learn how computers manage resources. Key topics include:
+*   **Process Management & Scheduling:** How CPUs juggle thousands of tasks simultaneously.
+*   **Virtual Memory:** Abstracting physical RAM to isolate and protect active programs.
+*   **Network Protocols:** The layered communication models (like TCP/IP) that allow machines to reliably exchange data across the globe.
+
+@Theory of Computation
+Theoretical computer science explores the absolute mathematical boundaries of computation. It asks fundamental questions: *What can a computer actually do? Are there problems that can never be solved?*
+
+This is formalized through **Automata Theory**, which categorizes languages and machines. It progresses from simple Finite State Machines to Context-Free Grammars, and ultimately to **Turing Machines**—the abstract mathematical model of any general-purpose computer.
+
+Mathematically, a Deterministic Finite Automaton (DFA) is defined as a 5-tuple:
+
+$$
+M = (Q, \Sigma, \delta, q_0, F)
+$$
+
+Where $Q$ is a finite set of states, $\Sigma$ is the input alphabet, $\delta$ is the transition function, $q_0$ is the start state, and $F$ is the set of accept states.
+
+@Artificial Intelligence and Data Science
+Modern computer science is heavily driven by data. The curriculum integrates databases, data analytics, and machine learning to build systems capable of pattern recognition and predictive logic. 
+
+Students explore supervised and unsupervised learning, decision trees, neural networks, and Bayesian inference. In decision tree learning, for example, algorithms must decide the best feature to split data. This is often calculated using **Shannon Entropy**, which measures the impurity or unpredictability of a dataset $S$:
+
+$$
+H(S) = - \sum_{i=1}^{c} p_i \log_2 p_i
+$$
+
+By combining data-driven algorithms with massive distributed computing power, computer science is rapidly evolving to simulate, augment, and enhance human intelligence.

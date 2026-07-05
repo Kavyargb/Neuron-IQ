@@ -1,44 +1,71 @@
 ---
 name: Mathematics
 parent: Root
-category: Mathematics
+category: Math
 distance: 1
-aliases: [Math]
+alias: [Math]
 ---
-@Beginner
-**Mathematics** is the abstract science of number, quantity, and space. It is the fundamental language used to describe the patterns and structures of the universe. 
+**Mathematics** is the abstract science of number, quantity, and space. It provides the fundamental logical frameworks, analytical tools, and theoretical rigor required to design algorithms, model complex systems, and develop artificial intelligence.
 
-From counting objects to balancing a checkbook, mathematics is used in everyday life. The core branches of mathematics that most people encounter early on include:
-* **Arithmetic:** Basic operations like addition, subtraction, multiplication, and division.
-* **Geometry:** The study of shapes, sizes, and the properties of space. For example, the Pythagorean theorem states that for a right-angled triangle, $a^2 + b^2 = c^2$.
-* **Algebra:** Using letters (variables) to represent unknown numbers in equations.
+Mathematics foundation is structured to build both discrete logic and continuous analysis skills. Rather than just calculating numbers, students learn to construct rigorous proofs and mathematical models. The core mathematical pillars include:
+*   **Discrete Structures**
+*   **Linear Algebra**
+*   **Real Analysis**
+*   **Probability and Statistics**
 
-@Intermediate
-As we progress, mathematics becomes the foundation for all quantitative sciences (physics, chemistry, economics, and computer science).
+@Discrete Structures
+Unlike continuous mathematics, discrete structures deal with distinct, separated values. This is the natural language of computer science, underpinning data structures, cryptography, and algorithm design.
 
-* **Trigonometry:** Explores the relationships between the angles and sides of triangles, essential for navigation, engineering, and understanding periodic phenomena like sound waves.
-* **Calculus:** Developed independently by Isaac Newton and Gottfried Wilhelm Leibniz, calculus is the mathematics of continuous change. It consists of:
-  * **Differential Calculus:** Concerns rates of change and slopes of curves (derivatives).
-  * **Integral Calculus:** Concerns accumulation of quantities and the areas under and between curves (integrals).
+Key areas of study include:
+*   **Propositional Logic & Proof Techniques:** Methods like mathematical induction and contradiction.
+*   **Combinatorics:** Counting principles, permutations, combinations, and the pigeonhole principle.
+*   **Algebraic Structures:** Group theory, rings, and finite fields, which are directly applied in coding theory and modern information security.
+*   **Graph Theory:** The study of paths, cycles, and networks. 
 
-A famous geometric formula is the area of a circle, which relates the radius $r$ to the transcendental number $\pi$:
-$$A = \pi r^2$$
-
-@Advanced
-At the highest levels, mathematics transitions into rigorous proof-based abstraction. Topics like Topology, Abstract Algebra, and Real/Complex Analysis explore the absolute boundaries of logic.
-
-#### Euler's Identity
-Considered by many mathematicians to be the most beautiful equation in mathematics, Euler's identity connects five fundamental mathematical constants ($0, 1, \pi, e$, and $i$) in one profound statement:
+A foundational combinatorics concept is the binomial coefficient, which determines the number of ways to choose $k$ items from $n$ items:
 
 $$
-e^{i\pi} + 1 = 0
+\binom{n}{k} = \frac{n!}{k!(n-k)!}
 $$
 
-#### Mathematical Physics
-Advanced mathematics is inextricably linked with modern physics. The formulation of quantum mechanics relies heavily on linear algebra and partial differential equations. For instance, the **Schrödinger equation** describes how the quantum state of a physical system changes over time:
+@Linear Algebra
+Linear algebra is the study of vector spaces and linear mappings between these spaces. It is computationally vital for machine learning, image compression, optimization, and computer graphics. 
+
+The core concepts span from solving systems of linear equations to abstract transformations:
+*   **Vector Spaces & Subspaces:** Understanding dimensions, basis, span, and the Rank-Nullity Theorem.
+*   **Eigenvalues and Eigenvectors:** Fundamental for understanding network structures, random walks, and principal component analysis (PCA).
+*   **Matrix Decompositions:** Techniques like Spectral Decomposition and Singular Value Decomposition (SVD).
+
+The fundamental eigenvalue equation, where applying a matrix $A$ to a vector $x$ simply scales it by a factor $\lambda$, is written as:
 
 $$
-i\hbar \frac{\partial}{\partial t} \Psi(\mathbf{r},t) = \left[ \frac{-\hbar^2}{2m}\nabla^2 + V(\mathbf{r},t) \right] \Psi(\mathbf{r},t)
+A x = \lambda x
 $$
 
-This equation represents the wave function $\Psi$ and its evolution, demonstrating how abstract mathematics perfectly models the fundamental reality of the universe.
+@Real Analysis
+Real Analysis provides the rigorous theoretical foundation for calculus and continuous functions. It explains *why* the rules of calculus work by diving deep into the properties of real numbers, sequences, and series.
+
+In advanced engineering, this transitions into Complex Analysis and Vector Calculus. Topics include:
+*   **Sequences and Series:** Convergence, limits, supremum, infimum, and Cauchy sequences.
+*   **Vector Calculus:** Gradients, curl, divergence, and partial differential equations (PDEs).
+*   **Complex Variables:** Analytic functions, poles, and essential singularities.
+
+A beautiful result from complex analysis taught in this curriculum is **Cauchy's Integral Formula**, which shows that the value of an analytic function inside a disk is completely determined by its values on the boundary:
+
+$$
+f(a) = \frac{1}{2\pi i} \oint_C \frac{f(z)}{z-a} dz
+$$
+
+@Probability and Statistics
+In a world driven by data, probability and statistics provide the mathematical rules for uncertainty, machine learning, and algorithmic analysis.
+
+This area systematically defines chance and inference through:
+*   **Random Variables:** Discrete (Binomial, Poisson) and Continuous (Normal, Exponential, Cauchy) distributions.
+*   **Random Processes:** Markov chains and Poisson processes.
+*   **Statistical Inference:** Point and interval estimation, hypothesis testing, and Bayesian inference.
+
+One of the most important concepts in probability is the **Normal Distribution** (Gaussian), governed by its mean $\mu$ and standard deviation $\sigma$. Its probability density function is represented as:
+
+$$
+f(x) = \frac{1}{\sigma \sqrt{2\pi}} e^{-\frac{1}{2}\left(\frac{x-\mu}{\sigma}\right)^2}
+$$
