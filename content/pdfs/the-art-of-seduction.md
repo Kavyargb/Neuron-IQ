@@ -3,7 +3,7 @@ name: The Art of Seduction
 parent: Psychology
 category: Psychology
 distance: 3
-pdf: "The Art of Seduction.pdf"
+pdf: "https://kavyargb.github.io/NeuronIQ-Library/The%20Art%20of%20Seduction.pdf"
 ---
 @Overview
 **The Art of Seduction** by Robert Greene presents a comprehensive study of seduction throughout history, analyzing the psychological dynamics between seducer and target across different eras. Greene outlines **24 types of seducers** (e.g., the Siren, the Rake, the Charmer, the Coquette) and **six target types** (e.g., the Idealist, the Victim, the Platonic, the Sensitive), each with distinct vulnerabilities and responses. The book argues that successful seduction relies on psychological maneuvering rather than physical appearance, emphasizing the importance of **creating desire through mystery, transformation, and strategic emotional engagement**.

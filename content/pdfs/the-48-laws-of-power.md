@@ -3,7 +3,7 @@ name: The 48 Laws of Power
 parent: Psychology
 category: Psychology
 distance: 2
-pdf: "The 48 Laws of Power.pdf"
+pdf: "https://kavyargb.github.io/NeuronIQ-Library/The%2048%20Laws%20of%20Power.pdf"
 ---
 @Overview
 
