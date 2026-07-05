@@ -215,7 +215,7 @@ const getBookTemplate = (node, parentLink, plainTextDesc, breadcrumbsHTML) => `
     </header>
 
     <main style="display: block; width: 100vw; height: calc(100vh - 60px); padding: 0; margin: 0; overflow: hidden; background: #fff;">
-        <iframe src="pdfs/${node.pdf}" style="width: 100%; height: 100%; border: none; display: block; background: #fff;"></iframe>
+        <iframe src="${node.pdf.startsWith('http') ? node.pdf : `pdfs/${node.pdf}`}" style="width: 100%; height: 100%; border: none; display: block; background: #fff;"></iframe>
     </main>
 </body>
 </html>`;
