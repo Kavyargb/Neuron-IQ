@@ -136,6 +136,90 @@ const getSitemapTemplate = (sitemapCategoriesHTML) => `
 </body>
 </html>`;
 
+const getBookTemplate = (node, parentLink, plainTextDesc, breadcrumbsHTML) => `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#030712">
+    <title>${node.name} - Neuron-IQ</title>
+    <meta name="description" content="${plainTextDesc}...">
+    <link rel="stylesheet" href="page.css">
+    <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0"></script>
+    <script src="graph.js" defer></script>
+    <script src="global.js" defer></script>
+    <script src="router.js" defer></script>
+    <style>
+        .book-container {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            height: 75vh;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            overflow: hidden;
+            margin-top: 1rem;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+        .epub-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.6);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            gap: 20px;
+        }
+        .epub-btn {
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #e5e7eb;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .epub-btn:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-1px);
+        }
+        #viewer {
+            flex-grow: 1;
+            width: 100%;
+            background: #f9fafb;
+            overflow: hidden;
+        }
+        .pdf-viewer {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: #111827;
+        }
+    </style>
+</head>
+<body>
+    <header class="top-nav">
+        <a href="index.html" class="brand text-gradient">Neuron-IQ</a>
+        <nav class="nav-links">
+            <a href="#" class="nav-link header-search-btn" id="global-search-trigger">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align: middle; margin-right: 4px;"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>Search
+            </a>
+            <a href="sitemap.html" class="nav-link">Sitemap</a>
+        </nav>
+    </header>
+
+    <main style="display: block; width: 100vw; height: calc(100vh - 60px); padding: 0; margin: 0; overflow: hidden; background: #fff;">
+        <iframe src="pdfs/${node.pdf}" style="width: 100%; height: 100%; border: none; display: block; background: #fff;"></iframe>
+    </main>
+</body>
+</html>`;
+
 // --- Main Builder Orchestrator ---
 async function buildGraph() {
     const { marked } = await import('marked');
@@ -144,7 +228,19 @@ async function buildGraph() {
     marked.use(markedKatex({ throwOnError: false }));
     if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir);
 
-    const files = fs.readdirSync(contentDir).filter(f => f.endsWith('.md'));
+    const getAllFiles = function(dirPath, arrayOfFiles) {
+        let filesList = fs.readdirSync(dirPath);
+        arrayOfFiles = arrayOfFiles || [];
+        filesList.forEach(function(file) {
+            if (fs.statSync(path.join(dirPath, file)).isDirectory()) {
+                arrayOfFiles = getAllFiles(path.join(dirPath, file), arrayOfFiles);
+            } else {
+                arrayOfFiles.push(path.join(dirPath, file));
+            }
+        });
+        return arrayOfFiles;
+    }
+    const files = getAllFiles(contentDir).filter(f => f.endsWith('.md')).map(f => path.relative(contentDir, f).replace(/\\/g, '/'));
     const graphData = {}, categoriesMap = {}, nodesList = [];
 
     // --- PHASE 1: Parse and Load All Knowledge Nodes ---
@@ -205,6 +301,19 @@ async function buildGraph() {
         });
     });
 
+    // --- PHASE 1.8: Copy Static Books ---
+    const pdfDir = path.join(contentDir, 'pdfs');
+    const outPdfDir = path.join(outputDir, 'pdfs');
+
+    if (fs.existsSync(pdfDir)) {
+        if (!fs.existsSync(outPdfDir)) fs.mkdirSync(outPdfDir, { recursive: true });
+        fs.readdirSync(pdfDir).forEach(f => {
+            if (f.endsWith('.pdf')) {
+                fs.copyFileSync(path.join(pdfDir, f), path.join(outPdfDir, f));
+            }
+        });
+    }
+
     // --- PHASE 2: Generate HTML Pages ---
     nodesList.forEach(node => {
         const parentLink = node.parent === 'Root' ? 'index.html' : `${slugify(node.parent)}.html`;
@@ -223,7 +332,11 @@ async function buildGraph() {
             breadcrumbsHTML += ` <span class="sep">/</span> ` + (index === pathArray.length - 1 ? `<span class="current">${item.name}</span>` : `<a href="${item.slug}.html">${item.name}</a>`);
         });
 
-        fs.writeFileSync(path.join(outputDir, `${node.slug}.html`), getArticleTemplate(node, parentLink, plainTextDesc, breadcrumbsHTML).trim());
+        if (node.pdf) {
+            fs.writeFileSync(path.join(outputDir, `${node.slug}.html`), getBookTemplate(node, parentLink, plainTextDesc, breadcrumbsHTML).trim());
+        } else {
+            fs.writeFileSync(path.join(outputDir, `${node.slug}.html`), getArticleTemplate(node, parentLink, plainTextDesc, breadcrumbsHTML).trim());
+        }
     });
 
     // --- PHASE 3: Generate Sitemap Page ---
