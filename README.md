@@ -606,6 +606,27 @@ nodes.forEach(d => {
 });
 ```
 
+#### Tick Throttling (requestAnimationFrame)
+
+To support rendering large graphs (>500 nodes) smoothly, layout calculations and DOM style/path attribute updates are throttled inside `requestAnimationFrame`. This decouples the simulation updates from redundant DOM draws, preventing layout thrashing and ensuring the client runs smoothly at the display's native refresh rate (60Hz+).
+
+```javascript
+let tickPending = false;
+window.graphSimulation.on("tick", () => {
+    if (nodes.length > 500) {
+        if (!tickPending) {
+            tickPending = true;
+            requestAnimationFrame(() => {
+                // Perform physics recalculations & update DOM styles/link geometries
+                tickPending = false;
+            });
+        }
+    } else {
+        // Run synchronously for smaller graphs to maintain simulation snappiness
+    }
+});
+```
+
 #### Zoom & Pan
 
 D3 zoom with scale limits `[0.3, 3.0]`. Controls: `+`, `−`, `⊙` reset — in a floating glass panel.
@@ -715,12 +736,16 @@ Automatically converts plain-text mentions of other knowledge nodes into clickab
 ```mermaid
 flowchart LR
     A["Walk text nodes<br/>in .main-content"] --> B["Skip code, pre, a,<br/>h1–h4, breadcrumbs"]
-    B --> C["Build combined regex<br/>from all names + aliases"]
-    C --> D["One-pass matching"]
+    B --> C["Build case-insensitive Trie<br/>from all names + aliases"]
+    C --> D["O(N) Trie traversal<br/>with word boundary checks"]
     D --> E["Replace with<br/>clickable anchors"]
 ```
 
-**Key decisions**: Terms sorted by length descending ("Linear Algebra" before "Algebra"). Single combined regex. Current page excluded from self-linking. Hover popovers on mouseenter.
+**Key decisions / Implementation**:
+- **Trie Search Engine**: Swapped the high-backtracking regular expression engine with a custom prefix `Trie` containing all target concept names and aliases. This guarantees $O(N)$ string matching complexity with respect to the text length $N$, completely independent of the dictionary size.
+- **Word Boundary Checking**: Simulates `\b` boundary transitions using character look-behind and look-ahead evaluations: `isWordChar(text[i - 1]) !== isWordChar(text[i])` and `isWordChar(text[j]) !== isWordChar(text[j + 1])` where `isWordChar(c)` matches `/^[a-zA-Z0-9_]$/`.
+- **Greedy Matching**: Traverses the Trie path to find the longest matching prefix (e.g. matching "Linear Algebra" first before fallback to "Algebra").
+- **Exclusion**: Current page and its aliases are excluded from self-linking. Hover popovers trigger on `mouseenter`.
 
 ### Feature 3 · Global Search Modal
 

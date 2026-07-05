@@ -260,10 +260,23 @@ window.initHomePage = function() {
                         }
                     });
 
+        let tickPending = false;
         window.graphSimulation.on("tick", () => {
-            nodes.forEach(d => { if (d.fx === null) { d.x += d.vx * (1 / d.mass - 1); d.y += d.vy * (1 / d.mass - 1); d.vx /= d.mass; d.vy /= d.mass; } });
-            linkElements.attr("d", d => `M ${d.source.x} ${d.source.y} C ${d.source.x + Math.abs(d.target.x - d.source.x) * 0.5} ${d.source.y}, ${d.target.x - Math.abs(d.target.x - d.source.x) * 0.5} ${d.target.y}, ${d.target.x} ${d.target.y}`);
-            nodeElements.style("left", d => `${d.x}px`).style("top", d => `${d.y}px`);
+            if (nodes.length > 500) {
+                if (!tickPending) {
+                    tickPending = true;
+                    requestAnimationFrame(() => {
+                        nodes.forEach(d => { if (d.fx === null) { d.x += d.vx * (1 / d.mass - 1); d.y += d.vy * (1 / d.mass - 1); d.vx /= d.mass; d.vy /= d.mass; } });
+                        linkElements.attr("d", d => `M ${d.source.x} ${d.source.y} C ${d.source.x + Math.abs(d.target.x - d.source.x) * 0.5} ${d.source.y}, ${d.target.x - Math.abs(d.target.x - d.source.x) * 0.5} ${d.target.y}, ${d.target.x} ${d.target.y}`);
+                        nodeElements.style("left", d => `${d.x}px`).style("top", d => `${d.y}px`);
+                        tickPending = false;
+                    });
+                }
+            } else {
+                nodes.forEach(d => { if (d.fx === null) { d.x += d.vx * (1 / d.mass - 1); d.y += d.vy * (1 / d.mass - 1); d.vx /= d.mass; d.vy /= d.mass; } });
+                linkElements.attr("d", d => `M ${d.source.x} ${d.source.y} C ${d.source.x + Math.abs(d.target.x - d.source.x) * 0.5} ${d.source.y}, ${d.target.x - Math.abs(d.target.x - d.source.x) * 0.5} ${d.target.y}, ${d.target.x} ${d.target.y}`);
+                nodeElements.style("left", d => `${d.x}px`).style("top", d => `${d.y}px`);
+            }
         });
 
         // Setup Zoom & Filters

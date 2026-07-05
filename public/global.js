@@ -3,6 +3,77 @@
  * Centralizes reusable utilities, search algorithms, and initializes shared page logic.
  */
 
+class TrieNode {
+    constructor() {
+        this.children = {};
+        this.term = null;
+    }
+}
+
+class Trie {
+    constructor() {
+        this.root = new TrieNode();
+    }
+
+    insert(term) {
+        let node = this.root;
+        const lower = term.toLowerCase();
+        for (let i = 0; i < lower.length; i++) {
+            const char = lower[i];
+            if (!node.children[char]) {
+                node.children[char] = new TrieNode();
+            }
+            node = node.children[char];
+        }
+        node.term = term;
+    }
+}
+
+function searchTrie(text, trie) {
+    const matches = [];
+    const n = text.length;
+
+    const isWordChar = (c) => {
+        return c !== undefined && /^[a-zA-Z0-9_]$/.test(c);
+    };
+
+    let i = 0;
+    while (i < n) {
+        let node = trie.root;
+        let longestMatch = null;
+        let longestMatchLength = 0;
+
+        for (let j = i; j < n; j++) {
+            const char = text[j].toLowerCase();
+            if (!node.children[char]) {
+                break;
+            }
+            node = node.children[char];
+            if (node.term !== null) {
+                const startBound = (i === 0) ? !isWordChar(text[i]) : (isWordChar(text[i - 1]) !== isWordChar(text[i]));
+                const endBound = (j === n - 1) ? !isWordChar(text[j]) : (isWordChar(text[j]) !== isWordChar(text[j + 1]));
+                if (startBound && endBound) {
+                    longestMatch = node.term;
+                    longestMatchLength = j - i + 1;
+                }
+            }
+        }
+
+        if (longestMatch !== null) {
+            matches.push({
+                index: i,
+                length: longestMatchLength,
+                text: text.substring(i, i + longestMatchLength),
+                term: longestMatch
+            });
+            i += longestMatchLength;
+        } else {
+            i++;
+        }
+    }
+    return matches;
+}
+
 const NeuronUtils = {
     // --- 1. Theming & Colors ---
     getCategoryColor: (cat) => {
@@ -315,7 +386,7 @@ function setupInlineDefinitions(map, currentName) {
     const currentNameLower = currentName ? currentName.toLowerCase() : '';
 
     const termToConceptName = {};
-    const terms = [];
+    const trie = new Trie();
 
     Object.values(map).forEach(n => {
         const nodeNameLower = n.name.toLowerCase();
@@ -323,7 +394,7 @@ function setupInlineDefinitions(map, currentName) {
         if (isCurrentNode) return;
 
         // Add main name
-        terms.push(n.name);
+        trie.insert(n.name);
         termToConceptName[nodeNameLower] = n.name;
 
         // Add aliases
@@ -331,7 +402,7 @@ function setupInlineDefinitions(map, currentName) {
             n.aliases.forEach(alias => {
                 const aliasLower = alias.toLowerCase();
                 if (aliasLower !== currentNameLower && !currentAliases.includes(aliasLower)) {
-                    terms.push(alias);
+                    trie.insert(alias);
                     if (!termToConceptName[aliasLower]) {
                         termToConceptName[aliasLower] = n.name;
                     }
@@ -340,45 +411,43 @@ function setupInlineDefinitions(map, currentName) {
         }
     });
 
-    if (terms.length === 0) return;
-
-    // Sort terms by length descending to match longer terms first
-    terms.sort((a, b) => b.length - a.length);
-
-    const combinedRegex = new RegExp(`\\b(${terms.map(NeuronUtils.escapeRegExp).join('|')})\\b`, 'ig');
+    if (Object.keys(trie.root.children).length === 0) return;
 
     textNodes.forEach(textNode => {
         const text = textNode.nodeValue;
         const parent = textNode.parentNode;
         if (!parent) return;
 
-        combinedRegex.lastIndex = 0;
-        let match, lastIndex = 0, hasReplacements = false;
+        const matches = searchTrie(text, trie);
+        if (matches.length === 0) return;
+
         const fragment = document.createDocumentFragment();
+        let lastIndex = 0;
 
-        while ((match = combinedRegex.exec(text)) !== null) {
-            hasReplacements = true;
-            if (match.index > lastIndex) fragment.appendChild(document.createTextNode(text.substring(lastIndex, match.index)));
+        matches.forEach(match => {
+            if (match.index > lastIndex) {
+                fragment.appendChild(document.createTextNode(text.substring(lastIndex, match.index)));
+            }
 
-            const originalTerm = termToConceptName[match[0].toLowerCase()];
+            const originalTerm = termToConceptName[match.term.toLowerCase()];
             if (originalTerm && map[originalTerm]) {
                 const anchor = document.createElement('a');
                 anchor.href = `${map[originalTerm].slug}.html`;
                 anchor.className = 'inline-wiki-link';
                 anchor.dataset.term = originalTerm;
-                anchor.innerText = match[0];
+                anchor.innerText = match.text;
                 fragment.appendChild(anchor);
             } else {
-                fragment.appendChild(document.createTextNode(match[0]));
+                fragment.appendChild(document.createTextNode(match.text));
             }
-            lastIndex = combinedRegex.lastIndex;
-        }
+            lastIndex = match.index + match.length;
+        });
 
-        if (hasReplacements) {
-            if (lastIndex < text.length) fragment.appendChild(document.createTextNode(text.substring(lastIndex)));
-            parent.insertBefore(fragment, textNode);
-            parent.removeChild(textNode);
+        if (lastIndex < text.length) {
+            fragment.appendChild(document.createTextNode(text.substring(lastIndex)));
         }
+        parent.insertBefore(fragment, textNode);
+        parent.removeChild(textNode);
     });
 
     const popover = document.createElement('div');
