@@ -1,11 +1,10 @@
 ---
 name: Poems by John Keats
 parent: English Literature
-category: Poems
-distance: 3
-pdf: "https://kavyargb.github.io/NeuronIQ-Library/Poems by John Keats.pdf"
+category: English Literature
+distance: 2
+pdf: https://kavyargb.github.io/NeuronIQ-Library/Poems by John Keats.pdf
 ---
-@Overview
 **John Keats’ poetry captures the essence of Romanticism, exploring beauty, nature, love, mortality, and the human imagination through vivid imagery, odes, sonnets, and narrative poems.**
 
 ## Themes and Style  

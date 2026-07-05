@@ -5,8 +5,6 @@ category: Psychology
 distance: 2
 pdf: "https://kavyargb.github.io/NeuronIQ-Library/The%2048%20Laws%20of%20Power.pdf"
 ---
-@Overview
-
 ### **1–10: Mastering Perception and Influence**
 1. **Never outshine the master** — Make superiors feel secure.  
 2. **Never put too much trust in friends; learn to use enemies** — Friends can betray emotionally; enemies are predictable.  
