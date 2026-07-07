@@ -23,6 +23,8 @@
   Neuron-IQ turns plain Markdown files into a <strong>glowing, animated neural knowledge graph</strong> you can search, zoom, drag, and click through — right in your browser. Think of it like a personal Wikipedia fused with a constellation map: every concept is a luminous orb, every connection is a pulsing neural pathway, and everything is searchable with fuzzy matching.
 </p>
 
+![Homepage of NeuronIQ](image.png)
+
 > [!NOTE]
 > **No database. No backend server.** Every page is a static HTML file generated from Markdown at build time — the entire site works offline as a PWA.
 
