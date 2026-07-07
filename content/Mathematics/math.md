@@ -1,9 +1,10 @@
 ---
 name: Mathematics
 parent: Root
-category: Math
+category: Mathematics
 distance: 1
-alias: [Math]
+alias:
+  - Math
 ---
 **Mathematics** is the abstract science of number, quantity, and space. It provides the fundamental logical frameworks, analytical tools, and theoretical rigor required to design algorithms, model complex systems, and develop artificial intelligence.
 

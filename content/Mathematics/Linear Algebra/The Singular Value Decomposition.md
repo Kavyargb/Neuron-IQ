@@ -7,5 +7,6 @@ aliases:
   - Image Processing
   - Low Rank Images
   - Eigenvectors for the SVD
+  - SVD
 pdf: https://kavyargb.github.io/NeuronIQ-Library/Introduction to Linear Algebra Ed 5 Gilbert Strang/C7.pdf
 ---

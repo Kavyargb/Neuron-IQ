@@ -1,9 +1,11 @@
 ---
 name: Linear Algebra
 parent: Mathematics
-category: Math
+category: Mathematics
 distance: 2
-aliases: [Matrix Algebra, Vector Spaces]
+aliases:
+  - Matrix Algebra
+  - Vector Spaces
 ---
 
 **Linear Algebra** is the branch of mathematics concerning linear equations, linear maps, and their representations in vector spaces and through matrices. In modern Computer Science, it is arguably the most important mathematical prerequisite, serving as the computational engine behind Machine Learning, Artificial Intelligence, Computer Graphics, and Data Science.

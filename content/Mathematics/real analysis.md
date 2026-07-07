@@ -1,9 +1,11 @@
 ---
 name: Real Analysis
 parent: Mathematics
-category: Math
+category: Mathematics
 distance: 2
-aliases: [Mathematical Analysis, Analysis]
+aliases:
+  - Mathematical Analysis
+  - Analysis
 ---
 
 @Introduction
