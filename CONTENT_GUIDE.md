@@ -1,127 +1,142 @@
-# 🧠 Neuron-IQ: Content Writer's Guidebook
+# Neuron-IQ: Content Writer's Guidebook
 
-Welcome to the Neuron-IQ Knowledge Database. This system uses a **"Docs-as-Code"** architecture. You do not need to use a database interface to add knowledge to the graph; you simply create a `.md` (Markdown) text file.
+Welcome to the Neuron-IQ Knowledge Database. 
 
-This guide explains the exact anatomy required for a file to be successfully parsed by the Plausibility Engine and rendered into the Neural Tree.
+Unlike traditional platforms, Neuron-IQ does not use a database interface, a complex CMS, or SQL to store knowledge. Instead, it uses a **Docs-as-Code** architecture. To add a new node to the brain, you simply write a Markdown (`.md`) text file. The build engine handles the rest, automatically wiring your concept into the global neural network.
+
+This guide will teach you exactly how to write, structure, and format a file so that it is perfectly understood by the Neuron-IQ parser.
 
 ---
 
-## 1. File Placement & Naming
-*   **Location:** Every new concept must be saved inside the `/content` folder.
+## 1. File Placement & Naming Conventions
+
+*   **Location:** Every new concept must be saved inside the `content/` folder (or any subfolder inside it).
 *   **Extension:** The file must end in `.md`.
-*   **Naming:** Use lowercase letters and hyphens (e.g., `quantum-mechanics.md`, `linear-algebra.md`). 
+*   **Naming Rule:** Use lowercase letters and hyphens for the filename (e.g., `quantum-mechanics.md`, `linear-algebra.md`). This ensures the generated URLs are clean and web-friendly.
 
 ---
 
 ## 2. The Anatomy of a Node
 
-Every file is strictly divided into **two parts**:
-1. The **Frontmatter** (The invisible metadata that plots it on the graph)
-2. The **Tiered Content** (The actual text the user reads)
+Every Markdown file in Neuron-IQ is strictly divided into **two parts**:
+1. **The Frontmatter** (The invisible metadata that plots the node on the graph).
+2. **The Content Layer** (The actual text, math, and images the user reads).
 
-### Part 1: The Frontmatter
-At the very top of your file, you must include a YAML metadata block enclosed by `---`. 
+### Part 1: The Frontmatter (Graph Topology)
+
+At the very top of your file, you must include a YAML metadata block enclosed by `---`. This is the most critical part of the file; it tells the physics engine exactly where this concept belongs in the universe.
 
 ```yaml
 ---
-name: Calculus
-parent: Mathematics
-category: Math
+name: Artificial Intelligence
+parent: Computer Science (CS)
+category: Computer Science
 distance: 2
+aliases: [AI, Machine Intelligence, Machine Learning]
 ---
 ```
 
-**Frontmatter Rules:**
-*   **`name`**: The exact title of the concept. This is what displays on the graph dots and page headers.
-*   **`parent`**: The `name` of the node that comes exactly before this one. **This must match the parent's spelling exactly.** If this is a top-level pillar (like Physics or Math), write `parent: Root`.
-*   **`category`**: Used to color-code the graph. To trigger the built-in colors, use one of the following: `CS` (Yellow), `Math` (Red), `Physics` (Blue), or `Science` (Green).
-*   **`distance`**: An integer representing how many steps away from the center this concept is. 
-    *   Distance 1 = Core Pillars (Physics, Math)
-    *   Distance 2 = Sub-fields (Calculus, Quantum Mechanics)
-    *   Distance 3 = Specific Concepts (Derivatives, Superposition)
+#### Field Dictionary:
+*   **`name`** *(Required)*: The exact title of your concept. This is what displays on the glowing graph orb and the article's `<h1>` header.
+*   **`parent`** *(Required)*: The `name` of the node that directly precedes this one. **This must match the parent's spelling perfectly.** 
+    * *Note: If you are creating a massive, top-level pillar (like Physics or Math), write `parent: Root`.*
+*   **`category`** *(Required)*: This color-codes your node on the graph. The system will look for keywords here. `CS` or `Computer` triggers yellow; `Math` triggers pink; `Physics` triggers blue.
+*   **`distance`** *(Required)*: A number representing how deep into the brain this concept is. 
+    *   `1` = Core Pillars (e.g., Physics, Math)
+    *   `2` = Sub-fields (e.g., Classical Mechanics, Algebra)
+    *   `3` = Specific Concepts (e.g., Gravity, Matrices)
+    *   `4+` = Granular details
+*   **`aliases`** *(Optional)*: An array of alternative names for this concept. (See Section 4 for why this is incredibly powerful).
+*   **`pdf`** *(Optional)*: If you want this node to display a PDF book instead of text, provide the filename (e.g., `pdf: calculus-textbook.pdf`). Place the actual PDF in `content/pdfs/`.
 
-### Part 2: The Content Sections
-Directly below the frontmatter, you will write your content. You can divide your content into any custom sections you like using `@Section Title` (e.g., `@Introduction`, `@Deep Dive`, `@Mathematical Proof`). 
-
-**Section Rules:**
-*   The `@` tags must be at the very start of a line.
-*   The text following the `@` will automatically become both a section header and a link in the Table of Contents.
-
----
-
-## 3. Formatting & Rich Text (Markdown)
-
-Because Neuron-IQ uses a Markdown compiler, you can style your text beautifully without writing HTML code.
-
-**Text Styles:**
-*   `**bold text**` becomes **bold text**
-*   `*italic text*` becomes *italic text*
-*   `[Google](https://google.com)` creates a clickable link.
-
-**Lists:**
-```markdown
-* First item
-* Second item
-  * Sub-item
-```
-
-**Blockquotes:**
-```markdown
-> "Imagination is more important than knowledge." - Albert Einstein
+```mermaid
+flowchart TD
+    Root((Root)) -->|parent: Root| A[Mathematics]
+    A -->|parent: Mathematics| B[Algebra]
+    A -->|parent: Mathematics| C[Calculus]
+    C -->|parent: Calculus| D[Derivatives]
+    
+    style Root fill:#fff,color:#000
+    style A fill:#fb7185,color:#000
+    style B fill:#fb7185,color:#000
+    style C fill:#fb7185,color:#000
+    style D fill:#fb7185,color:#000
 ```
 
 ---
 
-## 4. Writing Mathematics (KaTeX)
+### Part 2: The Content Layer
 
-Neuron-IQ is equipped with a high-performance math rendering engine. You do not need images to display equations. 
+Directly below the frontmatter, you will write your content. 
 
-**Inline Math:**
-To put math inside a sentence, wrap it in single `$` signs.
-*   *You type:* The Pythagorean theorem is `$a^2 + b^2 = c^2$`.
-*   *Result:* The Pythagorean theorem is $a^2 + b^2 = c^2$.
+Neuron-IQ introduces a custom Markdown convention to handle section splitting: **The `@` Symbol.**
 
-**Block Equations:**
-To center a large, complex equation on its own line, wrap it in double `$$` signs.
-*   *You type:*
-```latex
-$$
-i\hbar \frac{\partial}{\partial t} \Psi = \hat{H} \Psi
-$$
-```
-
----
-
-## 5. The Perfect Template
-
-Here is a complete, perfect example of a Neuron-IQ content file. Copy and paste this whenever you want to create a new concept:
+Whenever you start a line with `@`, the build engine creates a new section, generates a clickable anchor link, and adds it to the Sidebar Table of Contents.
 
 ```markdown
----
-name: Quantum Entanglement
-parent: Quantum Mechanics
-category: Physics
-distance: 3
----
+Any text written before the first `@` symbol is considered the "Preamble" or "Overview". 
+Keep this short and engaging. It will be used as the SEO description and the hover-card preview.
+
 @Introduction
-Quantum entanglement is like a pair of magic dice. If you roll them, no matter how far apart they are—even on opposite sides of the universe—they will always land on the exact same number at the exact same time. It shows that particles can be invisibly connected.
+Welcome to the concept. You can write normal Markdown here, including **bolding**, *italics*, and bullet points.
 
-Quantum entanglement is a physical phenomenon that occurs when a group of particles is generated, interact, or share spatial proximity in a way such that the quantum state of each particle cannot be described independently of the state of the others. 
-
-Einstein famously referred to this as *"spooky action at a distance"*, because it appears to violate the speed of light limit for information transfer.
+@Deep Dive
+This creates a new section in the Table of Contents automatically!
+You can add code blocks:
+\`\`\`python
+print("Hello World")
+\`\`\`
 
 @Mathematical Proof
-Mathematically, an entangled state is one that cannot be factored as a tensor product of the states of its local constituents. For a bipartite system consisting of subsystems $A$ and $B$, a state $|\psi\rangle$ is entangled if it cannot be written as:
-
-$$
-|\psi\rangle = |\phi\rangle_A \otimes |\chi\rangle_B
-$$
-
-Instead, it exists as a superposition, such as the Bell state:
-
-$$
-|\Phi^+\rangle = \frac{1}{\sqrt{2}} (|00\rangle + |11\rangle)
-$$
+And you can add more sections as needed.
 ```
 
 ---
+
+## 3. Mathematical Typesetting (KaTeX)
+
+Because Neuron-IQ is heavily tailored for STEM fields, it has first-class, blazing-fast support for mathematical equations via KaTeX. 
+
+You write math exactly as you would in LaTeX:
+
+*   **Inline Math**: Wrap your equation in single dollar signs `$`. 
+    * *Example:* The area of a circle is $A = \pi r^2$.
+*   **Block Math**: Wrap your equation in double dollar signs `$$`. This will center the equation on its own line.
+    * *Example:*
+      $$ 
+      \hat{H} \Psi = E \Psi 
+      $$
+
+*Tip: The build engine pre-renders this math on the server, meaning it loads instantly without layout shifts when the user opens the page.*
+
+---
+
+## 4. The Synapse Engine: Auto-Linking & Aliases
+
+In a traditional wiki, you have to manually write links like `[Artificial Intelligence](artificial-intelligence.md)`. 
+
+**In Neuron-IQ, you never write internal links.** 
+
+The engine uses a high-speed Prefix Trie algorithm to scan your text. If you type a word that matches the `name` of *any* other node in the database, the engine automatically turns it into a clickable Wikipedia-style link.
+
+This is where the **`aliases`** frontmatter field becomes a superpower. 
+
+If the `Artificial Intelligence` node has `aliases: [AI, Machine Learning]`, you can write:
+> *"The future of **AI** is heavily dependent on advanced **machine learning** models."*
+
+The engine will automatically detect both "AI" and "machine learning" and link them directly to the Artificial Intelligence page. 
+
+**Best Practice:** Add as many logical aliases as possible to your nodes. It makes the auto-linking network much denser and improves fuzzy search results!
+
+---
+
+## 5. Quick Checklist for Contributors
+
+Before committing your Markdown file, check the following:
+- [ ] Is the filename lowercase with hyphens?
+- [ ] Does the `parent` field exactly match an existing node?
+- [ ] Did you include a short preamble before your first `@` section?
+- [ ] Are your math equations properly wrapped in `$` or `$$`?
+- [ ] Did you define `aliases` to help the engine auto-link your concept?
+
+Happy writing. By adding a single file, you are physically expanding the boundaries of the digital brain.
