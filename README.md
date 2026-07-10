@@ -2,7 +2,7 @@
   <img src="public/icon.svg" alt="Neuron-IQ Logo" width="96" height="96" />
 </p>
 
-<h1 align="center">🧠 Neuron-IQ</h1>
+<h1 align="center">Neuron-IQ</h1>
 
 <p align="center">
   <strong>An interactive, graph-based knowledge exploration platform</strong><br/>
