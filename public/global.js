@@ -316,7 +316,6 @@ window.initGlobalPage = function() {
 
     injectSearchModal();
     setupSearchModalLogic();
-    setupKatexAutoRender();
     setupTOCScrollObserver();
 
     // Re-bind article smooth scrolling for TOC links centrally
@@ -570,17 +569,6 @@ function setupSearchModalLogic() {
         }
         resetModalNav();
     });
-}
-
-function setupKatexAutoRender() {
-    if (typeof renderMathInElement === 'function') {
-        renderMathInElement(document.body, {
-            delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}, {left: '\\[', right: '\\]', display: true}],
-            throwOnError: false
-        });
-    } else {
-        setTimeout(setupKatexAutoRender, 200);
-    }
 }
 
 function setupTOCScrollObserver() {

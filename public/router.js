@@ -88,13 +88,6 @@
                 if (!window.initHomePage) {
                     await loadScript('app.js');
                 }
-            } else if (!isSitemap) {
-                // Reading pages need KaTeX
-                if (typeof katex === 'undefined') {
-                    loadStylesheet('https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css');
-                    await loadScript('https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js');
-                    await loadScript('https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js');
-                }
             }
 
             // 3. Local DOM update function
